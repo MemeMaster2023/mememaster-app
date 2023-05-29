@@ -1,5 +1,5 @@
 <template>
-  <div id="collections">
+  <div id="create">
     <v-responsive style="background-color: #000;">
       
       <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 1">
@@ -25,7 +25,8 @@
         <v-col cols="12" md="3" :align="center">
           <v-card
             class="mx-auto"
-            max-width="344"
+            max-width="350"
+            min-height="180"
             variant="outlined"
           >
             <v-card-item>
@@ -35,7 +36,7 @@
               </div>
             </v-card-item>
 
-            <v-card-actions class="ma-1">
+            <v-card-actions style="position: absolute; bottom: 0;width:100%;">
               <v-btn 
                 variant="outlined" 
                 color="deep-purple-lighten-1" 
@@ -52,7 +53,8 @@
         <v-col cols="12" md="3" :align="center">
           <v-card
             class="mx-auto"
-            max-width="344"
+            min-height="180"
+            max-width="350"
             variant="outlined"
           >
             <v-card-item>
@@ -62,14 +64,19 @@
               </div>
             </v-card-item>
 
-            <v-card-actions class="ma-1">
-              <v-btn variant="outlined" color="indigo-lighten-1"  style="width:100%" prepend-icon="mdi-upload" >
+            <v-card-actions style="position: absolute; bottom: 0;width:100%">
+              <v-btn 
+                variant="outlined" 
+                color="indigo-lighten-1"  
+                style="width:100%" 
+                prepend-icon="mdi-upload" >
                 Continue
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
-        <v-col cols="12" md="3" :align="center">
+        
+        <v-col cols="12" md="3" :align="center" >
         </v-col>
        </v-row>
       </v-card>
@@ -77,6 +84,7 @@
       <!-- ############################### Create Meme Comp -->
       <CreateMeme v-if="view === 2"
         :isMobileDevice="isMobileDevice" 
+        :dark="dark"
         :windowWidth="windowWidth" 
         :windowHeight="windowHeight"
         :drawer="drawer"
@@ -92,7 +100,7 @@
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import CreateMeme from './CreateMeme'
 export default {
-  name: 'Collections',
+  name: 'Create',
   props: {
     isMobileDevice: Boolean,
     dark: Boolean,

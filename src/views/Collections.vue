@@ -1,7 +1,7 @@
 <template>
-  <Home />
+  <Collections />
 </template>
 
 <script setup>
-  import Home from '@/components/Collections.vue'
+  import Collections from '@/components/Collections.vue'
 </script>

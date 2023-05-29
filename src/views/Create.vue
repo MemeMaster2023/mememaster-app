@@ -1,7 +1,7 @@
 <template>
-  <Home />
+  <Create />
 </template>
 
 <script setup>
-  import Home from '@/components/app/Create.vue'
+  import Create from '@/components/app/Create.vue'
 </script>

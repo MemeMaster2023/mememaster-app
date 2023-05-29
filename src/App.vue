@@ -4,7 +4,7 @@
     :windowWidth="window.width"
     :windowHeight="window.height"
     :isMobileDevice="isMobileDevice"
-    :drawer="drawer"
+    :drawer="getDrawer"
   />
 </template>
 
@@ -15,7 +15,6 @@ export default {
   name: 'App',
   props: {},
   data: () => ({
-    drawer: true,
     dark: true,
     isMobileDevice: false,
     window: {
@@ -51,7 +50,9 @@ export default {
     console.log(this.isMobileDevice)
   },
   computed: {
-    
+    getDrawer () {
+      return this.$store.state.drawer
+    }
   },
   watch: {
 
@@ -80,10 +81,10 @@ export default {
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
-      console.log('this.window.height')
+      /* console.log('this.window.height')
       console.log(this.window.height)
       console.log('this.window.width')
-      console.log(this.window.width)
+      console.log(this.window.width) */
       // this.window.width > 770 ? this.drawer = false : this.drawer = true
     },
     logout() {

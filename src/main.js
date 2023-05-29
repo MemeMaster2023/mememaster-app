@@ -11,6 +11,8 @@ import App from './App.vue'
 import { createApp } from 'vue'
 
 // Plugins
+import 'core-js/stable'; 
+import 'regenerator-runtime/runtime';
 import { registerPlugins } from '@/plugins'
 import VueScrollTo from 'vue-scrollto';
 import FIREBASE_CONFIG from './config/firebase';
@@ -19,14 +21,18 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/analytics';
 import 'firebase/auth';
+import VueHtml2Canvas from 'vue-html2canvas';
 // import Jazzicon from 'vue3-jazzicon/src/components';
 
 const app = createApp(App)
 // app.component(Jazzicon.name, Jazzicon)
 
-firebase.initializeApp(FIREBASE_CONFIG);
+if (!firebase.apps.length) {
+    firebase.initializeApp(FIREBASE_CONFIG);
+}
 export const db = firebase.firestore();
 export const auth = firebase.auth();
+// export const storageRef = firebase.storage().ref()
 
 // Add Vue directive
 app.directive('scroll-to', VueScrollTo, {
@@ -42,7 +48,7 @@ app.directive('scroll-to', VueScrollTo, {
     x: false,
     y: true,
 })
-
+app.use(VueHtml2Canvas);
 registerPlugins(app)
 
 app.mount('#app')

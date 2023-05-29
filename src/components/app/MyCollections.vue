@@ -1,0 +1,505 @@
+<template>
+  <div id="collections">
+    <v-responsive style="background-color: #000;">
+      
+      <v-card theme="dark" color="#2b2b2b"  class="mt-16 mb-4" height="100%" v-if="view === 1">
+
+       <v-row class="mt-12" :align="center">
+          <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
+          </v-col>
+
+          <v-col cols="12" md="6" :align="center">
+            <div class="text-h4 text-center ma-2">My Meme Collections</div>
+            <div class="text-center cardTextCreateSmall ma-2">Look no further! My Meme Collections is here to revolutionize the way you manage and organize your memes, ensuring that none of your comic masterpieces ever get lost in the digital void.</div>
+          </v-col>
+
+          <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
+          </v-col>
+       </v-row>
+
+       <v-row class="mb-16" :align="center">
+
+        <v-col cols="12" md="2" :align="center" >
+        </v-col>
+       
+        <v-col cols="12" md="8" :align="center" >
+          <v-card >
+  
+          <v-card-text v-if="!uploadingFile && !uploadComplete && !newCollection">
+            <v-row>
+              <v-col cols="=12" md="6" :align="'end'">
+                <v-text-field
+                  prepend-inner-icon="mdi-feature-search-outline"
+                  placeholder="Search..."
+                  density="compact"
+                  v-model="searchCollections"
+                  variant="outlined"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="=12" md="6" :align="'end'">
+                <v-btn 
+                    :style="isMobileDevice ? 'width:100%;margin-top:-20px' : ''"
+                    prepend-icon="mdi-plus" 
+                    variant="outlined"
+                    @click="newCollection = true"
+                >
+                  New Collection
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <v-list lines="two" v-if="getCollections.length > 0">
+              <v-list-subheader>My Meme Collections ({{ getCollections.length }})</v-list-subheader>
+
+                <template v-for="(item, index) in filteredCollections" :key="index">
+                  <v-list-item
+                    link
+                    :value="item"
+                    active-color="primary"
+                    @click="selectedCollectionClicked(item)"
+                  >
+                    <template v-slot:prepend>
+                      <v-avatar color="blue-lighten-1">
+                        <v-icon color="white">mdi-image-multiple-outline</v-icon>
+                      </v-avatar>
+                    </template>
+
+                    <v-list-item-title style="color: #FFF;font-size: 18px;font-weight: bold;">
+                      {{ item.name  }}
+                    </v-list-item-title>
+
+                    <v-list-item-subtitle>
+                      {{ 'Created: ' + makeDateTime(item.created) + ' --- ' + (item.public ? 'Public Collection' : 'Private Collection') }}
+                    </v-list-item-subtitle>
+
+
+                    <template v-slot:append>
+                      <v-icon
+                        :color="item.public ? 'green-lighten-1' : 'red-lighten-1'"
+                      >
+                        {{  item.public ? 'mdi-lock-open-variant-outline' : 'mdi-lock-outline' }}
+                      </v-icon>
+                    </template>
+                  </v-list-item>
+                  <v-divider></v-divider>
+                </template>
+
+            </v-list>
+            <div v-else class="text-h6 ma-2">You don't have any Collections yet. Create one first.</div>
+
+          </v-card-text>
+
+          <v-card-text v-if="newCollection">
+            <v-row>
+              <v-col cols="=12" md="8">
+                <v-form fast-fail @submit.prevent>
+                  <v-text-field
+                    prepend-inner-icon="mdi-collage"
+                    label="Collection Name"
+                    placeholder="Collection Name..."
+                    density="compact"
+                    maxlength="50"
+                    v-model="newCollectionName"
+                    variant="outlined"
+                    hint="A name for your new collection."
+                    :rules="nameRules"
+                  ></v-text-field>
+                </v-form>
+              </v-col>
+
+              <v-col cols="=12" md="4" :align="'end'">
+                <v-layout>
+                  <v-switch
+                    style="margin-top:-8px"
+                    v-model="public"
+                    hide-details
+                    true-value="Yes"
+                    false-value="No"
+                    :label="`Make Public: ${public}`"
+                    inset
+                  ></v-switch>
+                  
+                  <v-icon
+                    style="margin-top:7px"
+                    size="large"
+                    @click="privatePublicDialog = true"
+                   >
+                    mdi-information-outline
+                  </v-icon>
+                </v-layout>
+              </v-col>
+
+            </v-row>
+          </v-card-text>
+
+            <v-card-actions class="mb-2 mr-4"  v-if="newCollection">
+              <v-btn 
+                  variant="text"
+                  @click="newCollection = flase"
+              >
+                Cancel
+              </v-btn>
+              <v-btn 
+                  prepend-icon="mdi-content-save-check-outline" 
+                  variant="outlined"
+                  color="green-lighten-1"
+                  @click="createNewCollection()"
+                  :disabled="newCollectionName === '' || checkNameRules(newCollectionName)"
+              >
+                Create Collection
+              </v-btn>
+            </v-card-actions>
+
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" md="2" :align="center">
+        </v-col>
+
+       </v-row>
+      </v-card>
+  
+    </v-responsive>
+
+     <!-- ############################## DIALOGS ####################################### -->
+     <v-dialog
+        v-model="privatePublicDialog"
+        max-width="800"
+        :fullscreen="isMobileDevice"
+      >
+        <v-card theme="dark">
+          <v-toolbar
+            color="transparent"
+          >
+          <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click="privatePublicDialog = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text>
+            My Meme Collections offers both private and public collections, providing you with the flexibility to choose the level of visibility for your memes.<br><br>
+
+            Private Collections: Keep your memes exclusively for your eyes only. With private collections, you have complete control over who can access and view your memes. It's perfect for those special, inside jokes or personal creations that you prefer to keep within a select group of friends or for your personal amusement.<br><br>
+
+            Public Collections: If you're eager to share your memes with the world and embrace the full glory of internet fame, public collections are for you. Showcase your creativity to a wider audience and let your memes spread like wildfire across the web. Public collections allow other users to discover, appreciate, and even contribute to your meme collection, fostering a vibrant community of meme enthusiasts.<br><br>
+
+            Whether you choose to keep your memes private or make them public, My Meme Collections ensures that your preferences are respected. You have the freedom to manage your collections and decide who gets to enjoy your meme masterpieces.
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" block @click="privatePublicDialog = false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+    <!-- #########################  COLLECTION  DETAIL DIALOG #########################-->
+    <v-dialog
+      v-model="collectionDetailsDialog"
+      fullscreen
+      transition="dialog-bottom-transition"
+      persistent
+    >
+        <v-card theme="dark">
+          <v-toolbar
+            color="#241d43"
+            :title="'Collection Details - ' + selectedCollection.name"
+            class="text-white"
+          >
+          <v-spacer></v-spacer>
+           <v-btn
+              icon
+              color="white"
+              @click="collectionDetailsDialog = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <v-row class="pa-4">
+                
+            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'right'">
+
+              <v-avatar color="blue-lighten-1" size="120">
+                <v-icon v-if="selectedCollection.icon === 'default'" size="80" color="white">mdi-image-multiple-outline
+                </v-icon>
+                <v-img v-else :src="selectedCollection.icon">
+                </v-img>
+              </v-avatar>
+              
+              <v-btn size="small" 
+                     icon="mdi-camera-outline" 
+                     color="grey" 
+                     style="position: fixed;margin-top: 80px;margin-left: -40px;"
+                     @click="photoDialog = true"
+              >
+              </v-btn>
+              
+            </v-col>
+
+            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'left'">
+              <v-card
+              :dark="dark"
+              flat
+              class="pa-4"
+              > 
+                <div style="text-transform: uppercase;" class="text-h4 font-weight-bold">{{ selectedCollection.name }}</div>
+                <div class="text-h7 mb-1 font-weight-bold">Created: {{ makeDate(selectedCollection.created) }}</div>
+                <div class="text-h7 mb-1 font-weight-bold">Public: {{ selectedCollection.public ? 'Yes' : 'No' }}</div>
+              </v-card>
+            </v-col>
+
+          </v-row>
+
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="photoDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+          <v-card theme="dark">
+            <v-toolbar flat color="grey-darken-3">
+              <v-btn icon @click.native="photoDialog = false">
+                <v-icon>mdi-arrow-left</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{ 'Select an Image' }}</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+
+            <v-row :align="'center'" class="pa-2">
+              <p class="mt-2"></p>
+              <v-col cols="12" md="3" :align="'center'">
+              </v-col>
+              
+              <v-col cols="12" md="6" :align="'center'">
+
+                <v-btn color="#388E3C" @click="setProfilePhoto"
+                    :loading="loading" :disabled="loading || image === ''">
+                  <v-icon left>mdi-check-circle-outline</v-icon>{{ 'Use this Image' }}
+                </v-btn>
+
+              </v-col>
+
+              <v-col cols="12" md="3" :align="'center'">
+              </v-col>
+
+            </v-row>
+          </v-card>
+      </v-dialog>
+
+     <!-- ############################## SNACKBARS ####################################### -->
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="4000"
+      >
+      <v-layout>
+        <v-icon color="green" left>mdi-check-circle-outline</v-icon>
+        {{ snackbarText }}
+      </v-layout>
+
+        <template v-slot:actions>
+          <v-btn
+            color="pink"
+            variant="text"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+  </div>
+</template>
+
+<script>
+// @ is an alias to /src
+import { db } from '@/main'
+import { scroller } from 'vue-scrollto/src/scrollTo'
+import dateformat from "dateformat"
+export default {
+  name: 'My Collections',
+  props: {
+    isMobileDevice: Boolean,
+    dark: Boolean,
+    windowWidth: Number,
+    windowHeight: Number,
+    drawer: Boolean
+  },
+  data: () => ({
+    loading: false,
+    snackbar: false,
+    snackbarText: '',
+    privatePublicDialog: false,
+    collectionDetailsDialog: false,
+    photoDialog: false,
+    image: '',
+    view: 1,
+    newCollection: false,
+    newCollectionName: '',
+    public: 'No',
+    searchCollections: '',
+    selectedCollection: [],
+    nameRules: [
+      value => {
+        if (/^[\w\s]+$/.test(value)) return true
+        return 'Name must be alphanumeric'
+      },
+    ],
+  }),
+  components: {
+  },
+  computed: {
+    getUser () {
+      return this.$store.state.user
+    },
+    getCollections () {
+      return this.$store.state.fb.collections
+    },
+    filteredCollections () {
+        return this.getCollections.filter(item => {
+          // console.log(item)
+          return item.name.toLowerCase().indexOf(this.searchCollections.toLowerCase()) > -1 
+        })
+      }
+  },
+  watch: {
+  },
+  created() {
+    // this.currentUser = firebase.auth().currentUser;
+    this.scrollToTop()
+    this.getUserCollections()
+  },
+  methods: {
+    getUserCollections() {
+      console.log(this.getCollections)
+      if (this.getCollections.length > 0) {
+        let checkTime = Math.round(new Date().getTime() / 1000)
+        if (this.getCollections[0]?.checkTime > Math.round(checkTime)) {
+          console.log('No collections reload needed')
+          return
+        }
+      }
+      let dispatchObj = {
+        uid: this.getUser.uid,
+        limit: 20
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch("getUserCollections", dispatchObj)
+        .then(() => {
+          console.log(this.getCollections)
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
+    },
+    createNewCollection () {
+      // Insert database first then objects
+      let postkey = db.collection('collections').doc()
+      let dispatchObj = {
+        id: postkey.id,
+        uid: this.getUser.uid,
+        name: this.newCollectionName,
+        status: 1,
+        public: this.public === 'No' ? false : true,
+        created: new Date().getTime(),
+        username: this.getUser.displayName,
+        slug: '',
+        icon: 'default'
+      }
+      this.$store.dispatch('createCollection', dispatchObj)
+        .then(() => {
+          console.log('Collection Added to Firebase!')
+          this.getCollections.splice(0, 0, dispatchObj)
+          this.newCollectionName = ''
+          this.newCollection = false
+          this.snackbarText = 'Collection created!' // this.lang[this.getLanguage].RECORD_DELETED
+          this.snackbar = true
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
+    },
+    selectedCollectionClicked (item) {
+      console.log(item)
+      // actions
+
+      this.selectedCollection = item
+      this.collectionDetailsDialog = true
+    },
+    scrollToTop () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#collections');
+      }, 200);
+    },
+    checkNameRules (value) {
+      if (/^[\w\s]+$/.test(value)) return false
+      return true
+    },
+    onChange (image) {
+      // console.log('New picture selected!')
+      // console.log(image)
+      if (image) {
+        console.log('Picture loaded.')
+        this.image = image
+      } else {
+        // console.log('FileReader API not supported: use the <form>, Luke!')
+      }
+    },
+    onRemove () {
+      // console.log('Picture removed!')
+      this.image = ''
+    },
+    makeDate (date) {
+      return dateformat(new Date(date), 'dd mmm, yyyy')
+    },
+    makeDateTime (date) {
+      return dateformat(new Date(date), 'dd mmm, yyyy HH:MM')
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+  .homeText {
+    font-family: 'Baumans';
+    font-size: 40px;
+    line-height: 1em;
+    color: #FFF;
+  }
+  .homeTextSmall {
+    font-family: 'Baumans';
+    font-size: 28px;
+    line-height: 1em;
+    color: #FFF;
+  }
+  .homeTextSmaller {
+    font-family: 'Baumans';
+    font-size: 24px;
+    line-height: 1em;
+    color: #FFF;
+    margin-top: 16px;
+  }
+  .cardTextTitle {
+    font-family: 'Saira';
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .cardTextCreateSmall {
+    font-family: 'Jura';
+    font-size: 18px;
+  }
+  .gallery {
+    font-family: 'Baumans';
+    font-size: 45px;
+    line-height: 1em;
+    color: #FFF;
+  }
+  .v-card--reveal {
+    bottom: 0;
+    opacity: 1 !important;
+    position: absolute;
+    width: 100%;
+  }
+</style>

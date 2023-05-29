@@ -6,6 +6,7 @@ import { db } from '@/main'
 import MemeMasterAPI from '@/clients/MemeMasterAPI'
 const FirebaseModule = {
   state: {
+    collections: [],
     promotedTokens: [],
     launchQueue: [],
     popularTokens: [],
@@ -15,6 +16,9 @@ const FirebaseModule = {
     searchResults: []
   },
   mutations: {
+    setCollections (state, payload) {
+      state.collections = payload
+    },
     setPromotedTokens (state, payload) {
       state.promotedTokens = payload
     },
@@ -41,6 +45,56 @@ const FirebaseModule = {
     },
   },
   actions: {
+    getUserCollections ({commit}, payload) {
+      commit('setLoading', payload.uid)
+      let today = new Date().getTime()
+      let query = db.collection('collections').where('uid', '==', payload.uid).where('status', '==', 1).orderBy('name', 'asc')
+      query.get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.')
+          return
+        }
+        var collectionList = []
+        snapshot.forEach(doc => {
+          // console.log(doc.id, '=>', doc.data())
+          var obj = doc.data()
+          obj.id = doc.id
+          obj.checkTime = Math.round(today / 1000 + 1800) // 1 Hour to prevent to much Firebase loading/reading
+          collectionList.push(obj)
+        })
+        commit('setCollections', collectionList)
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      })
+    },
+    createCollection({ commit }, payload) {
+      commit('setLoading', true);
+      db.collection('collections')
+        .doc(payload.id)
+        .set(payload)
+        .then(() => {
+          console.log('Collection in bucket created');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addMemeToCollection ({ commit }, payload) {
+      // console.log(payload)
+      commit('setLoading', true);
+
+      db.collection('memes')
+        .doc(payload.id)
+        .set(payload)
+        .then(() => {
+          console.log('File in meme bucket created!');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getPromotedTokens ({commit}, payload) {
       // console.log(payload.limit)
       commit('setLoading', payload.limit)
@@ -539,6 +593,9 @@ const FirebaseModule = {
     }
   },
   getters: {
+    collections (state) {
+      return state.collections
+    },
     promotedTokens (state) {
       return state.promotedTokens
     },

@@ -51,13 +51,18 @@ export default createStore({
                 showWelcomeSession: false,
                 showWelcome: localStorage.getItem('welcome') === null ? false : JSON.parse(localStorage.getItem('welcome'))
             },
-            count: 0
+            count: 0,
+            drawer: false
         }
     },
     mutations: {
         increment (state) {
             state.count++
             console.log(state)
+        },
+        setDrawer (state, payload) {
+            console.log('drawer: ' + payload.drawer)
+            state.drawer = payload.drawer
         },
         SetMetaMaskInstalled (state, payload) {
             state.user.mmInstalled = payload.mmInstalled
@@ -124,7 +129,7 @@ export default createStore({
     },
     modules: {
         // More Modules Go Here
-        AuthModule,
-        FirebaseModule
+        auth: AuthModule,
+        fb: FirebaseModule
     }
 })

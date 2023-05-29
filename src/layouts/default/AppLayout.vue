@@ -65,18 +65,19 @@
 
         <v-list-item
           v-bind="props"
+          prepend-icon="mdi-collage"
+          title="My Collections"
+          to="/mycollections"
+        ></v-list-item>
+
+        <v-list-item
+          v-bind="props"
         >
           <v-layout>
             <img src="/img/icons/nfts.png" style="max-width:24px%;max-height:24px;margin-right:32px;"/>
             <v-list-item-title v-text="'My NFTs'" style="margin-top:2px"></v-list-item-title>
           </v-layout>
         </v-list-item>
-
-        <v-list-item
-          v-bind="props"
-          prepend-icon="mdi-collage"
-          title="My Collections"
-        ></v-list-item>
 
         <v-list-item
           v-bind="props"
@@ -183,7 +184,7 @@
       max-width="600"
       v-model="connectWalletDialog"
     >
-        <v-card height="100%" >
+        <v-card height="100%" theme="dark">
           <v-toolbar
             color="#241d43"
           >
@@ -232,7 +233,7 @@
               <v-btn style="width:100%"
                      size="large"
                      variant="outlined"
-                     color="deep-purple-darken-4"
+                     color="deep-purple-lighten-2"
                      :disabled="email === ''"
               >Authenticate
               </v-btn>
@@ -268,7 +269,7 @@
                 <v-btn style="width:100%"
                       size="large"
                       variant="outlined"
-                      color="deep-purple-darken-4"
+                      color="deep-purple-lighten-2"
                       :disabled="email === ''"
                 >Authenticate
                 </v-btn>
@@ -285,6 +286,7 @@
 </template>
 
 <script>
+import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import md5 from 'md5'
 // import WalletConnect from '@/components/wallets/WalletConnect'
@@ -342,7 +344,9 @@ export default {
         }
       },
       drawer () {
-        
+        store.commit('setDrawer', {
+          drawer: this.drawer,
+        })
       }
     /* binanceConnected () {
       if (this.binanceConnected) {

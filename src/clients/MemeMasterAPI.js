@@ -18,7 +18,7 @@ if (process.env.VUE_APP_ENVIRONMENT === 'production') {
   MEME_MASTER_API = process.env.VUE_APP_MM_API_TEST;
 } else {
   console.log('API LOCAL ENVIRONMENT');
-  MEME_MASTER_API = 'http://localhost:6060/api/v1/' //process.env.VUE_APP_MM_API_LOCAL;
+  MEME_MASTER_API = 'http://localhost:6060/api/v1/' //process.env.VUE_APP_MM_API_LOCAL; // 'https://testnet.mememaster.app/api/v1/'
 }
 
 let getters = null
@@ -64,6 +64,23 @@ class MemeMasterAPI {
     }
     console.log(MEME_MASTER_API)
     return await axios.post(MEME_MASTER_API + 'generate-text-to-image', payload, config)
+      .then(response => {
+        // console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  async getGenerationEngines() {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    console.log(MEME_MASTER_API)
+    return await axios.get(MEME_MASTER_API + 'get-engines', config)
       .then(response => {
         // console.log(response)
         return response
