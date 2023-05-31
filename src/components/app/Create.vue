@@ -88,6 +88,7 @@
         :windowWidth="windowWidth" 
         :windowHeight="windowHeight"
         :drawer="drawer"
+        :toDrafts="toDrafts"
       >
       </CreateMeme>
   
@@ -111,6 +112,7 @@ export default {
   data: () => ({
     loading: false,
     view: 1,
+    toDrafts: false
   }),
   components: {
     CreateMeme
@@ -119,11 +121,30 @@ export default {
 
   },
   watch: {
+    '$route.params.type'() {
+      console.log('route changed')
+      if (this.$route.params?.type === 'default') {
+        this.view = 2
+        this.toDrafts = false
+        return
+      } else {
+        this.view = 2
+        this.toDrafts = true
+      }
+    }
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
     this.scrollToTop()
     this.init()
+    if (this.$route.params?.type === 'default') {
+      this.view = 1
+      this.toDrafts = false
+      return
+    } else {
+      this.view = 2
+      this.toDrafts = true
+    }
   },
   methods: {
     init () {

@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-  import MyCollections from '@/components/app/Mycollections.vue'
+  import MyCollections from '@/components/app/MyCollections.vue'
 </script>

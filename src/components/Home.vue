@@ -8,7 +8,7 @@
         hide-delimiters
         :show-arrows="false"
         cycle
-        :interval="6000"
+        :interval="10000"
       >
       <v-carousel-item
         v-for="(item, i) in carouselItems"
@@ -24,7 +24,7 @@
             </v-col>
             <v-col cols="12" md="8" class="pa-4">
               <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master, the ultimate AI-powered meme and NFT platform for all social media channels.</p>
-              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're creating a hub where memes, NFTs, and social media intersect. Currently under development, we're excited to announce our fair token launch, targeted for June 2023.</p>
+              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're creating a hub where memes, NFTs, and social media intersect. Currently under development, we're excited to announce our IDO token listing, targeted for June 2023.</p>
               <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold MM tokens in your wallet and be a part of our platform's growth.<br><br>Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p>
               <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'"> Join us and become a Meme Master!</p>
               <!--<v-layout class="mt-8" >
@@ -306,18 +306,6 @@
         </v-row>
     </v-row>
 
-    <div id="roadmap">
-      <!-- ############################### Create Meme Comp -->
-      <Roadmap
-        :isMobileDevice="isMobileDevice" 
-        :dark="dark"
-        :windowWidth="windowWidth" 
-        :windowHeight="windowHeight"
-        :drawer="drawer"
-      >
-      </Roadmap>
-    </div>
-
     <div id="gallery">
         <v-row :style="scrollClicked ? 'margin-top:64px' : ''">
           <v-col class="mt-4">
@@ -380,7 +368,6 @@
 
 <script>
 // @ is an alias to /src
-import Roadmap from './Roadmap'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 export default {
   name: 'Home',
@@ -436,9 +423,8 @@ export default {
     reveal: false,
     scrollClicked: false
   }),
-  components: {
-    Roadmap
-},
+  components: { 
+  },
   computed: {
 
   },
@@ -464,20 +450,20 @@ export default {
 
 <style lang="scss">
   .homeText {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 40px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 24px;
     line-height: 1em;
     color: #FFF;
     margin-top: 16px;
   }
   .homeTextSmaller {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 22px;
     line-height: 1em;
     color: #FFF;
@@ -494,7 +480,7 @@ export default {
     font-weight: bold;
   }
   .gallery {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 45px;
     line-height: 1em;
     color: #FFF;

@@ -370,11 +370,13 @@
                   :subtitle="'Created: ' + makeDateTime(item.created) + ' --- ' + (item.public ? 'Public Collection' : 'Private Collection')"
                   @click="selectedCollection = item"
                 >
-                  <template v-slot:prepend>
-                    <v-avatar color="blue-lighten-1">
-                      <v-icon color="white">mdi-image-multiple-outline</v-icon>
-                    </v-avatar>
-                  </template>
+                <template v-slot:prepend>
+                      <v-avatar color="blue-lighten-1" style="border-radius: 10px;" v-if="item.icon === 'default'" >
+                        <v-icon color="white">mdi-image-multiple-outline</v-icon>
+                      </v-avatar>
+                      <v-img v-else :src="item.icon" style="max-width: 40px;min-width: 40px; max-height:40px;min-height:40px;border-radius: 10px;margin-right: 18px">
+                      </v-img>
+                    </template>
 
                   <template v-slot:append>
                     <v-icon
@@ -431,15 +433,14 @@
                     style="margin-top:-8px"
                     v-model="public"
                     hide-details
-                    true-value="Yes"
-                    false-value="No"
-                    :label="`Make Public: ${public}`"
+                    :label="`Make Public: ${public ? 'Yes' : 'No'}`"
                     inset
                   ></v-switch>
                   
                   <v-icon
-                    style="margin-top:7px"
+                    style="margin-top:5px"
                     size="large"
+                    color="green"
                     @click="privatePublicDialog = true"
                    >
                     mdi-information-outline
@@ -562,7 +563,7 @@ export default {
     memeName: '',
     memeText: '',
     newCollectionName: '',
-    public: 'No',
+    public: false,
     font: { name: "Nunito", id: "Nunito" },
     fonts: [
       { name: "Nunito", id: "Nunito" },

@@ -24,7 +24,7 @@ const routes = [
       },
       // App - User is Connected or Logged In
       {
-        path: '/generate',
+        path: '/generate/:type',
         name: 'Generate',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
@@ -38,6 +38,22 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "home" */ '@/views/MyCollections.vue'),
+      },
+      {
+        path: '/mynfts',
+        name: 'My NFTs',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/MyNFTs.vue'),
+      },
+      {
+        path: '/roadmap',
+        name: 'Roadmap',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/Roadmap.vue'),
       },
     ],
   },

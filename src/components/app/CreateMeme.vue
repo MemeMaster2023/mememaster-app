@@ -401,7 +401,7 @@
                     v-if="generatedArr.length === 0"
                     style="border-radius: 5px;"
                     :src="'/img/home/placeholder-square.webp'"
-                    :lazy-src="'/img/placeholder-square.webp'"
+                    :lazy-src="'/img/home/placeholder-square.webp'"
                     :aspect-ratio="w_x_h.split('x')[0]/w_x_h.split('x')[1]"
                     cover
                     class="bg-grey-lighten-2"
@@ -630,7 +630,7 @@
                     <v-list-item
                       v-bind="props"
                       prepend-icon="mdi-account-circle"
-                      @click="openDraftsFfolder(item.path, index)"
+                      @click="openDraftsFolder(item.path, index)"
                     >
                       <template v-slot:prepend>
                         <v-avatar color="blue-lighten-1">
@@ -751,7 +751,8 @@ export default {
     dark: Boolean,
     windowWidth: Number,
     windowHeight: Number,
-    drawer: Boolean
+    drawer: Boolean,
+    toDrafts: Boolean
   },
   data: () => ({
     loading: false,
@@ -812,10 +813,24 @@ export default {
   components: {
     CreateMemeText
   },
+  watch: {
+    toDrafts () {
+      if (this.toDrafts) {
+        this.view = 'edit'
+        this.openDrafts()
+      } else {
+        this.view = 'generate'
+      }
+    }
+  },
   created(){
     this.getGenerationEngines()
     // Get a reference to the storage service
     this.storageRef = firebase.storage().ref()
+    if (this.toDrafts) {
+      this.view = 'edit'
+      this.openDrafts()
+    }
   },
   computed:{
     getUser () {
@@ -894,7 +909,7 @@ export default {
           // Uh-oh, an error occurred!
         });
     },
-    async openDraftsFfolder (path, index) {
+    async openDraftsFolder (path, index) {
       this.draftsImagesArr = []
       /* if (this.draftsImagesArr.length > 0 ) {
         console.log('No reload needed')
@@ -989,9 +1004,28 @@ export default {
       console.log(this.aspect)
     },
     getBase64 (url) {
-      fetch(url)
+      
+      Promise.resolve(MemeMasterAPI.getFirestoreImage(url))
+        .then(result => {
+          console.log(result)
+          // Handle Result
+          // this.items = result.data.message
+          // var obj = {
+            // base64: result.data.message.base64
+            // selected: true
+          // }
+          // this.generatedArr.push(obj)
+        })
+        .catch(err => {
+          // this.loading = false
+          console.log('Error generating Meme.', err)
+          // show friendly error in user screen
+        })
+        
+      /* fetch(url)
         .then(response => response.arrayBuffer())
         .then(buffer => {
+          console.log(buffer)
           let base64 = btoa(
             new Uint8Array(buffer).reduce(
               (data, byte) => data + String.fromCharCode(byte),
@@ -1003,7 +1037,7 @@ export default {
             base64: base64
           }
           this.generatedArr.push(obj)
-        });
+        }); */
     },
     openPromptingGuide () {
 
@@ -1015,7 +1049,7 @@ export default {
         text_prompts: [
           {
             text: this.prompt,
-            weight: this.promptStrength
+            weight: parseFloat(this.promptStrength)
           },
         ],
         cfg_scale: 7, // Default

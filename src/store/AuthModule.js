@@ -85,7 +85,7 @@ const AuthModule = {
         email: payload.email,
         gravatar: true,
         avatar: '',
-        accounts: payload.accounts,
+        accounts: [payload.accounts],
         status: payload.status,
         link_verified: false,
         id_verified: false,

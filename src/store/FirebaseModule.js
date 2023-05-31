@@ -81,6 +81,18 @@ const FirebaseModule = {
           console.log(error);
         });
     },
+    updateCollection({ commit }, payload) {
+      commit('setLoading', true);
+      db.collection('collections')
+        .doc(payload.id)
+        .update(payload)
+        .then(() => {
+          console.log('Collection in bucket updated');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     addMemeToCollection ({ commit }, payload) {
       // console.log(payload)
       commit('setLoading', true);
