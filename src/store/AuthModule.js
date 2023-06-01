@@ -3,88 +3,37 @@ import { db } from '@/main'
 
 const AuthModule = {
   state: {
-    user: null
+    user: null,
+    authMessage: '',
+    errorMessage: '',
+    provider:'',
   },
   mutations: {
-    setUser (state, payload) {
-      state.user = payload
-    }
+    setUser(state, payload) {
+      state.user = payload;
+    },
+    setState(state, payload) {
+      console.log(payload);
+      var keys = Object.keys(payload);
+      keys.forEach((key) => {
+        state[key] = payload[key];
+      });
+    },
   },
   actions: {
-    signUserUp ({commit}, payload) {
-      commit('setLoading', true)
-      commit('clearError')
-      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            user.updateProfile({displayName: payload.eth_address})
-              .then(
-                user => {
-                  commit('setLoading', false)
-                  const newUser = {
-                    id: user.uid,
-                    name: user.eth_address,
-                    email: user.email,
-                    photoUrl: user.photoURL
-                  }
-                  commit('setUser', newUser)
-                }
-              )
-              .catch(
-                error => {
-                  commit('setLoading', false)
-                  commit('setError', error)
-                  console.log(error)
-                }
-              )
-          }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
-    },
-    signUserIn ({commit}, payload) {
-      commit('setLoading', true)
-      commit('clearError')
-      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            commit('setLoading', false)
-            const newUser = {
-              id: user.uid,
-              name: user.displayName,
-              email: user.email,
-              photoUrl: user.photoURL
-            }
-            commit('setUser', newUser)
-          }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
-    },
-    insertUserForSignUp ({commit}, payload) {
-      commit('setLoading', true)
+    insertUserForSignUp({ commit }, payload) {
       // console.log(payload)
       const newUser = {
         uid: payload.uid,
         name: payload.name,
-        about_me: '',
-        full_name: '',
-        address: '',
-        date_of_birth: '',
+        about_me: "",
+        full_name: "",
+        address: "",
+        date_of_birth: "",
         gender: 0,
         email: payload.email,
         gravatar: true,
-        avatar: '',
+        avatar: "",
         accounts: payload.accounts,
         status: payload.status,
         link_verified: false,
@@ -94,29 +43,31 @@ const AuthModule = {
         acc_level: 1,
         acc_type: 10, // TBD 10 Free 10k holder 11, 75k holder 12
         terms_accepted: true,
-        language: 'en',
+        language: "en",
         created: payload.created,
         lastlogin: 0,
         favorites: [],
-        welcome: payload.welcome
-      }
-      db.collection('users').doc(payload.postkey).set(newUser)
-      .then(() => {
-          // console.log('User Account in bucket created')
-
-          commit('SetConnectedUserDetails', {
+        welcome: payload.welcome,
+      };
+      console.log(newUser);
+      db.collection("users")
+        .doc(payload.postkey)
+        .set(newUser)
+        .then(() => {
+          console.log('User Account in bucket created')
+          commit("SetConnectedUserDetails", {
             uid: payload.uid,
             docId: payload.postkey,
-            language: 'en',
+            language: "en",
             displayName: payload.name,
-            aboutMe: '',
-            address: '',
-            fullName: '',
-            dob: '',
+            aboutMe: "",
+            address: "",
+            fullName: "",
+            dob: "",
             gender: 0,
             email: payload.email,
             gravatar: true,
-            avatar: '',
+            avatar: "",
             isLoggedIn: true,
             isVerified: false,
             idVerified: false,
@@ -126,160 +77,173 @@ const AuthModule = {
             accStatus: payload.status,
             memberSince: payload.created,
             favorites: [],
-          })
-          // console.log('Set User Details in Store - Auth Module')
-
+          });
         })
-      .catch(error => {
-          console.log(error)
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    sendMagicLink({ commit }, payload) {
+      var MM_URL;
+      console.log(payload);
+      const environment = import.meta.env.VITE_APP_ENVIRONMENT;
+      if (environment === "production") {
+        console.log("API PRODUCTION ENVIRONMENT");
+        MM_URL = import.meta.env.VITE_APP_MM;
+      } else if (environment === "testnet") {
+        console.log("API TEST ENVIRONMENT");
+        MM_URL = import.meta.env.VITE_APP_MM_TEST;
+      } else {
+        console.log("API LOCAL ENVIRONMENT");
+        MM_URL = import.meta.env.VITE_APP_MM_LOCAL;
+      }
+      var actionCodeSettings = {
+        url: MM_URL + "authorise/" + btoa(payload.email),
+        handleCodeInApp: true,
+      };
+      firebase
+        .auth()
+        .sendSignInLinkToEmail(payload.email, actionCodeSettings)
+        .then(() => {
+          window.localStorage.setItem(
+            "meme-master-emailForSignIn",
+            payload.email
+          );
+          commit("setState", {
+            authMessage: "Email sent successfully!",
+          });
         })
+        .catch((error) => {
+          console.log(error);
+          commit("setState", {
+            errorMessage: error.message,
+          });
+        });
     },
-    userLoginMagicLink ({commit}, payload) {
-      commit('setLoading', true)
-      // console.log(payload)
-      const message = {
-        link_verified: payload.link_verified
-      }
-      console.log(message)
-      db.collection('users').doc(payload.postkey).update(message)
-        .then(() => {
-            // console.log('User Account in bucket updated')
-          })
-        .catch(error => {
-            console.log(error)
-          })
-    },
-    magicLinkClickedForSignUp ({commit}, payload) {
-      commit('setLoading', true)
-      // console.log(payload)
-      const message = {
-        uid: payload.uid,
-        status: payload.status,
-        link_verified: payload.link_verified,
-        lastlogin: payload.lastlogin
-      }
-      db.collection('users').doc(payload.postkey).update(message)
-        .then(() => {
-            // console.log('User Account in bucket Updated')
-          })
-        .catch(error => {
-            console.log(error)
-          })
-    },
-    signUserInGoogle ({commit}) {
-      commit('setLoading', true)
-      commit('clearError')
-      firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
-        .then(
-          user => {
-            commit('setLoading', false)
-            const newUser = {
-              id: user.uid,
-              name: user.displayName,
-              email: user.email,
-              photoUrl: user.photoURL
+    signInWithLink: ({ commit, dispatch }, payload) => {
+      firebase
+        .auth()
+        .signInWithEmailLink(payload.email, payload.link)
+        .then(async (result) => {
+          const user = result.user;
+          if (user) {
+            if (payload.new) {
+              if (result.user !== null && result.user !== undefined) {
+                try {
+                  console.log(result.user);
+                  await firebase
+                    .auth()
+                    .currentUser.updatePassword(result.user.uid);
+                } catch (err) {
+                  console.log(err);
+                  commit("setState", {
+                    errorMessage: err.message,
+                  });
+                }
+              } 
+              let newPostKey = db.collection("users").doc();
+              let dispatchObj = {
+                uid: user.uid,
+                postkey: newPostKey.id,
+                name: '',//payload.username ?? payload.email.split("@")[0],
+                email: payload.email,
+                accounts: [],
+                status: 1,
+                level: 10,
+                created: new Date().getTime(),
+                welcome: true,
+              };
+              await dispatch("insertUserForSignUp", dispatchObj);
+            } else {
+              commit("SetConnectedUserDetails", payload.userData);
             }
-            commit('setUser', newUser)
+            localStorage.removeItem("meme-master-emailForSignIn");
+            commit("SetEmailConnected", {
+              isEmailConnected: true,
+              isLoggedIn: true
+            }, { root: true }
+            );
           }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
+        })
+        .catch((error) => {
+          localStorage.removeItem("meme-master-emailForSignIn");
+          console.log(error);
+          commit("setState", {
+            errorMessage: error.message,
+          });
+        });
     },
-    signUserInFacebook ({commit}) {
-      commit('setLoading', true)
-      commit('clearError')
-      firebase.auth().signInWithPopup(new firebase.auth.FacebookAuthProvider())
-        .then(
-          user => {
-            commit('setLoading', false)
-            const newUser = {
-              id: user.uid,
-              name: user.displayName,
-              email: user.email,
-              photoUrl: user.photoURL
+    signUserInGoogle({ commit, dispatch }) {
+      firebase
+        .auth()
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(async (result) => {
+          const user = result.user;
+          if (user) {
+            const querySnapshot = await db
+              .collection('users')
+              .where('email', '==', user.email)
+              .get();
+            if(querySnapshot.empty){
+              let newPostKey = db.collection("users").doc();
+              let dispatchObj = {
+                uid: user.uid,
+                postkey: newPostKey.id,
+                name: '',//user.displayName ?? user.email.split("@")[0],
+                email: user.email,
+                accounts: [],
+                status: 1,
+                level: 10,
+                created: new Date().getTime(),
+                welcome: true,
+              };
+              await dispatch("insertUserForSignUp", dispatchObj);
+            }else{
+              let objFromDb = querySnapshot.docs[0].data();
+              objFromDb["docId"] = querySnapshot.docs[0].id;
+              commit("SetConnectedUserDetails", objFromDb);
             }
-            commit('setUser', newUser)
+            commit("SetEmailConnected", {
+                isEmailConnected: true,
+                isLoggedIn: true
+              }, { root: true }
+            );
+            commit("setState", {
+              authMessage: "Login using google success!",
+              provider: "Google"
+            });
           }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
+        })
+        .catch((error) => {
+          commit("setState", {
+            errorMessage: error.message,
+          });
+        });
     },
-    signUserInGithub ({commit}) {
-      commit('setLoading', true)
-      commit('clearError')
-      firebase.auth().signInWithPopup(new firebase.auth.GithubAuthProvider())
-        .then(
-          user => {
-            commit('setLoading', false)
-            const newUser = {
-              id: user.uid,
-              name: user.displayName,
-              email: user.email,
-              photoUrl: user.photoURL
-            }
-            commit('setUser', newUser)
-          }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
+    emptyAuthMessage({commit}){
+      commit("setState", {
+        errorMessage: "",
+        authMessage: "",
+      });
     },
-    signUserInTwitter ({commit}) {
-      commit('setLoading', true)
-      commit('clearError')
-      firebase.auth().signInWithPopup(new firebase.auth.TwitterAuthProvider())
-        .then(
-          user => {
-            commit('setLoading', false)
-            const newUser = {
-              id: user.uid,
-              name: user.displayName,
-              email: user.email,
-              photoUrl: user.photoURL
-            }
-            commit('setUser', newUser)
-          }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
-    },
-    autoSignIn ({commit}, payload) {
-      commit('setUser', {
+    autoSignIn({ commit }, payload) {
+      commit("setUser", {
         id: payload.uid,
         name: payload.displayName,
         email: payload.email,
-        photoUrl: payload.photoURL
-      })
+        photoUrl: payload.photoURL,
+      });
     },
-    logout ({commit}) {
-      firebase.auth().signOut()
-      commit('setUser', null)
-    }
+    logout({ commit }) {
+      firebase.auth().signOut();
+      commit("setUser", null);
+    },
   },
   getters: {
-    user (state) {
-      return state.user
-    }
-  }
-}
+    user(state) {
+      return state.user;
+    },
+  },
+};
 
 export default AuthModule
