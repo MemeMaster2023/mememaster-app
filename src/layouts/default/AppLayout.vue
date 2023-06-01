@@ -68,7 +68,7 @@
           v-bind="props"
           prepend-icon="mdi-view-grid-plus"
           title="Generate"
-          to="/generate"
+          to="/generate/default"
         ></v-list-item>
 
         <v-list-item
@@ -80,6 +80,7 @@
 
         <v-list-item
           v-bind="props"
+          to="/mynfts"
         >
           <v-layout>
             <img src="/img/icons/nfts.png" style="max-width:24px%;max-height:24px;margin-right:32px;"/>
@@ -91,6 +92,7 @@
           v-bind="props"
           prepend-icon="mdi-image-edit-outline"
           title="Drafts"
+          to="/generate/drafts"
         ></v-list-item>
 
 
@@ -98,8 +100,8 @@
         
       <v-list-item prepend-icon="mdi-robot-outline" title="Meme Marketplace" value="mememarket"></v-list-item>
       <v-list-item prepend-icon="mdi-circle-multiple-outline" title="Token Listings" value="tokens"></v-list-item>
-      <v-list-item prepend-icon="mdi-transit-connection-variant" title="Roadmap" value="faq"></v-list-item>
-      <v-list-item prepend-icon="mdi-chart-arc" title="Tokenomics" value="faq"></v-list-item>
+      <v-list-item prepend-icon="mdi-transit-connection-variant" title="Roadmap" value="Roadmap" to="/roadmap"></v-list-item>
+      <v-list-item prepend-icon="mdi-chart-arc" title="Tokenomics" value="Tokenomics"></v-list-item>
       <v-list-item prepend-icon="mdi-head-question-outline" title="FAQ" value="faq"></v-list-item>
       <v-list-item prepend-icon="mdi-at" title="Contact Us" value="contact"></v-list-item>
     </v-list>
@@ -168,7 +170,7 @@
         variant="outlined"
         color="white"
         theme="dark"
-        to="/generate"
+        to="/generate/default"
         prepend-icon="mdi-view-grid-plus" 
       >
         Generate

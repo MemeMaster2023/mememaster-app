@@ -89,5 +89,29 @@ class MemeMasterAPI {
         console.log(e)
       })
   }
+
+  // ###################################################################################
+  // ############################# FIRESTORE IMAGE TO BASE64  ##########################
+  // ###################################################################################
+
+  async getFirestoreImage(imgUrl) {
+    var payload = {
+      imgUrl: imgUrl
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    console.log(MEME_MASTER_API)
+    return await axios.post(MEME_MASTER_API + 'get-firestore-image', payload, config)
+      .then(response => {
+        console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
 }
 export default new MemeMasterAPI()

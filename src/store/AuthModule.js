@@ -23,6 +23,10 @@ const AuthModule = {
   actions: {
     insertUserForSignUp({ commit }, payload) {
       // console.log(payload)
+      let accounts = [];
+      if(![null,undefined].includes(payload.accounts)){
+        accounts = Array.isArray(payload.accounts) ? payload.accounts : [payload.accounts]
+      }
       const newUser = {
         uid: payload.uid,
         name: payload.name,
@@ -33,8 +37,8 @@ const AuthModule = {
         gender: 0,
         email: payload.email,
         gravatar: true,
-        avatar: "",
-        accounts: payload.accounts,
+        avatar: '',
+        accounts: accounts,
         status: payload.status,
         link_verified: false,
         id_verified: false,

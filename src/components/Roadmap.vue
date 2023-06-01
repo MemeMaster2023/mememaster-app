@@ -1,36 +1,209 @@
 <template>
-  <v-card theme="dark" tile flat style="width: 100%;height: auto">
-    <v-row :style="isMobileDevice ? 'margin-right:10px' : 'margin-right:100px;margin-left:100px;margin-bottom:20px'">
+  <v-card theme="dark" style="width: 100%;height: auto">
+    <v-row :style="isMobileDevice ? 'margin-left:4px;margin-right:4px' : 'margin-top:50px;'">
       <v-col cols="12" md="12" class="mt-8 mb-16" >
-        <div style="font-size: 3rem;" class="text-center">Roadmap</div>
-        <v-timeline :side="isMobileDevice ? 'end' : ''" >
-          <v-timeline-item
-            v-for="(item, i) in items"
-            :color="item.color"
-            :icon="item.icon"
-            :dot-color="item.color"
-            size="large"
+        <div v-if="model === '0'" style="font-size: 3rem;" class="text-center">Roadmap</div>
+        
+        <v-carousel 
+              v-model="model" 
+              :height="(windowHeight - (model === '0' ? 170 : 100))"
+              show-arrows="hover"
           >
-            <template v-slot:opposite v-if="!isMobileDevice">
-              <span
-                :class="`font-weight-bold`"
-                style="font-size: 2rem;"
-                v-text="item.date"
-              ></span>
-            </template>
-            <v-card
-              :color="item.color"
-              :style="isMobileDevice ? 'max-width: ' + (windowWidth - 100) + 'px;' : 'max-width: 600px'"
+          <v-carousel-item
+            value="0"
+            src="/img/roadmap/slide_01.webp"
+            height="100%"
+          >
+          </v-carousel-item>
+
+          <v-carousel-item
+            value="1"
+            height="100%"
+          >
+            <v-sheet
+              height="100%"
+              tile
+              style="background: rgb(255,82,93);background: linear-gradient(180deg, rgba(125, 40, 45,1) 0%, rgb(255,82,93) 100%);"
             >
-              <v-card-title :style="dark ? 'color: #FFF' : 'color: #FFF'" class="title">{{ item.title }}</v-card-title>
-              <v-card-text class="white text--primary" style="padding-top:10px">
-                <template v-for="(t, index) in item.text" :key="index">
-                  <p>{{ t }}</p>
-                </template>
-              </v-card-text>
-            </v-card>
-          </v-timeline-item>
-        </v-timeline>
+
+            <v-row style="height:100%">
+              <v-col cols="12" md="8" class="pl-16 pt-16">
+                <v-list density="compact" bg-color="transparent">
+                    <span style="font-weight: bold;font-size: 1.2rem;">{{ items[0].date}} - {{ items[0].title}}</span>
+
+                    <v-list-item
+                      v-for="(item, i) in items[0].text"
+                      :key="i"
+                      :value="item"
+                      active-color="primary"
+                    >
+                      <template v-slot:prepend>
+                        <v-icon size="32" color="green" v-if="item.completed" icon="mdi-checkbox-marked-outline"></v-icon>
+                        <v-icon size="32" v-else icon="mdi-checkbox-blank-outline"></v-icon>
+                      </template>
+
+                      <span style="font-size: 1.1rem;" v-text="item.text"></span>
+                    </v-list-item>
+                  </v-list>
+                </v-col>
+
+                <v-col cols="12" md="4" class="pr-16 pb-16" align-self="end" >
+                  <v-img src="/img/roadmap/slide_02_1.webp"></v-img>
+                </v-col>
+              </v-row>
+
+            </v-sheet>
+            
+          </v-carousel-item>
+
+          <v-carousel-item
+            value="2"
+            height="100%"
+          >
+            <v-sheet
+              height="100%"
+              tile
+              style="background: rgb(226, 82, 255);background: linear-gradient(180deg, rgba(117, 42, 132,1) 0%, rgb(226, 82, 255) 100%);"
+            >
+            <v-row style="height:100%">
+                <v-col cols="12" md="4" class="pl-16" align-self="center" >
+                  <v-img src="/img/roadmap/slide_03_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
+                </v-col>
+
+                <v-col cols="12" md="8" class="pl-16 pt-16">
+                <v-list density="compact" bg-color="transparent">
+                    <span style="font-weight: bold;font-size: 1.2rem;">{{ items[1].date}} - {{ items[1].title }}</span>
+
+                    <v-list-item
+                      v-for="(item, i) in items[1].text"
+                      :key="i"
+                      :value="item"
+                      active-color="primary"
+                    >
+                      <template v-slot:prepend>
+                        <v-icon size="32" color="green" v-if="item.completed" icon="mdi-checkbox-marked-outline"></v-icon>
+                        <v-icon size="32" v-else icon="mdi-checkbox-blank-outline"></v-icon>
+                      </template>
+
+                      <span style="font-size: 1.1rem;" v-text="item.text"></span>
+                    </v-list-item>
+                  </v-list>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+
+          <v-carousel-item
+            value="3"
+            height="100%"
+          >
+            <v-sheet
+              height="100%"
+              tile
+              style="background: rgb(82, 192, 255);background: linear-gradient(180deg, rgb(42, 95, 132) 0%, rgb(82, 192, 255) 100%);"
+            >
+            <v-row style="height:100%">
+                <v-col cols="12" md="8" class="pl-16 pt-16">
+                <v-list density="compact" bg-color="transparent">
+                    <span style="font-weight: bold;font-size: 1.2rem;">{{ items[2].date}} - {{ items[2].title }}</span>
+
+                    <v-list-item
+                      v-for="(item, i) in items[2].text"
+                      :key="i"
+                      :value="item"
+                      active-color="primary"
+                    >
+                      <template v-slot:prepend>
+                        <v-icon size="32" color="green" v-if="item.completed" icon="mdi-checkbox-marked-outline"></v-icon>
+                        <v-icon size="32" v-else icon="mdi-checkbox-blank-outline"></v-icon>
+                      </template>
+
+                      <span style="font-size: 1.1rem;" v-text="item.text"></span>
+                    </v-list-item>
+                  </v-list>
+                </v-col>
+                <v-col cols="12" md="4" class="pt-16 pr-16" align-self="start" >
+                  <v-img src="/img/roadmap/slide_04_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+
+          <v-carousel-item
+            value="4"
+            height="100%"
+          >
+            <v-sheet
+              height="100%"
+              tile
+              style="background: rgb(82, 255, 154);background: linear-gradient(180deg, rgb(42, 132, 89) 0%, rgb(82, 255, 154) 100%);"
+            >
+            <v-row style="height:100%">
+                <v-col cols="12" md="4" class="pl-16" align-self="center" >
+                  <v-img src="/img/roadmap/slide_05_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
+                </v-col>
+
+                <v-col cols="12" md="8" class="pl-16 pt-16">
+                <v-list density="compact" bg-color="transparent">
+                    <span style="font-weight: bold;font-size: 1.2rem;">{{ items[3].date}} - {{ items[3].title }}</span>
+
+                    <v-list-item
+                      v-for="(item, i) in items[3].text"
+                      :key="i"
+                      :value="item"
+                      active-color="primary"
+                    >
+                      <template v-slot:prepend>
+                        <v-icon size="32" color="green" v-if="item.completed" icon="mdi-checkbox-marked-outline"></v-icon>
+                        <v-icon size="32" v-else icon="mdi-checkbox-blank-outline"></v-icon>
+                      </template>
+
+                      <span style="font-size: 1.1rem;" v-text="item.text"></span>
+                    </v-list-item>
+                  </v-list>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+
+          <v-carousel-item
+            value="5"
+            height="100%"
+          >
+            <v-sheet
+              height="100%"
+              tile
+              style="background: rgb(255, 209, 82);background: linear-gradient(180deg, rgb(132, 105, 42) 0%, rgb(255, 209, 82) 100%);"
+            >
+            <v-row style="height:100%">
+                <v-col cols="12" md="8" class="pl-16 pt-16">
+                <v-list density="compact" bg-color="transparent">
+                    <span style="font-weight: bold;font-size: 1.2rem;">{{ items[4].date}} - {{ items[4].title }}</span>
+
+                    <v-list-item
+                      v-for="(item, i) in items[4].text"
+                      :key="i"
+                      :value="item"
+                      active-color="primary"
+                    >
+                      <template v-slot:prepend>
+                        <v-icon size="32" color="green" v-if="item.completed" icon="mdi-checkbox-marked-outline"></v-icon>
+                        <v-icon size="32" v-else icon="mdi-checkbox-blank-outline"></v-icon>
+                      </template>
+
+                      <span style="font-size: 1.1rem;" v-text="item.text"></span>
+                    </v-list-item>
+                  </v-list>
+                </v-col>
+                <v-col cols="12" md="4" class="pt-16 pr-16" align-self="center" >
+                  <v-img src="/img/roadmap/slide_06_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+          
+        </v-carousel>
+        
       </v-col>
     </v-row>
   </v-card>
@@ -51,37 +224,82 @@ export default {
       items: [
         {
           title: 'Building the App and Establishing Foundations',
-          text: ['✅ Develop the MemeMaster App: Prioritize user-friendly design and make sure it\'s compatible with various devices.', '✅ Integrate a Meme Creator: Enable users to generate unique and personalized memes with an easy-to-use tool.','✅ Integrate Wallets: Both web3 wallets for blockchain transactions and non-web3 wallets for standard transactions.', '✅ Develop MemeMaster ERC 20 Tokens: This will be the native token for your platform.', '✅ Create and curate Meme Collections.', '✅ Establish Galleries: Users can view and explore these curated collections.', '✅ Incorporate Social Media Links: Encourage sharing across platforms and foster community engagement.', '⬜ Create a prompt library for far better meme and other creations.', '⬜ MM Token launch on ICO Drops'],
+          text: [
+            {text: 'Develop the MemeMaster App: Prioritize user-friendly design and make sure it\'s compatible with various devices.', completed: true}, 
+            {text: 'Integrate a Meme Creator: Enable users to generate unique and personalized memes with an easy-to-use tool.', completed: true},
+            {text: 'Integrate Wallets: Both web3 wallets for blockchain transactions and non-web3 wallets for standard transactions.', completed: true}, 
+            {text: 'Develop Meme Master ERC 20 Tokens: This will be the native token for your platform.', completed: true},
+            {text: 'Create a Meme Marketplace where public Collections can be showcased to public and platform users.', completed: false}, 
+          ],
           date: 'Phase 1',
           color: '#463552',
           colorHex: this.getTheme,
-          icon: 'mdi-rocket-launch-outline'
+          icon: 'mdi-calendar-start'
         },
         {
-          title: 'Enabling NFT Interactions',
-          text: ['⬜  Develop NFT Backend Infrastructure: This will support minting, buying, and selling of NFTs.', '⬜  Build the NFT Minting Application: This will allow users to create their own meme-based NFTs.', '⬜ Launch MemeMaster\'s Meme-to-NFT Creation Section: This can be an exclusive feature of the platform allowing memes to be converted to NFTs', '⬜ Educational Content: Provide resources for users unfamiliar with NFTs, blockchain, or crypto.'],
+          title: 'Refinement & User Experience ',
+          text: [
+            {text: 'All your generated content automatically saved to your Dratfs so you can continue editing your creations.', completed: true}, 
+            {text: 'Establish Galleries: Users can view and explore these curated collections.', completed: true}, 
+            {text: 'Incorporate Social Media Links: Encourage sharing across platforms and foster community engagement.', completed: false}, 
+            {text: 'Create a prompt library for far better meme and other creations.', completed: false}, 
+            {text: 'Integrate Stripe payments for topping up credits.', completed: false}, 
+            {text: 'IDO Token launch, trageted for June 2023', completed: false},
+          ],
           date: 'Phase 2',
           color: '#463552',
           colorHex: this.getTheme,
           icon: 'mdi-calendar-start'
         },
         {
-          title: 'Taking shape and getting it out',
-          text: ['⬜ Publish Final Whitepaper', '⬜ MEME & NFT platform App development', '⬜ MEME & NFT platform demo and previews', '⬜ Cross chain with Cardano, Polkadot, NEO and TRON', '⬜ Token LAUNCHPAD rolling out for all platforms/chains', '⬜ Swap platform', '⬜ Limit orders on swap platforms', '⬜ Airdrops to TMO holders from projects launching', '⬜ Airdrops to TMO holders from Meme Master from time to time', '⬜ Continue marketing and funneling','⬜ Apply to other exchanges', '⬜ Reach 15,000 TMO Holders', '⬜ Reach 5,000 Telegram members'],
+          title: 'Launch & Enabling NFT Interactions',
+          text: [
+            {text: 'Uniswap and CEX listings', completed: false},
+            {text: 'Develop NFT Backend Infrastructure: This will support minting, buying, and selling of NFTs.', completed: false}, 
+            {text: 'Build the NFT Minting Application: This will allow users to create their own meme-based NFTs.', completed: false}, 
+            {text: 'Launch MemeMaster\'s Meme-to-NFT Creation Section: This can be an exclusive feature of the platform allowing memes to be converted to NFTs', completed: false}
+          ],
           date: 'Phase 3',
           color: '#463552',
           colorHex: this.getTheme,
-          icon: 'mdi-bullhorn-outline'
+          icon: 'mdi-tune'
+        },
+        {
+          title: 'Expanding Platform Capabilities',
+          text: [
+            {text: 'Educational Content: Provide resources for users unfamiliar with NFTs, blockchain, or crypto.', completed: false},
+            {text: 'Plan and Execute Airdrops: Distribute Memes and NFTs to wallet holders.', completed: false}, 
+            {text: 'Confirm Coinmarketcap and Coingecko listing', completed: false},
+            {text: 'Create New Token Listing Platform: This will provide users with access to newly minted tokens, enhancing the ecosystem\'s dynamism.', completed: false},  
+            {text: 'Gaming App Integration: Develop a mini-game section where users can play with/against each other. The games can be meme-themed or utilize user\'s NFTs', completed: false} 
+          ],
+          date: 'Phase 4',
+          color: '#463552',
+          colorHex: this.getTheme,
+          icon: 'mdi-rocket-launch-outline'
         },
         {
           title: 'Time to grow!',
-          text: ['⬜ MetaMask & Binance Chain Wallet ( Full Funtionality )', '⬜ Hybrid MEME & NFT platform Launch (Mobile)', '⬜ MEME/NFT Exchange', '⬜ Collect and Trade / Exchange', '⬜ Implementation of Trading Bots', '⬜ Smart Contract interfaces... Produce your own token and launch your own project on Meme Master on multiple chains', '⬜ Links and ratings to other launchpads (kind of CoinGecko for launchpads) all chains', '⬜ Apply to more exchanges', '⬜ Reach 30,000 TMO Holders', '⬜ Reach 15,000 Telegram members'],
-          date: 'Phase 4',
+          text: [
+            {text: 'Launch a Decentralized Marketplace: Enable peer-to-peer transaction of memes and NFTs within the platform.', completed: false},
+            {text: 'Listing on more DEX and CEX exchanges.', completed: false},
+            {text: 'Continuous improvment and development following the latest in Meme, NFT & AI movements.', completed: false},
+            {text: 'Ordinal NFT creation.', completed: false}
+          ],
+          date: 'Phase 5',
           color: '#463552',
           colorHex: this.getTheme,
           icon: 'mdi-sprout-outline'
         }
-      ]
+      ],
+      colors: [
+        'primary',
+        'secondary',
+        'yellow darken-2',
+        'red',
+        'orange',
+      ],
+      model: 0,
     }
   },
   watch: {

@@ -56,12 +56,14 @@
                     link
                     :value="item"
                     active-color="primary"
-                    @click="selectedCollectionClicked(item)"
+                    @click="selectedCollectionClicked(item, index)"
                   >
                     <template v-slot:prepend>
-                      <v-avatar color="blue-lighten-1">
+                      <v-avatar color="blue-lighten-1" style="border-radius: 10px;" v-if="item.icon === 'default'" >
                         <v-icon color="white">mdi-image-multiple-outline</v-icon>
                       </v-avatar>
+                      <v-img v-else :src="item.icon" style="width: 40px; max-height:40px;min-height:40px;border-radius: 10px;margin-right: 18px">
+                      </v-img>
                     </template>
 
                     <v-list-item-title style="color: #FFF;font-size: 18px;font-weight: bold;">
@@ -113,9 +115,7 @@
                     style="margin-top:-8px"
                     v-model="public"
                     hide-details
-                    true-value="Yes"
-                    false-value="No"
-                    :label="`Make Public: ${public}`"
+                    :label="`Make Public: ${public ? 'Yes' : 'No'}`"
                     inset
                   ></v-switch>
                   
@@ -217,22 +217,22 @@
             </v-btn>
           </v-toolbar>
 
-          <v-row class="pa-4">
+          <v-row class="pa-12">
                 
             <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'right'">
 
-              <v-avatar color="blue-lighten-1" size="120">
+              <v-avatar color="blue-lighten-1" size="120" style="border-radius: 10px;">
                 <v-icon v-if="selectedCollection.icon === 'default'" size="80" color="white">mdi-image-multiple-outline
                 </v-icon>
-                <v-img v-else :src="selectedCollection.icon">
+                <v-img v-else :src="selectedCollection.icon" style="width: 120px; height:120px;border-radius: 10px;">
                 </v-img>
               </v-avatar>
               
               <v-btn size="small" 
                      icon="mdi-camera-outline" 
                      color="grey" 
-                     style="position: fixed;margin-top: 80px;margin-left: -40px;"
-                     @click="photoDialog = true"
+                     style="position: fixed;margin-top: 90px;margin-left: -30px;"
+                     @click="collectionImageDialog = true"
               >
               </v-btn>
               
@@ -244,9 +244,65 @@
               flat
               class="pa-4"
               > 
-                <div style="text-transform: uppercase;" class="text-h4 font-weight-bold">{{ selectedCollection.name }}</div>
-                <div class="text-h7 mb-1 font-weight-bold">Created: {{ makeDate(selectedCollection.created) }}</div>
-                <div class="text-h7 mb-1 font-weight-bold">Public: {{ selectedCollection.public ? 'Yes' : 'No' }}</div>
+                <v-layout v-if="!collectionNameEdit">
+                  <div style="text-transform: uppercase;" class="text-h4 font-weight-bold">{{ selectedCollection.name }}</div>
+                  <v-icon
+                    style="margin-left:10px"
+                    size="small"
+                    @click="collectionNameEditClicked"
+                   >
+                    mdi-pencil-box-outline
+                  </v-icon>
+                </v-layout>
+
+                <v-layout v-if="collectionNameEdit">
+                  <v-text-field
+                    v-model="selectedCollection.name"
+                    maxlength="70"
+                    variant="outlined"
+                  >
+                  </v-text-field>
+                  <v-btn
+                    icon
+                    size="large"
+                    @click="updateCollectionSettings" 
+                    v-if="collectionNameEdit"
+                  >
+                    <v-icon color="green">mdi-content-save-outline</v-icon>
+                  </v-btn>
+                  <v-btn
+                    icon
+                    size="large"
+                    @click="collectionNameEditCancel"
+                    v-if="collectionNameEdit"
+                  >
+                    <v-icon color="grey">mdi-close-circle</v-icon>
+                  </v-btn>
+                </v-layout>
+
+                <div class="text-h7 mb-3 font-weight-bold">Created: {{ makeDate(selectedCollection.created) }}</div>
+
+                <v-layout style="padding-top: 5px">
+                  <div class="text-h7 mb-3 font-weight-bold">Public: {{ selectedCollection.public ? 'Yes' : 'No' }}</div>
+                  <v-switch
+                    style="margin-left:20px;margin-top: -14px"
+                    v-model="selectedCollection.public"
+                    hide-details
+                    inset
+                    @change="updateCollectionSettings"
+                  >
+                  </v-switch>
+                  
+                  <v-icon
+                    style="margin-top:-3px"
+                    size="large"
+                    color="green"
+                    @click="privatePublicDialog = true"
+                   >
+                    mdi-information-outline
+                  </v-icon>
+                  <v-spacer></v-spacer>
+                </v-layout>
               </v-card>
             </v-col>
 
@@ -255,10 +311,10 @@
         </v-card>
       </v-dialog>
 
-      <v-dialog v-model="photoDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-dialog v-model="collectionImageDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
           <v-card theme="dark">
             <v-toolbar flat color="grey-darken-3">
-              <v-btn icon @click.native="photoDialog = false">
+              <v-btn icon @click.native="collectionImageDialog = false">
                 <v-icon>mdi-arrow-left</v-icon>
               </v-btn>
               <v-toolbar-title>{{ 'Select an Image' }}</v-toolbar-title>
@@ -272,10 +328,45 @@
               
               <v-col cols="12" md="6" :align="'center'">
 
-                <v-btn color="#388E3C" @click="setProfilePhoto"
-                    :loading="loading" :disabled="loading || image === ''">
-                  <v-icon left>mdi-check-circle-outline</v-icon>{{ 'Use this Image' }}
-                </v-btn>
+                <div class="image-upload">
+                  <label for="file-input">
+
+                    <div class="text-center mb-2">Click or tab to select an image.</div>
+                    <v-avatar color="blue-lighten-1" size="150"  v-if="collectionImage === ''" style="border-radius: 10px;">
+                      <v-icon size="80" color="white">{{ isMobileDevice ? 'mdi-gesture-tap' : 'mdi-selection-search' }}
+                      </v-icon>
+                    </v-avatar>
+                    <v-img v-else :src="collectionImageUrl" style="width: 150px;height:150px;border-radius: 10px;">
+                    </v-img>
+
+                  </label>
+
+                  <input 
+                      id="file-input" 
+                      type="file" 
+                      accept="image/jpg,image/jpeg,image/png"
+                      @change="handleFiles"
+                    />
+                  </div>
+
+                <v-row>
+                  <v-col cols="12" md="12">
+                    <v-btn color="#388E3C" 
+                          @click="setCollectionImage" 
+                          class="mt-4"
+                          :disabled="collectionImage === ''">
+                      <v-icon class="mr-2">mdi-check-circle-outline</v-icon>{{ 'Use this Image' }}
+                    </v-btn>
+
+                    <v-btn color="grey" 
+                          @click="onRemove()" 
+                          class="mt-4 ml-2"
+                          variant="outlined"
+                          :disabled="collectionImage === ''">
+                      {{ 'Change' }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
 
               </v-col>
 
@@ -313,6 +404,7 @@
 // @ is an alias to /src
 import { db } from '@/main'
 import { scroller } from 'vue-scrollto/src/scrollTo'
+import imageCompression from 'browser-image-compression'
 import dateformat from "dateformat"
 export default {
   name: 'My Collections',
@@ -329,14 +421,17 @@ export default {
     snackbarText: '',
     privatePublicDialog: false,
     collectionDetailsDialog: false,
-    photoDialog: false,
-    image: '',
+    collectionImageDialog: false,
+    collectionImage: '',
+    collectionImageUrl: '',
     view: 1,
     newCollection: false,
     newCollectionName: '',
-    public: 'No',
+    collectionNameEdit: false,
+    oldValue: null,
+    public: false,
     searchCollections: '',
-    selectedCollection: [],
+    selectedCollection: {},
     nameRules: [
       value => {
         if (/^[\w\s]+$/.test(value)) return true
@@ -419,12 +514,70 @@ export default {
           this.loadingData = false
         })
     },
-    selectedCollectionClicked (item) {
-      console.log(item)
+    selectedCollectionClicked (item, index) {
       // actions
-
       this.selectedCollection = item
+      this.selectedCollection.index = index
       this.collectionDetailsDialog = true
+      console.log(this.selectedCollection)
+    },
+    setCollectionImage () {
+      // compress the image
+
+      let dispatchObj = {
+        id: this.selectedCollection.id,
+        name: this.selectedCollection.name,
+        public: this.selectedCollection.public === 'No' ? false : true,
+        modified: new Date().getTime(),
+        username: this.getUser.displayName,
+        icon: this.collectionImageUrl === '' ? 'default' : this.collectionImageUrl
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch('updateCollection', dispatchObj)
+        .then(() => {
+          console.log('Collection updated!')
+          this.snackbarText = 'Collection updated!' // this.lang[this.getLanguage].RECORD_DELETED
+          this.snackbar = true
+          this.getCollections[this.selectedCollection.index].icon = this.collectionImageUrl === '' ? 'default' : this.collectionImageUrl
+          this.selectedCollection.icon = this.collectionImageUrl === '' ? 'default' : this.collectionImageUrl
+          this.collectionImageDialog = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
+    },
+    updateCollectionSettings () {
+      console.log(this.selectedCollection.public)
+      let dispatchObj = {
+        id: this.selectedCollection.id,
+        name: this.selectedCollection.name,
+        public: this.selectedCollection.public,
+        modified: new Date().getTime(),
+        username: this.getUser.displayName,
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch('updateCollection', dispatchObj)
+        .then(() => {
+          console.log('Collection updated!')
+          this.snackbarText = 'Collection updated!' // this.lang[this.getLanguage].RECORD_DELETED
+          this.snackbar = true
+          this.getCollections[this.selectedCollection.index].name = this.selectedCollection.name
+          this.getCollections[this.selectedCollection.index].public = this.selectedCollection.public
+          this.collectionNameEdit = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
+    },
+    collectionNameEditClicked () {
+      this.collectionNameEdit =  true
+      this.oldValue = this.selectedCollection.name
+    },
+    collectionNameEditCancel () {
+      this.collectionNameEdit = false
+      this.selectedCollection.name = this.oldValue
     },
     scrollToTop () {
       const firstScrollTo = scroller();
@@ -437,19 +590,43 @@ export default {
       if (/^[\w\s]+$/.test(value)) return false
       return true
     },
-    onChange (image) {
-      // console.log('New picture selected!')
-      // console.log(image)
-      if (image) {
-        console.log('Picture loaded.')
-        this.image = image
+    async handleFiles(image) {
+      if (this.collectionImage === undefined) {
+        this.filesValid = false;
+        return;
+      }
+      if (this.collectionImage.size > 2000000) {
+        // === 500 KB
+        this.collectionImage = [];
+        this.showRowAlert = true;
+        this.showRowAlertText =
+          'Maximum file size of 500KB exeeded for ' + this.collectionImage.name + '!';
+        return;
       } else {
-        // console.log('FileReader API not supported: use the <form>, Luke!')
+        console.log(image)
+        const options = {
+          maxSizeMB: 0.2,
+          maxWidthOrHeight: 960,
+          useWebWorker: true
+        }
+        this.collectionImage = await imageCompression(image.target.files[0], options)
+        this.filesValid = true
+        this.getBase64(this.collectionImage).then((data) => (this.collectionImageUrl = data));
+        console.log( this.collectionImageUrl)
       }
     },
     onRemove () {
       // console.log('Picture removed!')
-      this.image = ''
+      this.collectionImage = ''
+      this.collectionImageUrl = ''
+    },
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
     },
     makeDate (date) {
       return dateformat(new Date(date), 'dd mmm, yyyy')
@@ -463,19 +640,19 @@ export default {
 
 <style lang="scss">
   .homeText {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 40px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 28px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmaller {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 24px;
     line-height: 1em;
     color: #FFF;
@@ -491,7 +668,7 @@ export default {
     font-size: 18px;
   }
   .gallery {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 45px;
     line-height: 1em;
     color: #FFF;
@@ -502,4 +679,8 @@ export default {
     position: absolute;
     width: 100%;
   }
+  .image-upload>input {
+    display: none;
+  }
+
 </style>
