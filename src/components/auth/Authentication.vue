@@ -12,7 +12,7 @@
         color="#241d43"
       >
         <v-toolbar-title style="text-overflow:none" class="text-white" v-if="!isError">
-          {{isLoading ? 'Loading...' : isExistingUser ? 'Connecting...' : 'Please set your display name!'}}
+          {{isLoading ? 'Loading...' : isExistingUser ? 'Connected' : 'Please set your display name!'}}
         </v-toolbar-title>
         <v-toolbar-title style="text-overflow:none" class="text-white" v-if="isError">
           Error
@@ -120,7 +120,6 @@ export default {
     message: '',
     email: '',
     displayName: '',
-    password:'',
     uid: '',
   }),
   computed: {
@@ -137,12 +136,6 @@ export default {
     },
     authMessage(){
       return this.$store.state.auth.authMessage;
-    },
-    authProvider(){
-      return this.$store.state.auth.provider;
-    },
-    authUser(){
-      return this.$store.state.auth.user;
     },
     user(){
       console.log("user store", this.$store.state.user)
@@ -165,43 +158,46 @@ export default {
     const link = window.location.href;
     const emailFromLink = atob(code);
     const email = emailForSignIn ?? emailFromLink;
-    console.log(email)
+    console.log("User for ", email);
     this.email = email;
-      if (email) {
-        await this.onSignInWithLink(email, link);
-      } else {
-        await this.onInit();
-      }
+    if (email) {
+      console.log("Email Login");
+      await this.onSignInWithLink(email, link);
+    } else {
+      console.log("Google Login");
+      await this.onInit();
+    }
   },
   methods: {
     async onInit() {
-      let id = '';
-      let user = null;
-      setTimeout(()=>{
-        user = firebase.auth().currentUser;
-      }, 1000)
-      if (user !== null) {
-        id = user.uid;
-        this.email = user.email;
+      let uid = '';
+      if (this.user.uid !== '') {
+        uid = this.user.uid;
+        this.email = this.user.email;
       } else {
         let firebaseUser = firebase.auth().currentUser;
         console.log(firebaseUser);
         if (firebaseUser) {
-          id = firebaseUser.uid;
+          uid = firebaseUser.uid;
           this.email = firebaseUser.email;
-          // this.displayName = firebaseUser.displayName;
         }
       }
-      console.log("user", user);
-      if (id === '') {
+      console.log("uid", uid);
+      if (uid === '') {
         this.isLoading = false;
         this.$router.push('/');
       } else {
-        const userDoc = await db.collection('users').doc(id).get();
-        if(userDoc.exists){
-          this.isExistingUser = true;
+        console.log("User for ", this.email);
+        const userSnapshot = await db.collection('users').where("uid","==",uid).get();
+        console.log("snapshot", userSnapshot);
+        if(!userSnapshot.empty){
+          const existingUser = userSnapshot.docs[0].data();
+          console.log(existingUser);
+          if(existingUser.name !== ""){
+            this.isExistingUser = true;
+          }
         }
-        this.uid = id;
+        this.uid = uid;
         this.isLoading = false;
       }
     },
@@ -211,12 +207,14 @@ export default {
         .where('email', '==', email)
         .get();
       let isNew = querySnapshot.empty;
-      if(!isNew){
+      if(isNew){
+        this.isExistingUser = false;
+      }else{
         this.userData = querySnapshot.docs[0].data();
         this.userData["docId"] = querySnapshot.docs[0].id;
         this.userDocId = querySnapshot.docs[0].id;
+        this.isExistingUser = true;
       }
-      this.isExistingUser = !isNew;
       this.$store.dispatch('signInWithLink', {
         email: email,
         link: link,
