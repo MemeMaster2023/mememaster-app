@@ -8,17 +8,17 @@ import axios from 'axios'
 // const MORALIS_API = 'http://209.58.172.141:3000/api/'
 //
 const MORALIS_API = 'https://deep-index.moralis.io/api/v2/'
-
+const environment = import.meta.env.VITE_APP_ENVIRONMENT;
 var MEME_MASTER_API;
-if (process.env.VUE_APP_ENVIRONMENT === 'production') {
-  console.log('API PRODUCTION ENVIRONMENT');
-  MEME_MASTER_API = process.env.VUE_APP_MM_API;
-} else if (process.env.VUE_APP_ENVIRONMENT === 'testnet') {
-  console.log('API TEST ENVIRONMENT');
-  MEME_MASTER_API = process.env.VUE_APP_MM_API_TEST;
+if (environment === "production") {
+  console.log("API PRODUCTION ENVIRONMENT");
+  MEME_MASTER_API = import.meta.env.VITE_APP_MM_API;
+} else if (environment === "testnet") {
+  console.log("API TEST ENVIRONMENT");
+  MEME_MASTER_API = import.meta.env.VITE_APP_MM_API_TEST;
 } else {
-  console.log('API LOCAL ENVIRONMENT');
-  MEME_MASTER_API = 'http://localhost:6060/api/v1/' //process.env.VUE_APP_MM_API_LOCAL; // 'https://testnet.mememaster.app/api/v1/'
+  console.log("API LOCAL ENVIRONMENT");
+  MEME_MASTER_API = "http://localhost:6060/api/v1/"; //process.env.VUE_APP_MM_API_LOCAL; // 'https://testnet.mememaster.app/api/v1/'
 }
 
 let getters = null

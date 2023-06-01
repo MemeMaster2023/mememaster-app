@@ -25,7 +25,7 @@
     </v-layout>
 
     <v-layout class="mr-4 ml-4 mt-8 mb-4" v-if="env">
-      <v-btn v-if="!mmConnected"
+      <v-btn v-if="!mmConnected && !emailConnected"
         variant="outlined"
         color="white"
         theme="dark"
@@ -41,6 +41,14 @@
         style="width:100%"
       >
       <img src="/img/icons/metamask.png" style="max-width:22px%;max-height:22px;padding-right:10px"/>Connected
+      </v-btn>
+      <v-btn v-if="emailConnected"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        style="width:100%"
+      >
+      <v-icon class="mr-2">mdi-email</v-icon> Connected
       </v-btn>
     </v-layout>
 
@@ -138,22 +146,23 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!drawer && !isMobileDevice && env && !mmConnected"
+      <v-btn v-if="!drawer && !isMobileDevice && env && (!mmConnected && !emailConnected)"
         style="margin-right:30px;margin-top:-7px"
         variant="outlined"
         color="white"
         theme="dark"
         @click="connectWalletDialog = true"
       >
-        Connect
+        Connect 
       </v-btn>
-      <v-btn v-if="!drawer && !isMobileDevice && env && mmConnected"
+      <v-btn v-if="!drawer && !isMobileDevice && env && (mmConnected || emailConnected)"
         style="margin-right:10px;margin-top:-7px"
         variant="outlined"
         color="white"
         theme="dark"
       >
-      <img src="/img/icons/metamask.png" style="max-width:18px%;max-height:18px;padding-right:10px"/>Connected
+      <img src="/img/icons/metamask.png" style="max-width:18px%;max-height:18px;padding-right:10px" v-if="mmConnected"/> <v-icon v-if="emailConnected
+      " class="mr-2">mdi-email</v-icon>Connected
       </v-btn>
 
       <v-btn v-if="!drawer && !isMobileDevice && env && isLoggedIn"
@@ -237,8 +246,17 @@
                      variant="outlined"
                      color="deep-purple-lighten-2"
                      :disabled="email === ''"
+                      @click="authenticateViaEmail"
               >Authenticate
               </v-btn>
+              <v-btn style="width:100%"
+                      size="large"
+                      class="mt-2"
+                      color="deep-purple-lighten-3"
+                      :disabled="isButtonDisabled"
+                      @click="authenticateViaGoogle"
+                >Continue with Google
+                </v-btn>
             </v-col>
           </v-row>
 
@@ -272,8 +290,18 @@
                       size="large"
                       variant="outlined"
                       color="deep-purple-lighten-2"
-                      :disabled="email === ''"
+                      :disabled="email === '' || isButtonDisabled"
+                      @click="authenticateViaEmail"
                 >Authenticate
+                </v-btn>
+                <v-btn style="width:100%"
+                      size="large"
+                      variant="outlined"
+                      color="deep-purple-lighten-2"
+                      class="text-white mt-2"
+                      :disabled="email === '' || isButtonDisabled"
+                      @click="authenticateViaEmail"
+                >Continue with Google
                 </v-btn>
             </v-col>
           </v-row>
@@ -284,13 +312,31 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
+   <v-snackbar
+      v-model="snackbar"
+      vertical
+    >
+      <div class="text-subtitle-1 pb-2">{{ snackbarTitle }}</div>
 
+      <p>{{ snackbarText }}</p>
+
+      <template v-slot:actions>
+        <v-btn
+          color="indigo"
+          variant="text"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 </template>
 
 <script>
 import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import md5 from 'md5'
+import { db } from '@/main'
 // import WalletConnect from '@/components/wallets/WalletConnect'
 export default {
     name: 'AppBar',
@@ -306,17 +352,32 @@ export default {
       drawer: false,
       scrolled: false,
       connectWalletDialog: false,
-      email: ''
+      loadingEmailAuth: false,
+      emailDialog: false,
+      isExistingUser: false,
+      email: '',
+      username: '',
+      password:'',
+      snackbar: false,
+      isButtonDisabled: false,
+      // snackbarTitle: '',
+      snackbarText: '',
+      tempUserData: null,
     }),
     components: {
       MetaMaskConnect
     },
     computed: {
       getUser () {
-        return this.$store.state.user
+        console.log(this.$store.state.user);
+        return store.state.user
       },
       gravatar () {
         return this.$store.state.user.gravatar
+      },
+      provider(){
+        console.log(store.state.auth.provider)
+        return store.state.auth.provider;
       },
       getChain () {
         return this.$store.state.user.networkChainID
@@ -324,8 +385,14 @@ export default {
       mmConnected () {
         return this.$store.state.user.mmConnected
       },
+      emailConnected () {
+        return store.state.user.isEmailConnected;
+      },
       isLoggedIn () {
         return this.$store.state.user.isLoggedIn
+      },
+      snackbarTitle(){
+        return store.state.auth.authMessage;
       },
       disconnecWallet () {
         if (this.mmConnected) {
@@ -345,10 +412,34 @@ export default {
           }, 2000)
         }
       },
+      emailConnected(newValue){
+        console.log("watch email", newValue)
+        if(newValue){
+          this.connectWalletDialog = false
+        }
+      },
       drawer () {
         store.commit('setDrawer', {
           drawer: this.drawer,
         })
+      },
+      snackbar(newValue){
+        if(!newValue){
+          store.commit("setState", {
+            authMessage: "",
+          });
+        }
+      },
+      snackbarTitle(newValue){
+        if(newValue.length > 0){
+          this.snackbar = true;
+        }
+      },
+      provider(newValue){
+        if(newValue === 'Google'){
+          this.connectWalletDialog = false
+          this.routerGo('/authorise')
+        }
       }
     /* binanceConnected () {
       if (this.binanceConnected) {
@@ -424,7 +515,21 @@ export default {
         } else {
           this.scrolled = false
         }
-      }
+      },
+      authenticateViaEmail(){
+        const payload = {email: this.email}
+        store.dispatch('sendMagicLink', payload)
+        .then(() =>{
+          this.isButtonDisabled = true;
+        })
+      },
+      authenticateViaGoogle(){
+        this.isButtonDisabled = true;
+        store.dispatch('signUserInGoogle')
+        .then(() =>{
+          console.log(this.provider)
+        })
+      },
     }
   }
 </script>

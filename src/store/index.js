@@ -25,6 +25,7 @@ export default createStore({
                 accounts: [],
                 walletProvider: localStorage.getItem('provider') === null ? '' : localStorage.getItem('provider'),
                 mmConnected: false,
+                isEmailConnected: false,
                 mmInstalled: false,
                 mmCount: 0,
                 newCount: 10,
@@ -64,6 +65,10 @@ export default createStore({
             console.log('drawer: ' + payload.drawer)
             state.drawer = payload.drawer
         },
+        SetEmailConnected(state, payload) { 
+            state.user.isEmailConnected = payload.isEmailConnected;
+            state.user.isLoggedIn = payload.isLoggedIn;
+        },
         SetMetaMaskInstalled (state, payload) {
             state.user.mmInstalled = payload.mmInstalled
         },
@@ -92,6 +97,7 @@ export default createStore({
             state.user.mmCount = payload.mmCount
         },
         SetConnectedUserDetails (state, payload) {
+            console.log(payload);
             // console.log('SetUserDetails in Store')
             // console.log(payload)
             state.user.uid = payload.uid
