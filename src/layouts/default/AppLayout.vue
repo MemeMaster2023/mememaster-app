@@ -216,13 +216,13 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
-          <div class="text-center ma-4">
+          <div class="text-center ma-4" v-if="showConfirmation === false">
             If you don't have a wallet, you can select a provider and create one now.<br>
             <v-btn variant="text">Learn more</v-btn>
           </div>
 
           <v-row v-if="getChain === '0x1' && !isMobileDevice" pl-4 pr-4 style="margin-left:15%;margin-right:15%">
-            <v-col cols="12" >
+            <v-col cols="12" v-if="showConfirmation === false">
               <MetaMaskConnect :isMobileDevice="!isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
               </MetaMaskConnect>
               <p class="mt-0"></p>
@@ -258,6 +258,23 @@
                 >Continue with Google
                 </v-btn>
             </v-col>
+            <v-col cols="12" v-else>
+              <v-img
+                src="/img/logos/logo.png"
+                class="mx-auto mt-4"
+                style="max-height: 130px; max-width: 130px;cursor: pointer;"
+              ></v-img>
+              <p style="font-size:14px" class="font-weight-medium text-center mt-6 mb-4">You're almost there, please check your email and click the magic link to verify your email and access your account.</p>
+              <v-divider></v-divider>
+              <p style="font-size:18px" class="font-weight-medium text-center mt-4 mb-2">Didn't get the email?</p>
+              <v-btn style="width:100%"
+                     size="large"
+                     color="deep-purple-lighten-2"
+                     :disabled="email === ''"
+                      @click="authenticateViaEmail"
+              >Resend Now!
+              </v-btn>
+            </v-col>
           </v-row>
 
           <!-- <v-layout v-if="getChain != '0x1' && !isMobileDevice" column align-center pl-4 pr-4 :style="windowWidth < 770 ? '' : 'margin-left:25%;margin-right:25%'">
@@ -270,7 +287,7 @@
             <!-- <v-btn v-if="$route.name === '/'" large style="width:100%;text-transform: none !important" :color="dark ? '#132f5d' : 'blue lighten-5'"  @click="gotoMMLink('https://metamask.app.link/dapp/chill2303.molanft.io/mmobile')">
               <v-icon left >mdi-wallet</v-icon>Connect Wallet
             </v-btn> -->
-            <v-col cols="12" >
+            <v-col cols="12" v-if="showConfirmation === false">
               <MetaMaskConnect v-if="$route.name === 'Home'" :isMobileDevice="isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
               </MetaMaskConnect>
 
@@ -303,6 +320,23 @@
                       @click="authenticateViaEmail"
                 >Continue with Google
                 </v-btn>
+            </v-col>
+            <v-col cols="12" v-else>
+              <v-img
+                src="/img/logos/logo.png"
+                class="mx-auto mt-4"
+                style="max-height: 130px; max-width: 130px;cursor: pointer;"
+              ></v-img>
+              <p style="font-size:14px" class="font-weight-medium text-center mt-6 mb-4">You're almost there, please check your email and click the magic link to verify your email and access your account.</p>
+              <v-divider></v-divider>
+              <p style="font-size:18px" class="font-weight-medium text-center mt-4 mb-2">Didn't get the email?</p>
+              <v-btn style="width:100%"
+                     size="large"
+                     color="deep-purple-lighten-2"
+                     :disabled="email === ''"
+                      @click="authenticateViaEmail"
+              >Resend Now!
+              </v-btn>
             </v-col>
           </v-row>
 
@@ -360,6 +394,7 @@ export default {
       password:'',
       snackbar: false,
       isButtonDisabled: false,
+      showConfirmation: false,
       // snackbarTitle: '',
       snackbarText: '',
       tempUserData: null,
@@ -433,6 +468,8 @@ export default {
       snackbarTitle(newValue){
         if(newValue.length > 0){
           this.snackbar = true;
+        }else{
+          this.snackbar = false;
         }
       },
       provider(newValue){
@@ -519,9 +556,10 @@ export default {
       authenticateViaEmail(){
         const payload = {email: this.email}
         store.dispatch('sendMagicLink', payload)
-        .then(() =>{
-          this.isButtonDisabled = true;
-        })
+          .then(() =>{
+            this.isButtonDisabled = true;
+            this.showConfirmation = true;
+          })
       },
       authenticateViaGoogle(){
         this.isButtonDisabled = true;
