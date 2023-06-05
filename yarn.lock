@@ -12,6 +12,11 @@
   "resolved" "https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz"
   "version" "1.5.0"
 
+"@esbuild-plugins/node-globals-polyfill@^0.2.3":
+  "integrity" "sha512-r3MIryXDeXDOZh7ih1l/yE9ZLORCd5e8vWg02azWRGj5SPTuoh69A2AIyn0Z31V/kHBfZ4HgWJ+OK3GTTwLmnw=="
+  "resolved" "https://registry.npmjs.org/@esbuild-plugins/node-globals-polyfill/-/node-globals-polyfill-0.2.3.tgz"
+  "version" "0.2.3"
+
 "@esbuild/darwin-arm64@0.17.19":
   "integrity" "sha512-80wEoCfF/hFKM6WE1FyBHc9SfUblloAWx6FJkFWTWiCoht9Mc0ARGEM47e67W9rI09YoUxJL68WHfDRYEAvOhg=="
   "resolved" "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.17.19.tgz"
@@ -1575,6 +1580,11 @@
   "version" "2.0.2"
   dependencies:
     "uzip" "0.20201231.0"
+
+"browser-image-resizer@^2.4.1":
+  "integrity" "sha512-gqrmr7+NTI9FgZVVyw/GIqwJE3MhNWaBn1R5ptu75r+/M5ncyntSMQYuYhOPonm44qQNnkGN9cnghlpd9h1Hug=="
+  "resolved" "https://registry.npmjs.org/browser-image-resizer/-/browser-image-resizer-2.4.1.tgz"
+  "version" "2.4.1"
 
 "browserify-aes@^1.2.0":
   "integrity" "sha512-+7CHXqGuspUn/Sl5aO7Ea0xWGAtETPXNSAjHo48JfLdPWcMng33Xe4znFvQweqc/uzk5zSOI3H52CYnjCfb5hA=="

@@ -4,17 +4,17 @@
     <v-row v-if="buttonType === 'large'">
 
       <v-btn style="width:100%;" size="large" color="deep-purple-lighten-4" v-if="mmInstalled && mmConnected">
-        <img src="/img/icons/metamask.png" style="max-width:22px%;max-height:22px;padding-right:10px;text-transform: none !important;"/>Connected To Metamask
+        <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Connected To Metamask
       </v-btn>
 
       <!-- :disabled="isMobileDevice" -->
       <v-btn style="width:100%;" size="large" color="deep-purple-lighten-4" @click="enableEthereumButton" v-if="mmInstalled && !mmConnected">
-        <img src="/img/icons/metamask.png" style="max-width:22px%;max-height:22px;padding-right:10px"/>Metamask
+        <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>Metamask
       </v-btn>
 
       <!-- :disabled="isMobileDevice" -->
       <v-btn  style="width:100%;" size="large" color="deep-purple-lighten-4" @click="startOnboarding" v-if="!mmInstalled">
-        <img src="/img/icons/metamask.png" style="max-width:22px%;max-height:22px;padding-right:10px"/>Install Metamask
+        <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>Install Metamask
       </v-btn>
 
     </v-row>
@@ -22,16 +22,16 @@
     <v-row  v-if="buttonType === 'small'">
 
       <v-btn :style="dark ? 'width:190px;color:#212121' : 'width:190px;color:#EEEEEE'" depressed :color="dark ? 'grey lighten-3' : 'grey darken-3'" small v-if="mmInstalled && mmConnected">
-        <img src="/img/icons/metamask.png" style="max-width:22px;max-height:22px;padding-right:10px;text-transform: none !important;"/>Connected
+        <img src="/img/icons/metamask.png" style="width:24px;height:22px;padding-right:10px;text-transform: none !important;"/>Connected
       </v-btn>
 
       <!-- :disabled="isMobileDevice" -->
       <v-btn  :style="dark ? 'width:190px;color:#212121' : 'width:190px;color:#EEEEEE'" @click="enableEthereumButton" depressed :color="dark ? 'grey lighten-3' : 'grey darken-3'" small v-if="mmInstalled && !mmConnected">
-        <img src="/img/icons/metamask.png" style="max-width:22px;max-height:22px;padding-right:10px"/>Connect
+        <img src="/img/icons/metamask.png" style="width:24px;height:22px;padding-right:10px"/>Connect
       </v-btn>
 
       <v-btn :style="dark ? 'width:190px;color:#212121' : 'width:190px;color:#EEEEEE'" @click="startOnboarding" depressed :color="dark ? 'grey lighten-3' : 'grey darken-3'" small v-if="!mmInstalled">
-        <img src="/img/icons/metamask.png" style="max-width:22px;max-height:22px;padding-right:10px"/>Install Metamask
+        <img src="/img/icons/metamask.png" style="width:24px;height:22px;padding-right:10px"/>Install Metamask
       </v-btn>
 
     </v-row>
@@ -41,33 +41,41 @@
       persistent
       max-width="400"
     >
-      <v-card pa-4 :dark="dark">
+      <v-card pa-4 theme="dark">
         <v-card-title class="wrap-text text-h5">
-          Please enter your Display Name or Nickname
+          Please enter your Display Name
         </v-card-title>
         <v-card-text>This can be your real name or not, we leave that up to you.</v-card-text>
 
-        <v-layout pa-4 >
+        <v-layout class="pa-4" >
           <v-text-field
             v-model="getUser.displayName"
             label="Display Name"
-            placeholder="Please, enter your name"
+            placeholder="Please, enter your display name..."
             maxlength="50"
-            outlined
+            variant="outlined"
             v-on:keyup="submitDisplayNameClicked"
             @click:append="submitDisplayNameClicked('click')"
             :rules="[v => !!v]"
           ></v-text-field>
         </v-layout>
+        <v-layout class="pl-4 pr-4" style="margin-top:-30px" >
+          <v-checkbox 
+              v-model="ageConfirm" 
+              label="I confirm that I am at least 13 years old.">
+          </v-checkbox>
+        </v-layout>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn :disabled="getUser.displayName.length < 1 && getUser.displayName !== ' ' && getUser.displayName !== '  '"
+          <v-btn 
+            variant="outlined"
+            :disabled="(getUser.displayName.length < 2 || getUser.displayName === ' ' || getUser.displayName === '  ') || !ageConfirm"
             :color="dark ? '#388E3C' : 'green lighten-4'"
             @click="submitDisplayName"
           >
-            Submit
+            Continue
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -97,7 +105,8 @@
     data(){
       return {
         userExists: false,
-        setDisplayNameDialog: false
+        setDisplayNameDialog: false,
+        ageConfirm: false
       }
     },
     computed: {
@@ -189,7 +198,8 @@
       },
       submitDisplayName () {
         let obj = {
-          name: this.getUser.displayName
+          name: this.getUser.displayName,
+          consent_13_years: true
         }
         this.saveSettingsData(obj)
         // Update Display Name
@@ -197,7 +207,7 @@
           displayName: this.getUser.displayName
         }).then(function () {
           // Update successful.
-          // console.log('Display Name Updated - Firebase')
+          console.log('Display Name Updated - Firebase')
         }, (error) => {
           // An error happened.
           console.log(error)
@@ -334,8 +344,8 @@
                           }
                           this.$store.dispatch('insertUserForSignUp', dispatchObj)
                             .then(() => {
-                              // console.log('User Created in db')
-                              // this.setDisplayNameDialog = true
+                              console.log('User Created in db - Set Display name')
+                              this.setDisplayNameDialog = true
                             }).catch(error => {
                               console.log(error)
                             })
@@ -407,7 +417,7 @@
                           })
                           // console.log('Set User Details in Store success!')
                           if (this.getUser.displayName === '') {
-                            // this.setDisplayNameDialog = true
+                            this.setDisplayNameDialog = true
                           }
 
                           /* this.$store.dispatch('setUserTier', { address: userAddress[0] })
@@ -461,7 +471,7 @@
                       })
                       // console.log('Set User Details in Store success!')
                       if (this.getUser.displayName === '') {
-                        // this.setDisplayNameDialog = true
+                        this.setDisplayNameDialog = true
                       }
 
                       /* this.$store.dispatch('setUserTier', { address: userAddress[0] })

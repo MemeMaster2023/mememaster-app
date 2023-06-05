@@ -2,7 +2,7 @@
   <div id="mynfts">
     <v-responsive style="background-color: #000;">
       
-      <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 1">
+      <v-card theme="dark" class="mt-16 mb-16 ml-2 mr-2" height="100%" v-if="view === 1">
 
        <v-row class="mt-12" :align="center">
         <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
@@ -72,7 +72,7 @@ export default {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#mynfts');
+        firstScrollTo('#mynfts', 500, { offset: -64 });
       }, 200);
     },
   }
@@ -81,19 +81,19 @@ export default {
 
 <style lang="scss">
   .homeText {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 40px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 28px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmaller {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 24px;
     line-height: 1em;
     color: #FFF;
@@ -109,7 +109,7 @@ export default {
     font-size: 18px;
   }
   .gallery {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 45px;
     line-height: 1em;
     color: #FFF;

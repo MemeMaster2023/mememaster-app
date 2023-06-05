@@ -9,6 +9,7 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@mdi/font": "7.0.96",
     "@metamask/onboarding": "^1.0.1",
     "@walletconnect/client": "^1.8.0",
@@ -16,6 +17,7 @@
     "axios": "^1.4.0",
     "browser-fs-access": "^0.33.1",
     "browser-image-compression": "^2.0.2",
+    "browser-image-resizer": "^2.4.1",
     "color": "^4.2.3",
     "core-js": "^3.30.2",
     "dateformat": "^5.0.3",

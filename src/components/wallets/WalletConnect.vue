@@ -1,21 +1,21 @@
 <template>
-  <div id="metamask">
+  <div id="walletconnect">
 
-    <v-layout column v-if="buttonType === 'large'">
+    <v-row v-if="buttonType === 'large'" :class="isMobileDevice ? 'pt-2 ml-0 mr-0' : 'pt-2'">
 
-      <v-btn style="width:100%;" large :color="dark ? '#132f5d' : 'blue lighten-5'" v-if="walletConnected">
-        <img src="/img/icons/walletconnect.png" style="max-width:22px%;max-height:22px;padding-right:10px;text-transform: none !important;"/>Connected
+      <v-btn style="width:100%;" size="large" color="blue lighten-5" v-if="walletConnected">
+        <img src="/img/icons/walletconnect_light.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Connected
       </v-btn>
 
-      <v-btn style="width:100%;" large :color="dark ? '#132f5d' : 'blue lighten-5'" @click="walletConnectInit('button')" v-if="!walletConnected">
-        <img src="/img/icons/walletconnect.png" style="max-width:22px%;max-height:22px;padding-right:10px"/>Wallet Connect
+      <v-btn style="width:100%;" size="large" color="blue lighten-5" @click="walletConnectInit('button')" v-if="!walletConnected">
+        <img src="/img/icons/walletconnect_light.png" style="max-width:32px;padding-right:10px"/>Wallet Connect
       </v-btn>
 
       <!-- <v-btn style="width:100%;" large :color="dark ? '#388E3C' : 'green lighten-5'" @click="startOnboarding" v-if="!mmInstalled">
         <img src="/img/icons/metamask.png" style="max-width:22px%;max-height:22px;padding-right:10px"/>Install Metamask
       </v-btn> -->
 
-    </v-layout>
+    </v-row>
 
     <v-layout column v-if="buttonType === 'small'">
 
@@ -44,27 +44,35 @@
         </v-card-title>
         <v-card-text>This can be your real name or not, we leave that up to you.</v-card-text>
 
-        <v-layout pa-4 >
+        <v-layout class="pa-4" >
           <v-text-field
             v-model="getUser.displayName"
             label="Display Name"
-            placeholder="Please, enter your name"
+            placeholder="Please, enter your display name..."
             maxlength="50"
-            outlined
+            variant="outlined"
             v-on:keyup="submitDisplayNameClicked"
             @click:append="submitDisplayNameClicked('click')"
             :rules="[v => !!v]"
           ></v-text-field>
         </v-layout>
+        <v-layout class="pl-4 pr-4" style="margin-top:-30px" >
+          <v-checkbox 
+              v-model="ageConfirm" 
+              label="I confirm that I am at least 13 years old.">
+          </v-checkbox>
+        </v-layout>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn :disabled="getUser.displayName.length < 1 && getUser.displayName !== ' ' && getUser.displayName !== '  '"
+          <v-btn 
+            variant="outlined"
+            :disabled="(getUser.displayName.length < 2 || getUser.displayName === ' ' || getUser.displayName === '  ') || !ageConfirm"
             :color="dark ? '#388E3C' : 'green lighten-4'"
             @click="submitDisplayName"
           >
-            Submit
+            Continue
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -81,13 +89,15 @@
   import { db } from '@/main'
   import WalletConnect from "@walletconnect/client";
   import QRCodeModal from "@walletconnect/qrcode-modal"
-  const generate = require('project-name-generator');
+  import { generate } from 'project-name-generator';
   export default {
     props: {
       dark: Boolean,
       windowWidth: Number,
       windowHeight: Number,
-      buttonType: String
+      buttonType: String,
+      isMobileDevice: Boolean
+      
     },
     components: {
     },
@@ -98,7 +108,8 @@
         setDisplayNameDialog: false,
         displayName: '',
         accounts: [],
-        chainId: 0
+        chainId: 0,
+        ageConfirm: false
       }
     },
     computed: {
@@ -191,7 +202,8 @@
       },
       submitDisplayName () {
         let obj = {
-          name: this.getUser.displayName
+          name: this.getUser.displayName,
+          consent_13_years: true
         }
         this.saveSettingsData(obj)
         // Update Display Name
@@ -278,7 +290,7 @@
                     this.$store.dispatch(action, dispatchObj)
                       .then(() => {
                         // console.log('User Created in db')
-                        // this.setDisplayNameDialog = true
+                        this.setDisplayNameDialog = true
                       }).catch(error => {
                         console.log(error)
                       })
@@ -350,7 +362,7 @@
                     })
                     // console.log('Set User Details in Store success!')
                     if (this.getUser.displayName === '') {
-                      // this.setDisplayNameDialog = true
+                      this.setDisplayNameDialog = true
                     }
 
                     /* this.$store.dispatch('setUserTier', { address: userAddress[0] })
@@ -404,7 +416,7 @@
                 })
                 // console.log('Set User Details in Store success!')
                 if (this.getUser.displayName === '') {
-                  // this.setDisplayNameDialog = true
+                  this.setDisplayNameDialog = true
                 }
 
                 /* this.$store.dispatch('setUserTier', { address: userAddress[0] })

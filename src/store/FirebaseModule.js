@@ -7,6 +7,9 @@ import MemeMasterAPI from '@/clients/MemeMasterAPI'
 const FirebaseModule = {
   state: {
     collections: [],
+    collectionsEmpty: false,
+    memes: [],
+    memesEmpty: false,
     promotedTokens: [],
     launchQueue: [],
     popularTokens: [],
@@ -18,6 +21,15 @@ const FirebaseModule = {
   mutations: {
     setCollections (state, payload) {
       state.collections = payload
+    },
+    setCollectionsEmpty (state, payload) {
+      state.collectionsEmpty = payload
+    },
+    setMemes (state, payload) {
+      state.memes = payload
+    },
+    setMemesEmpty (state, payload) {
+      state.memesEmpty = payload
     },
     setPromotedTokens (state, payload) {
       state.promotedTokens = payload
@@ -47,12 +59,14 @@ const FirebaseModule = {
   actions: {
     getUserCollections ({commit}, payload) {
       commit('setLoading', payload.uid)
+      commit('setCollectionsEmpty', false);
       let today = new Date().getTime()
       let query = db.collection('collections').where('uid', '==', payload.uid).where('status', '==', 1).orderBy('name', 'asc')
       query.get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents.')
+          commit('setCollectionsEmpty', true);
           return
         }
         var collectionList = []
@@ -106,6 +120,32 @@ const FirebaseModule = {
         .catch((error) => {
           console.log(error);
         });
+    },
+    getUserMemes ({commit}, payload) {
+      commit('setLoading', payload.id)
+      commit('setMemesEmpty', false);
+      let today = new Date().getTime()
+      let query = db.collection('memes').where('cid', '==', payload.cid).where('status', '==', 1).orderBy('created', 'desc')
+      query.get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.')
+          commit('setMemesEmpty', true);
+          return
+        }
+        var memeList = []
+        snapshot.forEach(doc => {
+          // console.log(doc.id, '=>', doc.data())
+          var obj = doc.data()
+          obj.id = doc.id
+          obj.checkTime = Math.round(today / 1000 + 1800) // 1 Hour to prevent to much Firebase loading/reading
+          memeList.push(obj)
+        })
+        commit('setMemes', memeList)
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      })
     },
     getPromotedTokens ({commit}, payload) {
       // console.log(payload.limit)
@@ -607,6 +647,15 @@ const FirebaseModule = {
   getters: {
     collections (state) {
       return state.collections
+    },
+    collectionsEmpty(state) {
+      return state.collectionsEmpty;
+    },
+    memes (state) {
+      return state.memes
+    },
+    memesEmpty(state) {
+      return state.memesEmpty;
     },
     promotedTokens (state) {
       return state.promotedTokens

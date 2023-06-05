@@ -1,532 +1,550 @@
 <template>
-  
-  <v-card theme="dark" color="#2b2b2b" class="mt-16 mb-16" height="100%">
+  <div id="generate">
+    <v-card theme="dark" color="#2b2b2b" class="mt-16 mb-1" height="100%">
 
-    <!-- <v-row class="mt-12" :align="center">
-       <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
-       </v-col>
+      <!-- ######################################################################################## -->
+      <!-- ############################ Generate Text to Image #################################### -->
+      <!-- ######################################################################################## -->
+      <v-row class="pt-12 pl-4 pr-4 pb-12" v-if="view === 'generate'" >
+        <v-col cols="12" md="4" :align="center" >
 
-       <v-col cols="12" md="6" :align="center">
-         <div class="text-h4 text-center">Create Meme</div>
-       </v-col>
-
-       <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
-       </v-col>
-
-    </v-row> -->
-
-    <v-row class="pt-12 pl-4 pr-4" :align="center" v-if="view === 'generate'" >
-       <v-col cols="12" md="4" :align="center" >
-
-          <v-layout class="mb-4">
-            <v-tooltip text="Image Generation Mode" location="top">
-              <template v-slot:activator="{ props }">
-                <v-btn 
-                    v-if="view === 'generate'"
-                    width="49%" 
-                    class="mr-2" 
-                    prepend-icon="mdi-view-grid-plus" 
-                    color="white"
-                    @click="view = 'generate'"
-                    v-bind="props"
-                >
-                  Generate
-                </v-btn>
-              </template>
-            </v-tooltip>
-
-            <v-tooltip text="Image Generation Mode" location="top">
-              <template v-slot:activator="{ props }">
-                <v-btn 
-                    v-if="view === 'edit'"
-                    width="49%" 
-                    class="mr-2" 
-                    variant="outlined" 
-                    prepend-icon="mdi-view-grid-plus"
-                    @click="view = 'generate'"
-                    v-bind="props"
-                >
-                Generate
-                </v-btn>
-              </template>
-            </v-tooltip>
-
-            <v-tooltip text="Edit Images From your Drafts" location="top">
-              <template v-slot:activator="{ props }">
-                <v-btn 
-                    v-if="view === 'generate'"
-                    width="49%" 
-                    variant="outlined" 
-                    prepend-icon="mdi-image-edit-outline"
-                    @click="openDrafts()"
-                    v-bind="props"
-                >
-                  Edit
-                </v-btn>
-              </template>
-            </v-tooltip>
-
-            <v-tooltip text="Edit Images From your Drafts" location="top">
-              <template v-slot:activator="{ props }">
-                <v-btn 
-                    v-if="view === 'edit'"
-                    width="49%" 
-                    prepend-icon="mdi-image-edit-outline"
-                    color="white"
-                    @click="openDrafts()"
-                    v-bind="props"
-                >
-                  Edit
-                </v-btn>
-              </template>
-            </v-tooltip>
-          </v-layout>
-
-          <v-btn 
-                class="mb-4"
-                prepend-icon="mdi-book-open-variant" 
-                style="width:100%;text-transform: none !important" 
-                color="deep-purple-lighten-1"
-                @click="openPromptingGuide()"
-            >
-            Meme Master Prompting Guide
-          </v-btn>
-          
-
-          <v-textarea
-            v-model="prompt"
-            class="mb-4"
-            label="Prompt"
-            auto-grow
-            variant="outlined"
-            placeholder="What do you want to make?"
-            persistent-placeholder
-            clearable
-            rows="3"
-            maxlength="2000"
-            row-height="25"
-            shaped
-            hint="Max. 2000 characters"
-            counter
-          ></v-textarea>
-
-          <v-expansion-panels v-model="panel">
-            <v-expansion-panel 
-              value="settings"
-              title="Settings"
-            >
-              <v-expansion-panel-text style="margin-left:-20px">
-                <v-col>
-                  <p class="mb-1">Image Style</p>
-                  <v-menu >
-                    <template v-slot:activator="{ props }">
-                      
-                      <v-list-item v-bind="props" style="border: 1px #FFF solid;border-radius: 5px;">
-                        <v-layout>
-                          <v-avatar>
-                            <v-img :src="stylePreset.img" width="32" height="32" style="border-radius: 5px;"></v-img>
-                          </v-avatar>
-
-                          <v-list-item-content>
-                          <v-list-item-title
-                            class="ml-2 pt-2"
-                            style="cursor: pointer"
-                            >
-                          {{ stylePreset.name }}
-                          </v-list-item-title>
-                          </v-list-item-content>
-                          <v-spacer></v-spacer>
-                          <v-list-item-action>
-                            <v-icon size="large">mdi-chevron-down</v-icon>
-                          </v-list-item-action>
-                        </v-layout>
-
-                      </v-list-item>
-                    </template>
-                    <v-list >
-                        <template v-for="(item) in images">
-                          <v-list-item class="pa-2" link @click="stylePreset = item" >
-                            <v-layout>
-                              <v-avatar size="72" style="border-radius: 5px;">
-                                <v-img :src="item.img" width="72" height="72" ></v-img>
-                              </v-avatar>
-
-                              <v-list-item-title
-                                style="cursor: pointer"
-                                >
-                                <v-layout>
-                                  <span class="ml-4 pt-6 text-h6">{{ item.name }}</span>
-                                </v-layout>
-                              </v-list-item-title>
-                            </v-layout>
-                          </v-list-item>
-                        </template>
-                    </v-list>
-                  </v-menu>
-
-                  <p class="mt-4 mb-1">Number of image variants to generate? </p>
-                  <v-btn-toggle
-                      v-model="imagesCount"
-                      rounded="0"
-                      divided
-                    >
-                      <v-btn :value="1" size="small" width="50px" >
-                        1
-                      </v-btn>
-
-                      <v-btn :value="2" size="small" width="50px" >
-                        2
-                      </v-btn>
-
-                      <v-btn :value="3" size="small" width="50px" >
-                        3
-                      </v-btn>
-
-                      <v-btn :value="4" size="small" width="50px" >
-                        4
-                      </v-btn>
-
-                      <v-btn :value="5" size="small" width="50px" >
-                        5
-                      </v-btn>
-
-                      <v-btn :value="6" size="small" width="50px" >
-                        6
-                      </v-btn>
-
-                      <v-btn :value="7" size="small" width="50px" >
-                        7
-                      </v-btn>
-
-                      <v-btn :value="8" size="small" width="50px" >
-                        8
-                      </v-btn>
-                    </v-btn-toggle>
-
-                    <p class="mt-4">Image size and aspect {{  w_x_h }}</p>
-                    
-                    <v-row style="width:395px;margin-top:2px">
-                      <v-col cols="4" md="4" >
-                        <v-icon class="pl-4">mdi-image-area</v-icon>
-                      </v-col>
-                      <v-col cols="4" md="4" :align="'center'">
-                        <v-icon>mdi-image</v-icon>
-                      </v-col>
-                      <v-col cols="4" md="4" :align="'end'">
-                        <v-icon  class="pr-4">mdi-image-album</v-icon>
-                      </v-col>
-                    </v-row>
-
-                    <v-btn-toggle
-                      v-model="aspect"
-                      rounded="0"
-                      divided
-                      style="min-width:395px;margin-top:2px;margin-left:-2px"
-                    >
-                      <v-btn value="7:4" size="x-small" >
-                        7 : 4
-                      </v-btn>
-                      <v-btn value="3:2" size="x-small" >
-                        3 : 2
-                      </v-btn>
-                      <v-btn value="4:3" size="x-small" >
-                        4 : 3
-                      </v-btn>
-                      <v-btn value="5:4" size="x-small" >
-                        5 : 4
-                      </v-btn>
-                      <v-btn value="1:1" size="x-small" >
-                        1 : 1
-                      </v-btn>
-                      <v-btn value="4:%" size="x-small" >
-                        4 : 5
-                      </v-btn>
-                      <v-btn value="3:4" size="x-small" >
-                        3 : 4
-                      </v-btn>
-                      <v-btn value="2:3" size="x-small" >
-                        2 : 3
-                      </v-btn>
-                      <v-btn value="4:7" size="x-small" >
-                        4 : 7
-                      </v-btn>
-                    </v-btn-toggle>
-
-                    <v-btn 
-                        style="text-transform: none !important;"
-                        size="small"
-                        class="mt-4" 
-                        variant="text" 
-                        prepend-icon="mdi-tune-vertical-variant"
-                        @click="showAdvanced = !showAdvanced"
-                      >
-                      Advanced Settings
-                    </v-btn>
-
-                    <v-row style="margin-top: 2px;margin-left: 1px" v-if="showAdvanced" >
-                      <v-col cols="12" md="6">
-                        <v-layout>
-                        <p>Prompt strength</p>
-                        <v-tooltip location="top" text="Prompt strength determines how much the final image will portray your prompts.">
-                          <template v-slot:activator="{ props }">
-                            <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
-                          </template>
-                        </v-tooltip>
-                      </v-layout>
-
-                        <v-text-field
-                          prepend-inner-icon="mdi-dots-grid"
-                          placeholder="Auto"
-                          type="number"
-                          min="-1"
-                          max="1"
-                          density="compact"
-                          v-model="promptStrength"
-                          variant="outlined"
-                          hint="Range 0 to 1"
-                        ></v-text-field>
-
-
-                      </v-col>
-                      <v-col cols="12" md="6" :style="windowWidth < 940 ? 'margin-top: -20px;' : ''">
-                        <v-layout>
-                            <p>Generation steps</p>
-                          <v-tooltip location="top" text="Generation steps is how many times the image is sampled. More steps may be more accurate.">
-                            <template v-slot:activator="{ props }">
-                              <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
-                            </template>
-                          </v-tooltip>
-                        </v-layout>
-                        <v-text-field
-                          prepend-inner-icon="mdi-stairs"
-                          placeholder="Auto"
-                          type="number"
-                          min="10"
-                          max="150"
-                          density="compact"
-                          v-model="generationSteps"
-                          variant="outlined"
-                          hint="Range 10 to 150"
-                        ></v-text-field>
-
-                      </v-col>
-                    </v-row>
-
-                    <v-row style="margin-top: -20px;margin-left: 1px" v-if="showAdvanced" >
-                      <v-col cols="12" md="6">
-
-                        <v-layout>
-                          <p>Seed</p>
-                          <v-tooltip location="top" text="Seed determines the initial noise. Using the same seed with the same settings will create a very similar image.">
-                            <template v-slot:activator="{ props }">
-                              <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
-                            </template>
-                          </v-tooltip>
-                        </v-layout>
-                        <v-text-field
-                          prepend-inner-icon="mdi-sprout-outline"
-                          placeholder="Auto"
-                          type="number"
-                          min="0"
-                          max="4294967295"
-                          density="compact"
-                          v-model="seed"
-                          variant="outlined"
-                          hint="Range 0 to 4294967295"
-                        ></v-text-field>
-                      </v-col>
-
-                      <v-col :style="windowWidth < 940 ? 'margin-top: -20px;' : ''">
-                      
-                      </v-col>
-                    </v-row>
-
-                    <v-row style="margin-top: -20px;margin-left: 1px" v-if="showAdvanced" >
-                      <v-col cols="12" md="12">
-                        <v-layout>
-                          <p>Model</p>
-                          <v-tooltip location="top" text="The Model to user to generate the image. Default is latest stable version.">
-                            <template v-slot:activator="{ props }">
-                              <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
-                            </template>
-                          </v-tooltip>
-                        </v-layout>
-                        <v-select
-                          return-object
-                          v-model="model"
-                          :items="items"
-                          item-title="name"
-                          item-value="id"
-                          density="compact"
-                          variant="outlined"
-      
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                </v-col>
-              </v-expansion-panel-text>
-            </v-expansion-panel>
-        </v-expansion-panels>
-
-        <v-row class="mt-2">
-          <v-col >
             <v-btn 
-                prepend-icon="mdi-auto-fix" 
-                size="large" 
-                style="width:100%;text-transform: none !important" 
-                color="deep-purple-lighten-1"
-                :disabled="prompt === ''"
-                @click="startMemeGeneration()"
-                :loading="generateLoading"
-            >
-              Start Meme Generation
-            </v-btn>
-          </v-col>
-        </v-row>
+                  class="mb-4"
+                  size="large"
+                  prepend-icon="mdi-book-open-variant" 
+                  style="width:100%;text-transform: none !important" 
+                  color="deep-purple-lighten-1"
+                  @click="openPromptingGuide()"
+              >
+              Meme Master Prompt Guide
+            </v-btn>            
 
-       </v-col>
+            <v-textarea
+              v-model="prompt"
+              class="mb-2"
+              label="Prompt"
+              auto-grow
+              variant="outlined"
+              placeholder="What do you want to make?"
+              persistent-placeholder
+              clearable
+              rows="3"
+              maxlength="2000"
+              row-height="25"
+              shaped
+              hint="Max. 2000 characters"
+              counter
+            ></v-textarea>
 
-       <!-- ################ Generated Photo Box ##########################-->
-       <v-col cols="12" :md="getDrawer ? 5 : 6" :align="center">
-        <v-card theme="dark" 
-                height="100%"
-                variant="outlined"
-                class="pa-4"
-        >
-          <v-row>
-            <template v-for="(index) in parseInt(imagesCount)">
-              <v-col cols="12" :md="parseInt(imagesCount) === 1 ? 12 : 6" class="pa-2">
+            <v-expansion-panels v-model="panel" multiple>
 
-                  <v-img
-                    v-if="generatedArr.length === 0"
-                    style="border-radius: 5px;"
-                    :src="'/img/home/placeholder-square.webp'"
-                    :lazy-src="'/img/home/placeholder-square.webp'"
-                    :aspect-ratio="w_x_h.split('x')[0]/w_x_h.split('x')[1]"
-                    cover
-                    class="bg-grey-lighten-2"
-                  > 
-                  <v-row :align="'center'" style="height: 100%;">
-                    <v-col cols="12" :align="'center'">
-                      <v-progress-circular
-                        class="pt-4"
-                        v-if="generateLoading"
-                        :size="50"
-                        :width="7"
-                        color="purple"
-                        indeterminate
-                      ></v-progress-circular>
-                      <v-icon v-else 
-                              class="pt-4"
-                              color="purple" 
-                              :size="50"
+              <v-expansion-panel 
+                v-if="toUpload"
+                value="upload"
+                title="Upload & Enhance Your Image"
+              >
+                <v-expansion-panel-text style="margin-left:-20px;margin-bottom:-20px">
+                  <v-col cols="12" :align="'center'">
+                    <div class="image-upload">
+                      <label for="file-input">
+
+                        <div class="text-center">Click or tab to select an image.</div>
+                        <div style="font-size: 0.8rem;" class="text-center mb-2">Max 10 MB.</div>
+                        <v-avatar size="150"  v-if="uploadImage === ''" style="border-radius: 5px;">
+                          <v-icon size="80" color="white">{{ isMobileDevice ? 'mdi-gesture-tap' : 'mdi-selection-search' }}
+                          </v-icon>
+                        </v-avatar>
+                        <v-img v-else 
+                               :src="uploadImageUrl" 
+                               :style="'max-width: 150px;max-height:150px;border-radius: 5px;filter: blur(' + (1 - imageStrength) + 'rem;'">
+                        </v-img>
+
+                        <v-btn v-if="uploadImage !== ''"
+                              size="small" 
+                              icon="mdi-close-circle-outline" 
+                              color="red" 
+                              style="position: relative;margin-top: -25px;margin-left: 130px;"
+                              @click="removeImage"
+                        >
+                        </v-btn>
+                        <v-alert v-model="showRowAlert"
+                            closable 
+                            :text="showRowAlertText" 
+                            type="error" 
+                            variant="tonal"
+                        >
+                        </v-alert>
+
+                      </label>
+
+                      <input 
+                        id="file-input" 
+                        type="file" 
+                        accept="image/jpg,image/jpeg,image/png, image/webp"
+                        @change="handleFiles"
+                      />
+                    </div>
+
+                    <v-layout v-if="uploadImage !== ''" class="ml-2">
+                      <p>Image Strength</p>
+                      <v-tooltip location="top">
+                        <template v-slot:activator="{ props }">
+                          <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
+                        </template>
+                        <span>How much influence the source image has on the diffusion process.<br>Values close to 100% will yield images very similar to the source image,<br>while values close to 0% will yield images wildly different than the source image.</span>
+                      </v-tooltip>
+                      <v-spacer></v-spacer>
+                      <p>{{ Math.round(imageStrength * 100) }}%</p>
+                    </v-layout>
+                    <v-slider v-if="uploadImage !== ''"
+                      v-model="imageStrength"
+                      color="blue"
+                      :step="0.01"
+                      :max="1"
+                      :min="0"
+                    ></v-slider>
+                  </v-col>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+
+              <v-expansion-panel 
+                value="settings"
+                title="Settings"
+              >
+                <v-expansion-panel-text style="margin-left:-20px">
+                  <v-col>
+                    <p class="mb-1">Image Style</p>
+                    <v-menu >
+                      <template v-slot:activator="{ props }">
+                        
+                        <v-list-item v-bind="props" style="border: 1px #FFF solid;border-radius: 5px;">
+                          <v-layout>
+                            <v-avatar>
+                              <v-img :src="stylePreset.img" width="32" height="32" style="border-radius: 5px;"></v-img>
+                            </v-avatar>
+
+                            <v-list-item-content>
+                            <v-list-item-title
+                              class="ml-2 pt-2"
+                              style="cursor: pointer"
+                              >
+                            {{ stylePreset.name }}
+                            </v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                              <v-icon size="large">mdi-chevron-down</v-icon>
+                            </v-list-item-action>
+                          </v-layout>
+
+                        </v-list-item>
+                      </template>
+                      <v-list >
+                          <template v-for="(item) in images">
+                            <v-list-item class="pa-2" link @click="stylePreset = item" >
+                              <v-layout>
+                                <v-avatar size="72" style="border-radius: 5px;">
+                                  <v-img :src="item.img" width="72" height="72" ></v-img>
+                                </v-avatar>
+
+                                <v-list-item-title
+                                  style="cursor: pointer"
+                                  >
+                                  <v-layout>
+                                    <span class="ml-4 pt-6 text-h6">{{ item.name }}</span>
+                                  </v-layout>
+                                </v-list-item-title>
+                              </v-layout>
+                            </v-list-item>
+                          </template>
+                      </v-list>
+                    </v-menu>
+
+                    <p class="mt-4 mb-1">Number of image variants to generate? </p>
+                    <v-btn-toggle
+                        v-model="imagesCount"
+                        rounded="0"
+                        divided
                       >
-                        mdi-checkbox-blank-circle-outline
-                      </v-icon>
-                    </v-col>
-                  </v-row>
-                  </v-img>
+                        <v-btn :value="1" size="small" width="50px" >
+                          1
+                        </v-btn>
 
-                  <v-img
-                    v-if="generatedArr.length > 0"
-                    :style="generatedArr[index - 1].selected ? 'border: 4px solid green;border-radius: 5px;' : 'border-radius: 5px;'"
-                    :src="'data:image/png;base64,' + generatedArr[index -1].base64"
-                    :lazy-src="'data:image/png;base64,' + generatedArr[index -1].base64"
-                    :aspect-ratio="w_x_h.split('x')[0]/w_x_h.split('x')[1]"
-                    cover
-                    class="bg-grey-lighten-2"
-                    @mouseover="showToolbar[index - 1].show = true"
-                    @mouseleave="showToolbar[index - 1].show = false"
-                  >
-                    <v-toolbar color="grey" style="opacity:0.8" v-show="showToolbar[index - 1].show" >
+                        <v-btn :value="2" size="small" width="50px" >
+                          2
+                        </v-btn>
 
-                      <v-tooltip text="Select Image" location="top">
-                        <template v-slot:activator="{ props }">
-                          <v-btn icon @click="selectImage(index - 1)" v-bind="props">
-                            <v-icon>mdi-select</v-icon>
-                          </v-btn>
-                        </template>
-                      </v-tooltip>
+                        <v-btn :value="3" size="small" width="50px" >
+                          3
+                        </v-btn>
 
-                      <v-tooltip text="Download Image" location="top">
-                        <template v-slot:activator="{ props }">
-                          <v-btn icon @click="downloadImage(index - 1)" v-bind="props">
-                            <v-icon>mdi-tray-arrow-down</v-icon>
-                          </v-btn>
-                        </template>
-                      </v-tooltip>
+                        <v-btn :value="4" size="small" width="50px" >
+                          4
+                        </v-btn>
 
-                      <v-tooltip text="Delete Image" location="top">
-                        <template v-slot:activator="{ props }">
-                          <v-btn icon @click="deleteImage(index - 1)" v-bind="props">
-                            <v-icon>mdi-trash-can-outline</v-icon>
-                          </v-btn>
-                        </template>
-                      </v-tooltip>
+                        <v-btn :value="5" size="small" width="50px" >
+                          5
+                        </v-btn>
 
-                    </v-toolbar>
-                    <v-btn
-                      v-if="generatedArr[index - 1].selected"
-                      variant="text"
-                      size="large"
-                      style="position: absolute;bottom:0;right: 0;"
-                      color="green"
-                      icon="mdi-check-circle-outline"
-                    >
-                    </v-btn>
-                  </v-img>
-              </v-col>
-            </template>
+                        <v-btn :value="6" size="small" width="50px" >
+                          6
+                        </v-btn>
+
+                        <v-btn :value="7" size="small" width="50px" >
+                          7
+                        </v-btn>
+
+                        <v-btn :value="8" size="small" width="50px" >
+                          8
+                        </v-btn>
+                      </v-btn-toggle>
+
+                      <p class="mt-4">Image size and aspect {{  w_x_h }}</p>
+                      
+                      <v-row style="width:395px;margin-top:2px">
+                        <v-col cols="4" md="4" >
+                          <v-icon class="pl-4">mdi-image-area</v-icon>
+                        </v-col>
+                        <v-col cols="4" md="4" :align="'center'">
+                          <v-icon>mdi-image</v-icon>
+                        </v-col>
+                        <v-col cols="4" md="4" :align="'end'">
+                          <v-icon  class="pr-4">mdi-image-album</v-icon>
+                        </v-col>
+                      </v-row>
+
+                      <v-btn-toggle
+                        v-model="aspect"
+                        rounded="0"
+                        divided
+                        style="min-width:395px;margin-top:2px;margin-left:-2px"
+                      >
+                        <v-btn value="7:4" size="x-small" >
+                          7 : 4
+                        </v-btn>
+                        <v-btn value="3:2" size="x-small" >
+                          3 : 2
+                        </v-btn>
+                        <v-btn value="4:3" size="x-small" >
+                          4 : 3
+                        </v-btn>
+                        <v-btn value="5:4" size="x-small" >
+                          5 : 4
+                        </v-btn>
+                        <v-btn value="1:1" size="x-small" >
+                          1 : 1
+                        </v-btn>
+                        <v-btn value="4:5" size="x-small" >
+                          4 : 5
+                        </v-btn>
+                        <v-btn value="3:4" size="x-small" >
+                          3 : 4
+                        </v-btn>
+                        <v-btn value="2:3" size="x-small" >
+                          2 : 3
+                        </v-btn>
+                        <v-btn value="4:7" size="x-small" >
+                          4 : 7
+                        </v-btn>
+                      </v-btn-toggle>
+
+                      <v-btn 
+                          style="text-transform: none !important;"
+                          size="small"
+                          class="mt-4" 
+                          variant="text" 
+                          prepend-icon="mdi-tune-vertical-variant"
+                          @click="showAdvanced = !showAdvanced"
+                        >
+                        Advanced Settings
+                      </v-btn>
+
+                      <v-row style="margin-top: 2px;margin-left: 1px" v-if="showAdvanced" >
+                        <v-col cols="12" md="6">
+                          <v-layout>
+                          <p>Prompt strength</p>
+                          <v-tooltip location="top" text="Prompt strength determines how much the final image will portray your prompts.">
+                            <template v-slot:activator="{ props }">
+                              <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
+                            </template>
+                          </v-tooltip>
+                        </v-layout>
+
+                          <v-text-field
+                            prepend-inner-icon="mdi-dots-grid"
+                            placeholder="Auto"
+                            type="number"
+                            min="-1"
+                            max="1"
+                            density="compact"
+                            v-model="promptStrength"
+                            variant="outlined"
+                            hint="Range 0 to 1"
+                          ></v-text-field>
+
+
+                        </v-col>
+                        <v-col cols="12" md="6" :style="windowWidth < 940 ? 'margin-top: -20px;' : ''">
+                          <v-layout>
+                              <p>Generation steps</p>
+                            <v-tooltip location="top" text="Generation steps is how many times the image is sampled. More steps may be more accurate.">
+                              <template v-slot:activator="{ props }">
+                                <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
+                              </template>
+                            </v-tooltip>
+                          </v-layout>
+                          <v-text-field
+                            prepend-inner-icon="mdi-stairs"
+                            placeholder="Auto"
+                            type="number"
+                            min="10"
+                            max="150"
+                            density="compact"
+                            v-model="generationSteps"
+                            variant="outlined"
+                            hint="Range 10 to 150"
+                          ></v-text-field>
+
+                        </v-col>
+                      </v-row>
+
+                      <v-row style="margin-top: -20px;margin-left: 1px" v-if="showAdvanced" >
+                        <v-col cols="12" md="6">
+
+                          <v-layout>
+                            <p>Seed</p>
+                            <v-tooltip location="top" text="Seed determines the initial noise. Using the same seed with the same settings will create a very similar image.">
+                              <template v-slot:activator="{ props }">
+                                <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
+                              </template>
+                            </v-tooltip>
+                          </v-layout>
+                          <v-text-field
+                            prepend-inner-icon="mdi-sprout-outline"
+                            placeholder="Auto"
+                            type="number"
+                            min="0"
+                            max="4294967295"
+                            density="compact"
+                            v-model="seed"
+                            variant="outlined"
+                            hint="Range 0 to 4294967295"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col :style="windowWidth < 940 ? 'margin-top: -20px;' : ''">
+                        
+                        </v-col>
+                      </v-row>
+
+                      <v-row style="margin-top: -20px;margin-left: 1px" v-if="showAdvanced" >
+                        <v-col cols="12" md="12">
+                          <v-layout>
+                            <p>Model</p>
+                            <v-tooltip location="top" text="The Model to user to generate the image. Default is latest stable version.">
+                              <template v-slot:activator="{ props }">
+                                <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
+                              </template>
+                            </v-tooltip>
+                          </v-layout>
+                          <v-select
+                            return-object
+                            v-model="model"
+                            :items="items"
+                            item-title="name"
+                            item-value="id"
+                            density="compact"
+                            variant="outlined"
+        
+                          ></v-select>
+                        </v-col>
+                      </v-row>
+                  </v-col>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+          </v-expansion-panels>
+
+          <v-row class="mt-2">
+            <v-col >
+              <v-btn v-if="!enableStopGenerating"
+                  prepend-icon="mdi-auto-fix" 
+                  size="large" 
+                  style="width:100%;text-transform: none !important" 
+                  color="deep-purple-lighten-1"
+                  :disabled="prompt === ''"
+                  @click="startMemeGeneration()"
+                  :loading="generateLoading"
+              >
+                Start Meme Generation
+              </v-btn>
+
+              <v-btn v-if="enableStopGenerating"
+                  prepend-icon="mdi-close-octagon-outline" 
+                  size="large" 
+                  style="width:100%;text-transform: none !important" 
+                  color="pink-darken-1"
+                  @click="stopGenerationClicked()"
+              >
+                Stop Generating
+              </v-btn>
+            </v-col>
           </v-row>
 
-        </v-card>
-       </v-col>
+        </v-col>
 
-       <v-col cols="12" :md="getDrawer ? 3 : 2" :align="center">
-        
-        <v-btn  prepend-icon="mdi-tune-variant" 
-                style="width:100%;text-transform: none !important" 
-                color="indigo-darken-2"
-                :disabled="generatedArr.length === 0"
-                @click="modifyPrompt()"
-        >
-          Modify Prompt
-        </v-btn>
+        <!-- ################ Generated Photo Box ##########################-->
+        <v-col cols="12" :md="getDrawer ? 5 : 6" :align="center">
+          <v-card theme="dark" 
+                  height="100%"
+                  variant="outlined"
+                  class="pa-4"
+          >
+            <v-row>
+              <template v-for="(index) in parseInt(imagesCount)">
+                <v-col cols="12" :md="parseInt(imagesCount) === 1 ? 12 : 6" class="pa-2">
 
-        <v-btn  class="mt-2"
-                prepend-icon="mdi-restart" 
-                style="width:100%;text-transform: none !important" 
-                color="deep-purple-lighten-1"
-                :disabled="generatedArr.length === 0"
-                @click="startOverClicked"
-        >
-          Start Over
-        </v-btn>
+                    <v-img
+                      v-if="generatedArr.length === 0"
+                      style="border-radius: 5px;"
+                      :src="'/img/home/placeholder-square.webp'"
+                      :lazy-src="'/img/home/placeholder-square.webp'"
+                      :aspect-ratio="w_x_h.split('x')[0]/w_x_h.split('x')[1]"
+                      cover
+                      class="bg-grey-lighten-2"
+                    > 
+                    <v-row :align="'center'" style="height: 100%;">
+                      <v-col cols="12" :align="'center'">
+                        <v-progress-circular
+                          class="pt-4"
+                          v-if="generateLoading"
+                          :size="50"
+                          :width="7"
+                          color="purple"
+                          indeterminate
+                        ></v-progress-circular>
+                        <v-icon v-else 
+                                class="pt-4"
+                                color="purple" 
+                                :size="50"
+                        >
+                          mdi-checkbox-blank-circle-outline
+                        </v-icon>
+                      </v-col>
+                    </v-row>
+                    </v-img>
 
-        <v-btn  class="mt-2"
-                variant="outlined" 
-                prepend-icon="mdi-image-edit-outline" 
-                style="width:100%;text-transform: none !important" 
-                @click="openDrafts()"
-        >
-          Open Saved Drafts
-        </v-btn>
+                    <v-img
+                      v-if="generatedArr.length > 0"
+                      :style="generatedArr[index - 1].selected ? 'border: 4px solid green;border-radius: 5px;' : 'border-radius: 5px;'"
+                      :src="'data:image/png;base64,' + generatedArr[index -1].base64"
+                      :lazy-src="'data:image/png;base64,' + generatedArr[index -1].base64"
+                      :aspect-ratio="w_x_h.split('x')[0]/w_x_h.split('x')[1]"
+                      cover
+                      class="bg-grey-lighten-2"
+                      @mouseover="showToolbar[index - 1].show = true"
+                      @mouseleave="showToolbar[index - 1].show = false"
+                    >
+                      <v-toolbar color="grey" style="opacity:0.8" v-show="showToolbar[index - 1].show" >
 
-        <v-btn  class="mt-2"
-                variant="outlined" 
-                prepend-icon="mdi-arrow-right-bold-circle-outline" 
-                style="width:100%;text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(138, 190, 145);" 
-                color="green-lighten-1"
-                :disabled="selectedImage === null"
-                @click="selectedImageClicked()"
-        >
-          Use Selected Image
-        </v-btn>
+                        <v-tooltip text="Select Image" location="top">
+                          <template v-slot:activator="{ props }">
+                            <v-btn icon @click="selectImage(index - 1)" v-bind="props">
+                              <v-icon>mdi-select</v-icon>
+                            </v-btn>
+                          </template>
+                        </v-tooltip>
 
-       </v-col>
+                        <v-tooltip text="Download Image" location="top">
+                          <template v-slot:activator="{ props }">
+                            <v-btn icon @click="downloadImage(index - 1)" v-bind="props">
+                              <v-icon>mdi-tray-arrow-down</v-icon>
+                            </v-btn>
+                          </template>
+                        </v-tooltip>
+
+                        <v-tooltip text="Delete Image" location="top">
+                          <template v-slot:activator="{ props }">
+                            <v-btn icon @click="deleteImage(index - 1)" v-bind="props">
+                              <v-icon>mdi-trash-can-outline</v-icon>
+                            </v-btn>
+                          </template>
+                        </v-tooltip>
+
+                      </v-toolbar>
+                      <v-btn
+                        v-if="generatedArr[index - 1].selected"
+                        variant="text"
+                        size="large"
+                        style="position: absolute;bottom:0;right: 0;"
+                        color="green"
+                        icon="mdi-check-circle-outline"
+                      >
+                      </v-btn>
+                    </v-img>
+                </v-col>
+              </template>
+            </v-row>
+
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" :md="getDrawer ? 3 : 2" :align="center">
+          
+          <!--<v-btn  prepend-icon="mdi-tune-variant" 
+                  style="width:100%;text-transform: none !important" 
+                  color="indigo-darken-2"
+                  :disabled="generatedArr.length === 0"
+                  @click="modifyPrompt()"
+          >
+            Modify Prompt
+          </v-btn> -->
+
+          <v-btn  class="mt-2"
+                  prepend-icon="mdi-restart" 
+                  style="width:100%;text-transform: none !important" 
+                  color="deep-purple-lighten-1"
+                  :disabled="generatedArr.length === 0"
+                  @click="startOverClicked"
+          >
+            Start Over
+          </v-btn>
+
+          <v-btn  class="mt-2"
+                  variant="outlined" 
+                  prepend-icon="mdi-image-edit-outline" 
+                  style="width:100%;text-transform: none !important" 
+                  @click="openDrafts()"
+          >
+            Open Saved Drafts
+          </v-btn>
+
+          <!-- <v-btn class="mt-2"
+            variant="outlined" 
+            color="indigo-lighten-1"  
+            style="width:100%" 
+            prepend-icon="mdi-upload" 
+            to="/generate/upload"
+            >
+            Upload Your Image
+          </v-btn> -->
+
+          <v-btn  class="mt-2"
+                  variant="outlined" 
+                  prepend-icon="mdi-arrow-right-bold-circle-outline" 
+                  style="width:100%;text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(138, 190, 145);" 
+                  color="green-lighten-1"
+                  :disabled="selectedImage === null"
+                  @click="selectedImageClicked()"
+          >
+            Add Meme Caption
+          </v-btn>
+
+        </v-col>
     </v-row>
 
-    <!-- ##################### Add Meme Text To Image #################### -->
+    <!-- ######################################################################################## -->
+    <!-- ############################ Add Meme Caption To Image ################################## -->
+    <!-- ######################################################################################## -->
     <v-row class="pt-12 pl-4 pr-4" :align="center" v-if="view === 'memetext'">
       <v-btn @click="view = 'generate'" prepend-icon="mdi-arrow-left-bold" class="mt-1 ml-3">Back</v-btn>
       <v-col cols="12" md="12">
@@ -546,20 +564,20 @@
     <!-- ##################### EDIT Images ################################-->
       
       <v-row class="pt-12 pl-4 pr-4" :align="center" v-if="view === 'edit'">
-        <v-col cols="12" md="4" :align="center">
+        <v-col cols="12" md="3" :align="center">
           <v-layout class="mb-4">
               <v-tooltip text="Image Generation Mode" location="top">
                 <template v-slot:activator="{ props }">
                   <v-btn 
                       v-if="view === 'generate'"
-                      width="49%" 
+                      width="100%" 
                       class="mr-2" 
                       prepend-icon="mdi-view-grid-plus" 
                       color="white"
                       @click="view = 'generate'"
                       v-bind="props"
                   >
-                    Generate
+                  Back To Generate
                   </v-btn>
                 </template>
               </v-tooltip>
@@ -568,19 +586,19 @@
                 <template v-slot:activator="{ props }">
                   <v-btn 
                       v-if="view === 'edit'"
-                      width="49%" 
+                      width="100%" 
                       class="mr-2" 
                       variant="outlined" 
                       prepend-icon="mdi-view-grid-plus"
                       @click="view = 'generate'"
                       v-bind="props"
                   >
-                  Generate
+                  Back To Generate
                   </v-btn>
                 </template>
               </v-tooltip>
 
-              <v-tooltip text="Edit Images From your Drafts" location="top">
+              <!-- <v-tooltip text="Edit Images From your Drafts" location="top">
                 <template v-slot:activator="{ props }">
                   <v-btn 
                       v-if="view === 'generate'"
@@ -608,13 +626,13 @@
                     Edit
                   </v-btn>
                 </template>
-              </v-tooltip>
+              </v-tooltip> -->
             </v-layout>
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-1 mr-1' : 'ml-1 mr-4'" :align="center" v-if="view === 'edit'">
-         
+          
           <v-col cols="12" md="5" >
 
             <v-card
@@ -666,7 +684,7 @@
                           size="x-large"
                           color="purple-lighten-1"
                         >
-                         mdi-image-check-outline
+                          mdi-image-check-outline
                         </v-icon>
                       </template>
 
@@ -707,10 +725,10 @@
                     disabled
                   ></v-textarea>
                   <v-btn style="width:100%;text-transform: none !important;"
-                         variant="outlined" 
-                         prepend-icon="mdi-arrow-right-bold-circle-outline" 
-                         color="green-lighten-1"
-                         @click="draftContinueClicked()"
+                          variant="outlined" 
+                          prepend-icon="mdi-arrow-right-bold-circle-outline" 
+                          color="green-lighten-1"
+                          @click="draftContinueClicked()"
                   >
                     Continue with this Draft
                   </v-btn>
@@ -720,24 +738,184 @@
 
             </v-card>
           </v-col>
-
         </v-row>
 
-  </v-card>
+        <!-- ######################################################################################## -->
+        <!-- ######################## Upload our Image - Text to Image ############################## -->
+        <!-- ######################################################################################## -->
+        
 
-  <!-- #################################  DIALOGS ################################ -->
-  <v-dialog v-model="deleteDialog" persistent min-width="290" max-width="390">
-    <v-card>
-      <v-card-title class="headline">Delete Selected Image</v-card-title>
-      <v-card-text class="subheading">Please, confirm.</v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="grey darken-1" text @click="deleteDialog = false">Cancel</v-btn>
-        <v-btn color="red darken-1" text @click="deleteRowConfirm">Delete</v-btn>
-      </v-card-actions>
     </v-card>
-  </v-dialog>
 
+    <!-- ################################################################################### -->
+    <!-- ############################## PROMPT GUIDE ####################################### -->
+    <!-- ################################################################################### -->
+    <v-dialog
+          v-model="promptGuideDialog"
+          fullscreen
+        >
+          <v-card theme="dark" color="#2b2b2b">
+            <v-toolbar
+              color="deep-purple-darken-2"
+            >
+            <v-toolbar-title>Meme Master Prompt Guide</v-toolbar-title>
+            <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="promptGuideDialog = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text :class="isMobileDevice ? 'ml-4 mr-4' : 'ml-16 mr-16'">
+              <p class="text-h6 mb-8">After reading this document and applying these simple steps, you’ll be able to generate better images with the same amount of effort.</p>
+
+              <v-expansion-panels multiple>
+                <v-expansion-panel>
+                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">1. Raw prompt</v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <p>Raw prompt is the simplest way of describing what you want to generate, for instance;<br><br>
+                      1. Princess<br>
+                      2. A warrior with a sword<br>
+                      3. Skeleton<br><br>
+                      This is the basic building block of any prompt. 
+                      Most new people start by only using raw prompts, this is usually a mistake as the images you generate like this tend to get random and chaotic.<br><br> 
+                      In the next sections you will learn how to apply styles to improve your prompting and fine tune tune your results.
+                    </p>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">2. Style</v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <p>Style is a crucial part of the prompt. The AI, when missing a specified style, usually chooses the one it has seen the most in related images, for example, if we generate a landscape, it would probably generate realistic or oil painting looking images. Having a well chosen style + raw prompt is sometimes enough, as the style influences the image the most right after the raw prompt.<br><br>
+                      The most commonly used styles include:<br><br>
+                      1. Realistic<br>
+                      2. Oil painting<br>
+                      3. Pencil drawing<br>
+                      4. Concept art<br><br>
+                      Examine them one by one to give an overview on how you might use these styles.<br><br>
+                      In the case of a realistic image, there are various ways of making it the style, most resulting in similar images. Here are some commonly used techniques of making the image realistic:<br><br>
+                      1. a photo of + raw prompt<br>
+                      2. a photograph of + raw prompt<br>
+                      3. raw prompt, hyperrealistic<br>
+                      4. raw prompt, realistic<br><br>
+                      You can of course combine these to get more and more realistic images.
+                      To get oil painting you can just simply add “an oil painting of” to your prompt. This sometimes results in the image showing an oil painting in a frame, to fix this you can just re-run the prompt or use raw prompt + “oil painting”<br><br>
+                      To make a pencil drawing just simply add “a pencil drawing of” to your raw prompt or make your prompt raw prompt + “pencil drawing”.
+                      The same applies to landscape art.
+                    </p>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">3. Artist</v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <p>
+                      To make your style more specific, or the image more coherent, you can use artists’ names in your prompt. For instance, if you want a very abstract image, you can add “made by Pablo Picasso” or just simply, “Picasso”.<br>
+                      Below are lists of artists in different styles that you can use, but we always encourage you to search for different artists as it is a cool way of discovering new art.<br><br>
+                      Portrait<br>
+                      1. John Singer Sargent<br>
+                      2. Edgar Degas<br>
+                      3. Paul Cézanne<br>
+                      4. Jan van Eyck<br><br>
+                      Oil painting<br>
+                      1. Leonardo DaVinci<br>
+                      2. Vincent Van Gogh<br>
+                      3. Johannes Vermeer<br>
+                      4. Rembrandt<br><br>
+                      Pencil/Pen drawing<br>
+                      1. Albrecht Dürer<br>
+                      2. Leonardo da Vinci<br>
+                      3. Michelangelo<br>
+                      4. Jean-Auguste-Dominique Ingres<br><br>
+                      Landscape art<br>
+                      1. Thomas Moran<br>
+                      2. Claude Monet<br>
+                      3. Alfred Bierstadt<br>
+                      4. Frederic Edwin Church<br><br>
+                      Mixing the artists is highly encouraged, as it can lead to interesting-looking art.
+                    </p>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">4. Finishing touches</v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <p>
+                      This is the part that some people take to extremes, leading to longer prompts than this article. 
+                      Finishing touches are the final things that you add to your prompt to make it look like you want. 
+                      For instance, if you want to make your image more artistic, add “trending on artstation”. 
+                      If you want to add more realistic lighting add “Unreal Engine.” You can add anything you want, but here are some examples:<br><br>
+                      Highly detailed, surrealism, trending on art station, triadic color scheme, smooth, sharp focus, matte, elegant, 
+                      the most beautiful image ever seen, illustration, digital paint, dark, gloomy, octane render, 8k, 4k, washed colors, 
+                      sharp, dramatic lighting, beautiful, post processing, picture of the day, ambient lighting, epic composition.
+                    </p>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">5. Conclusion</v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <p>
+                      Prompt engineering allows you to have better control of what the image will look like.<br>
+                      It (if done right) improves the image quality by a lot in every aspect. 
+                    </p>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">6. Prompt samples</v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <p>
+                      <span class="text-h6 font-weight-bold">Add these prompts after your subject choice, ie A car on a mountain... then add promts below after it. example below.</span><br><br>
+
+                      A CAR ON A MOUNTAIN, animation, clipart, sticker, colorful,  digital render, digital painting,sticker illustration, trending on 99designs, high quality, svg, vector art,<br><br>
+
+                      pltn style, Crypto raccoon, cute big circular reflective eyes, Pixar render, unreal engine cinematic smooth, intricate detail<br><br>
+
+                      pltn style, noir style, mystery, fog, trending on art station, matte, dramatic lighting, detailed, retro, style by Blade Runner,<br><br>
+
+                      muted colors, highly detailed, simple, smooth and clean vector illustration, no jagged lines, vector art, smooth, art station<br><br>
+
+                      animation, clipart, sticker, colorful,  digital render, digital painting, beeple, noah bradley, cyril roland, ross tran, trending on artstation<br><br>
+
+                      cosmic star dust, galactic, uhd, hdr, 8k, maximalist”<br><br>
+
+                      swirling multicolored neon potion, 8k : 2.0 | blurry, ugly, deformed, jpeg, low resolution : -1.0<br><br>
+                      
+                      Music, Fashion designer logo, intricate details, UHD, sharp focus, golden ratio, octane render, volumetric lighting, Greg Rutkowski, acrylic painting, background by Craig Mullins, netflix, poster, ultra rea      
+                    </p>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+                
+              </v-expansion-panels>
+    
+
+            
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="primary" block @click="promptGuideDialog = false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+    <!-- ########################################################################### -->
+    <!-- #################################  DIALOGS ################################ -->
+    <!-- ########################################################################### -->
+    
+    <v-dialog v-model="deleteDialog" persistent min-width="290" max-width="390">
+      <v-card>
+        <v-card-title class="headline">Delete Selected Image</v-card-title>
+        <v-card-text class="subheading">Please, confirm.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="grey darken-1" text @click="deleteDialog = false">Cancel</v-btn>
+          <v-btn color="red darken-1" text @click="deleteRowConfirm">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 <script>
 import firebase from 'firebase/app'
@@ -745,6 +923,9 @@ import 'firebase/storage'
 import { db } from '@/main'
 import MemeMasterAPI from '../../clients/MemeMasterAPI';
 import CreateMemeText from './CreateMemeText'
+import { scroller } from 'vue-scrollto/src/scrollTo'
+import imageCompression from 'browser-image-compression'
+import { readAndCompressImage } from 'browser-image-resizer'
 export default {
   props: {
     isMobileDevice: Boolean,
@@ -752,12 +933,14 @@ export default {
     windowWidth: Number,
     windowHeight: Number,
     drawer: Boolean,
-    toDrafts: Boolean
+    toDrafts: Boolean,
+    toUpload: Boolean
   },
   data: () => ({
     loading: false,
     deleteDialog: false,
     generateLoading: false,
+    promptGuideDialog: false,
     storageRef: null,
     view: 'generate',
     panel: ['settings'],
@@ -802,6 +985,8 @@ export default {
     },
     draftPrompt: '',
     generatedArr: [],
+    enableStopGenerating: false,
+    generationStopped: false,
     selectedImage: null,
     showToolbar: [
       { show: false },
@@ -809,6 +994,13 @@ export default {
       { show: false },
       { show: false }
     ],
+    uploadImage: '',
+    uploadImageUrl: '',
+    newWidth: 0,
+    newHeight: 0,
+    imageStrength: 0.35,
+    showRowAlert: false,
+    showRowAlertText: ''
   }),
   components: {
     CreateMemeText
@@ -821,15 +1013,30 @@ export default {
       } else {
         this.view = 'generate'
       }
+    },
+    toUpload () {
+      if (this.toUpload) {
+        this.view = 'generate'
+        this.panel = ['settings','upload']
+        //this.openDrafts()
+      } else {
+        this.toUpload = false
+      }
     }
   },
   created(){
+    this.scrollToTop()
     this.getGenerationEngines()
     // Get a reference to the storage service
     this.storageRef = firebase.storage().ref()
     if (this.toDrafts) {
       this.view = 'edit'
+      this.toUpload = false
       this.openDrafts()
+    }
+    if (this.toUpload) {
+      this.view = 'generate'
+      this.panel = ['settings','upload']
     }
   },
   computed:{
@@ -865,6 +1072,13 @@ export default {
     },
   },
   methods:{
+    scrollToTop () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#generate', 500, { offset: -64 });
+      }, 200);
+    },
     getGenerationEngines () {
       this.items = []
       Promise.resolve(MemeMasterAPI.getGenerationEngines())
@@ -959,12 +1173,13 @@ export default {
       this.selectedImage = null
       this.getBase64(this.selectedDraft.url)
       // Set all generation settings from propmts
+      this.imagesCount = 1
       let promptUsed = JSON.parse(this.selectedDraft.metadata.customMetadata.prompt);
       this.prompt = promptUsed.text_prompts[0].text
       this.stylePreset =  this.images.find(item => item.id === promptUsed.style_preset)
       this.promptStrength = parseFloat(promptUsed.text_prompts[0].weight) ?? 0.5
-      this.generationSteps = parseFloat(promptUsed.steps)
-      this.seed = parseFloat(promptUsed.seed)
+      this.generationSteps = parseInt(promptUsed.steps)
+      this.seed = parseInt(promptUsed.seed)
       this.model = this.items.find(item => item.id === this.selectedDraft.metadata.customMetadata.model ?? 'stable-diffusion-512-v2-1') 
       var w_h = promptUsed.width + ' x ' + promptUsed.height
       // Set the Aspect from width x height
@@ -1010,11 +1225,13 @@ export default {
           console.log(result)
           // Handle Result
           // this.items = result.data.message
-          // var obj = {
-            // base64: result.data.message.base64
-            // selected: true
-          // }
-          // this.generatedArr.push(obj)
+          var obj = {
+            base64: result.data.message,
+            selected: true
+          }
+          this.generatedArr.push(obj)
+          this.selectedImage = obj
+          console.log(this.selectedImage)
         })
         .catch(err => {
           // this.loading = false
@@ -1040,11 +1257,21 @@ export default {
         }); */
     },
     openPromptingGuide () {
-
+      this.promptGuideDialog = true
     },
     async startMemeGeneration () {
+      console.log(this.toUpload)
+      if (this.toUpload && this.uploadImageUrl !== '') {
+        this.startImagetoImageGeneration()
+        return
+      }
+      this.generationStopped = false
+      setTimeout(() => {
+        this.enableStopGenerating = true
+      }, 1500)
       this.generateLoading = true
       this.generatedArr = []
+      this.selectedImage = null
       let genObject = {
         text_prompts: [
           {
@@ -1057,9 +1284,9 @@ export default {
         style_preset: this.stylePreset.id,
         height: parseInt(this.w_x_h.split('x')[1]),
         width: parseInt(this.w_x_h.split('x')[0]),
-        samples: this.imagesCount,
-        steps: this.generationSteps,
-        seed: this.seed,
+        samples: parseInt(this.imagesCount),
+        steps: parseInt(this.generationSteps),
+        seed: parseInt(this.seed),
       }
       let configObj = {
         engine_id: this.model.id,
@@ -1072,28 +1299,118 @@ export default {
         .then(result => {
           console.log(result)
           // Handle Result
+          if (this.generationStopped) {
+            return;
+          }
           this.generatedArr = []
           this.generatedArr = result.data.message.artifacts
           for (var i in this.generatedArr) {
             this.generatedArr[i].selected = false
           }
           this.generateLoading = false
+          this.enableStopGenerating = false
         })
         .catch(err => {
           // this.loading = false
           console.log('Error generating Meme.', err)
           // show friendly error in user screen
         })
-      /* try {
-        // only oce a day according to mola_points_updated in fb
-        const response = await MemeMasterAPI.generateMeme(genObject);
-        console.log(response);
-        res = response;
-        
-      } catch (err) {
-        console.log(err);
-        res = null;
-      } */
+    },
+    // Image to Image
+    async startImagetoImageGeneration () {
+      this.generationStopped = false
+      setTimeout(() => {
+        this.enableStopGenerating = true
+      }, 1500)
+      this.generateLoading = true
+      this.generatedArr = []
+      this.selectedImage = null
+
+      let configObj = {
+        engine_id: this.model.id,
+        uid: this.getUser.uid,
+        username: this.getUser.displayName
+      }
+      var replaceType = 'data:' + this.fileType + ';base64,'
+      let genImgToImgObject = {
+        text_prompts: [
+          {
+            text: this.prompt,
+            weight: parseFloat(this.promptStrength)
+          },
+        ],
+        init_image: this.uploadImageUrl.replace(replaceType, ''), // base 64 image
+        init_image_mode: 'IMAGE_STRENGTH',
+        image_strength: parseFloat(this.imageStrength),
+        cfg_scale: 7, // Default
+        clip_guidance_preset: 'NONE', // Default
+        style_preset: this.stylePreset.id,
+        height: this.newHeight, // parseInt(this.w_x_h.split('x')[1]),
+        width: this.newWidth, // parseInt(this.w_x_h.split('x')[0]),
+        samples: parseInt(this.imagesCount),
+        steps: parseInt(this.generationSteps),
+        seed: parseInt(this.seed),
+      }
+
+      Promise.resolve(MemeMasterAPI.generateImageToImage(genImgToImgObject, configObj))
+        .then(result => {
+          console.log(result)
+          // Handle Result
+          if (this.generationStopped) {
+            return;
+          }
+          this.generatedArr = []
+          this.generatedArr = result.data.message.artifacts
+          for (var i in this.generatedArr) {
+            this.generatedArr[i].selected = false
+          }
+          var w_h = this.newWidth + ' x ' + this.newHeight
+          // Set the Aspect from width x height
+          switch (w_h) {
+            case '896 x 512':
+              this.aspect = '7:4';
+              break;
+            case '768 x 512':
+              this.aspect = '3:2';
+              break;
+            case '704 x 512':
+              this.aspect = '4:3';
+              break;
+            case '640 x 512':
+              this.aspect = '5:4'; 
+              break;
+            case '512 x 512':
+              this.aspect = '1:1'; 
+              break;
+            case '512 x 640':
+              this.aspect = '4:5'; 
+              break;
+            case '512 x 704':
+              this.aspect = '3:4';
+              break;
+            case '512 x 768':
+              this.aspect = '2:3';
+              break;
+            case '512 x 896':
+              this.aspect = '4:7';
+              break;
+            default:
+              this.aspect = '1:1';
+              break;
+          }
+          this.generateLoading = false
+          this.enableStopGenerating = false
+        })
+        .catch(err => {
+          // this.loading = false
+          console.log('Error generating Meme.', err)
+          // show friendly error in user screen
+        })
+    },
+    stopGenerationClicked ()  {
+      this.generateLoading = false
+      this.generationStopped = true
+      this.enableStopGenerating =  false
     },
     modifyPrompt () {
       this.generatedArr = []
@@ -1153,6 +1470,129 @@ export default {
       downloadLink.href = linkSource;
       downloadLink.download = fileName;
       downloadLink.click()
+    },
+    // Upload Text to Image
+    async handleFiles(image) {
+      if (image.target.files[0] === undefined) {
+        this.filesValid = false;
+        return;
+      }
+      if (image.target.files[0].size > 10000000) {
+        // === 10MB Max size
+        console.log(image.target.files[0].size)
+        this.showRowAlert = true;
+        this.showRowAlertText = 'Maximum file size of 10MB exeeded for ' + image.target.files[0].name + '!';
+        this.uploadImage = '';
+        return;
+      } else {
+        console.log(image)
+        this.fileType = image.target.files[0].type
+        this.showRowAlert = false
+        this.checkDimension(image.target)
+        /* const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 896,
+          useWebWorker: true
+        }
+        const config = {
+          quality: 1,
+          maxWidth: 896,
+          maxHeight: 896,
+          mimeType: this.fileType
+        }
+        this.uploadImage = await imageCompression(image.target.files[0], options)
+        this.uploadImage = await readAndCompressImage(this.uploadImage, config)
+        this.filesValid = true
+        this.getBase64Upload(this.uploadImage).then((data) => (this.uploadImageUrl = data, console.log(this.uploadImage))) */
+      }
+    },
+    checkDimension (target) {
+      //Check whether the file is valid Image.
+      var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif|.jpeg)$");
+      if (regex.test(target.value.toLowerCase())) {
+  
+          //Check whether HTML5 is supported.
+          if (typeof (target.files[0]) !== "undefined") {
+              //Initiate the FileReader object.
+              var reader = new FileReader()
+              //Read the contents of Image File.
+              reader.readAsDataURL(target.files[0])
+              reader.onload = (e) => {
+                //Initiate the JavaScript Image object.
+                var image = new Image()
+
+                //Set the Base64 string return from FileReader as source.
+                image.src = e.target.result
+                console.log(e.target.result)
+
+                //Validate the File Height and Width.
+                image.onload = () => {
+                  var height = image.height
+                  var width = image.width
+                  
+                  console.log(width + 'x' + height)
+                  // show width and height to use
+                  this.processWidthHeight(width, height, target.files[0])
+              
+                  // alert("Uploaded image has valid Height and Width.")
+                  // return width + 'x' + height
+                }
+              }
+          } else {
+              alert("This browser does not support HTML5.")
+              return false
+          }
+      } else {
+          alert("Please select a valid Image file.")
+          return false
+      }
+    },
+    async processWidthHeight (width, height, file) {
+      console.log(width/64)
+      console.log(height/64)
+      this.newWidth = Math.round(width/64) * 64
+      this.newHeight = Math.round(height/64) * 64
+      console.log(this.newWidth)
+      console.log(this.newHeight)
+
+      if (this.newWidth === this.newHeight) {
+        this.newWidth = 512
+        this.newHeight = 512
+      } else if ( this.newWidth > this.newHeight) {
+        this.newWidth = 896
+        this.newHeight = 512
+      } else if ( this.newWidth < this.newHeight) {
+        this.newWidth = 512
+        this.newHeight = 896
+      }
+      // console.log('ratio = ' + Math.round(width/64) + ':' + Math.round(height/64))
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 896,
+        useWebWorker: true
+      }
+      /* const config = {
+        quality: 1,
+        maxWidth: newWidth,
+        maxHeight: newHeight,
+        mimeType: this.fileType
+      } */
+      // this.uploadImage = await readAndCompressImage(file, config)
+      this.uploadImage = await imageCompression(file, options)
+      this.filesValid = true
+      this.getBase64Upload(this.uploadImage).then((data) => (this.uploadImageUrl = data, console.log(this.uploadImage)));
+    },
+    getBase64Upload(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    },
+    removeImage () {
+      this.uploadImage = ''
+      this.uploadImageUrl = ''
     }
   }
 }
@@ -1161,5 +1601,8 @@ export default {
 <style lang="scss">
   .v-tooltip .v-overlay__content {
     background: rgba(var(--v-theme-surface-variant), 1) !important;
-  }   
+  } 
+  .image-upload>input {
+    display: none;
+  }
 </style>

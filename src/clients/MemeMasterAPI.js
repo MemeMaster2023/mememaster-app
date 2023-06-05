@@ -18,7 +18,7 @@ if (environment === "production") {
   MEME_MASTER_API = import.meta.env.VITE_APP_MM_API_TEST;
 } else {
   console.log("API LOCAL ENVIRONMENT");
-  MEME_MASTER_API = "http://localhost:6060/api/v1/"; //process.env.VUE_APP_MM_API_LOCAL; // 'https://testnet.mememaster.app/api/v1/'
+  MEME_MASTER_API = import.meta.env.VITE_APP_MM_API_LOCAL; // 'https://testnet.mememaster.app/api/v1/' // "http://localhost:6060/api/v1/"; 
 }
 
 let getters = null
@@ -49,7 +49,7 @@ class MemeMasterAPI {
   }
 
   // ###################################################################################
-  // ############################# TEXT TO IMAGE/MAME  GENERATION ######################
+  // ############################# TEXT TO IMAGE/MEME GENERATION #######################
   // ###################################################################################
 
   async generateTextToImage(genObj, configObj) {
@@ -72,6 +72,35 @@ class MemeMasterAPI {
         console.log(e)
       })
   }
+
+  // ###################################################################################
+  // ############################# IMAGE TO IMAGE/MEME GENERATION ######################
+  // ###################################################################################
+
+  async generateImageToImage(genObj, configObj) {
+    var payload = {
+      generate: genObj,
+      config: configObj
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    console.log(MEME_MASTER_API)
+    return await axios.post(MEME_MASTER_API + 'generate-image-to-image', payload, config)
+      .then(response => {
+        // console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  // ###################################################################################
+  // ############################# GET ENGINES/MODELS FROM API  ########################
+  // ###################################################################################
 
   async getGenerationEngines() {
     const config = {

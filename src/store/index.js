@@ -131,6 +131,13 @@ export default createStore({
             localStorage.setItem('provider', payload.walletProvider)
             state.user.isLoggedIn = payload.isLoggedIn
         },
+        SetWalletConnectChanges (state, payload) {
+            state.user.accounts = payload.accounts
+            state.user.walletConnected = payload.mmConnected
+            state.user.walletProvider = payload.walletProvider
+            localStorage.setItem('provider', payload.walletProvider)
+            state.user.isLoggedIn = payload.isLoggedIn
+        },
         
     },
     modules: {

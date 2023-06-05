@@ -4,6 +4,7 @@
                  :windowHeight="windowHeight"
                  :isMobileDevice="isMobileDevice"
                  :drawer="drawer"
+                 v-on:wpClicked="openWhitepaper()"
     />
     <v-footer
     class="d-flex flex-column"
@@ -333,7 +334,11 @@ export default {
   methods: {
     gotoLink(link) {
       window.open(link, "_blank");
-    }
+    },
+    openWhitePaper(link) {
+      window.open('https://mememaster.app/whitepaper/MemeMaster2023%20White%20Paper.pdf', '_blank');
+    },
+    
   }
 }
 </script>

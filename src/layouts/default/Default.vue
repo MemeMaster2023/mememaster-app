@@ -1,7 +1,19 @@
 <template>
   <v-app id="mememaster-app">
-    <default-bar :isMobileDevice="isMobileDevice" :windowWidth="windowWidth" :windowHeight="windowHeight" :drawer="drawer"/>
-    <default-view :isMobileDevice="isMobileDevice" :windowWidth="windowWidth" :windowHeight="windowHeight" :drawer="drawer"/>
+    <default-bar 
+        :isMobileDevice="isMobileDevice" 
+        :windowWidth="windowWidth" 
+        :windowHeight="windowHeight" 
+        :drawer="drawer"
+        v-on:wpClicked="openWhitepaper()"
+        v-on:mmMobileClicked="mmMobileClicked()"
+    />
+    <default-view 
+        :isMobileDevice="isMobileDevice" 
+        :windowWidth="windowWidth" 
+        :windowHeight="windowHeight" 
+        :drawer="drawer"
+  />
   </v-app>
 </template>
 
@@ -16,6 +28,16 @@
     windowHeight: Number,
     drawer: Boolean
   })
+
+  function openWhitepaper() {
+    // console.log('wpClicked Received')
+    window.open('https://mememaster.app/whitepaper/MemeMaster2023%20White%20Paper.pdf', '_blank');
+  }
+  function mmMobileClicked() {
+    // console.log('wpClicked Received')
+    window.open('https://metamask.app.link/dapp/testnet.mememaster.app/mmobile', '_blank');
+  }
+  
 </script>
 
 <style lang="scss">
