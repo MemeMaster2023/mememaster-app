@@ -83,7 +83,7 @@ export default {
   data: () => ({
     loading: false,
     chatLog: [
-      { sender: 'AI', text: "Hello, I'm here to help. What can I do for you today? What can I do for you today?" },
+      { sender: 'AI', text: "Hello, I'm here to help. What can I do for you today?" },
       { sender: 'Human', text: "What time is it in Jakarta Indonesia?" }
     ]
   }),

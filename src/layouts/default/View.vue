@@ -115,18 +115,33 @@
         ></v-img>
       </v-col>
       <v-col cols="12" md="7">
-        <div class="pt-0 mb-4 mr-8 ml-8">
-          Unleash your creativity, explore hilarious trends, and connect with meme aficionados across multiple social media platforms. Our generative platform brings you a universe of endless meme possibilities. Get ready to laugh, share, and meme like never before! Join the meme revolution now.
+        <div class="pt-4 mb-4 mr-8 ml-8">
+          Unleash your creativity, explore trends, and connect with meme aficionados across multiple social media platforms. Our generative platform brings you a universe of endless meme, NFT music and gaming possibilities. Join the meme revolution now!
+        </div>
+        <div :class="isMobileDevice ? 'pt-4 text-center' : 'pt-4 text-center'">
+          <p class="text-h6">Key partner</p>
+          <v-btn 
+                 variant="text"
+                 size="large"
+                 style="text-transform: none !important;"
+                 @click="gotoLink('https://www.haven-associates.com/')"
+          >
+          <img src="/img/icons/haven_logo.png" 
+               style="max-width:32px;padding-right:10px;text-transform: none !important;"
+          /> 
+            Haven Associates
+          </v-btn>
         </div>
       </v-col>
 
-      <v-col cols="12" md="2">
+      <v-col cols="12" md="2" :align="isMobileDevice ? 'center' : ''" class="pt-5">
         <v-btn variant="text" style="text-transform: none !important;" @click="termsDialog = true">
           Terms and Conditions
         </v-btn>
         <v-btn variant="text" style="text-transform: none !important;" @click="privacyDialog = true">
           Privacy Policy
         </v-btn>
+
       </v-col>
     </v-row>
 
@@ -333,11 +348,12 @@ export default {
   },
   methods: {
     gotoLink(link) {
+      console.log('button clicked')
       window.open(link, "_blank");
     },
     openWhitePaper(link) {
       window.open('https://mememaster.app/whitepaper/MemeMaster2023%20White%20Paper.pdf', '_blank');
-    },
+    }
     
   }
 }

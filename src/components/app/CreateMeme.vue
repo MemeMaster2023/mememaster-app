@@ -50,6 +50,7 @@
 
                         <div class="text-center">Click or tab to select an image.</div>
                         <div style="font-size: 0.8rem;" class="text-center mb-2">Max 10 MB.</div>
+                        <div style="font-size: 0.8rem;" class="text-center mb-2">Note: The image below may look blurry below 100 but your output will not.</div>
                         <v-avatar size="150"  v-if="uploadImage === ''" style="border-radius: 5px;">
                           <v-icon size="80" color="white">{{ isMobileDevice ? 'mdi-gesture-tap' : 'mdi-selection-search' }}
                           </v-icon>
@@ -166,23 +167,23 @@
                         rounded="0"
                         divided
                       >
-                        <v-btn :value="1" size="small" width="50px" >
+                        <v-btn :value="1" size="small" width="60px" >
                           1
                         </v-btn>
 
-                        <v-btn :value="2" size="small" width="50px" >
+                        <v-btn :value="2" size="small" width="60px" >
                           2
                         </v-btn>
 
-                        <v-btn :value="3" size="small" width="50px" >
+                        <v-btn :value="3" size="small" width="60px" >
                           3
                         </v-btn>
 
-                        <v-btn :value="4" size="small" width="50px" >
+                        <v-btn :value="4" size="small" width="60px" >
                           4
                         </v-btn>
 
-                        <v-btn :value="5" size="small" width="50px" >
+                        <!--<v-btn :value="5" size="small" width="50px" >
                           5
                         </v-btn>
 
@@ -196,7 +197,7 @@
 
                         <v-btn :value="8" size="small" width="50px" >
                           8
-                        </v-btn>
+                        </v-btn> -->
                       </v-btn-toggle>
 
                       <p class="mt-4">Image size and aspect {{  w_x_h }}</p>
@@ -443,12 +444,13 @@
                       class="bg-grey-lighten-2"
                       @mouseover="showToolbar[index - 1].show = true"
                       @mouseleave="showToolbar[index - 1].show = false"
+                      @click="selectImage(index - 1)"
                     >
                       <v-toolbar color="grey" style="opacity:0.8" v-show="showToolbar[index - 1].show" >
 
                         <v-tooltip text="Select Image" location="top">
                           <template v-slot:activator="{ props }">
-                            <v-btn icon @click="selectImage(index - 1)" v-bind="props">
+                            <v-btn icon @click.stop="selectImage(index - 1)" v-bind="props">
                               <v-icon>mdi-select</v-icon>
                             </v-btn>
                           </template>
@@ -538,6 +540,7 @@
           >
             Add Meme Caption
           </v-btn>
+          <p class="mt-2 text-center" v-if="generatedArr.length > 0 && selectedImage === null">Click or tab to select an image</p>
 
         </v-col>
     </v-row>
@@ -868,23 +871,54 @@
                   <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">6. Prompt samples</v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <p>
-                      <span class="text-h6 font-weight-bold">Add these prompts after your subject choice, ie A car on a mountain... then add promts below after it. example below.</span><br><br>
+                      <span class="text-h5 font-weight-bold">Add these prompts after your subject choice, ie A car on a mountain... then add prompts below after it... example below.</span><br><br>
+                      A CAR ON A MOUNTAIN, animation, clipart, sticker, colorful,  digital render, digital painting<br><br>
 
-                      A CAR ON A MOUNTAIN, animation, clipart, sticker, colorful,  digital render, digital painting,sticker illustration, trending on 99designs, high quality, svg, vector art,<br><br>
+                      Dragon meme that showcases Pixar-like rendering and Unreal Engine cinematic sharpness<br><br>
+
+                      Rabbit sticker illustration, trending on 99designs, high quality, svg, vector art<br><br>
+
+                      Girl, pltn style, cute big circular reflective eyes, Pixar render, unreal engine cinematic smooth, intricate detail<br><br>
+
+                      <span class="text-h5 font-weight-bold">Add you item at the beginning of the following prompts as above.</span><br><br>
 
                       pltn style, Crypto raccoon, cute big circular reflective eyes, Pixar render, unreal engine cinematic smooth, intricate detail<br><br>
 
-                      pltn style, noir style, mystery, fog, trending on art station, matte, dramatic lighting, detailed, retro, style by Blade Runner,<br><br>
+                      pltn style, noir style, my stery, fog, trending on artstation, matte, dramatic lighting, detailed, retro, style by Blade Runner<br><br>
 
-                      muted colors, highly detailed, simple, smooth and clean vector illustration, no jagged lines, vector art, smooth, art station<br><br>
+                      muted colors, highly detailed, simple, smooth and clean vector illustration, no jagged lines, vector art, smooth, artstation<br><br>
 
                       animation, clipart, sticker, colorful,  digital render, digital painting, beeple, noah bradley, cyril roland, ross tran, trending on artstation<br><br>
 
                       cosmic star dust, galactic, uhd, hdr, 8k, maximalist”<br><br>
 
-                      swirling multicolored neon potion, 8k : 2.0 | blurry, ugly, deformed, jpeg, low resolution : -1.0<br><br>
-                      
-                      Music, Fashion designer logo, intricate details, UHD, sharp focus, golden ratio, octane render, volumetric lighting, Greg Rutkowski, acrylic painting, background by Craig Mullins, netflix, poster, ultra rea      
+                      swirling multicolored neon potion, ugly, deformed, jpeg, high resolution<br><br>
+
+                      Music, Fashion designer logo, intricate details, UHD, sharp focus, golden ratio, octane render, volumetric lighting, Greg Rutkowski, acrylic painting, background by Craig Mullins, netflix, poster, ultra real<br><br>
+
+                      Stylish vector art stickers: must be SVG, high-quality<br><br>
+
+                      Create a high-quality SVG vector illustration<br><br>
+
+                      Seeking innovative and high-quality sticker illustrations, SVG vector art preferred<br><br>
+
+                      Creative call to designers: High-quality SVG vector art for a trending sticker<br><br>
+
+                      SVG vector art, high-quality illustrations wanted<br><br>
+
+                      Stand out on 99designs: SVG vector art sticker design challenge, high quality<br><br>
+
+                      PLTN-style meme with a character possessing cute, big, circular reflective eyes. The image should have Pixar-like rendering, Unreal Engine cinematic smoothness, and intricate detail<br><br>
+
+                      PLTN-style, with Pixar-rendered characters boasting big circular reflective eyes. Expecting Unreal Engine cinematic smoothness and attention to detail<br><br>
+
+                      a meme that showcases Pixar-like rendering and Unreal Engine cinematic smoothness<br><br>
+
+                      vibrant, Beeple-inspired animations and digital paintings for a clipart sticker. Trending style on ArtStation, with a touch of Cyril Roland's aesthetic and Noah Bradley's unique flair<br><br>
+
+                      colorful sticker that blends the digital rendering styles of Beeple and Ross Tran, with a dash of Noah Bradley and Cyril Roland's artistry. Aim to trend on ArtStation<br><br>
+
+                      animated clipart sticker, using vibrant colors and digital painting techniques. Draw inspiration from Beeple, Noah Bradley, Cyril Roland, and Ross Tran, and aim for the ArtStation trend list<br><br>
                     </p>
                   </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -925,7 +959,7 @@ import MemeMasterAPI from '../../clients/MemeMasterAPI';
 import CreateMemeText from './CreateMemeText'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import imageCompression from 'browser-image-compression'
-import { readAndCompressImage } from 'browser-image-resizer'
+// import { readAndCompressImage } from 'browser-image-resizer'
 export default {
   props: {
     isMobileDevice: Boolean,
@@ -1000,7 +1034,7 @@ export default {
     newHeight: 0,
     imageStrength: 0.35,
     showRowAlert: false,
-    showRowAlertText: ''
+    showRowAlertText: '',
   }),
   components: {
     CreateMemeText
@@ -1008,7 +1042,6 @@ export default {
   watch: {
     toDrafts () {
       if (this.toDrafts) {
-        this.view = 'edit'
         this.openDrafts()
       } else {
         this.view = 'generate'
@@ -1030,13 +1063,13 @@ export default {
     // Get a reference to the storage service
     this.storageRef = firebase.storage().ref()
     if (this.toDrafts) {
-      this.view = 'edit'
-      this.toUpload = false
+      // this.toUpload = false
       this.openDrafts()
     }
     if (this.toUpload) {
       this.view = 'generate'
       this.panel = ['settings','upload']
+      // this.toDrafts = false
     }
   },
   computed:{

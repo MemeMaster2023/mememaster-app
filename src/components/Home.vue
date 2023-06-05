@@ -28,18 +28,26 @@
               
               <template v-if="i === 0">
                 <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
-                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're creating a hub where memes, NFTs, and social media intersect.</p>
               </template>
+
               <template v-if="i === 1">
+                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're creating a hub where memes, NFTs, and social media intersect.</p>
+              </template>
+              
+              <template v-if="i === 2">
                 <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Currently under development, we're excited to announce our IDO token listing, targeted for June 2023.</p>
               </template>
 
-              <template v-if="i === 2">
+              <template v-if="i === 3">
                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Hold EMAS tokens in your wallet and be a part of our platform's growth.</p>
               </template>
-              <template v-if="i === 3">
-                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p><br>
-                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'"> Join us and become a Meme Master!</p>
+
+              <template v-if="i === 4">
+                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p><br>
+              </template>
+
+              <template v-if="i === 5">
+                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText mb-4'"> Join us and become a Meme Master!</p>
               </template>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
@@ -56,7 +64,7 @@
             </v-col>
           </v-row>
 
-          <v-row :align="'center'" v-if="!isMobileDevice" style="height:100%">
+          <v-row :align="'center'" v-if="!isMobileDevice" style="height:100%" class="pt-8">
             <v-col cols="12" md="1" class="pa-4">
             </v-col>
 
@@ -409,6 +417,9 @@ export default {
     carousel: 0,
     carouselItems: [
         {
+          src: '/img/home/mememaster_home01.webp',
+        },
+        {
           src: '/img/home/mememaster_home02.webp',
         },
         {
@@ -419,6 +430,9 @@ export default {
         },
         {
           src: '/img/home/mememaster_home05.webp',
+        },
+        {
+          src: '/img/home/mememaster_home06.webp',
         }
       ],
     images1: [
@@ -474,13 +488,13 @@ export default {
 <style lang="scss">
   .homeText {
     font-family: 'Gruppo';
-    font-size: 40px;
+    font-size: 44px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
     font-family: 'Gruppo';
-    font-size: 34px;
+    font-size: 40px;
     line-height: 1em;
     color: #FFF;
     margin-top: 16px;

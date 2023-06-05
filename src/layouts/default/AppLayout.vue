@@ -109,7 +109,7 @@
       <!-- <v-list-item prepend-icon="mdi-circle-multiple-outline" title="Token Listings" value="tokens"></v-list-item> -->
       <v-list-item prepend-icon="mdi-transit-connection-variant" title="Roadmap" value="Roadmap" @click="routerGo('/roadmap')"></v-list-item>
       <v-list-item prepend-icon="mdi-chart-arc" title="Tokenomics" value="Tokenomics"></v-list-item>
-      <v-list-item prepend-icon="mdi-account-group" title="Team" value="Team"></v-list-item>
+      <v-list-item prepend-icon="mdi-account-group" title="Team" value="Team" @click="gotoTeamLink()"></v-list-item>
       <v-list-item prepend-icon="mdi-head-question-outline" title="FAQ" value="faq"></v-list-item>
       <v-list-item prepend-icon="mdi-at" title="Contact Us" value="contact"></v-list-item>
       <v-list-item prepend-icon="mdi-file-outline" title="Whitepaper" value="whitepaper" @click="openWhitePaper()"></v-list-item>
@@ -169,15 +169,62 @@
       >
         Connect 
       </v-btn>
-      <v-btn v-if="!drawer && env && (mmConnected || emailConnected)"
-        style="margin-right:10px;margin-top:-7px"
-        variant="outlined"
-        color="white"
-        theme="dark"
-      >
-      <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/> 
-      <v-icon v-if="emailConnected" class="mr-2">mdi-email</v-icon>Connected
-      </v-btn>
+
+      <v-menu v-if="!drawer && env && (mmConnected || emailConnected)" style="opacity:0.8">
+        <template v-slot:activator="{ props }">
+          <v-btn v-if="!drawer && env && (mmConnected || emailConnected)"
+            style="margin-right:10px;margin-top:-7px"
+            variant="outlined"
+            color="white"
+            theme="dark"
+            v-bind="props"
+            offset="-20"
+          >
+          <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/> 
+          <v-icon v-if="emailConnected" class="mr-2">mdi-email</v-icon>Connected
+          </v-btn>
+        </template>
+        <v-card 
+            min-width="300" 
+            max-width="300" 
+            class="mt-2"
+         >
+          <v-list>
+            <v-list-item
+              :title="getUser.displayName"
+              :subtitle="makeDate(getUser.memberSince)"
+            >
+            <template v-slot:prepend>
+              <v-avatar color="deep-purple-lighten-4" style="border-radius: 10px;" size="65">
+                <v-img :src="'https://robohash.org/' + getUser.displayName" style="width: 65px;height:65px;">
+                </v-img>
+              </v-avatar>
+            </template>
+
+              <!-- <template v-slot:append>
+                <v-btn
+                  variant="text"
+                  :class="fav ? 'text-red' : ''"
+                  icon="mdi-heart"
+                  @click="fav = !fav"
+                ></v-btn>
+              </template> -->
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <div class="text-center">
+            <v-btn style="width:280px" 
+                  class="ma-2"
+                  color="pink-darken-4"
+                  prepend-icon="mdi-close-circle-outline"
+                  @click="disconnectClicked"
+            >
+              Disconnect
+            </v-btn>
+          </div>
+        </v-card>
+      </v-menu>
+
       <v-btn v-else-if="!drawer && env && (walletConnected || emailConnected)"
         style="margin-right:10px;margin-top:-7px"
         variant="outlined"
@@ -395,7 +442,6 @@
             </v-col>
           </v-row>
 
-
           <v-card-actions class="justify-end">
 
           </v-card-actions>
@@ -440,7 +486,7 @@ import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 // import WalletConnect from '@/components/wallets/WalletConnect'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
 import md5 from 'md5'
-import { db } from '@/main'
+import dateformat from "dateformat"
 export default {
     name: 'AppBar',
     props: {
@@ -595,7 +641,14 @@ export default {
       },
       gotoMMLink() {
         // console.log('wpClicked')
+        this.drawer = false
         this.$emit("mmMobileClicked")
+      },
+      gotoTeamLink() {
+        // console.log('wpClicked')
+        // window.open(link, "_blank")
+        this.drawer = false
+        this.$emit("teamLinkClicked")
       },
       getHash (name) {
         return md5(name)
@@ -660,6 +713,31 @@ export default {
       closeChat () {
         console.log('chat close clicked')
         this.chatActive = false
+      },
+      makeDate (date) {
+        return dateformat(new Date(date), 'dd mmm, yyyy')
+      },
+      disconnectClicked () {
+        if (this.mmConnected) {
+          this.$refs.mmConnect.disconnectMetamask()
+        } else if (this.walletConnected) {
+          this.$refs.walletConnect.disconnecWallet()
+        }
+        /* else if (this.binanceConnected) {
+          this.$refs.mmConnect.disconnectBinance()
+        } */ 
+        if (this.isEmailConnected) {
+          this.$store.dispatch('logout').then(() => {
+            // const firstScrollTo = scroller();
+            // console.log('Clear userPredictionsArr Array')
+            // this.$store.dispatch('clearUserPredictions')
+            setTimeout(() => {
+              this.$router.push('/');
+              window.location.reload();
+              // firstScrollTo('#hometoolbar');
+            }, 1000);
+          });
+        }
       }
     }
   }

@@ -7,6 +7,7 @@
         :drawer="drawer"
         v-on:wpClicked="openWhitepaper()"
         v-on:mmMobileClicked="mmMobileClicked()"
+        v-on:teamLinkClicked="teamLinkClicked()"
     />
     <default-view 
         :isMobileDevice="isMobileDevice" 
@@ -36,6 +37,10 @@
   function mmMobileClicked() {
     // console.log('wpClicked Received')
     window.open('https://metamask.app.link/dapp/testnet.mememaster.app/mmobile', '_blank');
+  }
+  function teamLinkClicked() {
+    // console.log('wpClicked Received')
+    window.open('https://haven-associates.com/#tabs', '_blank');
   }
   
 </script>

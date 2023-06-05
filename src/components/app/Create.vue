@@ -154,7 +154,7 @@ export default {
       return
     } else if (this.$route.params?.type === 'drafts') {
       this.view = 2
-      this.toDrafts = false
+      this.toDrafts = true
       this.toUpload = false
       return
     } else if (this.$route.params?.type === 'upload') {
