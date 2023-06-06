@@ -108,7 +108,7 @@ export default {
     },
     changeLanguage(lang){
       this.$store.commit('SetCurrentLanguage', lang)
-    },
+    }
   }
 }
 </script>

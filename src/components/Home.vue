@@ -1,4 +1,5 @@
 <template>
+   <div id="home">
     <v-responsive style="background-color: #000;">
 
     <v-carousel 
@@ -19,14 +20,35 @@
         gradient="to bottom, rgba(0,0,0,.7), rgba(0,0,0,.4)"
       >
         <div :class="isMobileDevice ? 'ma-2' : ''">
-          <v-row style="margin-top:200px;" :align="'center'">
-            <v-col cols="12" md="2" class="pa-4">
+          
+          <v-row style="margin-top:250px;" :align="'center'">
+            <v-col cols="12" md="3" class="pa-4">
             </v-col>
-            <v-col cols="12" md="8" class="pa-4">
-              <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master, the ultimate AI-powered meme and NFT platform for all social media channels.</p>
-              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're creating a hub where memes, NFTs, and social media intersect. Currently under development, we're excited to announce our IDO token listing, targeted for June 2023.</p>
-              <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold MM tokens in your wallet and be a part of our platform's growth.<br><br>Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p>
-              <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'"> Join us and become a Meme Master!</p>
+            <v-col cols="12" md="6" class="pa-4">
+              
+              <template v-if="i === 0">
+                <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
+              </template>
+
+              <template v-if="i === 1">
+                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're creating a hub where memes, NFTs, and social media intersect.</p>
+              </template>
+              
+              <template v-if="i === 2">
+                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Currently under development, we're excited to announce our IDO token listing, targeted for June 2023.</p>
+              </template>
+
+              <template v-if="i === 3">
+                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Hold EMAS tokens in your wallet and be a part of our platform's growth.</p>
+              </template>
+
+              <template v-if="i === 4">
+                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p><br>
+              </template>
+
+              <template v-if="i === 5">
+                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText mb-4'"> Join us and become a Meme Master!</p>
+              </template>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
                       variant="outlined"
@@ -38,15 +60,15 @@
               </v-layout> -->
             </v-col>
 
-            <v-col cols="12" md="2" class="pa-4">
+            <v-col cols="12" md="3" class="pa-4">
             </v-col>
           </v-row>
 
-          <v-row :align="'center'" v-if="!isMobileDevice">
+          <v-row :align="'center'" v-if="!isMobileDevice" style="height:100%" class="pt-8">
             <v-col cols="12" md="1" class="pa-4">
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-4">
+            <v-col cols="12" md="4" class="pa-4" align-self="end" style="height:100%">
               <v-card
                 class="mx-auto overflow-auto"
                 max-width="100%"
@@ -74,7 +96,7 @@
                     style="margin-top: 5px"
                     variant="text"
                     color="purple-darken-4"
-                    @click="scrollToGllery()"
+                    @click="scrollToGallery()"
                   >
                     Sample Gallery
                   </v-btn>
@@ -176,9 +198,9 @@
         <div class="ma-8">
           <v-row :style="'margin-top:' + (windowHeight - 450) + 'px;'" :align="'center'">
             <v-col cols="12" md="12" >
-              <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master, the ultimate AI-powered meme and NFT platform for all social media channels.</p>
-              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're creating a hub where memes, NFTs, and social media intersect. Currently under development, we're excited to announce our fair token launch, targeted for June 2023.</p>
-              <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold MM tokens in your wallet and be a part of our platform's growth.<br><br>Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p>
+              <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
+              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're creating a hub where memes, NFTs, and social media intersect.<br><br>Currently under development, we're excited to announce our fair token launch, targeted for June 2023.</p>
+              <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold EMAS tokens in your wallet and be a part of our platform's growth.<br><br>Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p>
               <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'"> Join us and become a Meme Master!</p>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
@@ -227,7 +249,7 @@
                   style="margin-top: 5px"
                   variant="text"
                   color="purple-darken-4"
-                  @click="scrollToGllery()"
+                  @click="scrollToGallery()"
                 >
                   Sample Gallery
                 </v-btn>
@@ -364,6 +386,7 @@
       </div>
 
     </v-responsive>
+  </div>
 </template>
 
 <script>
@@ -394,6 +417,9 @@ export default {
     carousel: 0,
     carouselItems: [
         {
+          src: '/img/home/mememaster_home01.webp',
+        },
+        {
           src: '/img/home/mememaster_home02.webp',
         },
         {
@@ -404,6 +430,9 @@ export default {
         },
         {
           src: '/img/home/mememaster_home05.webp',
+        },
+        {
+          src: '/img/home/mememaster_home06.webp',
         }
       ],
     images1: [
@@ -433,15 +462,23 @@ export default {
   created() {
     // this.currentUser = firebase.auth().currentUser;
     // this.init();
+    this.scrollToTop()
     console.log('###### this.isMobileDevice Home Home ##########')
     console.log(this.isMobileDevice)
   },
   methods: {
-    scrollToGllery () {
+    scrollToGallery () {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#gallery');
+        firstScrollTo('#gallery', 500, { offset: -64 });
+      }, 200);
+    },
+    scrollToTop () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#home', 500, { offset: -64 });
       }, 200);
     },
   }
@@ -451,20 +488,20 @@ export default {
 <style lang="scss">
   .homeText {
     font-family: 'Gruppo';
-    font-size: 40px;
+    font-size: 44px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
     font-family: 'Gruppo';
-    font-size: 24px;
+    font-size: 40px;
     line-height: 1em;
     color: #FFF;
     margin-top: 16px;
   }
   .homeTextSmaller {
     font-family: 'Gruppo';
-    font-size: 22px;
+    font-size: 28px;
     line-height: 1em;
     color: #FFF;
     margin-top: 16px;

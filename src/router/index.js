@@ -7,6 +7,12 @@ const routes = [
     component: () => import("@/layouts/default/Default.vue"),
     children: [
       {
+        path: '/mmobile',
+        name: 'MMobile',
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/Home.vue"),  
+      },
+      {
         path: "/",
         name: "Home",
         // route level code-splitting

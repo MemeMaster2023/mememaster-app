@@ -60,7 +60,7 @@
             <v-card-item>
               <div>
                 <div class="text-h6 text-center">Upload your Own</div>
-                <div class="body-1 text-center">Upload Images or Memes from your own collection and enhance them amd turn them into NFTs.</div>
+                <div class="body-1 text-center">Upload Images or from your own collection and enhance them and turn them into Memes.</div>
               </div>
             </v-card-item>
 
@@ -69,7 +69,9 @@
                 variant="outlined" 
                 color="indigo-lighten-1"  
                 style="width:100%" 
-                prepend-icon="mdi-upload" >
+                prepend-icon="mdi-upload" 
+                to="/generate/upload"
+                >
                 Continue
               </v-btn>
             </v-card-actions>
@@ -89,6 +91,7 @@
         :windowHeight="windowHeight"
         :drawer="drawer"
         :toDrafts="toDrafts"
+        :toUpload="toUpload"
       >
       </CreateMeme>
   
@@ -112,7 +115,8 @@ export default {
   data: () => ({
     loading: false,
     view: 1,
-    toDrafts: false
+    toDrafts: false,
+    toUpload: false
   }),
   components: {
     CreateMeme
@@ -126,10 +130,16 @@ export default {
       if (this.$route.params?.type === 'default') {
         this.view = 2
         this.toDrafts = false
+        this.toUpload = false
         return
-      } else {
+      } else if (this.$route.params?.type === 'drafts') {
         this.view = 2
         this.toDrafts = true
+        this.toUpload = false
+      } else if (this.$route.params?.type === 'upload') {
+        this.view = 2
+        this.toUpload = true
+        this.toDrafts = false
       }
     }
   },
@@ -140,10 +150,16 @@ export default {
     if (this.$route.params?.type === 'default') {
       this.view = 1
       this.toDrafts = false
+      this.toUpload = false
       return
-    } else {
+    } else if (this.$route.params?.type === 'drafts') {
       this.view = 2
       this.toDrafts = true
+      this.toUpload = false
+      return
+    } else if (this.$route.params?.type === 'upload') {
+      this.view = 2
+      this.toUpload = true
     }
   },
   methods: {
@@ -154,7 +170,7 @@ export default {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#collections');
+        firstScrollTo('#create', 500, { offset: -64 });
       }, 200);
     },
   }
@@ -163,19 +179,19 @@ export default {
 
 <style lang="scss">
   .homeText {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 40px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 28px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmaller {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 24px;
     line-height: 1em;
     color: #FFF;
@@ -191,7 +207,7 @@ export default {
     font-size: 18px;
   }
   .gallery {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 45px;
     line-height: 1em;
     color: #FFF;

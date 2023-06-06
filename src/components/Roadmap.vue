@@ -1,5 +1,5 @@
 <template>
-  <v-card theme="dark" style="width: 100%;height: auto">
+  <v-card theme="dark" style="width: 100%;height: 100%">
     <v-row :style="isMobileDevice ? 'margin-left:4px;margin-right:4px' : 'margin-top:50px;'">
       <v-col cols="12" md="12" class="mt-8 mb-16" >
         <div v-if="model === '0'" style="font-size: 3rem;" class="text-center">Roadmap</div>
@@ -7,7 +7,7 @@
         <v-carousel 
               v-model="model" 
               :height="(windowHeight - (model === '0' ? 170 : 100))"
-              show-arrows="hover"
+              :show-arrows="isMobileDevice ? false : 'hover'"
           >
           <v-carousel-item
             value="0"
@@ -27,8 +27,10 @@
             >
 
             <v-row style="height:100%">
-              <v-col cols="12" md="8" class="pl-16 pt-16">
-                <v-list density="compact" bg-color="transparent">
+              <v-col cols="12" md="4" class="pl-16 pt-16" v-if="isMobileDevice">
+              </v-col>
+              <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+                <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[0].date}} - {{ items[0].title}}</span>
 
                     <v-list-item
@@ -47,7 +49,7 @@
                   </v-list>
                 </v-col>
 
-                <v-col cols="12" md="4" class="pr-16 pb-16" align-self="end" >
+                <v-col cols="12" md="4" class="pr-16 pb-16" align-self="end" v-if="!isMobileDevice">
                   <v-img src="/img/roadmap/slide_02_1.webp"></v-img>
                 </v-col>
               </v-row>
@@ -67,11 +69,11 @@
             >
             <v-row style="height:100%">
                 <v-col cols="12" md="4" class="pl-16" align-self="center" >
-                  <v-img src="/img/roadmap/slide_03_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
+                  <v-img v-if="!isMobileDevice" src="/img/roadmap/slide_03_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
                 </v-col>
 
-                <v-col cols="12" md="8" class="pl-16 pt-16">
-                <v-list density="compact" bg-color="transparent">
+                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+                <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[1].date}} - {{ items[1].title }}</span>
 
                     <v-list-item
@@ -103,8 +105,10 @@
               style="background: rgb(82, 192, 255);background: linear-gradient(180deg, rgb(42, 95, 132) 0%, rgb(82, 192, 255) 100%);"
             >
             <v-row style="height:100%">
-                <v-col cols="12" md="8" class="pl-16 pt-16">
-                <v-list density="compact" bg-color="transparent">
+                <v-col cols="12" md="4" class="pl-16" v-if="isMobileDevice">
+                </v-col>
+                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+                <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[2].date}} - {{ items[2].title }}</span>
 
                     <v-list-item
@@ -118,11 +122,11 @@
                         <v-icon size="32" v-else icon="mdi-checkbox-blank-outline"></v-icon>
                       </template>
 
-                      <span style="font-size: 1.1rem;" v-text="item.text"></span>
+                      <span style="font-size: 1.2rem;" v-text="item.text"></span>
                     </v-list-item>
                   </v-list>
                 </v-col>
-                <v-col cols="12" md="4" class="pt-16 pr-16" align-self="start" >
+                <v-col cols="12" md="4" class="pt-16 pr-16" align-self="start" v-if="!isMobileDevice">
                   <v-img src="/img/roadmap/slide_04_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
                 </v-col>
               </v-row>
@@ -139,12 +143,14 @@
               style="background: rgb(82, 255, 154);background: linear-gradient(180deg, rgb(42, 132, 89) 0%, rgb(82, 255, 154) 100%);"
             >
             <v-row style="height:100%">
-                <v-col cols="12" md="4" class="pl-16" align-self="center" >
+                <v-col cols="12" md="4" class="pl-16" align-self="center" v-if="!isMobileDevice">
                   <v-img src="/img/roadmap/slide_05_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
                 </v-col>
+                <v-col cols="12" md="4" class="pl-16 pt-16" v-if="isMobileDevice">
+                </v-col>
 
-                <v-col cols="12" md="8" class="pl-16 pt-16">
-                <v-list density="compact" bg-color="transparent">
+                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+                  <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[3].date}} - {{ items[3].title }}</span>
 
                     <v-list-item
@@ -176,7 +182,9 @@
               style="background: rgb(255, 209, 82);background: linear-gradient(180deg, rgb(132, 105, 42) 0%, rgb(255, 209, 82) 100%);"
             >
             <v-row style="height:100%">
-                <v-col cols="12" md="8" class="pl-16 pt-16">
+              <v-col cols="12" md="4" class="pl-16" v-if="isMobileDevice">
+              </v-col>
+              <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
                 <v-list density="compact" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[4].date}} - {{ items[4].title }}</span>
 
@@ -195,7 +203,7 @@
                     </v-list-item>
                   </v-list>
                 </v-col>
-                <v-col cols="12" md="4" class="pt-16 pr-16" align-self="center" >
+                <v-col cols="12" md="4" class="pt-16 pr-16" align-self="center" v-if="!isMobileDevice">
                   <v-img src="/img/roadmap/slide_06_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
                 </v-col>
               </v-row>
@@ -239,12 +247,11 @@ export default {
         {
           title: 'Refinement & User Experience ',
           text: [
-            {text: 'All your generated content automatically saved to your Dratfs so you can continue editing your creations.', completed: true}, 
+            {text: 'All your generated content automatically saved to your drafts so you can continue editing your creations.', completed: true}, 
             {text: 'Establish Galleries: Users can view and explore these curated collections.', completed: true}, 
             {text: 'Incorporate Social Media Links: Encourage sharing across platforms and foster community engagement.', completed: false}, 
             {text: 'Create a prompt library for far better meme and other creations.', completed: false}, 
-            {text: 'Integrate Stripe payments for topping up credits.', completed: false}, 
-            {text: 'IDO Token launch, trageted for June 2023', completed: false},
+            {text: 'IDO Token launch, targeted for June 2023', completed: false},
           ],
           date: 'Phase 2',
           color: '#463552',
@@ -257,7 +264,7 @@ export default {
             {text: 'Uniswap and CEX listings', completed: false},
             {text: 'Develop NFT Backend Infrastructure: This will support minting, buying, and selling of NFTs.', completed: false}, 
             {text: 'Build the NFT Minting Application: This will allow users to create their own meme-based NFTs.', completed: false}, 
-            {text: 'Launch MemeMaster\'s Meme-to-NFT Creation Section: This can be an exclusive feature of the platform allowing memes to be converted to NFTs', completed: false}
+            {text: 'Launch MemeMaster\'s Meme-to-NFT Creation Section: This can be an exclusive feature of the platform allowing memes to be converted to NFTs.', completed: false}
           ],
           date: 'Phase 3',
           color: '#463552',
@@ -269,7 +276,7 @@ export default {
           text: [
             {text: 'Educational Content: Provide resources for users unfamiliar with NFTs, blockchain, or crypto.', completed: false},
             {text: 'Plan and Execute Airdrops: Distribute Memes and NFTs to wallet holders.', completed: false}, 
-            {text: 'Confirm Coinmarketcap and Coingecko listing', completed: false},
+            {text: 'Confirm Coinmarketcap and Coingecko listing.', completed: false},
             {text: 'Create New Token Listing Platform: This will provide users with access to newly minted tokens, enhancing the ecosystem\'s dynamism.', completed: false},  
             {text: 'Gaming App Integration: Develop a mini-game section where users can play with/against each other. The games can be meme-themed or utilize user\'s NFTs', completed: false} 
           ],
@@ -283,7 +290,7 @@ export default {
           text: [
             {text: 'Launch a Decentralized Marketplace: Enable peer-to-peer transaction of memes and NFTs within the platform.', completed: false},
             {text: 'Listing on more DEX and CEX exchanges.', completed: false},
-            {text: 'Continuous improvment and development following the latest in Meme, NFT & AI movements.', completed: false},
+            {text: 'Continuous improvement and development following the latest in Meme, NFT & AI movements.', completed: false},
             {text: 'Ordinal NFT creation.', completed: false}
           ],
           date: 'Phase 5',

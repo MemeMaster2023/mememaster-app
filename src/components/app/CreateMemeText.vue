@@ -256,7 +256,6 @@
           <div ref="memeCanvas">
             <v-img 
                 :src="'data:image/png;base64,' + selectedImage.base64" width="100%"
-                style="border-radius: 5px;"
                 :class="verticalPlacement + ' ' + horizontalPlacement"
             >
               <div :class="fontSize < 100 ? 'pa-2' : ''" 
@@ -579,7 +578,7 @@ export default {
     fontStyle: 'normal',
     textDecoration: 'none',
     fontColor: '#FFF',
-    swatches: false,
+    swatches: true,
     shadow: false,
     border: false,
     shadowColor: 'black',
@@ -842,7 +841,7 @@ export default {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#memetext');
+        firstScrollTo('#memetext', 500, { offset: -64 });
       }, 200);
     },
     checkNameRules (value) {
@@ -858,19 +857,19 @@ export default {
 <style lang="scss">
   @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Comfortaa:wght@400;700&family=Courgette&family=Gruppo&family=Luckiest+Guy&family=Nunito:wght@400;700;900&family=Roboto:wght@700;900&family=Saira:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap');
   .homeText {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 40px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 28px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmaller {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 24px;
     line-height: 1em;
     color: #FFF;
@@ -886,7 +885,7 @@ export default {
     font-size: 18px;
   }
   .gallery {
-    font-family: 'Baumans';
+    font-family: 'Gruppo';
     font-size: 45px;
     line-height: 1em;
     color: #FFF;

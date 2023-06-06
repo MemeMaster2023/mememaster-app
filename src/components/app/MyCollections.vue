@@ -1,5 +1,5 @@
 <template>
-  <div id="collections">
+  <div id="mycollections">
     <v-responsive style="background-color: #000;">
       
       <v-card theme="dark" color="#2b2b2b"  class="mt-16 mb-4" height="100%" v-if="view === 1">
@@ -17,7 +17,7 @@
           </v-col>
        </v-row>
 
-       <v-row class="mb-16" :align="center">
+       <v-row class="mb-4" :align="center">
 
         <v-col cols="12" md="2" :align="center" >
         </v-col>
@@ -48,7 +48,16 @@
               </v-col>
             </v-row>
 
-            <v-list lines="two" v-if="getCollections.length > 0">
+            <v-row v-if="loadingData && !collectionsEmpty">
+              <v-col cols="12"  :align="'center'">
+                <v-progress-circular
+                    indeterminate
+                    color="deep-purple-darken-2"
+                  ></v-progress-circular>
+                  <div class="text-h6 mt-2 blue--text">Loading collections...</div>
+              </v-col>
+            </v-row>
+            <v-list lines="two" v-else-if="getCollections.length > 0 && !loadingData">
               <v-list-subheader>My Meme Collections ({{ getCollections.length }})</v-list-subheader>
 
                 <template v-for="(item, index) in filteredCollections" :key="index">
@@ -62,7 +71,7 @@
                       <v-avatar color="blue-lighten-1" style="border-radius: 10px;" v-if="item.icon === 'default'" >
                         <v-icon color="white">mdi-image-multiple-outline</v-icon>
                       </v-avatar>
-                      <v-img v-else :src="item.icon" style="width: 40px; max-height:40px;min-height:40px;border-radius: 10px;margin-right: 18px">
+                      <v-img v-else :src="item.icon" style="width: 40px; height:40px;border-radius: 10px;margin-right: 18px">
                       </v-img>
                     </template>
 
@@ -153,7 +162,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="2" :align="center">
+        <v-col cols="12" md="2" :align="'center'">
         </v-col>
 
        </v-row>
@@ -217,9 +226,9 @@
             </v-btn>
           </v-toolbar>
 
-          <v-row class="pa-12">
+          <v-row class="pa-4" style="max-height: 200px;">
                 
-            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'right'">
+            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'right'" class="pr-4">
 
               <v-avatar color="blue-lighten-1" size="120" style="border-radius: 10px;">
                 <v-icon v-if="selectedCollection.icon === 'default'" size="80" color="white">mdi-image-multiple-outline
@@ -231,7 +240,7 @@
               <v-btn size="small" 
                      icon="mdi-camera-outline" 
                      color="grey" 
-                     style="position: fixed;margin-top: 90px;margin-left: -30px;"
+                     style="position: relative;margin-top: 100px;margin-left: -30px;"
                      @click="collectionImageDialog = true"
               >
               </v-btn>
@@ -305,7 +314,72 @@
                 </v-layout>
               </v-card>
             </v-col>
+          </v-row>
 
+          <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-8 mr-8 mb-8'" :align="start">
+            <v-col v-if="loadingData" :align="'center'">
+              <v-progress-circular
+                  indeterminate
+                  color="deep-purple-darken-2"
+                ></v-progress-circular>
+                <div class="text-h6 mt-2 blue--text">Loading memes...</div>
+            </v-col>
+            <v-col v-else-if="!memesEmpty && !loadingData" cols="12" md="3" v-for="(item,index) in getMemes" :key="index" class="px-0">
+              <v-card
+                class="ma-1 rounded-card"
+                max-width="448"
+                color="grey-darken-3"
+                :loading="loadingData"
+              >
+                <v-img
+                  :src="item.url"
+                  class="rounded-image"
+                  max-width="448"
+                  max-height="448"
+                  cover
+                ></v-img>
+
+                <v-card-title>
+                  {{ item.name }}
+                </v-card-title>
+
+                <v-card-subtitle>
+                  {{ makeDate(item.created) }}
+                </v-card-subtitle>
+
+                <v-card-actions class="ml-2">
+                  <v-layout>
+                    <v-icon class="mr-1">mdi-eye-outline</v-icon>
+                    {{ item.views }} View{{ item.views === 1 ? '' : 's' }}
+                  </v-layout>
+                  <v-layout>
+                    <v-icon class="mr-1">mdi-thumb-up-outline</v-icon>
+                    {{ item.views }}
+                  </v-layout>
+                  <v-layout>
+                    <v-icon class="mr-1">mdi-share-variant</v-icon>
+                   Share
+                  </v-layout>
+                </v-card-actions>
+              </v-card>
+              
+            </v-col>
+
+            <v-col v-if="memesEmpty" :align="'center'">
+              <div class="text-h6 ma-2 text-center">You don't have any Memes in this Collections yet.<br><br>
+                Create one now?
+              </div>
+              <v-btn 
+               size="large"
+               variant="outlined"
+               color="white"
+               theme="dark"
+               @click="routerGo('/generate/default')"
+               prepend-icon="mdi-view-grid-plus" 
+              >
+                Go To Generate
+              </v-btn>
+            </v-col>
           </v-row>
 
         </v-card>
@@ -342,12 +416,12 @@
                   </label>
 
                   <input 
-                      id="file-input" 
-                      type="file" 
-                      accept="image/jpg,image/jpeg,image/png"
-                      @change="handleFiles"
-                    />
-                  </div>
+                    id="file-input" 
+                    type="file" 
+                    accept="image/jpg,image/jpeg,image/png"
+                    @change="handleFiles"
+                  />
+                </div>
 
                 <v-row>
                   <v-col cols="12" md="12">
@@ -358,7 +432,7 @@
                       <v-icon class="mr-2">mdi-check-circle-outline</v-icon>{{ 'Use this Image' }}
                     </v-btn>
 
-                    <v-btn color="grey" 
+                    <v-btn color="grey-lighten-2" 
                           @click="onRemove()" 
                           class="mt-4 ml-2"
                           variant="outlined"
@@ -417,6 +491,7 @@ export default {
   },
   data: () => ({
     loading: false,
+    loadingData: false,
     snackbar: false,
     snackbarText: '',
     privatePublicDialog: false,
@@ -448,6 +523,15 @@ export default {
     getCollections () {
       return this.$store.state.fb.collections
     },
+    collectionsEmpty () {
+      return this.$store.state.fb.collectionsEmpty
+    },
+    getMemes () {
+      return this.$store.state.fb.memes
+    },
+    memesEmpty () {
+      return this.$store.state.fb.memesEmpty
+    },
     filteredCollections () {
         return this.getCollections.filter(item => {
           // console.log(item)
@@ -456,6 +540,26 @@ export default {
       }
   },
   watch: {
+    getCollections () {
+      if (this.getCollections.length > 0) {
+        this.loadingData = false
+        console.log(this.getCollections)
+      } else {
+        setTimeout(() => {
+          this.loadingData= false
+        }, 3000)
+      }
+    },
+    getMemes () {
+      if (this.getMemes.length > 0) {
+        this.loadingData= false
+        console.log(this.getMemes)
+      } else {
+        setTimeout(() => {
+          this.loadingData= false
+        }, 3000)
+      }
+    }
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
@@ -463,15 +567,17 @@ export default {
     this.getUserCollections()
   },
   methods: {
-    getUserCollections() {
-      console.log(this.getCollections)
-      if (this.getCollections.length > 0) {
+    getUserCollections () {
+      // console.log(this.getCollections)
+      this.loadingData = true
+      /* if (this.getCollections.length > 0) {
         let checkTime = Math.round(new Date().getTime() / 1000)
         if (this.getCollections[0]?.checkTime > Math.round(checkTime)) {
           console.log('No collections reload needed')
+          this.loadingData = false
           return
         }
-      }
+      } */
       let dispatchObj = {
         uid: this.getUser.uid,
         limit: 20
@@ -503,7 +609,13 @@ export default {
       this.$store.dispatch('createCollection', dispatchObj)
         .then(() => {
           console.log('Collection Added to Firebase!')
-          this.getCollections.splice(0, 0, dispatchObj)
+          if (this.getCollections.length === 0) {
+            this.getCollections.push(dispatchObj)
+            this.getUserCollections()
+          } else {
+            this.getCollections.splice(0, 0, dispatchObj)
+          }
+          console.log( this.getCollections)
           this.newCollectionName = ''
           this.newCollection = false
           this.snackbarText = 'Collection created!' // this.lang[this.getLanguage].RECORD_DELETED
@@ -520,6 +632,25 @@ export default {
       this.selectedCollection.index = index
       this.collectionDetailsDialog = true
       console.log(this.selectedCollection)
+
+      // load the memes from firebase
+      this.loadingData = true
+      this.$store.commit('setMemes', [])
+      let dispatchObj = {
+        cid: this.selectedCollection.id,
+        limit: 20
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch("getUserMemes", dispatchObj)
+        .then(() => {
+          console.log(this.getMemes)
+          this.loadingData = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
+
     },
     setCollectionImage () {
       // compress the image
@@ -583,7 +714,7 @@ export default {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#collections');
+        firstScrollTo('#mycollections', 500, { offset: -64 });
       }, 200);
     },
     checkNameRules (value) {
@@ -627,6 +758,9 @@ export default {
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
       });
+    },
+    routerGo (route) {
+      this.$router.push(route);
     },
     makeDate (date) {
       return dateformat(new Date(date), 'dd mmm, yyyy')
@@ -681,6 +815,13 @@ export default {
   }
   .image-upload>input {
     display: none;
+  }
+  .rounded-card {
+    border-radius:10px;
+  }
+  .rounded-image {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
 
 </style>
