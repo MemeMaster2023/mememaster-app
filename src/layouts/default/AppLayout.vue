@@ -215,7 +215,7 @@
           <div class="text-center">
             <v-btn style="width:280px" 
                   class="ma-2"
-                  color="pink-darken-4"
+                  color="purple-darken-4"
                   prepend-icon="mdi-close-circle-outline"
                   @click="disconnectClicked"
             >
