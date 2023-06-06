@@ -3,14 +3,14 @@ import { db } from '@/main'
 
 const AuthModule = {
   state: {
-    user: null,
+    persistentUser: null,
     authMessage: '',
     errorMessage: '',
     provider:'',
   },
   mutations: {
     setUser(state, payload) {
-      state.user = payload;
+      state.persistentUser = payload;
     },
     setState(state, payload) {
       console.log(payload);

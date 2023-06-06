@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-  import Authentication from '@/components/auth/Authentication.vue'
+  import Authentication from '@/components/user/Authentication.vue'
 </script>
