@@ -3,14 +3,18 @@ import { db } from '@/main'
 
 const AuthModule = {
   state: {
-    persistentUser: null,
+    persistentUser:  localStorage.getItem('mm-persisten-user') === null
+        ? null
+        : JSON.parse(localStorage.getItem('mm-persisten-user')),
     authMessage: '',
     errorMessage: '',
     provider:'',
   },
   mutations: {
-    setUser(state, payload) {
+    setPersistentUser(state, payload) {
+      console.log(payload);
       state.persistentUser = payload;
+      localStorage.setItem('mm-persisten-user', JSON.stringify(payload));
     },
     setState(state, payload) {
       console.log(payload);
@@ -158,7 +162,23 @@ const AuthModule = {
                 welcome: true,
               };
               await dispatch("insertUserForSignUp", dispatchObj);
+              commit("setPersistentUser", {
+                uid: user.uid,
+                email: user.email,
+                displayName: dispatchObj.name,
+                docId: newPostKey.id,
+                memberSince: dispatchObj.created,
+                isEmailConnected: true,
+              })
             } else {
+              commit("setPersistentUser", {
+                uid: payload.userData.uid,
+                email: payload.userData.email,
+                displayName: payload.userData.name,
+                docId: payload.userData.id,
+                memberSince: payload.created,
+                isEmailConnected: true,
+              })
               commit("SetConnectedUserDetails", payload.userData);
             }
             localStorage.removeItem("meme-master-emailForSignIn");
@@ -201,10 +221,26 @@ const AuthModule = {
                 created: new Date().getTime(),
                 welcome: true,
               };
+              commit("setPersistentUser", {
+                uid: user.uid,
+                email: user.email,
+                displayName: dispatchObj.name,
+                docId: newPostKey.id,
+                memberSince: dispatchObj.created,
+                isEmailConnected: true,
+              })
               await dispatch("insertUserForSignUp", dispatchObj);
             }else{
               let objFromDb = querySnapshot.docs[0].data();
               objFromDb["docId"] = querySnapshot.docs[0].id;
+              commit("setPersistentUser", {
+                uid: user.uid,
+                email: user.email,
+                displayName: objFromDb.name,
+                docId: objFromDb.docId,
+                memberSince: objFromDb.created,
+                isEmailConnected: true,
+              })
               commit("SetConnectedUserDetails", objFromDb);
             }
             commit("SetEmailConnected", {
@@ -231,16 +267,24 @@ const AuthModule = {
       });
     },
     autoSignIn({ commit }, payload) {
-      commit("setUser", {
-        id: payload.uid,
-        name: payload.displayName,
+      commit("setPersistentUser", {
+        uid: payload.uid,
+        displayName: payload.displayName,
         email: payload.email,
-        photoUrl: payload.photoURL,
+        memberSince: payload.created
       });
+    },
+    changeDisplayName({commit, state}, payload) {
+      const oldUser = state.persistentUser;
+      var keys = Object.keys(payload);
+      keys.forEach((key) => {
+        oldUser[key] = payload[key];
+      });
+      commit("setPersistentUser", oldUser);
     },
     logout({ commit }) {
       firebase.auth().signOut();
-      commit("setUser", null);
+      commit("setPersistentUser", null);
     },
   },
   getters: {
