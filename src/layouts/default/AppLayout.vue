@@ -62,7 +62,7 @@
     <v-list nav v-model:opened="open">
       <v-list-item prepend-icon="mdi-home-variant-outline" title="Home" value="home" @click="routerGo('/')"></v-list-item>
 
-      <v-list-group v-if="isLoggedIn" value="account">
+      <v-list-group v-if="isPersistentLogin" value="account">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -191,12 +191,12 @@
          >
           <v-list>
             <v-list-item
-              :title="getUser.displayName"
-              :subtitle="makeDate(getUser.memberSince)"
+              :title="persistentUser.displayName"
+              :subtitle="makeDate(persistentUser.memberSince)"
             >
             <template v-slot:prepend>
               <v-avatar color="deep-purple-lighten-4" style="border-radius: 10px;" size="65">
-                <v-img :src="'https://robohash.org/' + getUser.displayName" style="width: 65px;height:65px;">
+                <v-img :src="'https://robohash.org/' + persistentUser.displayName" style="width: 65px;height:65px;">
                 </v-img>
               </v-avatar>
             </template>
@@ -235,7 +235,7 @@
       <v-icon v-if="emailConnected" class="mr-2">mdi-email</v-icon>Connected
       </v-btn>
 
-      <v-btn v-if="!drawer && !isMobileDevice && env && (isLoggedIn || mmConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
+      <v-btn v-if="!drawer && !isMobileDevice && env && (isPersistentLogin || mmConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
         style="margin-right:30px;margin-top:-7px"
         variant="outlined"
         color="white"
@@ -526,6 +526,10 @@ export default {
         console.log(this.$store.state.user);
         return store.state.user
       },
+      persistentUser() {
+        console.log(store.state.auth.persistentUser)
+        return store.state.auth.persistentUser;
+      },
       gravatar () {
         return this.$store.state.user.gravatar
       },
@@ -543,6 +547,9 @@ export default {
         return this.$store.state.user.walletConnected
       },
       emailConnected () {
+        if(this.persistentUser !== null){
+          return store.state.auth.persistentUser.isEmailConnected;
+        }
         return store.state.user.isEmailConnected;
       },
       isLoggedIn () {
@@ -559,6 +566,10 @@ export default {
         } else  if (this.walletConnected) {
           this.$refs.mmConnect.disconnecWallet()
         } */
+      },
+      isPersistentLogin(){
+        if(this.isLoggedIn) return this.isLoggedIn;
+        return this.persistentUser !== null;
       },
     },
     watch: {
@@ -726,7 +737,7 @@ export default {
         /* else if (this.binanceConnected) {
           this.$refs.mmConnect.disconnectBinance()
         } */ 
-        if (this.isEmailConnected) {
+        if (this.emailConnected) {
           this.$store.dispatch('logout').then(() => {
             // const firstScrollTo = scroller();
             // console.log('Clear userPredictionsArr Array')
