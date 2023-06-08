@@ -48,6 +48,24 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "home" */ "@/views/Collections.vue"),
       },
+      {
+        path: "/exclusive",
+        name: "Exclusive NFTs",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/ExclusiveNFTs.vue"),
+      },
+      {
+        path: "/games-early-insights",
+        name: "Games early Insights",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/GamesInsights.vue"),
+      },
       // App - User is Connected or Logged In
       {
         path: '/generate/:type',
@@ -74,6 +92,31 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "home" */ '@/views/MyNFTs.vue'),
+      },
+      {
+        path: '/memes',
+        name: 'Meme Marketplace',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/MemeMarketplace.vue'),
+      },
+      {
+        path: '/nfts',
+        name: 'NFT Marketplace',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/NFTMarketplace.vue'),
+      },
+      {
+        path: "/games",
+        name: "Games",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/Games.vue"),
       },
       {
         path: '/roadmap',

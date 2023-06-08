@@ -30,8 +30,6 @@ export default {
     snackbarError: false,
     isOnline: true,
     isShowContact: false,
-    liveLeaderboard: false,
-    limitLiveLeaderboard: 10,
     dialogFilePreview: false,
     fileName: ''//'http://docs.google.com/gview?url=',
   }),

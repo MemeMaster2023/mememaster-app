@@ -14,20 +14,20 @@
             variant="plain" 
             @click.stop="drawer = !drawer" style="margin: 10px">
       </v-btn>
-  </v-layout>
+    </v-layout>
 
     <v-layout v-if="!isMobileDevice" style="margin-left: 80px;margin-top:-30px">
       <v-img
         src="/img/logos/logo.png"
         style="max-height: 130px; max-width: 130px;cursor: pointer;"
-        @click="routerGo('/')"
+        @click="routerGo('/')"  v-scroll-to="'#home'"
       ></v-img>
     </v-layout>
     <v-layout v-if="isMobileDevice" :style="'margin-left:' + ((windowWidth / 2) - 65) + 'px;margin-top:-30px'">
       <v-img
         src="/img/logos/logo.png"
         style="max-height: 130px; max-width: 130px;cursor: pointer;"
-        @click="routerGo('/')"
+        @click="routerGo('/')" v-scroll-to="'#home'"
       ></v-img>
     </v-layout>
 
@@ -49,15 +49,32 @@
       >
       <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>Connected
       </v-btn>
+
       <v-btn v-if="emailConnected"
         variant="outlined"
         color="white"
         theme="dark"
         style="width:100%"
       >
-      <v-icon class="mr-2">mdi-email</v-icon> Connected
+       <v-icon class="mr-2">mdi-email</v-icon> 
+      Connected
       </v-btn>
+
     </v-layout>
+
+    <!-- <v-layout class="mr-4 ml-4 mt-2 mb-4" v-if="env">
+      <v-btn v-if="(mmConnected || emailConnected || walletConnected)"
+             variant="outlined"
+             color="white"
+             @click="disconnectClicked"
+             style="width:100%"
+      > 
+        <template v-slot:prepend>        
+          <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>  
+        </template>
+        Disconnect
+      </v-btn>
+    </v-layout> -->
 
     <v-list nav v-model:opened="open">
       <v-list-item prepend-icon="mdi-home-variant-outline" title="Home" value="home" @click="routerGo('/')"></v-list-item>
@@ -105,13 +122,13 @@
 
       </v-list-group>
         
-      <v-list-item prepend-icon="mdi-robot-outline" title="Meme Marketplace" value="mememarket"></v-list-item>
+      <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes')"></v-list-item>
+      <v-list-item prepend-icon="mdi-view-dashboard" title="NFT Marketplace" value="nftmarket" @click="routerGo('/nfts')"></v-list-item>
+      <v-list-item prepend-icon="mdi-shape-plus" title="Games" value="games" @click="routerGo('/games')"></v-list-item>
       <!-- <v-list-item prepend-icon="mdi-circle-multiple-outline" title="Token Listings" value="tokens"></v-list-item> -->
-      <v-list-item prepend-icon="mdi-transit-connection-variant" title="Roadmap" value="Roadmap" @click="routerGo('/roadmap')"></v-list-item>
-      <v-list-item prepend-icon="mdi-chart-arc" title="Tokenomics" value="Tokenomics"></v-list-item>
       <v-list-item prepend-icon="mdi-account-group" title="Team" value="Team" @click="gotoTeamLink()"></v-list-item>
-      <v-list-item prepend-icon="mdi-head-question-outline" title="FAQ" value="faq"></v-list-item>
-      <v-list-item prepend-icon="mdi-at" title="Contact Us" value="contact"></v-list-item>
+      <v-list-item prepend-icon="mdi-at" title="Contact Us" value="contact" @click="gotoContact()" v-scroll-to="'#footer'"></v-list-item>
+      <v-list-item prepend-icon="mdi-transit-connection-variant" title="Roadmap" value="Roadmap" @click="routerGo('/roadmap')"></v-list-item>
       <v-list-item prepend-icon="mdi-file-outline" title="Whitepaper" value="whitepaper" @click="openWhitePaper()"></v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -191,12 +208,12 @@
          >
           <v-list>
             <v-list-item
-              :title="persistentUser.displayName"
-              :subtitle="makeDate(persistentUser.memberSince)"
+              :title="getUser.displayName"
+              :subtitle="makeDate(getUser.memberSince)"
             >
             <template v-slot:prepend>
               <v-avatar color="deep-purple-lighten-4" style="border-radius: 10px;" size="65">
-                <v-img :src="'https://robohash.org/' + persistentUser.displayName" style="width: 65px;height:65px;">
+                <v-img :src="'https://robohash.org/' + getUser.displayName" style="width: 65px;height:65px;">
                 </v-img>
               </v-avatar>
             </template>
@@ -215,7 +232,7 @@
           <div class="text-center">
             <v-btn style="width:280px" 
                   class="ma-2"
-                  color="purple-darken-4"
+                  color="deep-purple-darken-4"
                   prepend-icon="mdi-close-circle-outline"
                   @click="disconnectClicked"
             >
@@ -224,6 +241,18 @@
           </div>
         </v-card>
       </v-menu>
+
+      <v-btn v-if="!isMobileDevice && !drawer && env && (mmConnected || emailConnected || walletConnected)"
+             style="margin-right:10px;margin-top:-7px"
+             variant="outlined"
+             color="white"
+             @click="disconnectClicked"
+      > 
+        <template v-slot:prepend>        
+          <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>  
+        </template>
+        Disconnect
+      </v-btn>
 
       <v-btn v-else-if="!drawer && env && (walletConnected || emailConnected)"
         style="margin-right:10px;margin-top:-7px"
@@ -250,7 +279,7 @@
       </MetaMaskConnect>
 
       <v-img v-if="!drawer"
-        @click="drawer = !drawer"
+        @click.stop="drawer = !drawer"
         src="/img/icons/menu.png"
         :style="isMobileDevice ? 'max-height: 35px; max-width: 35px;margin-right:10px;cursor: pointer;' :  'margin-top: -5px;max-height: 35px; max-width: 35px;margin-right:20px;cursor: pointer;'"
       ></v-img>
@@ -304,7 +333,7 @@
               >
               </MetaMaskConnect>
               
-              <!-- <WalletConnect 
+              <WalletConnect 
                   :isMobileDevice="isMobileDevice" 
                   class="pt-6"
                   style="width:100%;" 
@@ -314,7 +343,8 @@
                   :windowHeight="windowHeight" 
                   :dark="dark"
               >
-              </WalletConnect> -->
+              </WalletConnect>
+
               <p class="mt-0"></p>
               <p style="font-size:14px" class="font-weight-medium text-center mt-6 mb-2">Works best with Chrome or Brave</p>
               <v-divider></v-divider>
@@ -380,7 +410,7 @@
               <MetaMaskConnect v-if="$route.name === 'MMobile'" :isMobileDevice="isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
               </MetaMaskConnect>
 
-              <!-- <WalletConnect 
+              <WalletConnect 
                   :isMobileDevice="isMobileDevice" 
                   class="pt-6"
                   style="width:100%;" 
@@ -390,7 +420,7 @@
                   :windowHeight="windowHeight" 
                   :dark="dark"
               >
-              </WalletConnect> -->
+              </WalletConnect>
 
               <p style="font-size:14px" class="font-weight-medium text-center mt-6 mb-2">Works best with Chrome or Brave</p>
                 <v-divider></v-divider>
@@ -450,6 +480,7 @@
 
     <!-- ############### ChatBot ################### -->
     <ChatGPT
+    v-if="(mmConnected || walletConnected || emailConnected)"
         v-model="chatActive"
         :isMobileDevice="isMobileDevice" 
         :windowWidth="windowWidth" 
@@ -483,7 +514,8 @@
 <script>
 import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
-// import WalletConnect from '@/components/wallets/WalletConnect'
+import WalletConnect from '@/components/wallets/WalletConnect'
+// import { scroller } from 'vue-scrollto/src/scrollTo'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
 import md5 from 'md5'
 import dateformat from "dateformat"
@@ -500,7 +532,7 @@ export default {
       env: false,
       drawer: false,
       scrolled: false,
-      chatActive: false,
+      chatActive: true,
       connectWalletDialog: false,
       loadingEmailAuth: false,
       emailDialog: false,
@@ -518,13 +550,16 @@ export default {
     }),
     components: {
       MetaMaskConnect,
-      // WalletConnect,
+      WalletConnect,
       ChatGPT
     },
     computed: {
       getUser () {
         console.log(this.$store.state.user);
-        return store.state.user
+        if(!this.emailConnected) {
+          return store.state.user 
+        }
+        return store.state.auth.persistentUser
       },
       persistentUser() {
         console.log(store.state.auth.persistentUser)
@@ -660,6 +695,9 @@ export default {
         // window.open(link, "_blank")
         this.drawer = false
         this.$emit("teamLinkClicked")
+      },
+      gotoContact () {
+        this.drawer = false
       },
       getHash (name) {
         return md5(name)

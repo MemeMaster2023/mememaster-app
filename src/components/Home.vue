@@ -9,7 +9,7 @@
         hide-delimiters
         :show-arrows="false"
         cycle
-        :interval="10000"
+        :interval="6000"
       >
       <v-carousel-item
         v-for="(item, i) in carouselItems"
@@ -24,7 +24,7 @@
           <v-row style="margin-top:250px;" :align="'center'">
             <v-col cols="12" md="3" class="pa-4">
             </v-col>
-            <v-col cols="12" md="6" class="pa-4">
+            <v-col cols="12" md="6">
               
               <template v-if="i === 0">
                 <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
@@ -35,19 +35,19 @@
               </template>
               
               <template v-if="i === 2">
-                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Currently under development, we're excited to announce our IDO token listing, targeted for June 2023.</p>
+                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
               </template>
 
               <template v-if="i === 3">
-                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Hold EMAS tokens in your wallet and be a part of our platform's growth.</p>
+                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">Follow us on our social media platforms  to stay updated and join our promo's.</p>
               </template>
 
               <template v-if="i === 4">
-                <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p><br>
+                <p style="margin-right: -20px;margin-right: -20px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We are an evolving project: Try our current features then follow our roadmap.</p>
               </template>
 
               <template v-if="i === 5">
-                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText mb-4'"> Join us and become a Meme Master!</p>
+                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for July 2023, get in early.</p>
               </template>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
@@ -68,18 +68,18 @@
             <v-col cols="12" md="1" class="pa-4">
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-4" align-self="end" style="height:100%">
+            <v-col cols="12" md="3" class="pa-4" align-self="end" style="height:100%">
               <v-card
                 class="mx-auto overflow-auto"
                 max-width="100%"
                 min-width="100%"
-                height="240"
+                :height="drawer ? 280 : 250"
                 max-height="300"
-                style="opacity:0.7"
+                style="opacity:0.8"
                 color="grey-lighten-4"
               >
               <v-card-title >
-                <div class="font-weight-bold cardTextTitle">
+                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
                   Meme Collections & Token Listings
                 </div>
               </v-card-title>
@@ -87,52 +87,50 @@
                   <div class="text-body-1">
                     With Meme Master, you'll be able to: <br>
                     Mint your own memes and turn them into NFTs.<br>
-                    Import, trade, and store your memes and NFTs in our marketplace.<br>
-                    Get early access to new token listings. 
+                    Import, trade, and store your memes and NFTs in our marketplace.
                   </div>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions class="card-actions" style="width:100%">
+                  <v-spacer></v-spacer>
                   <v-btn
-                    style="margin-top: 5px"
                     variant="text"
-                    color="purple-darken-4"
-                    @click="scrollToGallery()"
-                  >
-                    Sample Gallery
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-
-            <v-col cols="12" md="3" class="pa-4">
-              <v-card
-                class="mx-auto overflow-auto"
-                max-width="100%"
-                min-width="100%"
-                height="240"
-                max-height="300"
-                style="opacity:0.7"
-                color="grey-lighten-4"
-              >
-              <v-card-title>
-                <div class="cardTextTitleSmall">
-                  Airdrops with our AI ChatBot
-                </div>
-              </v-card-title>
-                <v-card-text>
-                  <div class="text-body-1">
-                    And enjoy limited edition Meme Master Airdrops with our AI ChatBot!<br>
-                    All of these features can be managed from your Meme Master dashboard, allowing seamless storage, trading, and transfer.<br>
-                  </div>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn
-                    style="margin-top:-35px"
-                    variant="text"
-                    color="purple-darken-4"
                   >
                     Learn More
                   </v-btn>
+                  <v-spacer></v-spacer>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-4">
+              <v-card
+                class="mx-auto overflow-auto"
+                max-width="100%"
+                min-width="100%"
+                :height="drawer ? 280 : 250"
+                max-height="300"
+                style="opacity:0.8"
+                color="grey-lighten-4"
+              >
+              <v-card-title>
+                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
+                  Airdrops, Gaming and much more
+                </div>
+              </v-card-title>
+                <v-card-text>
+                  <div class="text-body-1 pb-16">
+                    Get access to join our limited-edition airdrops.<br><br>
+                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed our roadmap.
+                  </div>
+                </v-card-text>
+                <v-card-actions class="card-actions" style="width:100%">
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    variant="text"
+                  >
+                    Learn More
+                  </v-btn>
+                  <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -142,13 +140,13 @@
                 class="mx-auto overflow-auto"
                 max-width="100%"
                 min-width="100%"
-                height="240"
+                :height="drawer ? 280 : 250"
                 max-height="300"
-                style="opacity:0.7"
+                style="opacity:0.8"
                 color="grey-lighten-4"
               >
               <v-card-title>
-                <div class="cardTextTitleSmall">
+                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
                   Connect Wallet or Walletless
                 </div>
               </v-card-title>
@@ -158,14 +156,14 @@
                     Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
                   </div>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions class="card-actions" style="width:100%">
+                  <v-spacer></v-spacer>
                   <v-btn
-                    style="margin-top: 5px"
                     variant="text"
-                    color="purple-darken-4"
                   >
                     Learn More
                   </v-btn>
+                  <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -196,12 +194,11 @@
       >
       
         <div class="ma-8">
-          <v-row :style="'margin-top:' + (windowHeight - 450) + 'px;'" :align="'center'">
+          <v-row :style="'margin-top:' + (windowHeight - 500) + 'px;'" :align="'center'">
             <v-col cols="12" md="12" >
               <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
-              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're creating a hub where memes, NFTs, and social media intersect.<br><br>Currently under development, we're excited to announce our fair token launch, targeted for June 2023.</p>
-              <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold EMAS tokens in your wallet and be a part of our platform's growth.<br><br>Follow us on our social media platforms to stay updated, and feel free to email us for any direct inquiries.</p>
-              <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'"> Join us and become a Meme Master!</p>
+              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
+              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our token offer, targeted for July 2023, get in early.</p>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
                       variant="outlined"
@@ -228,32 +225,63 @@
               min-width="100%"
               height="240"
               max-height="300"
-              style="opacity:0.7"
+              style="opacity:0.8"
               color="deep-purple-lighten-4"
             >
-            <v-card-title >
-              <div class="font-weight-bold cardTextTitle">
-                Meme Collections & Token Listings
-              </div>
-            </v-card-title>
-              <v-card-text>
-                <div class="text-body-1">
-                  With Meme Master, you'll be able to: <br>
-                  Mint your own memes and turn them into NFTs.<br>
-                  Import, trade, and store your memes and NFTs in our marketplace.<br>
-                  Get early access to new token listings. 
+              <v-card-title >
+                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
+                  Meme Collections & Token Listings
                 </div>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  style="margin-top: 5px"
-                  variant="text"
-                  color="purple-darken-4"
-                  @click="scrollToGallery()"
-                >
-                  Sample Gallery
-                </v-btn>
-              </v-card-actions>
+              </v-card-title>
+                <v-card-text>
+                  <div class="text-body-1">
+                    With Meme Master, you'll be able to: <br>
+                    Mint your own memes and turn them into NFTs.<br>
+                    <p style="margin-top:10px">Import, trade, and store your memes and NFTs in our marketplace.</p>
+                  </div>
+                </v-card-text>
+                <v-card-actions class="card-actions" style="width:100%">
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    variant="text"
+                  >
+                    Learn More
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                </v-card-actions>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="3" class="pa-4">
+            <v-card
+              class="mx-auto overflow-auto"
+              max-width="100%"
+              min-width="100%"
+              height="280"
+              max-height="350"
+              style="opacity:0.8"
+              color="deep-purple-lighten-4"
+            >
+              <v-card-title>
+                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
+                  Airdrops, Gaming and much more
+                </div>
+              </v-card-title>
+                <v-card-text>
+                  <div class="text-body-1 pb-16">
+                    Get access to join our limited-edition airdrops.<br><br>
+                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed our roadmap.
+                  </div>
+                </v-card-text>
+                <v-card-actions class="card-actions" style="width:100%">
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    variant="text"
+                  >
+                    Learn More
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                </v-card-actions>
             </v-card>
           </v-col>
 
@@ -264,62 +292,29 @@
               min-width="100%"
               height="240"
               max-height="300"
-              style="opacity:0.7"
+              style="opacity:0.8"
               color="deep-purple-lighten-4"
             >
-            <v-card-title>
-              <div class="cardTextTitleSmall">
-                Airdrops with our AI ChatBot
-              </div>
-            </v-card-title>
-              <v-card-text>
-                <div class="text-body-1">
-                  And enjoy limited edition Meme Master Airdrops with our AI ChatBot!<br>
-                  All of these features can be managed from your Meme Master dashboard, allowing seamless storage, trading, and transfer.<br>
+              <v-card-title>
+                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
+                  Connect Wallet or Walletless
                 </div>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  style="margin-top:-35px"
-                  variant="text"
-                  color="purple-darken-4"
-                >
-                  Learn More
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="3" class="pa-4">
-            <v-card
-              class="mx-auto overflow-auto"
-              max-width="100%"
-              min-width="100%"
-              height="240"
-              max-height="300"
-              style="opacity:0.7"
-              color="deep-purple-lighten-4"
-            >
-            <v-card-title>
-              <div class="cardTextTitleSmall">
-                Connect Wallet or Walletless
-              </div>
-            </v-card-title>
-            
-              <v-card-text>
-                <div class="text-body-1">
-                  Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
-                </div>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  style="margin-top: 5px"
-                  variant="text"
-                  color="purple-darken-4"
-                >
-                  Learn More
-                </v-btn>
-              </v-card-actions>
+              </v-card-title>
+              
+                <v-card-text>
+                  <div class="text-body-1">
+                    Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
+                  </div>
+                </v-card-text>
+                <v-card-actions class="card-actions" style="width:100%">
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    variant="text"
+                  >
+                    Learn More
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                </v-card-actions>
             </v-card>
           </v-col>
 
@@ -329,12 +324,12 @@
     </v-row>
 
     <div id="gallery">
-        <v-row :style="scrollClicked ? 'margin-top:64px' : ''">
+        <v-row :style="scrollClicked ? 'margin-top:32px' : ''">
           <v-col class="mt-4">
             <div class="text-center gallery">Get inspired by our gallery!</div>
           </v-col>
         </v-row>
-        <v-row class="ml-2 mr-2 mb-4">
+        <v-row class="mt-8 ml-2 mr-2 mb-4">
           <template v-for="(image,imgIdx) in images1" :key="imgIdx">
             <v-col cols="12" :md="image.cols">
               <v-img
@@ -378,6 +373,7 @@
                 theme="dark"
                 color="white"
                 to="/collections"
+                style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
             >
               See more Collections
             </v-btn>
@@ -398,7 +394,8 @@ export default {
     isMobileDevice: Boolean,
     dark: Boolean,
     windowWidth: Number,
-    windowHeight: Number
+    windowHeight: Number,
+    drawer: Boolean
   },
   data: () => ({
     loading: false,
@@ -488,16 +485,15 @@ export default {
 <style lang="scss">
   .homeText {
     font-family: 'Gruppo';
-    font-size: 44px;
+    font-size: 40px;
     line-height: 1em;
     color: #FFF;
   }
   .homeTextSmall {
     font-family: 'Gruppo';
-    font-size: 40px;
+    font-size: 38px;
     line-height: 1em;
     color: #FFF;
-    margin-top: 16px;
   }
   .homeTextSmaller {
     font-family: 'Gruppo';
@@ -516,6 +512,11 @@ export default {
     font-size: 18px;
     font-weight: bold;
   }
+  .cardTextTitleSmaller {
+    font-family: 'Saira';
+    font-size: 16px;
+    font-weight: bold;
+  }
   .gallery {
     font-family: 'Gruppo';
     font-size: 45px;
@@ -527,5 +528,9 @@ export default {
     opacity: 1 !important;
     position: absolute;
     width: 100%;
+  }
+  .card-actions {
+    position: absolute;
+    bottom: 0;
   }
 </style>

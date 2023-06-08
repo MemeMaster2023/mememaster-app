@@ -1,6 +1,21 @@
 <template>
   <div id="create">
     <v-responsive style="background-color: #000;">
+
+
+      <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 0">
+        
+        <v-row class="mt-16">
+              <v-col cols="12"  :align="'center'">
+                <v-progress-circular
+                    indeterminate
+                    color="deep-purple-darken-2"
+                  ></v-progress-circular>
+                  <div class="text-h6 mt-2 blue--text">Loading drafts...</div>
+              </v-col>
+            </v-row>
+      
+      </v-card>
       
       <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 1">
 
@@ -122,7 +137,9 @@ export default {
     CreateMeme
   },
   computed: {
-
+    getUser () {
+      return this.$store.state.user
+    },
   },
   watch: {
     '$route.params.type'() {
@@ -153,9 +170,16 @@ export default {
       this.toUpload = false
       return
     } else if (this.$route.params?.type === 'drafts') {
-      this.view = 2
-      this.toDrafts = true
-      this.toUpload = false
+      console.log('############## Drafts this.getUser ##############')
+      console.log(this.getUser.uid)
+      if (this.getUser.uid === '') {
+        this.view = 0
+        this.waitGetUser()
+      } else {
+        this.view = 2
+        this.toDrafts = true
+        this.toUpload = false
+      }
       return
     } else if (this.$route.params?.type === 'upload') {
       this.view = 2
@@ -165,6 +189,17 @@ export default {
   methods: {
     init () {
      
+    },
+    waitGetUser () {
+      setTimeout(() => {
+        if (this.getUser.uid === '') {
+          this.waitGetUser()
+        } else {
+          this.view = 2
+          this.toDrafts = true
+          this.toUpload = false
+        }
+      }, 2000);
     },
     scrollToTop () {
       const firstScrollTo = scroller();

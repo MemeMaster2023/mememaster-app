@@ -25,7 +25,7 @@
               label="Prompt"
               auto-grow
               variant="outlined"
-              placeholder="What do you want to make?"
+              :placeholder="'Type your prompt here, use the sample prompts in the guide above to assist you. Try changing image style below.'"
               persistent-placeholder
               clearable
               rows="3"
@@ -39,7 +39,6 @@
             <v-expansion-panels v-model="panel" multiple>
 
               <v-expansion-panel 
-                v-if="toUpload"
                 value="upload"
                 title="Upload & Enhance Your Image"
               >
@@ -521,6 +520,17 @@
           </v-btn>
 
           <!-- <v-btn class="mt-2"
+                 prepend-icon="mdi-content-save-outline" 
+                 variant="outlined" 
+                 style="width:100%;text-transform: none !important" 
+                 color="deep-purple-lighten-3"
+                 @click="printSaveThis()"
+                 :disabled="generatedArr.length === 0"
+          >
+            Save to Collections
+          </v-btn> -->
+
+          <!-- <v-btn class="mt-2"
             variant="outlined" 
             color="indigo-lighten-1"  
             style="width:100%" 
@@ -530,7 +540,7 @@
             Upload Your Image
           </v-btn> -->
 
-          <v-btn  class="mt-2"
+          <v-btn  class="mt-3"
                   variant="outlined" 
                   prepend-icon="mdi-arrow-right-bold-circle-outline" 
                   style="width:100%;text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(138, 190, 145);" 
@@ -540,7 +550,7 @@
           >
             Add Meme Caption
           </v-btn>
-          <p class="mt-2 text-center" v-if="generatedArr.length > 0 && selectedImage === null">Click or tab to select an image</p>
+          <p class="mt-2 text-center" v-if="generatedArr.length > 0 && selectedImage === null">Click on image to select</p>
 
         </v-col>
     </v-row>
@@ -683,11 +693,20 @@
                       <v-list-item-title style="color: #FFF;font-size: 22px;font-weight: bold;">{{ file.metadata.name  }}</v-list-item-title>
 
                       <template v-slot:append>
-                        <v-icon
+                        <!-- <v-icon
                           size="x-large"
-                          color="purple-lighten-1"
+                          color="deep-purple-lighten-1"
                         >
                           mdi-image-check-outline
+                        </v-icon> -->
+
+
+                        <v-icon
+                          size="x-large"
+                          color="red-lighten-1"
+                          @click.stop="deleteDraftImage(file, index)"
+                        >
+                          mdi-trash-can-outline
                         </v-icon>
                       </template>
 
@@ -925,8 +944,6 @@
                 
               </v-expansion-panels>
     
-
-            
             </v-card-text>
             <v-card-actions>
               <v-btn color="primary" block @click="promptGuideDialog = false">Close</v-btn>
@@ -949,6 +966,41 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="deleteDraftDialog" persistent min-width="290" max-width="390">
+      <v-card>
+        <v-card-title class="headline">Delete Selected Draft</v-card-title>
+        <v-card-text class="subheading">Name: {{ selectedItem.metadata.name}}</v-card-text>
+        <v-card-text class="subheading">Please, confirm.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="grey darken-1" text @click="deleteDraftDialog = false">Cancel</v-btn>
+          <v-btn color="red darken-1" text @click="deleteDraftConfirm">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- ############################## SNACKBARS ####################################### -->
+    <v-snackbar
+        v-model="snackbar"
+        :timeout="4000"
+      >
+      <v-layout>
+        <v-icon color="green" class="mr-2">mdi-check-circle-outline</v-icon>
+        {{ snackbarText }}
+      </v-layout>
+
+        <template v-slot:actions>
+          <v-btn
+            color="pink"
+            variant="text"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
   </div>
 </template>
 <script>
@@ -972,9 +1024,12 @@ export default {
   },
   data: () => ({
     loading: false,
+    snackbar: false,
+    snackbarText: '',
     deleteDialog: false,
     generateLoading: false,
     promptGuideDialog: false,
+    deleteDraftDialog: false,
     storageRef: null,
     view: 'generate',
     panel: ['settings'],
@@ -1018,6 +1073,7 @@ export default {
       }
     },
     draftPrompt: '',
+    promptUsed: '',
     generatedArr: [],
     enableStopGenerating: false,
     generationStopped: false,
@@ -1148,6 +1204,11 @@ export default {
               path: folderRef.fullPath,
             }
             this.draftsArr.push(obj)
+            this.draftsArr.sort(function (a, b) {
+              // Turn your strings into dates, and then subtract them
+              // to get a value that is either negative, positive, or zero.
+              return new Date(a.name) - new Date(b.name);
+            });
   
           });
           console.log(this.draftsArr)
@@ -1188,7 +1249,6 @@ export default {
       }).catch((error) => {
         // Uh-oh, an error occurred!
       })
-
     },
     selectedDraftClicked (item) {
       this.selectedDraft = item
@@ -1196,9 +1256,9 @@ export default {
       console.log(item)
     },
     getDraftPrompt (item) {
-      let promptUsed = JSON.parse(item.metadata.customMetadata.prompt);
-      console.log(promptUsed)
-      return promptUsed.text_prompts[0].text
+      this.promptUsed = JSON.parse(item.metadata.customMetadata.prompt);
+      console.log(this.promptUsed)
+      return this.promptUsed.text_prompts[0].text
     },
     draftContinueClicked () {
       // convert image to base 64 string
@@ -1260,7 +1320,8 @@ export default {
           // this.items = result.data.message
           var obj = {
             base64: result.data.message,
-            selected: true
+            selected: true,
+            prompt: this.promptUsed
           }
           this.generatedArr.push(obj)
           this.selectedImage = obj
@@ -1479,6 +1540,8 @@ export default {
     },
     selectedImageClicked () {
       this.view = 'memetext'
+      //this.selectedImage.propmt = 
+      console.log('######## this one ######')
       console.log(this.selectedImage)
     },
     downloadImage (index) {
@@ -1626,6 +1689,41 @@ export default {
     removeImage () {
       this.uploadImage = ''
       this.uploadImageUrl = ''
+    },
+    deleteDraftImage (item, index) {
+      console.log(this.draftsArr)
+      this.selectedItem = item
+      this.selectedItem.index = index
+      this.deleteDraftDialog = true
+    },
+    deleteDraftConfirm () {
+      // Create a reference to the file to delete
+      var filePath = this.selectedItem.metadata.ref.fullPath
+      var deleteFileRef = this.storageRef.child(filePath);
+
+      // Delete the file
+      deleteFileRef.delete().then(() => {
+        // File deleted successfully
+        // console.log(this.draftsArr)
+        // console.log(this.selectedItem)
+        this.deleteDraftDialog = false
+        this.snackbar = true
+        this.snackbarText = 'Draft deleted!'
+        let index
+        for (var i in this.draftsArr) {
+          if (Array.isArray(this.draftsArr[i].files)) {
+            if (this.draftsArr[i].files.findIndex(item => item.url === this.selectedItem.url) > -1 ) {
+              index = i
+            }
+          } else {
+            return
+          }
+        }
+        this.draftsArr[index].files.splice(this.selectedItem.index, 1)
+      }).catch((error) => {
+        // Uh-oh, an error occurred!
+      });
+
     }
   }
 }

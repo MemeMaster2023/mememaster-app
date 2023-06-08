@@ -7,166 +7,175 @@
                  v-on:wpClicked="openWhitepaper()"
     />
     <v-footer
-    class="d-flex flex-column"
-    style="background-color: #2f2f2f;"
-    theme="dark"
-  >
-    
-  <v-row class="mt-2" :align="'center'">
-    
-    <div style="text-align: center;">
+      class="d-flex flex-column"
+      style="background-color: #2f2f2f;"
+      theme="dark"
+    >
+      
+    <v-row class="mt-2" :align="'center'" style="width:100%">
 
-      <v-tooltip text="Telegram" location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn variant="text" class="mx-4 mt-1">
-            <v-img 
-              src="/img/icons/telegram.png" 
-              style="width:24px;height:24px;padding-top:4px" 
-              @click="gotoLink('https://t.me/MemeMaster2023')"
-              v-bind="props"
-            />
-          </v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip text="Twitter" location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            class="mx-4"
-            icon="mdi-twitter"
-            variant="text"
-            @click="gotoLink('https://twitter.com/MemeMaster_2023')"
-            v-bind="props"
-          ></v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip text="Instagram" location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            class="mx-4"
-            icon="mdi-instagram"
-            variant="text"
-            @click="gotoLink('https://www.instagram.com/meme_master_2023/')"
-            v-bind="props"
-          ></v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip text="Youtube" location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            class="mx-4"
-            icon="mdi-youtube"
-            variant="text"
-            @click="gotoLink('https://www.youtube.com/channel/UCUNli2csi8spAEBZJD8nXgg/')"
-            v-bind="props"
-          ></v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip text="Discord" location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn variant="text" class="mx-4 mt-1">
-            <v-img 
-              src="/img/icons/discord.png" 
-              style="width:24px;height:24px;padding-top:4px"
-              @click="gotoLink('https://discord.gg/KCvYMQSW')"
-              v-bind="props"
-            />
-          </v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip text="TikTok" location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn variant="text" class="mx-4 mt-1">
-            <v-img 
-              src="/img/icons/tiktok_white.png" 
-              style="width:24px;height:24px;padding-top:4px" 
-              @click="gotoLink('https://www.tiktok.com/@mememaster_2023')"
-              v-bind="props"
-            />
-          </v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip text="Pinterest" location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn variant="text" class="mx-4 mt-1">
-            <v-img 
-              src="/img/icons/pinterest.png" 
-              style="width:24px;height:24px;padding-top:4px" 
-              @click="gotoLink('https://www.pinterest.com/MemeMaster2023')"
-              v-bind="props"
-            />
-          </v-btn>
-        </template>
-      </v-tooltip>
-  </div>
-
-  </v-row>
-
-    <v-row class="mt-4 mb-1" style="width:100%">
       <v-col cols="12" md="3">
-        <v-img
-          src="/img/logos/mememaster_logo.png"
-          style="max-height: 72px; max-width: 350px;"
-        ></v-img>
       </v-col>
+
       <v-col cols="12" md="7">
-        <div class="pt-4 mb-4 mr-8 ml-8">
-          Unleash your creativity, explore trends, and connect with meme aficionados across multiple social media platforms. Our generative platform brings you a universe of endless meme, NFT music and gaming possibilities. Join the meme revolution now!
-        </div>
-        <div :class="isMobileDevice ? 'pt-4 text-center' : 'pt-4 text-center'">
-          <p class="text-h6">Key partner</p>
-          <v-btn 
-                 variant="text"
-                 size="large"
-                 style="text-transform: none !important;"
-                 @click="gotoLink('https://www.haven-associates.com/')"
-          >
-          <img src="/img/icons/haven_logo.png" 
-               style="max-width:32px;padding-right:10px;text-transform: none !important;"
-          /> 
-            Haven Associates
-          </v-btn>
+      
+        <div style="text-align: center;">
+
+          <v-tooltip text="Telegram" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn variant="text" class="mx-4 mt-1">
+                <v-img 
+                  src="/img/icons/telegram.png" 
+                  style="width:24px;height:24px;padding-top:4px" 
+                  @click="gotoLink('https://t.me/MemeMaster2023')"
+                  v-bind="props"
+                />
+              </v-btn>
+            </template>
+          </v-tooltip>
+
+          <v-tooltip text="Twitter" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                class="mx-4"
+                icon="mdi-twitter"
+                variant="text"
+                @click="gotoLink('https://twitter.com/MemeMaster_2023')"
+                v-bind="props"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+
+          <v-tooltip text="Instagram" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                class="mx-4"
+                icon="mdi-instagram"
+                variant="text"
+                @click="gotoLink('https://www.instagram.com/meme_master_2023/')"
+                v-bind="props"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+
+          <v-tooltip text="Youtube" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                class="mx-4"
+                icon="mdi-youtube"
+                variant="text"
+                @click="gotoLink('https://www.youtube.com/channel/UCUNli2csi8spAEBZJD8nXgg/')"
+                v-bind="props"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+
+          <v-tooltip text="Discord" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn variant="text" class="mx-4 mt-1">
+                <v-img 
+                  src="/img/icons/discord.png" 
+                  style="width:24px;height:24px;padding-top:4px"
+                  @click="gotoLink('https://discord.gg/KCvYMQSW')"
+                  v-bind="props"
+                />
+              </v-btn>
+            </template>
+          </v-tooltip>
+
+          <v-tooltip text="TikTok" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn variant="text" class="mx-4 mt-1">
+                <v-img 
+                  src="/img/icons/tiktok_white.png" 
+                  style="width:24px;height:24px;padding-top:4px" 
+                  @click="gotoLink('https://www.tiktok.com/@mememaster_2023')"
+                  v-bind="props"
+                />
+              </v-btn>
+            </template>
+          </v-tooltip>
+
+          <v-tooltip text="Pinterest" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn variant="text" class="mx-4 mt-1">
+                <v-img 
+                  src="/img/icons/pinterest.png" 
+                  style="width:24px;height:24px;padding-top:4px" 
+                  @click="gotoLink('https://www.pinterest.com/MemeMaster2023')"
+                  v-bind="props"
+                />
+              </v-btn>
+            </template>
+          </v-tooltip>
         </div>
       </v-col>
 
-      <v-col cols="12" md="2" :align="isMobileDevice ? 'center' : ''" class="pt-5">
-        <v-btn variant="text" style="text-transform: none !important;" @click="termsDialog = true">
-          Terms and Conditions
-        </v-btn>
-        <v-btn variant="text" style="text-transform: none !important;" @click="privacyDialog = true">
-          Privacy Policy
-        </v-btn>
-
+      <v-col cols="12" md="2">
       </v-col>
     </v-row>
 
-    <v-divider></v-divider>
-    <v-row class="mt-8 mb-1" style="width:100%">
-      <v-col cols="12" class="d-flex justify-center" v-if="isMobileDevice">
-        <span style="font-size: 16px; color:#FFF;">Copyright &copy; Meme Master, {{ new Date().getFullYear() }}</span>
-      </v-col>
-      <v-layout v-if="!isMobileDevice" style="width:100%" class="mr-2 ml-4">
-        <span style="font-size: 16px; color:#FFF;">&copy; Meme Master, {{ new Date().getFullYear() }}</span>
-        <v-spacer v-if="!isMobileDevice"></v-spacer>
-        <span style="font-size: 16px; color:#FFF;" v-if="!isMobileDevice">
-          <v-btn
-            variant="text"
-            style="color:#FFF;text-transform: none !important;margin-top: -5px;"
-            @click="gotoLink('mailto:info@mememaster.app')">
-          <v-icon 
-            left
-            :color="'white'"
-            >mdi-email</v-icon> info@mememaster.app
+      <v-row class="mt-4 mb-1" style="width:100%">
+        <v-col cols="12" md="3">
+          <v-img
+            src="/img/logos/mememaster_logo.png"
+            style="max-height: 72px; max-width: 350px;"
+          ></v-img>
+        </v-col>
+        <v-col cols="12" md="7">
+          <div class="pt-4 mb-4 mr-8 ml-8" style="text-align: justify;">
+            Unleash your creativity, explore trends, and connect with meme aficionados across multiple social media platforms. Our generative platform brings you a universe of endless meme, NFT music and gaming possibilities. Join the meme revolution now!
+          </div>
+          <div :class="isMobileDevice ? 'pt-4 text-center' : 'pt-4 text-center'">
+            <p class="text-h6">Key Partner</p>
+            <v-btn 
+                  variant="text"
+                  size="large"
+                  style="text-transform: none !important;"
+                  @click="gotoLink('https://www.haven-associates.com/')"
+            >
+            <img src="/img/icons/haven_logo.png" 
+                style="max-width:32px;padding-right:10px;text-transform: none !important;"
+            /> 
+              Haven Associates
+            </v-btn>
+          </div>
+        </v-col>
+
+        <v-col cols="12" md="2" :align="isMobileDevice ? 'center' : ''" class="pt-5">
+          <v-btn variant="text" style="text-transform: none !important;" @click="termsDialog = true">
+            Terms and Conditions
           </v-btn>
-        </span>
-      </v-layout>
-    </v-row>
-  </v-footer>
+          <v-btn variant="text" style="text-transform: none !important;" @click="privacyDialog = true">
+            Privacy Policy
+          </v-btn>
+
+        </v-col>
+      </v-row>
+
+      <v-divider></v-divider>
+      <v-row class="mt-8 mb-1" style="width:100%">
+        <v-col cols="12" class="d-flex justify-center" v-if="isMobileDevice">
+          <span style="font-size: 16px; color:#FFF;">Copyright &copy; Meme Master, {{ new Date().getFullYear() }}</span>
+        </v-col>
+        <v-layout v-if="!isMobileDevice" style="width:100%" class="mr-2 ml-4">
+          <span style="font-size: 16px; color:#FFF;">&copy; Meme Master, {{ new Date().getFullYear() }}</span>
+          <v-spacer v-if="!isMobileDevice"></v-spacer>
+          <span style="font-size: 16px; color:#FFF;" v-if="!isMobileDevice">
+            <v-btn
+              variant="text"
+              style="color:#FFF;text-transform: none !important;margin-top: -5px;"
+              @click="gotoLink('mailto:info@mememaster.app')">
+            <v-icon 
+              left
+              :color="'white'"
+              >mdi-email</v-icon> info@mememaster.app
+            </v-btn>
+          </span>
+        </v-layout>
+      </v-row>
+    </v-footer>
+    <div id="footer"></div>
   </v-main>
 
    <!-- #########################  DIALOGS #########################-->

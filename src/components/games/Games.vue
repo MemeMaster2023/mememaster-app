@@ -9,20 +9,33 @@
         </v-col>
 
         <v-col cols="12" md="6" :align="center">
-          <div class="text-h4 text-center ma-2">Turn your Memes into NFTs</div>
+          <div class="text-h4 text-center ma-2">Meme Master Games</div>
           <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
-            Welcome to our platform, where the world of memes meets the innovative realm of Non-Fungible Tokens (NFTs). 
-            Take your memes to new heights by transforming them into unique digital assets that will captivate audiences like never before.<br><br>
+            Welcome to our Games section, where excitement and rewards await! Immerse yourself in a world of thrilling gaming experiences and start earning points as you conquer challenges and achieve milestones in our featured games.<br><br>
 
-            With our advanced NFT creation tools, you can soon empower your creativity and give your memes a permanent place in the digital art ecosystem.</div>
-            <v-alert
-              class="mt-8 mb-16"
-              color="deep-purple-darken-4"
-              theme="dark"
-              icon="mdi-code-braces"
-            >
-              <p style="font-size: 1.3rem;margin-top: -5px;">This feature is still in development.<br>Stay tuned for information about the 1st release.</p>
-            </v-alert>                                
+            Every accomplishment you achieve in our games will earn you valuable points. These points serve as a currency within our ecosystem, opening up a world of possibilities. Use your hard-earned points in our marketplaces to unlock exclusive in-game items, power-ups, and enhancements that will take your gaming experience to the next level.<br><br>
+
+            But the rewards don't stop there! We believe in recognizing and appreciating our dedicated players. As a token of our gratitude, you can also redeem your accumulated points for our very own EMAS tokens. EMAS tokens not only hold inherent value within our platform but can also be used in various ways, such as participating in exclusive events, accessing premium content, or even trading them for other digital assets.
+          </div>
+          <v-alert
+            class="mt-8 mb-8"
+            color="deep-purple-darken-4"
+            theme="dark"
+            icon="mdi-code-braces"
+          >
+            <p style="font-size: 1.3rem;margin-top: -5px;">The Games will be developed in Phase 4.<br>Stay tuned for information about the 1st game releases.</p>
+          </v-alert>    
+          
+          <v-btn
+            variant="outlined"
+            color="deep-purple-lighten-2"
+            size="large"
+            style="width: 100%"
+            to="/games-early-insights"
+          >
+            
+            Take a sneak peek at our "Early Gaming Insights"
+          </v-btn>
         </v-col>
 
         <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">

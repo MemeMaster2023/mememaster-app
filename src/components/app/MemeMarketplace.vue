@@ -9,20 +9,24 @@
         </v-col>
 
         <v-col cols="12" md="6" :align="center">
-          <div class="text-h4 text-center ma-2">Turn your Memes into NFTs</div>
+          <div class="text-h4 text-center ma-2">Meme Marketplace</div>
           <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
-            Welcome to our platform, where the world of memes meets the innovative realm of Non-Fungible Tokens (NFTs). 
-            Take your memes to new heights by transforming them into unique digital assets that will captivate audiences like never before.<br><br>
+            Welcome to our Meme Marketplace, the ultimate hub for meme enthusiasts, creators, and collectors. Dive into a world of laughter, wit, and viral sensations as you explore our curated collection of hilarious and iconic memes.<br><br>
 
-            With our advanced NFT creation tools, you can soon empower your creativity and give your memes a permanent place in the digital art ecosystem.</div>
-            <v-alert
-              class="mt-8 mb-16"
-              color="deep-purple-darken-4"
-              theme="dark"
-              icon="mdi-code-braces"
-            >
-              <p style="font-size: 1.3rem;margin-top: -5px;">This feature is still in development.<br>Stay tuned for information about the 1st release.</p>
-            </v-alert>                                
+            Discover a wide range of meme formats, templates, and viral sensations that have taken the internet by storm. From classic reaction images to trending memes, our marketplace showcases the best and most entertaining content from across the meme-sphere.<br><br>
+
+            As a creator, our Meme Marketplace provides you with a platform to showcase your meme-making skills and gain recognition. Upload your original creations, share your unique sense of humor with the world, and even earn rewards for your viral masterpieces.<br><br>
+
+            For collectors, our marketplace offers a chance to own and trade rare and sought-after memes. Build your meme collection, unlock limited-edition memes, and connect with fellow meme aficionados. With a transparent and secure blockchain-based system, each meme comes with a verified and immutable ownership record.
+          </div>
+          <v-alert
+            class="mt-8 mb-16"
+            color="deep-purple-darken-4"
+            theme="dark"
+            icon="mdi-code-braces"
+          >
+            <p style="font-size: 1.3rem;margin-top: -5px;">The Meme Marketplace is still in development.<br>Stay tuned for information about the 1st release.</p>
+          </v-alert>                                
         </v-col>
 
         <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">

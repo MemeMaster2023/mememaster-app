@@ -49,6 +49,29 @@ class MemeMasterAPI {
   }
 
   // ###################################################################################
+  // ##########################WWWWW### CHAT GTP SEND MESSAGE #################WWWW#####
+  // ###################################################################################
+  async sendChatGPTmessage(prompt) {
+    var payload = {
+      prompt: prompt,
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    console.log(MEME_MASTER_API)
+    return await axios.post(MEME_MASTER_API + 'send-gpt-message', payload, config)
+      .then(response => {
+        console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  // ###################################################################################
   // ############################# TEXT TO IMAGE/MEME GENERATION #######################
   // ###################################################################################
 

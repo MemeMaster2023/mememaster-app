@@ -140,16 +140,16 @@
                   </template>
                 </v-tooltip> -->
               </v-layout>
-              <v-switch
+              <!-- <v-switch
                 v-model="swatches"
                 label="Color Swatches"
                 color="success"
                 value="swatches"
                 hide-details
-              ></v-switch>
+              ></v-switch> -->
 
               <v-checkbox
-                style="margin-top:-20px"
+                style="margin-top:-10px"
                 v-model="shadow"
                 label="Add Shadow"
                 color="success"
@@ -685,6 +685,7 @@ export default {
           customMetadata: {
             uid: this.getUser.uid,
             uname: this.getUser.displayName,
+            prompt: JSON.stringify(this.selectedImage.prompt),
             status: '1',
             created: new Date().getTime()
           },

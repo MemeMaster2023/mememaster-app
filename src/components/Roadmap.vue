@@ -2,11 +2,11 @@
   <v-card theme="dark" style="width: 100%;height: 100%">
     <v-row :style="isMobileDevice ? 'margin-left:4px;margin-right:4px' : 'margin-top:50px;'">
       <v-col cols="12" md="12" class="mt-8 mb-16" >
-        <div v-if="model === '0'" style="font-size: 3rem;" class="text-center">Roadmap</div>
+        <!-- <div v-if="model === '0'" style="font-size: 3rem;" class="text-center">Roadmap</div> -->
         
         <v-carousel 
               v-model="model" 
-              :height="(windowHeight - (model === '0' ? 170 : 100))"
+              :height="(windowHeight - 100)"
               :show-arrows="isMobileDevice ? false : 'hover'"
           >
           <v-carousel-item
@@ -37,7 +37,6 @@
                       v-for="(item, i) in items[0].text"
                       :key="i"
                       :value="item"
-                      active-color="primary"
                     >
                       <template v-slot:prepend>
                         <v-icon size="32" color="green" v-if="item.completed" icon="mdi-checkbox-marked-outline"></v-icon>
@@ -278,7 +277,8 @@ export default {
             {text: 'Plan and Execute Airdrops: Distribute Memes and NFTs to wallet holders.', completed: false}, 
             {text: 'Confirm Coinmarketcap and Coingecko listing.', completed: false},
             {text: 'Create New Token Listing Platform: This will provide users with access to newly minted tokens, enhancing the ecosystem\'s dynamism.', completed: false},  
-            {text: 'Gaming App Integration: Develop a mini-game section where users can play with/against each other. The games can be meme-themed or utilize user\'s NFTs', completed: false} 
+            {text: 'Gaming App Integration: Develop a mini-game section where users can play with/against each other. The games can be meme-themed or utilize user\'s NFTs', completed: false},
+            {text: 'Introducting Music to Meme Master. Add music to your Memes. Experiment with an AI DJ mixing a playlist for you.', completed: false} 
           ],
           date: 'Phase 4',
           color: '#463552',

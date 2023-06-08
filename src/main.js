@@ -6,6 +6,8 @@
 
 // Components
 import App from './App.vue'
+import { Buffer } from "buffer";
+window.Buffer = window.Buffer || Buffer;
 
 // Composables
 import { createApp } from 'vue'

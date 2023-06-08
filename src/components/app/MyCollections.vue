@@ -10,7 +10,7 @@
 
           <v-col cols="12" md="6" :align="center">
             <div class="text-h4 text-center ma-2">My Meme Collections</div>
-            <div class="text-center cardTextCreateSmall ma-2">Look no further! My Meme Collections is here to revolutionize the way you manage and organize your memes, ensuring that none of your comic masterpieces ever get lost in the digital void.</div>
+            <div class="text-center cardTextCreateSmall ma-2">My Meme Collections is the way to manage and organize your memes. Create more collections to file your meme's away for easy reference.</div>
           </v-col>
 
           <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
@@ -457,7 +457,7 @@
         :timeout="4000"
       >
       <v-layout>
-        <v-icon color="green" left>mdi-check-circle-outline</v-icon>
+        <v-icon color="green" class="mr-2">mdi-check-circle-outline</v-icon>
         {{ snackbarText }}
       </v-layout>
 

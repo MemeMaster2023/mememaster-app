@@ -9,20 +9,22 @@
         </v-col>
 
         <v-col cols="12" md="6" :align="center">
-          <div class="text-h4 text-center ma-2">Turn your Memes into NFTs</div>
+          <div class="text-h4 text-center ma-2">NFT Marketplace</div>
           <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
-            Welcome to our platform, where the world of memes meets the innovative realm of Non-Fungible Tokens (NFTs). 
-            Take your memes to new heights by transforming them into unique digital assets that will captivate audiences like never before.<br><br>
+            Meme Master's NFT Marketplace, the premier destination for buying, selling, and trading unique digital assets on the blockchain. Step into a world where creativity meets technology, and explore an incredible collection of non-fungible tokens (NFTs) created by talented artists and creators from around the globe.<br><br>
 
-            With our advanced NFT creation tools, you can soon empower your creativity and give your memes a permanent place in the digital art ecosystem.</div>
-            <v-alert
-              class="mt-8 mb-16"
-              color="deep-purple-darken-4"
-              theme="dark"
-              icon="mdi-code-braces"
-            >
-              <p style="font-size: 1.3rem;margin-top: -5px;">This feature is still in development.<br>Stay tuned for information about the 1st release.</p>
-            </v-alert>                                
+            Discover a diverse range of digital artwork, collectibles, virtual real estate, virtual goods, and much more. Our NFT Marketplace provides a platform for artists to showcase their digital creations and connect with a global community of art enthusiasts, collectors, and investors.<br><br>
+
+            Whether you're an artist looking to showcase your talent and monetize your work, a collector seeking rare and exclusive digital assets, or simply an enthusiast eager to explore the vibrant world of NFTs, our marketplace offers a seamless and secure platform to engage with this exciting ecosystem.      
+          </div>
+          <v-alert
+            class="mt-8 mb-16"
+            color="deep-purple-darken-4"
+            theme="dark"
+            icon="mdi-code-braces"
+          >
+            <p style="font-size: 1.3rem;margin-top: -5px;">The Marketplace is still in development.<br>Stay tuned for information about the 1st release.</p>
+          </v-alert>                                
         </v-col>
 
         <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
@@ -38,6 +40,7 @@
 <script>
 // @ is an alias to /src
 import { scroller } from 'vue-scrollto/src/scrollTo'
+import CreateMeme from './CreateMeme'
 export default {
   name: 'My NFTs',
   props: {
@@ -52,6 +55,7 @@ export default {
     view: 1,
   }),
   components: {
+    CreateMeme
   },
   computed: {
 

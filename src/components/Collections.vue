@@ -19,8 +19,8 @@
           :color="tab === '1' ? '#e8c5ff' : '#d4a863'"
           align-tabs="center"
         >
-          <v-tab value="1">Girl fighters</v-tab>
-          <v-tab value="2">Monsters & Wizzards</v-tab>
+          <v-tab value="1">Women Warriors</v-tab>
+          <!-- <v-tab value="2">Monsters & Wizzards</v-tab> -->
         </v-tabs>
 
         <v-window v-model="tab">
@@ -138,67 +138,55 @@ export default {
         "name": "Girl fighter 8.jpg"
       },
       {
-        "name": "Master 1.png"
+        "name": "Fighter girl.png"
       },
       {
-        "name": "Master 10.jpg"
+        "name": "Fighter girl 1.png"
       },
       {
-        "name": "Master 11.jpg"
+        "name": "Princeess warrior COREL.png"
       },
       {
-        "name": "Master 12.jpg"
+        "name": "Woman warrior Leonardo 3.jpg"
       },
       {
-        "name": "Master 13.jpg"
+        "name": "Woman warrior Leonardo 4.jpg"
       },
       {
-        "name": "Master 2.png"
+        "name": "Woman warrior Leonardo 5.jpg"
       },
       {
-        "name": "Master 3.png"
+        "name": "Woman warrior Leonardo 7.jpg"
       },
       {
-        "name": "Master 4.png"
+        "name": "Woman warrior Leonardo 8.jpg"
       },
       {
-        "name": "Master 5.jpg"
+        "name": "Woman warrior Leonardo 9.jpg"
       },
       {
-        "name": "Master 6.jpg"
+        "name": "Woman warrior Leonardo 10.jpg"
       },
       {
-        "name": "Master 7.jpg"
+        "name": "Woman warrior Leonardo 13.jpg"
       },
       {
-        "name": "Master 8.jpg"
+        "name": "Woman warrior Leonardo 14.jpg"
       },
       {
-        "name": "Master 9.jpg"
+        "name": "Woman warrior Leonardo 15.jpg"
       },
       {
-        "name": "Wizard warlord 1.jpg"
+        "name": "Woman warrior Leonardo 16.jpg"
       },
       {
-        "name": "Wizard warlord 2.jpg"
+        "name": "Woman warrior Leonardo 19.jpg"
       },
       {
-        "name": "Wizard warlord 3.jpg"
+        "name": "Woman warrior Leonardo 20.jpg"
       },
       {
-        "name": "Wizard warlord 4.jpg"
-      },
-      {
-        "name": "Wizard warlord 5.jpg"
-      },
-      {
-        "name": "Wizard warlord 6.jpg"
-      },
-      {
-        "name": "Wizard warlord 7.jpg"
-      },
-      {
-        "name": "a fantasy cartoon st.jpg"
+        "name": "Woman warrior Leonardo 21.jpg"
       }
     ],
     collection_02: [

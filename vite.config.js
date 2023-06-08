@@ -35,7 +35,9 @@ export default defineConfig({
         ]
     }
   },
-  define: { 'process.env': {} },
+  define: { 
+    'process.env': {}
+  },
   // include: ['color', 'mersenne-twister'],
   resolve: {
     alias: {
