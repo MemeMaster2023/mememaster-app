@@ -5,17 +5,28 @@
       <v-card theme="dark" class="mt-16 mb-16 ml-2 mr-2" height="100%" v-if="view === 1">
 
        <v-row class="mt-12" :align="center">
-        <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
+        <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
         </v-col>
 
-        <v-col cols="12" md="6" :align="center">
+        <v-col cols="12" md="8" :align="center">
           <div class="text-h4 text-center ma-2">Meme Master Games</div>
+
+          <v-row>
+            <v-col cols="12" md="8">
+              <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
+                Welcome to our Games section, where excitement and rewards await! Immerse yourself in a world of thrilling gaming experiences and start earning points as you conquer challenges and achieve milestones in our featured games.<br><br>
+                
+                Every accomplishment you achieve in our games will earn you valuable points. These points serve as a currency within our ecosystem, opening up a world of possibilities. Use your hard-earned points in our marketplaces to unlock exclusive in-game items, power-ups, and enhancements that will take your gaming experience to the next level.<br><br>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4" :align="isMobileDevice ? 'center' : 'right'">
+              <v-img style="max-width: 300px; border-radius: 10px;"
+                 src="https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FCyber%20pulse%20game%2FCyber%20pulse%20game.png?alt=media&token=b12af028-7656-4962-8c36-c27273b6274c"></v-img>
+            </v-col>
+          </v-row>
+
           <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
-            Welcome to our Games section, where excitement and rewards await! Immerse yourself in a world of thrilling gaming experiences and start earning points as you conquer challenges and achieve milestones in our featured games.<br><br>
-
-            Every accomplishment you achieve in our games will earn you valuable points. These points serve as a currency within our ecosystem, opening up a world of possibilities. Use your hard-earned points in our marketplaces to unlock exclusive in-game items, power-ups, and enhancements that will take your gaming experience to the next level.<br><br>
-
-            But the rewards don't stop there! We believe in recognizing and appreciating our dedicated players. As a token of our gratitude, you can also redeem your accumulated points for our very own EMAS tokens. EMAS tokens not only hold inherent value within our platform but can also be used in various ways, such as participating in exclusive events, accessing premium content, or even trading them for other digital assets.
+              But the rewards don't stop there! We believe in recognizing and appreciating our dedicated players. As a token of our gratitude, you can also redeem your accumulated points for our very own EMAS tokens. EMAS tokens not only hold inherent value within our platform but can also be used in various ways, such as participating in exclusive events, accessing premium content, or even trading them for other digital assets.
           </div>
           <v-alert
             class="mt-8 mb-8"
@@ -38,7 +49,7 @@
           </v-btn>
         </v-col>
 
-        <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
+        <v-col cols="12" md="8" :align="center" v-if="!isMobileDevice">
         </v-col>
 
        </v-row>

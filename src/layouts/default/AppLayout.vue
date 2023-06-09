@@ -83,7 +83,7 @@
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-account-circle-outline"
+            prepend-icon="mdi-account-box-outline"
             title="My Account"
           ></v-list-item>
         </template>
@@ -125,7 +125,7 @@
       <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes')"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="NFT Marketplace" value="nftmarket" @click="routerGo('/nfts')"></v-list-item>
       <v-list-item prepend-icon="mdi-shape-plus" title="Games" value="games" @click="routerGo('/games')"></v-list-item>
-      <!-- <v-list-item prepend-icon="mdi-circle-multiple-outline" title="Token Listings" value="tokens"></v-list-item> -->
+      <v-list-item prepend-icon="mdi-music" title="Music" value="music" @click="routerGo('/music')"></v-list-item>
       <v-list-item prepend-icon="mdi-account-group" title="Team" value="Team" @click="gotoTeamLink()"></v-list-item>
       <v-list-item prepend-icon="mdi-at" title="Contact Us" value="contact" @click="gotoContact()" v-scroll-to="'#footer'"></v-list-item>
       <v-list-item prepend-icon="mdi-transit-connection-variant" title="Roadmap" value="Roadmap" @click="routerGo('/roadmap')"></v-list-item>
@@ -187,7 +187,7 @@
         Connect 
       </v-btn>
 
-      <v-menu v-if="!drawer && env && (mmConnected || emailConnected)" style="opacity:0.8">
+      <v-menu v-if="!drawer && env && (mmConnected || emailConnected)" >
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && env && (mmConnected || emailConnected)"
             style="margin-right:10px;margin-top:-7px"
@@ -204,6 +204,7 @@
         <v-card 
             min-width="300" 
             max-width="300" 
+            max-height="400"
             class="mt-2"
          >
           <v-list>
@@ -229,14 +230,38 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
+          <v-row class="pt-2" style="width:280px">
+            <v-col :align="'center'" class="mt-2" style="width:280px">
+              <div class="row" style="width:280px" v-if="mmConnected || walletConnected">
+                <span class="font-weight-bold">{{ (this.getUser.accounts[0]).substring(0, 8) + '...' + (this.getUser.accounts[0]).substring(34, 42) }}</span>
+                <v-icon 
+                  size="x-small" 
+                  class="ml-2"
+                  v-clipboard:copy.stop="this.getUser.accounts[0]"
+                  v-clipboard:success="handleSuccess"
+                  v-clipboard:error="handleError"
+                  style="cursor: pointer;"
+                >
+                 mdi-content-copy
+                </v-icon>
+              </div>
+              <div class="row mt-2" style="width:280px" v-if="mmConnected || walletConnected">
+                <span>{{ balance }} ETH</span><span class="ml-4">{{ tokenBalance }} EMAS</span>
+              </div>
+              <div class="row mt-2" style="width:280px">
+                <p>500 Meme Master Credits</p>
+              </div>
+            </v-col>
+          </v-row>
           <div class="text-center">
-            <v-btn style="width:280px" 
+            <v-btn style="width:280px;text-transform: none !important;" 
                   class="ma-2"
+                  variant="outlined"
                   color="deep-purple-darken-4"
-                  prepend-icon="mdi-close-circle-outline"
-                  @click="disconnectClicked"
+                  prepend-icon="mdi-account-box-outline"
+                  to="/account"
             >
-              Disconnect
+              GoTo My Profile
             </v-btn>
           </div>
         </v-card>
@@ -509,12 +534,34 @@
       </template>
     </v-snackbar>
 
+     <!-- ############################## SNACKBARS ####################################### -->
+     <v-snackbar
+        v-model="snackbar2"
+        :timeout="4000"
+      >
+      <v-layout>
+        <v-icon color="green" class="mr-2">mdi-check-circle-outline</v-icon>
+        {{ snackbarText }}
+      </v-layout>
+
+        <template v-slot:actions>
+          <v-btn
+            color="pink"
+            variant="text"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
 </template>
 
 <script>
 import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
+import MemeMasterAPI from '../../clients/MemeMasterAPI';
 // import { scroller } from 'vue-scrollto/src/scrollTo'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
 import md5 from 'md5'
@@ -541,12 +588,15 @@ export default {
       username: '',
       password:'',
       snackbar: false,
+      snackbar2: false,
       isButtonDisabled: false,
       showConfirmation: false,
       // snackbarTitle: '',
       snackbarText: '',
       tempUserData: null,
       open: ['account'],
+      balance: 0,
+      tokenBalance: 0
     }),
     components: {
       MetaMaskConnect,
@@ -674,6 +724,7 @@ export default {
       // this.env = process.env.VUE_APP_ENVIRONMENT === 'testnet'
       console.log('this.getUser.mmConnected')
       console.log(this.getUser.mmConnected)
+      this.waitGetUser()
     },
     methods: {
       routerGo (route) {
@@ -766,6 +817,14 @@ export default {
       makeDate (date) {
         return dateformat(new Date(date), 'dd mmm, yyyy')
       },
+      handleSuccess(e) {
+        console.log(e);
+        this.snackbarText = 'Address copied to clipboard'
+        this.snackbar2 = true
+      },
+      handleError(e) {
+        console.log(e);
+      },
       disconnectClicked () {
         if (this.mmConnected) {
           this.$refs.mmConnect.disconnectMetamask()
@@ -787,7 +846,89 @@ export default {
             }, 1000);
           });
         }
+      },
+      // ############################## Web 3 ##################################
+      waitGetUser () {
+        setTimeout(() => {
+          if (this.getUser.uid === '') {
+            this.waitGetUser()
+          } else {
+            this.getWalletBalance()
+            this.getTokenBalance()
+          }
+        }, 1000);
+      },
+      getWalletBalance () {
+
+        console.log('this.getUser.accounts[0]')
+        console.log(this.getUser.accounts[0])
+
+        if (this.getUser.networkChainID === '0x38') {
+          this.connectedNw = 'BSC'
+        } else if (this.getUser.networkChainID === '0x1') {
+          this.connectedNw = 'ETH'
+        } else if (this.getUser.networkChainID === '0x89') {
+          this.connectedNw = 'MATIC'
+        }
+
+        if (this.getUser.walletProvider === 'MetaMask' || this.getUser.walletProvider === 'WalletConnect') {
+          window.ethereum.request({
+            method: 'eth_getBalance',
+            params:[
+               this.getUser.accounts[0],
+              'latest'
+            ],
+              id: 1
+            })
+          .then((balance) => {
+            console.log(balance)
+            this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
+          })
+          .catch((error) => console.log(error))
+        } else if (this.getUser.walletProvider === 'BinanceChainWallet') {
+          window.BinanceChain.request({
+            method: 'eth_getBalance',
+            params:[
+              this.getUser.accounts[0],
+              'latest'
+            ],
+              id: 1
+            })
+          .then((balance) => {
+            // console.log(balance)
+            this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
+          })
+          .catch((error) => console.log(error))
+        }
+      },
+      getTokenBalance () {
+        // https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0xe9e7cea3dedca5984780bafc599bd69add087d56&address=0x89e73303049ee32919903c09e8de5629b84f59eb&tag=latest&apikey=YourApiKeyToken
+        
+        let tokenAddress = ''
+        let network = 'ETH'
+        if (this.getUser.networkChainID === '0x1') {
+          tokenAddress = '0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72'
+          network = 'ETH'
+        } else if  (this.getUser.networkChainID === '0x5') {
+          tokenAddress = '0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72'
+          network = 'GOERLI'
+        }
+        let walletAddress = this.getUser.accounts[0]
+
+        Promise.resolve(MemeMasterAPI.getTokenBalance(tokenAddress, walletAddress, network))
+        .then(result => {
+          console.log(result)
+          var balance  = result.data.message.result
+          this.tokenBalance = balance / (10**18)
+          this.tokenBalance = this.tokenBalance.toLocaleString('en-US');
+        })
+        .catch(err => {
+          // this.loading = false
+          console.log('Error getting Token Balance.', err)
+          // show friendly error in user screen
+        })
       }
+      
     }
   }
 </script>

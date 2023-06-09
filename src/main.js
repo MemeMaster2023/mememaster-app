@@ -24,6 +24,7 @@ import 'firebase/firestore';
 import 'firebase/analytics';
 import 'firebase/auth';
 import VueHtml2Canvas from 'vue-html2canvas';
+import VueClipboard from 'vue3-clipboard'
 // import Jazzicon from 'vue3-jazzicon/src/components';
 
 const app = createApp(App)
@@ -50,7 +51,11 @@ app.directive('scroll-to', VueScrollTo, {
     x: false,
     y: true,
 })
-app.use(VueHtml2Canvas);
+app.use(VueHtml2Canvas)
+app.use(VueClipboard, {
+    autoSetContainer: true,
+    appendToBody: true,
+})
 registerPlugins(app)
 
 app.mount('#app')

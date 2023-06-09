@@ -35,6 +35,7 @@
     "vue-lazyload": "^3.0.0",
     "vue-router": "^4.0.0",
     "vue-scrollto": "^2.20.0",
+    "vue3-clipboard": "^1.0.0",
     "vue3-jazzicon": "^0.1.4",
     "vuetify": "^3.0.0",
     "vuex": "^4.0.2",

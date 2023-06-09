@@ -165,5 +165,31 @@ class MemeMasterAPI {
         console.log(e)
       })
   }
+
+  // ###################################################################################
+  // ############################# FIRESTORE IMAGE TO BASE64  ##########################
+  // ###################################################################################
+
+  getTokenBalance (tokenAddress, walletAddress, network) {
+    const requestBody = {
+      tokenAddress: tokenAddress,
+      walletAddress: walletAddress,
+      network: network
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+        // 'X-Authentication': token
+      }
+    }
+    return axios.post(MEME_MASTER_API + 'gettokenbalance', requestBody, config)
+      .then(response => {
+        // console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
 }
 export default new MemeMasterAPI()

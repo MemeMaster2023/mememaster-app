@@ -1007,7 +1007,7 @@
 import firebase from 'firebase/app'
 import 'firebase/storage'
 import { db } from '@/main'
-import MemeMasterAPI from '../../clients/MemeMasterAPI';
+import MemeMasterAPI from '../../clients/MemeMasterAPI'
 import CreateMemeText from './CreateMemeText'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import imageCompression from 'browser-image-compression'

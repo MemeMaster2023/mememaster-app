@@ -55,9 +55,9 @@
                   {{ col.name }}
                 </v-card-title>
 
-                <v-card-subtitle class="text-wrap">
+                <!-- <v-card-subtitle class="text-wrap">
                   <div>{{ lookupImageAndSubtitle(col.name).subtitle }}</div>
-                </v-card-subtitle>
+                </v-card-subtitle> -->
 
                 <v-card-actions class="card-actions" style="width:100%">
                   <v-spacer></v-spacer>

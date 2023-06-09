@@ -17,13 +17,13 @@
       <v-col cols="12" md="3">
       </v-col>
 
-      <v-col cols="12" md="7">
+      <v-col cols="12" md="6">
       
         <div style="text-align: center;">
 
           <v-tooltip text="Telegram" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn variant="text" class="mx-4 mt-1">
+              <v-btn variant="text" class="mx-2 mt-1">
                 <v-img 
                   src="/img/icons/telegram.png" 
                   style="width:24px;height:24px;padding-top:4px" 
@@ -37,7 +37,7 @@
           <v-tooltip text="Twitter" location="top">
             <template v-slot:activator="{ props }">
               <v-btn
-                class="mx-4"
+                class="mx-2"
                 icon="mdi-twitter"
                 variant="text"
                 @click="gotoLink('https://twitter.com/MemeMaster_2023')"
@@ -49,7 +49,7 @@
           <v-tooltip text="Instagram" location="top">
             <template v-slot:activator="{ props }">
               <v-btn
-                class="mx-4"
+                class="mx-2"
                 icon="mdi-instagram"
                 variant="text"
                 @click="gotoLink('https://www.instagram.com/meme_master_2023/')"
@@ -61,7 +61,7 @@
           <v-tooltip text="Youtube" location="top">
             <template v-slot:activator="{ props }">
               <v-btn
-                class="mx-4"
+                class="mx-2"
                 icon="mdi-youtube"
                 variant="text"
                 @click="gotoLink('https://www.youtube.com/channel/UCUNli2csi8spAEBZJD8nXgg/')"
@@ -72,7 +72,7 @@
 
           <v-tooltip text="Discord" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn variant="text" class="mx-4 mt-1">
+              <v-btn variant="text" class="mx-2 mt-1">
                 <v-img 
                   src="/img/icons/discord.png" 
                   style="width:24px;height:24px;padding-top:4px"
@@ -85,7 +85,7 @@
 
           <v-tooltip text="TikTok" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn variant="text" class="mx-4 mt-1">
+              <v-btn variant="text" class="mx-2 mt-1">
                 <v-img 
                   src="/img/icons/tiktok_white.png" 
                   style="width:24px;height:24px;padding-top:4px" 
@@ -98,7 +98,7 @@
 
           <v-tooltip text="Pinterest" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn variant="text" class="mx-4 mt-1">
+              <v-btn variant="text" class="mx-2 mt-1">
                 <v-img 
                   src="/img/icons/pinterest.png" 
                   style="width:24px;height:24px;padding-top:4px" 
@@ -111,7 +111,7 @@
         </div>
       </v-col>
 
-      <v-col cols="12" md="2">
+      <v-col cols="12" md="3">
       </v-col>
     </v-row>
 
@@ -122,7 +122,7 @@
             style="max-height: 72px; max-width: 350px;"
           ></v-img>
         </v-col>
-        <v-col cols="12" md="7">
+        <v-col cols="12" md="6">
           <div class="pt-4 mb-4 mr-8 ml-8" style="text-align: justify;">
             Unleash your creativity, explore trends, and connect with meme aficionados across multiple social media platforms. Our generative platform brings you a universe of endless meme, NFT music and gaming possibilities. Join the meme revolution now!
           </div>
@@ -142,7 +142,7 @@
           </div>
         </v-col>
 
-        <v-col cols="12" md="2" :align="isMobileDevice ? 'center' : ''" class="pt-5">
+        <v-col cols="12" md="3" :align="isMobileDevice ? 'center' : ''" class="pl-4 pt-5">
           <v-btn variant="text" style="text-transform: none !important;" @click="termsDialog = true">
             Terms and Conditions
           </v-btn>
