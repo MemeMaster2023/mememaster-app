@@ -249,7 +249,7 @@ export default {
             {text: 'All your generated content automatically saved to your drafts so you can continue editing your creations.', completed: true}, 
             {text: 'Establish Galleries: Users can view and explore these curated collections.', completed: true}, 
             {text: 'Incorporate Social Media Links: Encourage sharing across platforms and foster community engagement.', completed: false}, 
-            {text: 'Create a prompt library for far better meme and other creations.', completed: false}, 
+            {text: 'Create a prompt library for far better meme and other creations.', completed: true}, 
             {text: 'IDO Token launch, targeted for June 2023', completed: false},
           ],
           date: 'Phase 2',
@@ -263,7 +263,9 @@ export default {
             {text: 'Uniswap and CEX listings', completed: false},
             {text: 'Develop NFT Backend Infrastructure: This will support minting, buying, and selling of NFTs.', completed: false}, 
             {text: 'Build the NFT Minting Application: This will allow users to create their own meme-based NFTs.', completed: false}, 
-            {text: 'Launch MemeMaster\'s Meme-to-NFT Creation Section: This can be an exclusive feature of the platform allowing memes to be converted to NFTs.', completed: false}
+            {text: 'Launch MemeMaster\'s Meme-to-NFT Creation Section: This can be an exclusive feature of the platform allowing memes to be converted to NFTs.', completed: false},
+            {text: 'Text to video: Generate video memes by creating an animation or video from text using visual and audio elements.', completed: false}, 
+
           ],
           date: 'Phase 3',
           color: '#463552',
@@ -278,7 +280,7 @@ export default {
             {text: 'Confirm Coinmarketcap and Coingecko listing.', completed: false},
             {text: 'Create New Token Listing Platform: This will provide users with access to newly minted tokens, enhancing the ecosystem\'s dynamism.', completed: false},  
             {text: 'Gaming App Integration: Develop a mini-game section where users can play with/against each other. The games can be meme-themed or utilize user\'s NFTs', completed: false},
-            {text: 'Introducting Music to Meme Master. Add music to your Memes. Experiment with an AI DJ mixing a playlist for you.', completed: false} 
+            {text: 'Introducing Music to Meme Master. Add music to your Memes. Experiment with an AI DJ mixing a playlist for you.', completed: false} 
           ],
           date: 'Phase 4',
           color: '#463552',
@@ -291,7 +293,7 @@ export default {
             {text: 'Launch a Decentralized Marketplace: Enable peer-to-peer transaction of memes and NFTs within the platform.', completed: false},
             {text: 'Listing on more DEX and CEX exchanges.', completed: false},
             {text: 'Continuous improvement and development following the latest in Meme, NFT & AI movements.', completed: false},
-            {text: 'Ordinal NFT creation.', completed: false}
+            {text: 'Ordinal NFTs: Ordinal NFT creation adds an additional layer of uniqueness and value to the NFT ecosystem.', completed: false}
           ],
           date: 'Phase 5',
           color: '#463552',

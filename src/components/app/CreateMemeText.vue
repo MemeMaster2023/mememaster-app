@@ -278,7 +278,6 @@
                  :style="memeText === '' ? 'width:90%;text-transform: none !important' : 'width:90%;text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(237, 229, 249)'" 
                  color="deep-purple-lighten-1"
                  @click="printSaveThis()"
-                 :disabled="memeText === ''"
           >
             Save this Meme
           </v-btn>
@@ -473,7 +472,7 @@
               <v-btn
                 prepend-icon="mdi-check-all"
                 variant="outlined"
-                color="green-lighten-1"
+                color="green-lighten-3"
                 @click="memeCreationCompleted()"
                 :disabled="!uploadComplete"
               >
@@ -491,7 +490,7 @@
               <v-btn 
                   prepend-icon="mdi-content-save-check-outline" 
                   variant="outlined"
-                  color="green-lighten-1"
+                  color="green-lighten-3"
                   @click="createNewCollection()"
                   :disabled="newCollectionName === '' || checkNameRules(newCollectionName)"
               >

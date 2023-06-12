@@ -2,9 +2,9 @@
   <div id="mynfts">
     <v-responsive style="background-color: #000;">
       
-      <v-card theme="dark" class="mt-16 mb-16 ml-2 mr-2" height="100%" v-if="view === 1">
+      <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 1">
 
-       <v-row class="mt-12" :align="center">
+       <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" :align="center">
         <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
         </v-col>
 

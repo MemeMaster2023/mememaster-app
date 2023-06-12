@@ -356,6 +356,7 @@
                       accLevel: this.userData.acc_level,
                       accType: this.userData.acc_type,
                       accStatus: this.userData.status,
+                      credits: this.userData.credits ?? 0,
                       memberSince: this.userData.created,
                       favorites: this.userData.favorites,
                       welcome: this.userData.welcome
@@ -410,6 +411,7 @@
                   accLevel: this.userData.acc_level,
                   accType: this.userData.acc_type,
                   accStatus: this.userData.status,
+                  credits: this.userData.credits ?? 0,
                   memberSince: this.userData.created,
                   favorites: this.userData.favorites,
                   welcome: this.userData.welcome

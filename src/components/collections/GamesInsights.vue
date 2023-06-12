@@ -40,7 +40,6 @@
               cols="12" md="4"
             >
               <v-card
-                class="mx-auto"
                 min-width="400"
                 max-width="400"
                 @click="openCollection(col, index)"

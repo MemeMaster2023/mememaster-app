@@ -33,11 +33,12 @@
 
        </v-row>
 
-       <v-row class="mt-8 mb-16" :align="center">
-        <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
+       <v-row class="mt-8 mb-16" :align="center" style="margin-right: 10%;margin-left: 10%;">
+
+        <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
         </v-col>
 
-        <v-col cols="12" md="3" :align="center">
+        <v-col cols="12" md="4" :align="center">
           <v-card
             class="mx-auto"
             max-width="350"
@@ -56,7 +57,7 @@
                 variant="outlined" 
                 color="deep-purple-lighten-1" 
                 style="width:100%" 
-                prepend-icon="mdi-arrow-right-bold-hexagon-outline" 
+                prepend-icon="mdi-image-multiple-outline" 
                 @click="view = 2"
               >
                 Start Here
@@ -65,7 +66,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="3" :align="center">
+        <v-col cols="12" md="4" :align="center">
           <v-card
             class="mx-auto"
             min-height="180"
@@ -92,13 +93,44 @@
             </v-card-actions>
           </v-card>
         </v-col>
-        
-        <v-col cols="12" md="3" :align="center" >
+
+        <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
         </v-col>
+
+        <!-- <v-col cols="12" md="4" :align="center">
+          <v-card
+            class="mx-auto"
+            min-height="180"
+            max-width="350"
+            variant="outlined"
+          >
+            <v-card-item>
+              <div>
+                <div class="text-h6 text-center">Text to Video</div>
+                <div class="body-1 text-center">Turn text into dynamic videos, captivating audiences with stunning visuals and engaging animations.</div>
+              </div>
+            </v-card-item>
+
+            <v-card-actions style="position: absolute; bottom: 0;width:100%">
+              <v-btn 
+                variant="outlined" 
+                color="blue-lighten-1"  
+                style="width:100%" 
+                prepend-icon="mdi-animation-play" 
+                to="/generate/video"
+                >
+                Try It Now
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col> -->
+        
        </v-row>
       </v-card>
 
-      <!-- ############################### Create Meme Comp -->
+      <!-- #################################################################################-->
+      <!-- ############################### Create Meme Comp ############################### -->
+      <!-- #################################################################################-->
       <CreateMeme v-if="view === 2"
         :isMobileDevice="isMobileDevice" 
         :dark="dark"
@@ -109,6 +141,20 @@
         :toUpload="toUpload"
       >
       </CreateMeme>
+
+      <!-- #################################################################################-->
+      <!-- ############################### Text To Video ################################## -->
+      <!-- #################################################################################-->
+      <TextToVideo v-if="view === 3"
+        :isMobileDevice="isMobileDevice" 
+        :dark="dark"
+        :windowWidth="windowWidth" 
+        :windowHeight="windowHeight"
+        :drawer="drawer"
+        :toDrafts="toDrafts"
+        :toUpload="toUpload"
+      >
+      </TextToVideo>
   
     </v-responsive>
   </div>
@@ -118,6 +164,7 @@
 // @ is an alias to /src
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import CreateMeme from './CreateMeme'
+import TextToVideo from './TextToVideo'
 export default {
   name: 'Create',
   props: {
@@ -134,7 +181,8 @@ export default {
     toUpload: false
   }),
   components: {
-    CreateMeme
+    CreateMeme,
+    TextToVideo
   },
   computed: {
     getUser () {
@@ -156,6 +204,10 @@ export default {
       } else if (this.$route.params?.type === 'upload') {
         this.view = 2
         this.toUpload = true
+        this.toDrafts = false
+      } else if (this.$route.params?.type === 'video') {
+        this.view = 3
+        this.toUpload = false
         this.toDrafts = false
       }
     }
@@ -184,6 +236,9 @@ export default {
     } else if (this.$route.params?.type === 'upload') {
       this.view = 2
       this.toUpload = true
+    } else if (this.$route.params?.type === 'video') {
+      this.view = 3
+      this.toUpload = false
     }
   },
   methods: {

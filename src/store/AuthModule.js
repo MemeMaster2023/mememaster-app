@@ -55,7 +55,7 @@ const AuthModule = {
         created: payload.created,
         lastlogin: 0,
         favorites: [],
-        credit: 500,
+        credits: 500,
         welcome: payload.welcome,
       };
       console.log(newUser);
