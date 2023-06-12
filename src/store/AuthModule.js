@@ -3,19 +3,19 @@ import { db } from '@/main'
 
 const AuthModule = {
   state: {
-    persistentUser:  localStorage.getItem('mm-persisten-user') === null
-        ? null
-        : JSON.parse(localStorage.getItem('mm-persisten-user')),
+    // persistentUser:  localStorage.getItem('mm-persisten-user') === null
+    //     ? null
+    //     : JSON.parse(localStorage.getItem('mm-persisten-user')),
     authMessage: '',
     errorMessage: '',
     provider:'',
   },
   mutations: {
-    setPersistentUser(state, payload) {
-      console.log(payload);
-      state.persistentUser = payload;
-      localStorage.setItem('mm-persisten-user', JSON.stringify(payload));
-    },
+    // setPersistentUser(state, payload) {
+    //   console.log(payload);
+    //   state.persistentUser = payload;
+    //   localStorage.setItem('mm-persisten-user', JSON.stringify(payload));
+    // },
     setState(state, payload) {
       console.log(payload);
       var keys = Object.keys(payload);
@@ -163,23 +163,10 @@ const AuthModule = {
                 welcome: true,
               };
               await dispatch("insertUserForSignUp", dispatchObj);
-              commit("setPersistentUser", {
-                uid: user.uid,
-                email: user.email,
-                displayName: dispatchObj.name,
-                docId: newPostKey.id,
-                memberSince: dispatchObj.created,
-                isEmailConnected: true,
-              })
             } else {
-              commit("setPersistentUser", {
-                uid: payload.userData.uid,
-                email: payload.userData.email,
-                displayName: payload.userData.name,
-                docId: payload.userData.id,
-                memberSince: payload.created,
-                isEmailConnected: true,
-              })
+              payload.userData["displayName"] = payload.userData["name"];
+              payload.userData["memberSince"] = payload.userData["created"];
+              payload.userData["accStatus"] = payload.userData["status"];
               commit("SetConnectedUserDetails", payload.userData);
             }
             localStorage.removeItem("meme-master-emailForSignIn");
@@ -222,26 +209,13 @@ const AuthModule = {
                 created: new Date().getTime(),
                 welcome: true,
               };
-              commit("setPersistentUser", {
-                uid: user.uid,
-                email: user.email,
-                displayName: dispatchObj.name,
-                docId: newPostKey.id,
-                memberSince: dispatchObj.created,
-                isEmailConnected: true,
-              })
               await dispatch("insertUserForSignUp", dispatchObj);
             }else{
               let objFromDb = querySnapshot.docs[0].data();
               objFromDb["docId"] = querySnapshot.docs[0].id;
-              commit("setPersistentUser", {
-                uid: user.uid,
-                email: user.email,
-                displayName: objFromDb.name,
-                docId: objFromDb.docId,
-                memberSince: objFromDb.created,
-                isEmailConnected: true,
-              })
+              objFromDb["displayName"] = objFromDb["name"];
+              objFromDb["memberSince"] = objFromDb["created"];
+              objFromDb["accStatus"] = objFromDb["status"];
               commit("SetConnectedUserDetails", objFromDb);
             }
             commit("SetEmailConnected", {
@@ -267,25 +241,43 @@ const AuthModule = {
         authMessage: "",
       });
     },
-    autoSignIn({ commit }, payload) {
-      commit("setPersistentUser", {
-        uid: payload.uid,
-        displayName: payload.displayName,
-        email: payload.email,
-        memberSince: payload.created
-      });
+    async getUser({ commit }, payload){
+      console.log("Get User UID", payload)
+      const querySnapshot = await db
+              .collection('users')
+              .where('uid', '==', payload)
+              .get();
+      if(!querySnapshot.empty){
+        let objFromDb = querySnapshot.docs[0].data();
+        objFromDb["docId"] = querySnapshot.docs[0].id;
+        objFromDb["displayName"] = objFromDb["name"];
+        objFromDb["memberSince"] = objFromDb["created"];
+        objFromDb["accStatus"] = objFromDb["status"];
+        console.log("getUser", objFromDb);
+        commit("SetConnectedUserDetails", objFromDb);
+        commit("SetEmailConnected", {
+                isEmailConnected: true,
+                isLoggedIn: true
+              }, { root: true }
+            );
+      }
     },
-    changeDisplayName({commit, state}, payload) {
-      const oldUser = state.persistentUser;
-      var keys = Object.keys(payload);
-      keys.forEach((key) => {
-        oldUser[key] = payload[key];
-      });
-      commit("setPersistentUser", oldUser);
+    // autoSignIn({ commit }, payload) {
+    //   commit("setPersistentUser", {
+    //     uid: payload.uid,
+    //     displayName: payload.displayName,
+    //     email: payload.email,
+    //     memberSince: payload.created
+    //   });
+    // },
+    changeDisplayName({commit}, payload) {
+      commit("SetDisplayName",{
+        newName: payload
+      })
     },
     logout({ commit }) {
       firebase.auth().signOut();
-      commit("setPersistentUser", null);
+      commit("SetEmpty");
     },
   },
   getters: {

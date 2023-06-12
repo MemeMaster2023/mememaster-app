@@ -34,9 +34,30 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
+    <v-snackbar
+      :color="snackbarColor"
+      :timeout="isOnline ? 3000 : -1"
+      v-model="snackbar"
+    >
+    <v-icon v-if="!isOnline">mdi-alert-outline</v-icon>
+    <v-icon v-if="isOnline">mdi-check-circle-outline</v-icon>
+      {{ snackbarText }}
+
+      <template v-slot:actions>
+        <v-btn
+          color="white"
+          variant="text"
+          v-if="isOnline"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 </template>
 
 <script>
+import firebase from 'firebase/app'
 // import { scroller } from 'vue-scrollto/src/scrollTo';
 import WalletConnect from '@walletconnect/client';
 import { isMobile } from 'mobile-device-detect';
@@ -62,6 +83,8 @@ export default {
     isShowContact: false,
     dialogFilePreview: false,
     fileName: '',//'http://docs.google.com/gview?url=',
+    online: navigator.onLine,
+    isOnline: true,
     networkNames: [
     { id: 1, name: 'ethereum mainnet' },    
     { id: 2, name: 'morden testnet (deprecated)' },
@@ -92,6 +115,16 @@ export default {
     this.isMobileDevice = isMobile;
     console.log('###### this.isMobileDevice App ##########')
     console.log(this.isMobileDevice)
+    setTimeout(() => {
+      let uid = '';
+      const user = firebase.auth().currentUser;
+      if(!user){
+        uid = localStorage.getItem('mm-uid');
+      }else{
+        uid = user.uid;
+      }
+      this.$store.dispatch("getUser", uid);
+    }, 2000);
     if (this.getChain !== '0x1') {
       this.switchNWDialog = true
       // this.addETHNetwork()
@@ -112,6 +145,24 @@ export default {
     }
   },
   watch: {
+    online(v) {
+      if (v) {
+        this.isOnline = true
+      }else{
+        this.isOnline = false
+      }
+    },
+    isOnline(v){
+      if(v){
+        this.snackbar = true;
+        this.snackbarColor = "green";
+        this.snackbarText = "You are back online!"
+      }else{
+        this.snackbar = true;
+        this.snackbarColor = "red";
+        this.snackbarText = "You are offline!"
+      }
+    },
     getChain () {
       console.log('######### this.getChain ############')
       console.log(this.getChain)
@@ -124,8 +175,12 @@ export default {
     }
   },
   mounted() {
-    // console.log("mounted");
-    // this.connection();
+    window.addEventListener('online', this.updateOnlineStatus)
+    window.addEventListener('offline', this.updateOnlineStatus)
+  },
+  beforeDestroy() {
+    window.removeEventListener('online', this.updateOnlineStatus)
+    window.removeEventListener('offline', this.updateOnlineStatus)
   },
   methods: {
     routerGo(route) {
@@ -159,21 +214,13 @@ export default {
     getWeek () {
       return dateformat(new Date(), 'WW')
     },
-    connection() {
-      this.$bus.$on("connection", (online) => {
-        if(online){
-          this.snackbarError = false;
-          this.snackbar = true;
-          this.snackbarText = "You are online";
-        }else{
-          this.snackbar = false;
-          this.snackbarError = true;
-          this.snackbarText = "You are offline";
-        }
-      });
-    },
     changeLanguage(lang){
       this.$store.commit('SetCurrentLanguage', lang)
+    },
+    updateOnlineStatus(e) {
+      console.log(e);
+      const { type } = e
+      this.online = type === 'online'
     },
     getNetworkName () {
       let nwId = parseInt(this.getChain, 16)
