@@ -144,21 +144,19 @@ export default {
     online(v) {
       if (v) {
         this.isOnline = true
-        this.snackbar = true;
-        this.snackbarColor = "green";
-        this.snackbarText = "You are online!"
       }else{
         this.isOnline = false
-        this.snackbar = true;
-        this.snackbarColor = "red";
-        this.snackbarText = "You are offline!"
       }
     },
     isOnline(v){
       if(v){
-        alert('Online Status: Online');
+        this.snackbar = true;
+        this.snackbarColor = "green";
+        this.snackbarText = "You are online!"
       }else{
-        alert('Online Status: Offline');
+        this.snackbar = true;
+        this.snackbarColor = "red";
+        this.snackbarText = "You are offline!"
       }
     },
     getChain () {

@@ -44,7 +44,7 @@ export default createStore({
                 accLevel: 0,
                 accType: 0,
                 accStatus: 0,
-                memberSince: 1,
+                memberSince: localStorage.getItem('mm-memberSince') === null ? 0 : localStorage.getItem('mm-memberSince'),
                 credits: 0,
                 language: 'en', // localStorage.getItem('language') === null ? 'en' : localStorage.getItem('language'),
                 favorites: [],

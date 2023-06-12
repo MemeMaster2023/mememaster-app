@@ -249,7 +249,7 @@
                 <span>{{ balance }} ETH</span><span class="ml-4">{{ tokenBalance }} EMAS</span>
               </div>
               <div class="row mt-2" style="width:280px">
-                <span>{{ getUser.credits }} Credits</span>
+                <span>{{ getUser.credits ?? 0 }} Credits</span>
                 <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="ml-2" size="small" v-bind="props" style="margin-top: -2px">mdi-information-outline</v-icon>
@@ -387,6 +387,7 @@
                 type="email"
                 density="comfortable"
                 v-model="email"
+                :rules="emailRules"
                 variant="outlined"
               ></v-text-field>
               <v-btn style="width:100%"

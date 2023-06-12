@@ -202,7 +202,7 @@ export default {
         if(this.isExistingUser){
           setTimeout(() => {
             this.backToHome();
-          }, 1000);
+          }, 4000);
         }
       }
     },
