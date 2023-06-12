@@ -36,14 +36,18 @@
     </v-dialog>
     <v-snackbar
       :color="snackbarColor"
+      :timeout="isOnline ? 3000 : -1"
       v-model="snackbar"
     >
+    <v-icon v-if="!isOnline">mdi-alert-outline</v-icon>
+    <v-icon v-if="isOnline">mdi-check-circle-outline</v-icon>
       {{ snackbarText }}
 
       <template v-slot:actions>
         <v-btn
           color="white"
           variant="text"
+          v-if="isOnline"
           @click="snackbar = false"
         >
           Close
