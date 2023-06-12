@@ -86,10 +86,17 @@
 
                     <template v-slot:append>
                       <v-icon
-                        :color="item.public ? 'green-lighten-1' : 'red-lighten-1'"
+                        :color="item.public ? 'green-lighten-1' : 'blue-lighten-1'"
                       >
                         {{  item.public ? 'mdi-lock-open-variant-outline' : 'mdi-lock-outline' }}
                       </v-icon>
+                      <v-icon
+                          size="x-large"
+                          color="red-lighten-1"
+                          @click.stop="deleteCollection(item, index)"
+                        >
+                          mdi-trash-can-outline
+                        </v-icon>
                     </template>
                   </v-list-item>
                   <v-divider></v-divider>
@@ -212,7 +219,7 @@
     >
         <v-card theme="dark">
           <v-toolbar
-            color="#241d43"
+            color="deep-purple-darken-4"
             :title="'Collection Details - ' + selectedCollection.name"
             class="text-white"
           >
@@ -333,6 +340,7 @@
               >
                 <v-img
                   :src="item.url"
+                  :lazy-src="item.url"
                   class="rounded-image"
                   max-width="448"
                   max-height="448"
@@ -410,7 +418,9 @@
                       <v-icon size="80" color="white">{{ isMobileDevice ? 'mdi-gesture-tap' : 'mdi-selection-search' }}
                       </v-icon>
                     </v-avatar>
-                    <v-img v-else :src="collectionImageUrl" style="width: 150px;height:150px;border-radius: 10px;">
+                    <v-img v-else 
+                           :src="collectionImageUrl" 
+                           style="width: 150px;height:150px;border-radius: 10px;">
                     </v-img>
 
                   </label>
@@ -450,6 +460,23 @@
             </v-row>
           </v-card>
       </v-dialog>
+
+    <!-- ########################################################################### -->
+    <!-- #################################  DIALOGS ################################ -->
+    <!-- ########################################################################### -->
+    
+    <v-dialog v-model="deleteCollectionDialog" persistent min-width="290" max-width="390">
+      <v-card>
+        <v-card-title class="headline">Delete Selected Collection</v-card-title>
+        <v-card-text class="subheading">Name: {{ selectedCollection.name}}</v-card-text>
+        <v-card-text class="subheading">Please, confirm.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="grey darken-1" text @click="deleteCollectionDialog = false">Cancel</v-btn>
+          <v-btn color="red darken-1" text @click="deleteCollectionConfirm">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
      <!-- ############################## SNACKBARS ####################################### -->
       <v-snackbar
@@ -497,6 +524,7 @@ export default {
     privatePublicDialog: false,
     collectionDetailsDialog: false,
     collectionImageDialog: false,
+    deleteCollectionDialog: false,
     collectionImage: '',
     collectionImageUrl: '',
     view: 1,
@@ -564,9 +592,18 @@ export default {
   created() {
     // this.currentUser = firebase.auth().currentUser;
     this.scrollToTop()
-    this.getUserCollections()
+    this.waitGetUser()
   },
   methods: {
+    waitGetUser () {
+      setTimeout(() => {
+        if (this.getUser.uid === '') {
+          this.waitGetUser()
+        } else {
+          this.getUserCollections()
+        }
+      }, 1000);
+    },
     getUserCollections () {
       // console.log(this.getCollections)
       this.loadingData = true
@@ -709,6 +746,33 @@ export default {
     collectionNameEditCancel () {
       this.collectionNameEdit = false
       this.selectedCollection.name = this.oldValue
+    },
+    deleteCollection (item, index) {
+      console.log(this.item)
+      this.selectedCollection = item
+      this.selectedCollection.index = index
+      this.deleteCollectionDialog = true
+    },
+    deleteCollectionConfirm () {
+      let dispatchObj = {
+        id: this.selectedCollection.id,
+        status: -1,
+        modified: new Date().getTime(),
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch('updateCollection', dispatchObj)
+        .then(() => {
+          console.log('Collection Deleted!')
+          this.snackbarText = 'Collection Deleted!' // this.lang[this.getLanguage].RECORD_DELETED
+          this.snackbar = true
+          this.getCollections.splice(this.selectedCollection.index, 1)
+          this.deleteCollectionDialog = false
+
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
     },
     scrollToTop () {
       const firstScrollTo = scroller();

@@ -240,7 +240,7 @@
                   v-clipboard:copy.stop="this.getUser.accounts[0]"
                   v-clipboard:success="handleSuccess"
                   v-clipboard:error="handleError"
-                  style="cursor: pointer;"
+                  style="cursor: pointer;margin-top: -2px"
                 >
                  mdi-content-copy
                 </v-icon>
@@ -249,7 +249,13 @@
                 <span>{{ balance }} ETH</span><span class="ml-4">{{ tokenBalance }} EMAS</span>
               </div>
               <div class="row mt-2" style="width:280px">
-                <p>500 Meme Master Credits</p>
+                <span>{{ getUser.credits }} Credits</span>
+                <v-tooltip location="top">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="ml-2" size="small" v-bind="props" style="margin-top: -2px">mdi-information-outline</v-icon>
+                  </template>
+                  <span>These are your free credits you received upon Sign Up.<br>You can use them to use and try out the image and meme generation.</span>
+                </v-tooltip>
               </div>
             </v-col>
           </v-row>
@@ -458,6 +464,7 @@
                   density="comfortable"
                   v-model="email"
                   variant="outlined"
+                  :rules="emailRules"
                 ></v-text-field>
                 <v-btn style="width:100%"
                       size="large"
@@ -596,7 +603,13 @@ export default {
       tempUserData: null,
       open: ['account'],
       balance: 0,
-      tokenBalance: 0
+      tokenBalance: 0,
+      emailRules: [
+        (v) => !!v || "Email is required",
+        (v) =>
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          "Email address must be valid",
+      ],
     }),
     components: {
       MetaMaskConnect,
@@ -676,6 +689,10 @@ export default {
           }, 2000)
         }
       },
+      getChain () {
+          console.log('watcher this.waitGetUserBalance()')
+          this.waitGetUserBalance()
+      },
       emailConnected(newValue){
         console.log("watch email", newValue)
         if(newValue){
@@ -725,9 +742,12 @@ export default {
       console.log(this.getUser)
       this.env = true
       // this.env = process.env.VUE_APP_ENVIRONMENT === 'testnet'
+      console.log(import.meta.env.VITE_APP_ENVIRONMENT)
+      // this.env = true
+      this.env = import.meta.env.VITE_APP_ENVIRONMENT === 'local' || import.meta.env.VITE_APP_ENVIRONMENT === 'testnet'
       console.log('this.getUser.mmConnected')
       console.log(this.getUser.mmConnected)
-      this.waitGetUser()
+      this.waitGetUserBalance()
     },
     methods: {
       routerGo (route) {
@@ -755,38 +775,6 @@ export default {
       },
       getHash (name) {
         return md5(name)
-      },
-      async addETHNetwork () {
-        // console.log(this.getUser.walletProvider)
-        try {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x1' }],
-          });
-        } catch (switchError) {
-          // This error code indicates that the chain has not been added to MetaMask.
-          if (switchError.code === 4902) {
-            try {
-              await window.ethereum.request({
-                method: 'wallet_addEthereumChain',
-                params: [{
-                  chainId: '0x1', // A 0x-prefixed hexadecimal string
-                  chainName: 'Ethereum Mainnet',
-                  nativeCurrency: {
-                    name: 'Ethereum',
-                    symbol: 'ETH', // 2-6 characters long
-                    decimals: 18,
-                  },
-                  rpcUrls: ['https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
-                  blockExplorerUrls:['https://etherscan.io/']
-                }],
-              })
-            } catch (addError) {
-              // handle "add" error
-            }
-          }
-          // handle other "switch" errors
-        }
       },
       handleScroll () {
         // console.log(window.scrollY)
@@ -856,10 +844,10 @@ export default {
         localStorage.removeItem('mm-mmConnected');
       },
       // ############################## Web 3 ##################################
-      waitGetUser () {
+      waitGetUserBalance () {
         setTimeout(() => {
           if (this.getUser.uid === '') {
-            this.waitGetUser()
+            this.waitGetUserBalance()
           } else {
             this.getWalletBalance()
             this.getTokenBalance()
@@ -926,8 +914,12 @@ export default {
         Promise.resolve(MemeMasterAPI.getTokenBalance(tokenAddress, walletAddress, network))
         .then(result => {
           console.log(result)
-          var balance  = result.data.message.result
-          this.tokenBalance = balance / (10**18)
+          var tmpBalance  = result.data.message.result
+          if (tmpBalance === "Invalid contractAddress format") {
+            this.tokenBalance = 0
+            return
+          }
+          this.tokenBalance = tmpBalance / (10**18)
           this.tokenBalance = this.tokenBalance.toLocaleString('en-US');
         })
         .catch(err => {
@@ -950,5 +942,8 @@ export default {
     font-size: 22px;
     color: #FFF;
   }
+  .v-tooltip .v-overlay__content {
+    background: rgba(var(--v-theme-surface-variant), 1) !important;
+  } 
 
 </style>

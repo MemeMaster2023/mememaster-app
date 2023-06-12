@@ -286,8 +286,9 @@
         var nw
         window.ethereum.request({ method: 'net_version' })
         .then((nwId) => {
-          // console.log(nwId)
+          console.log(nwId)
           nw = parseInt(nwId).toString(16)
+          console.log(nw)
 
           Promise.resolve(connectWallet())
           .then(result => {
@@ -411,6 +412,7 @@
                             // accLevel: this.userData.acc_level,
                             accType: this.userData.acc_type,
                             accStatus: this.userData.status,
+                            credits: this.userData.credits ?? 0,
                             memberSince: this.userData.created,
                             favorites: this.userData.favorites,
                             welcome: this.userData.welcome
@@ -465,6 +467,7 @@
                         // accLevel: this.userData.acc_level,
                         accType: this.userData.acc_type,
                         accStatus: this.userData.status,
+                        credits: this.userData.credits ?? 0,
                         memberSince: this.userData.created,
                         favorites: this.userData.favorites,
                         welcome: this.userData.welcome

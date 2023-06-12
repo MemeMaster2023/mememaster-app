@@ -45,6 +45,7 @@ export default createStore({
                 accType: 0,
                 accStatus: 0,
                 memberSince: 1,
+                credits: 0,
                 language: 'en', // localStorage.getItem('language') === null ? 'en' : localStorage.getItem('language'),
                 favorites: [],
                 likes: localStorage.getItem('likes') === null ? [] : JSON.parse(localStorage.getItem('likes')),
@@ -121,6 +122,7 @@ export default createStore({
             // state.user.accLevel = payload.accLevel
             state.user.accType = payload.accType
             state.user.accStatus = payload.accStatus
+            state.user.credits = payload.credits
             state.user.memberSince = payload.memberSince
             state.user.favorites = payload.favorites
             state.user.welcome = payload.welcome
@@ -201,7 +203,10 @@ export default createStore({
             localStorage.removeItem('mm-email')
             localStorage.removeItem('mm-displayName')
             localStorage.removeItem('mm-memberSince')
-        }
+        },
+        SetNetworkChainID (state, payload) {
+            state.user.networkChainID = payload.networkChainID
+         }
     },
     modules: {
         // More Modules Go Here

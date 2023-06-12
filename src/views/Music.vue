@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-  import Music from '@/components/games/Music.vue'
+  import Music from '@/components/music/Music.vue'
 </script>

@@ -90,10 +90,11 @@
                     Import, trade, and store your memes and NFTs in our marketplace.
                   </div>
                 </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%">
+                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
+                    @click="learnMoreDialog = true"
                   >
                     Learn More
                   </v-btn>
@@ -123,10 +124,11 @@
                     These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed our roadmap.
                   </div>
                 </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%">
+                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
+                    @click="learnMoreDialog = true"
                   >
                     Learn More
                   </v-btn>
@@ -156,10 +158,11 @@
                     Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
                   </div>
                 </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%">
+                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
+                    @click="learnMoreDialog = true"
                   >
                     Learn More
                   </v-btn>
@@ -194,7 +197,7 @@
       >
       
         <div class="ma-8">
-          <v-row :style="'margin-top:' + (windowHeight - 500) + 'px;'" :align="'center'">
+          <v-row :style="'margin-top:' + (windowHeight - 460) + 'px;'" :align="'center'">
             <v-col cols="12" md="12" >
               <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
               <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
@@ -381,6 +384,121 @@
         </v-row>
       </div>
 
+      <!-- ######################## DIALOGS ############################ -->
+      <v-dialog
+          v-model="learnMoreDialog"
+          fullscreen
+        >
+          <v-card theme="dark" color="#2b2b2b">
+            <v-toolbar
+              color="deep-purple-darken-4"
+            >
+            <v-toolbar-title>Learn More...</v-toolbar-title>
+            <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="learnMoreDialog = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text >
+
+              <v-sheet
+                class="d-flex flex-wrap mx-auto px-8 py-8"
+                elevation="4"
+                rounded
+                width="100%"
+              >
+                <v-row>
+                  <v-col cols="12" md="8">
+                    <div>
+                      <h2 class="text-h4 font-weight-bold">Meme Collections & Token Listings</h2>
+
+                      <div class="text-h6 mt-2 mb-2">
+                        With Meme Master, you'll be able to:<br>
+                        Mint your own memes and turn them into NFTs.<br>
+                        Import, trade, and store your memes and NFTs in our marketplace.<br><br>
+                        Create NFTs from your memes or directly for integration in our gaming platforms.<br><br>
+                        Get early access to new token listings from our own token finder complete with features such as anti- rug pull, compliance, project KYC. Our daily top listings and much more to allow you to get early access into many projects with peace of mind, this will be exclusive to MemeMaster.
+                      </div>
+                    </div>
+                  </v-col>
+                  <v-col cols="12" md="4" :align="'right'" align-self="center">
+                    <v-img style="max-width: 350px; border-radius: 10px;"
+                           src="/img/home/nft_machine.webp"></v-img>
+                  </v-col>
+                </v-row>
+              </v-sheet>
+
+              <v-sheet
+                class="d-flex flex-wrap mx-auto px-8 py-8 mt-4"
+                elevation="4"
+                rounded
+                width="100%"
+              >
+                <v-row>
+                  <v-col cols="12" md="4" :align="'left'" align-self="center">
+                    <v-img style="max-width: 350px; border-radius: 10px;"
+                           src="/img/home/airdrops_and_gaming.webp"></v-img>
+                  </v-col>
+
+                  <v-col cols="12" md="8">
+                    <div>
+                      <h2 class="text-h4 font-weight-bold">Airdrops Gaming and much more</h2>
+
+                      <div class="text-h6 mt-2 mb-2">
+                        Get access to join our limited-edition airdrops.<br><br>
+                        These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed our roadmap, early access to new token listings, higher free allocation of our MemeMaster points that you can use in the games (that you will also have early access too) and later convert to our EMAS tokens.<br><br>
+                        Access to our future limited-edition airdrops and also early access to join our partners of listed tokens (coming soon) plus so much more...<br>
+                        All of these features can be managed from your Meme Master dashboard, allowing seamless storage, trading, and transfer on memes, NFTs, Games, music and more.<br><br>
+                        Holding our EMAS tokens is the first step to opening these possibilities.<br><br>
+                        Token Martix (this later will be a link to show users what they need to hold in order to be eligible)                  
+                        </div>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-sheet>
+
+              <v-sheet
+                class="d-flex flex-wrap mx-auto px-8 py-8 mt-4"
+                elevation="4"
+                rounded
+                width="100%"
+              >
+                <v-row>
+                  <v-col cols="12" md="8">
+                    <div>
+                      <h2 class="text-h4 font-weight-bold">Connect Wallet or Walletless</h2>
+
+                      <div class="text-h6 mt-2 mb-2">
+                        Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.<br><br>
+                        New to crypto? Click the guide below to help you onboard.<br><br>
+
+                        <v-btn
+                          style="text-transform: none !important;"
+                          variant="outlined"
+                          size="large"
+                          color="indigo-lighten-2"
+                          prepend-icon="mdi-wallet"
+                          @click="addETHNetwork"
+                        >
+                        How to Create a Wallet?
+                        </v-btn>
+                      </div>
+                    </div>
+                  </v-col>
+                  <v-col cols="12" md="4" :align="'right'" align-self="center">
+                    <v-img style="max-width: 350px; border-radius: 10px;"
+                           src="/img/home/crypto_onboarding.webp"></v-img>
+                  </v-col>
+                </v-row>
+              </v-sheet>
+              
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
     </v-responsive>
   </div>
 </template>
@@ -399,6 +517,7 @@ export default {
   },
   data: () => ({
     loading: false,
+    learnMoreDialog: false,
     imageLayout: [
       { cols: 4 },
       {
@@ -528,9 +647,5 @@ export default {
     opacity: 1 !important;
     position: absolute;
     width: 100%;
-  }
-  .card-actions {
-    position: absolute;
-    bottom: 0;
   }
 </style>
