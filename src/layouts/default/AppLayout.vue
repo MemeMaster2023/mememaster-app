@@ -79,7 +79,7 @@
     <v-list nav v-model:opened="open">
       <v-list-item prepend-icon="mdi-home-variant-outline" title="Home" value="home" @click="routerGo('/')"></v-list-item>
 
-      <v-list-group v-if="isPersistentLogin" value="account">
+      <v-list-group v-if="isLoggedIn" value="account">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -289,7 +289,7 @@
       <v-icon v-if="emailConnected" class="mr-2">mdi-email</v-icon>Connected
       </v-btn>
 
-      <v-btn v-if="!drawer && !isMobileDevice && env && (isPersistentLogin || mmConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
+      <v-btn v-if="!drawer && !isMobileDevice && env && (isLoggedIn || mmConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
         style="margin-right:30px;margin-top:-7px"
         variant="outlined"
         color="white"
@@ -606,15 +606,17 @@ export default {
     computed: {
       getUser () {
         console.log(this.$store.state.user);
-        if(!this.emailConnected) {
-          return store.state.user 
-        }
-        return store.state.auth.persistentUser
+        // if(!this.emailConnected) {
+        //   return store.state.user 
+        // }
+        return store.state.user 
+
+        //return store.state.auth.persistentUser
       },
-      persistentUser() {
-        console.log(store.state.auth.persistentUser)
-        return store.state.auth.persistentUser;
-      },
+      // persistentUser() {
+      //   console.log(store.state.auth.persistentUser)
+      //   return store.state.auth.persistentUser;
+      // },
       gravatar () {
         return this.$store.state.user.gravatar
       },
@@ -632,13 +634,13 @@ export default {
         return this.$store.state.user.walletConnected
       },
       emailConnected () {
-        if(this.persistentUser !== null){
-          return store.state.auth.persistentUser.isEmailConnected;
-        }
+        // if(this.persistentUser !== null){
+        //   return store.state.auth.persistentUser.isEmailConnected;
+        // }
         return store.state.user.isEmailConnected;
       },
       isLoggedIn () {
-        return this.$store.state.user.isLoggedIn
+        return this.$store.state.user.isLoggedIn || this.getUser.uid !== '';
       },
       snackbarTitle(){
         return store.state.auth.authMessage;
@@ -652,10 +654,10 @@ export default {
           this.$refs.mmConnect.disconnecWallet()
         } */
       },
-      isPersistentLogin(){
-        if(this.isLoggedIn) return this.isLoggedIn;
-        return this.persistentUser !== null;
-      },
+      // isPersistentLogin(){
+      //   if(this.isLoggedIn) return this.isLoggedIn;
+      //   return this.persistentUser !== null;
+      // },
     },
     watch: {
      mmConnected () {
@@ -720,6 +722,7 @@ export default {
     created () {
       window.addEventListener('scroll', this.handleScroll)
       console.log(process.env.VUE_APP_ENVIRONMENT)
+      console.log(this.getUser)
       this.env = true
       // this.env = process.env.VUE_APP_ENVIRONMENT === 'testnet'
       console.log('this.getUser.mmConnected')
@@ -846,6 +849,11 @@ export default {
             }, 1000);
           });
         }
+        localStorage.removeItem('mm-displayName');
+        localStorage.removeItem('mm-email');
+        localStorage.removeItem('mm-uid');
+        localStorage.removeItem('mm-isEmailConnected');
+        localStorage.removeItem('mm-mmConnected');
       },
       // ############################## Web 3 ##################################
       waitGetUser () {

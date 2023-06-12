@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import firebase from 'firebase/app'
 // import { scroller } from 'vue-scrollto/src/scrollTo';
 import { isMobile } from 'mobile-device-detect';
 export default {
@@ -31,7 +32,9 @@ export default {
     isOnline: true,
     isShowContact: false,
     dialogFilePreview: false,
-    fileName: ''//'http://docs.google.com/gview?url=',
+    fileName: '',//'http://docs.google.com/gview?url=',
+    online: navigator.onLine,
+    isOnline: true
   }),
   components: {
 
@@ -46,6 +49,16 @@ export default {
     this.isMobileDevice = isMobile;
     console.log('###### this.isMobileDevice App ##########')
     console.log(this.isMobileDevice)
+    setTimeout(() => {
+      let uid = '';
+      const user = firebase.auth().currentUser;
+      if(!user){
+        uid = localStorage.getItem('mm-uid');
+      }else{
+        uid = user.uid;
+      }
+      this.$store.dispatch("getUser", uid);
+    }, 2000);
   },
   computed: {
     getDrawer () {
@@ -53,11 +66,29 @@ export default {
     }
   },
   watch: {
+    online(v) {
+      if (v) {
+        this.isOnline = true
+      }else{
+        this.isOnline = false
+      }
 
+    },
+    isOnline(v){
+      if(v){
+        alert('Online Status: Online');
+      }else{
+        alert('Online Status: Offline');
+      }
+    }
   },
   mounted() {
-    // console.log("mounted");
-    // this.connection();
+    window.addEventListener('online', this.updateOnlineStatus)
+    window.addEventListener('offline', this.updateOnlineStatus)
+  },
+  beforeDestroy() {
+    window.removeEventListener('online', this.updateOnlineStatus)
+    window.removeEventListener('offline', this.updateOnlineStatus)
   },
   methods: {
     routerGo(route) {
@@ -91,21 +122,13 @@ export default {
     getWeek () {
       return dateformat(new Date(), 'WW')
     },
-    connection() {
-      this.$bus.$on("connection", (online) => {
-        if(online){
-          this.snackbarError = false;
-          this.snackbar = true;
-          this.snackbarText = "You are online";
-        }else{
-          this.snackbar = false;
-          this.snackbarError = true;
-          this.snackbarText = "You are offline";
-        }
-      });
-    },
     changeLanguage(lang){
       this.$store.commit('SetCurrentLanguage', lang)
+    },
+    updateOnlineStatus(e) {
+      console.log(e);
+      const { type } = e
+      this.online = type === 'online'
     }
   }
 }

@@ -9,10 +9,10 @@ export default createStore({
         return {
             user: {
                 dark: localStorage.getItem('darkTheme') === null ? true : JSON.parse(localStorage.getItem('darkTheme')), // set and get
-                uid: '',
+                uid: localStorage.getItem('mm-uid') === null ? '' : localStorage.getItem('mm-uid'),
                 docId: '',
-                email: '',
-                displayName: '',
+                email: localStorage.getItem('mm-email') === null ? '' : localStorage.getItem('mm-email'),
+                displayName: localStorage.getItem('mm-displayName') === null ? '' : localStorage.getItem('mm-displayName'),
                 aboutMe: '',
                 fullName: '',
                 address: '',
@@ -24,8 +24,8 @@ export default createStore({
                 hasWeb3InjectedBrowser: false,
                 accounts: [],
                 walletProvider: localStorage.getItem('provider') === null ? '' : localStorage.getItem('provider'),
-                mmConnected: false,
-                isEmailConnected: false,
+                mmConnected: localStorage.getItem('mm-mmConnected') === null ? false : localStorage.getItem('mm-mmConnected'),
+                isEmailConnected: localStorage.getItem('mm-isEmailConnected') === null ? false : localStorage.getItem('mm-isEmailConnected'),
                 mmInstalled: false,
                 mmCount: 0,
                 newCount: 10,
@@ -44,7 +44,7 @@ export default createStore({
                 accLevel: 0,
                 accType: 0,
                 accStatus: 0,
-                memberSince: 0,
+                memberSince: 1,
                 language: 'en', // localStorage.getItem('language') === null ? 'en' : localStorage.getItem('language'),
                 favorites: [],
                 likes: localStorage.getItem('likes') === null ? [] : JSON.parse(localStorage.getItem('likes')),
@@ -68,6 +68,7 @@ export default createStore({
         SetEmailConnected(state, payload) { 
             state.user.isEmailConnected = payload.isEmailConnected;
             state.user.isLoggedIn = payload.isLoggedIn;
+            localStorage.setItem('mm-isEmailConnected', payload.isEmailConnected);
         },
         SetMetaMaskInstalled (state, payload) {
             state.user.mmInstalled = payload.mmInstalled
@@ -95,6 +96,7 @@ export default createStore({
             state.user.isDAppReady = payload.isDAppReady
             state.user.networkChainID = payload.networkChainID
             state.user.mmCount = payload.mmCount
+            localStorage.setItem('mm-mmConnected', payload.mmConnected)
         },
         SetConnectedUserDetails (state, payload) {
             console.log(payload);
@@ -122,6 +124,10 @@ export default createStore({
             state.user.memberSince = payload.memberSince
             state.user.favorites = payload.favorites
             state.user.welcome = payload.welcome
+            localStorage.setItem('mm-displayName', payload.displayName)
+            localStorage.setItem('mm-email', payload.email)
+            localStorage.setItem('mm-uid', payload.uid)
+            localStorage.setItem('mm-memberSince', payload.memberSince)
         },
         SetMetaMaskChanges (state, payload) {
             console.log(payload)
@@ -129,16 +135,73 @@ export default createStore({
             state.user.mmConnected = payload.mmConnected
             state.user.walletProvider = payload.walletProvider
             localStorage.setItem('provider', payload.walletProvider)
+            localStorage.setItem('mm-mmConnected', payload.mmConnected)
             state.user.isLoggedIn = payload.isLoggedIn
+        },
+        SetDisplayName(state, payload){
+            state.user.displayName = payload.newName;
+            localStorage.setItem('mm-displayName', payload.newName)
         },
         SetWalletConnectChanges (state, payload) {
             state.user.accounts = payload.accounts
             state.user.walletConnected = payload.mmConnected
             state.user.walletProvider = payload.walletProvider
             localStorage.setItem('provider', payload.walletProvider)
+            localStorage.setItem('mm-mmConnected', payload.mmConnected)
             state.user.isLoggedIn = payload.isLoggedIn
         },
-        
+        SetEmpty(state){
+            state.dark = true
+            state.uid = ''
+            state.docId = ''
+            state.email = ''
+            state.displayName = ''
+            state.aboutMe = ''
+            state.fullName = ''
+            state.address = ''
+            state.dob = ''
+            state.gender = 0
+            state.gravatar = false
+            state.avatar = ''
+            state.hasCoinbase = false
+            state.hasWeb3InjectedBrowser = false
+            state.accounts = []
+            state.walletProvider = ''
+            state.mmConnected = false
+            state.isEmailConnected = false
+            state.mmInstalled = false
+            state.mmCount = 0
+            state.newCount = 10
+            state.networkChainID = '0x1'
+            state.binanceConnected = false
+            state.binanceInstalled = false
+            state.binanceCount = 0
+            state.walletConnected = false
+            state.isDAppReady = false
+            state.isLoggedIn = false
+            state.isVerified = false
+            state.idVerified = false
+            state.phoneVerified = false
+            state.ownsNFTs = false
+            state.nftName = ''
+            state.accLevel = 0
+            state.accType = 0
+            state.accStatus = 0
+            state.memberSince = 1
+            state.language = 'en'
+            state.favorites = []
+            state.likes = []
+            state.welcome = null
+            state.showWelcomeSession = false
+            state.showWelcome = null
+            localStorage.removeItem('provider')
+            localStorage.removeItem('mm-mmConnected')
+            localStorage.removeItem('mm-uid')
+            localStorage.removeItem('mm-displayName')
+            localStorage.removeItem('mm-email')
+            localStorage.removeItem('mm-displayName')
+            localStorage.removeItem('mm-memberSince')
+        }
     },
     modules: {
         // More Modules Go Here

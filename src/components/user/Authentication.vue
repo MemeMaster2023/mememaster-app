@@ -199,6 +199,11 @@ export default {
         }
         this.uid = uid;
         this.isLoading = false;
+        if(this.isExistingUser){
+          setTimeout(() => {
+            this.backToHome();
+          }, 1000);
+        }
       }
     },
     async onSignInWithLink(email, link) {
@@ -236,6 +241,7 @@ export default {
           docId = querySnapshot.docs[0].id;
         }
         await db.collection('users').doc(docId).update(payload)
+        this.$store.commit('changeDisplayName', this.displayName);
         this.isExistingUser = true;
     },
     backToHome(){
