@@ -152,7 +152,7 @@ export default {
       if(v){
         this.snackbar = true;
         this.snackbarColor = "green";
-        this.snackbarText = "You are online!"
+        this.snackbarText = "You are back online!"
       }else{
         this.snackbar = true;
         this.snackbarColor = "red";
