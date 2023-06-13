@@ -9,6 +9,9 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@cloudgeek/playcore-hls": "^0.1.7",
+    "@cloudgeek/vitar": "^0.1.11",
+    "@cloudgeek/vue3-video-player": "^0.3.10",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@mdi/font": "7.0.96",
     "@metamask/onboarding": "^1.0.1",

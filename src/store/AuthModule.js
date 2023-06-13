@@ -86,6 +86,7 @@ const AuthModule = {
             accStatus: payload.status,
             memberSince: payload.created,
             favorites: [],
+            credits: 500,
           });
         })
         .catch((error) => {

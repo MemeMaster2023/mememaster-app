@@ -36,51 +36,6 @@
 
     </v-row>
 
-    <v-dialog
-      v-model="setDisplayNameDialog"
-      persistent
-      max-width="400"
-    >
-      <v-card pa-4 theme="dark">
-        <v-card-title class="wrap-text text-h5">
-          Please enter your Display Name
-        </v-card-title>
-        <v-card-text>This can be your real name or not, we leave that up to you.</v-card-text>
-
-        <v-layout class="pa-4" >
-          <v-text-field
-            v-model="getUser.displayName"
-            label="Display Name"
-            placeholder="Please, enter your display name..."
-            maxlength="50"
-            variant="outlined"
-            v-on:keyup="submitDisplayNameClicked"
-            @click:append="submitDisplayNameClicked('click')"
-            :rules="[v => !!v]"
-          ></v-text-field>
-        </v-layout>
-        <v-layout class="pl-4 pr-4" style="margin-top:-30px" >
-          <v-checkbox 
-              v-model="ageConfirm" 
-              label="I confirm that I am at least 13 years old.">
-          </v-checkbox>
-        </v-layout>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn 
-            variant="outlined"
-            :disabled="(getUser.displayName.length < 2 || getUser.displayName === ' ' || getUser.displayName === '  ') || !ageConfirm"
-            :color="dark ? '#388E3C' : 'green lighten-4'"
-            @click="submitDisplayName"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
   </div>
 </template>
 
@@ -105,7 +60,6 @@
     data(){
       return {
         userExists: false,
-        setDisplayNameDialog: false,
         ageConfirm: false
       }
     },
@@ -232,7 +186,7 @@
           .then(() => {
               // console.log('User Account in bucket updated')
               // Snackbar That confirms
-              this.setDisplayNameDialog = false
+              // this.setDisplayNameDialog = false
             })
           .catch(error => {
               console.log(error)
@@ -252,6 +206,8 @@
           mmConnected: false,
           walletProvider: '',
           isLoggedIn: false,
+          isEmailConnected: false,
+          uid: ''
         })
         console.log('disconnectMetamask SetMetaMaskChanges ')
         firebase.auth().signOut()
@@ -346,7 +302,7 @@
                           this.$store.dispatch('insertUserForSignUp', dispatchObj)
                             .then(() => {
                               console.log('User Created in db - Set Display name')
-                              this.setDisplayNameDialog = true
+                              // this.setDisplayNameDialog = true
                             }).catch(error => {
                               console.log(error)
                             })
@@ -419,7 +375,7 @@
                           })
                           // console.log('Set User Details in Store success!')
                           if (this.getUser.displayName === '') {
-                            this.setDisplayNameDialog = true
+                            // this.setDisplayNameDialog = true
                           }
 
                           /* this.$store.dispatch('setUserTier', { address: userAddress[0] })
@@ -474,7 +430,7 @@
                       })
                       // console.log('Set User Details in Store success!')
                       if (this.getUser.displayName === '') {
-                        this.setDisplayNameDialog = true
+                        // this.setDisplayNameDialog = true
                       }
 
                       /* this.$store.dispatch('setUserTier', { address: userAddress[0] })
@@ -510,6 +466,8 @@
                 mmConnected: false,
                 walletProvider: '',
                 isLoggedIn: false,
+                isEmailConnected: this.getUser.isEmailConnected,
+                uid: this.getUser.uid
               })
               firebase.auth().signOut()
             }

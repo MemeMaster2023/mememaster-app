@@ -34,6 +34,52 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
+
+    <v-dialog
+      v-model="setDisplayNameDialog"
+      persistent
+      max-width="400"
+    >
+      <v-card pa-4 theme="dark">
+        <v-card-title class="wrap-text text-h5">
+          Please enter your Display Name or Nickname
+        </v-card-title>
+        <v-card-text>This can be your real name or not, we leave that up to you.</v-card-text>
+
+        <v-layout class="pa-4" >
+          <v-text-field
+            v-model="getUser.displayName"
+            label="Display Name"
+            placeholder="Please, enter your display name..."
+            maxlength="50"
+            variant="outlined"
+            v-on:keyup="submitDisplayNameClicked"
+            @click:append="submitDisplayNameClicked('click')"
+            :rules="[v => !!v]"
+          ></v-text-field>
+        </v-layout>
+        <v-layout class="pl-4 pr-4" style="margin-top:-30px" >
+          <v-checkbox 
+              v-model="ageConfirm" 
+              label="I confirm that I am at least 13 years old.">
+          </v-checkbox>
+        </v-layout>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn 
+            variant="outlined"
+            :disabled="(getUser.displayName.length < 2 || getUser.displayName === ' ' || getUser.displayName === '  ') || !ageConfirm"
+            :color="dark ? '#388E3C' : 'green lighten-4'"
+            @click="submitDisplayName"
+          >
+            Continue
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-snackbar
       :color="snackbarColor"
       :timeout="isOnline ? 3000 : -1"
@@ -58,6 +104,7 @@
 
 <script>
 import firebase from 'firebase/app'
+import { db } from '@/main'
 // import { scroller } from 'vue-scrollto/src/scrollTo';
 import WalletConnect from '@walletconnect/client';
 import { isMobile } from 'mobile-device-detect';
@@ -68,6 +115,8 @@ export default {
     dark: true,
     isMobileDevice: false,
     switchNWDialog: false,
+    setDisplayNameDialog: false,
+    ageConfirm: false,
     window: {
       width: 0,
       height: 0,
@@ -134,6 +183,12 @@ export default {
     getDrawer () {
       return this.$store.state.drawer
     },
+    getUser () {
+      return this.$store.state.user
+    },
+    displayName () {
+      return this.$store.state.user.displayName
+    },
     getChain () {
       return this.$store.state.user.networkChainID
     },
@@ -161,6 +216,13 @@ export default {
         this.snackbar = true;
         this.snackbarColor = "red";
         this.snackbarText = "You are offline!"
+      }
+    },
+    displayName () {
+      if (this.displayName === '' && (this.mmConnected || this.walletConnected)) {
+        setTimeout(() => {
+          this.setDisplayNameDialog = true
+        }, 1000);
       }
     },
     getChain () {
@@ -221,6 +283,50 @@ export default {
       console.log(e);
       const { type } = e
       this.online = type === 'online'
+    },
+    submitDisplayName () {
+      this.currentUser = firebase.auth().currentUser
+      let obj = {
+        name: this.getUser.displayName,
+        consent_13_years: true
+      }
+      this.saveSettingsData(obj)
+      // Update Display Name
+      this.currentUser.updateProfile({
+        displayName: this.getUser.displayName
+      }).then(() => {
+        // Update successful.
+        console.log('Display Name Updated - Firebase')
+        this.setDisplayNameDialog = false
+      }, (error) => {
+        // An error happened.
+        console.log(error)
+      })
+    },
+    submitDisplayNameClicked (e) {
+      // console.log(e)
+      // console.log(this.getUser.displayName)
+      // console.log(this.getUser.displayName.length)
+      if (e === 'click' && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
+        this.submitDisplayName()
+        return
+      }
+      if (e.keyCode === 13 && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
+        // alert('Enter was pressed')
+        this.submitDisplayName()
+        return
+      }
+    },
+    saveSettingsData (obj) {
+      db.collection('users').doc(this.getUser.docId).update(obj)
+        .then(() => {
+            // console.log('User Account in bucket updated')
+            // Snackbar That confirms
+            // this.setDisplayNameDialog = false
+          })
+        .catch(error => {
+            console.log(error)
+          })
     },
     getNetworkName () {
       let nwId = parseInt(this.getChain, 16)

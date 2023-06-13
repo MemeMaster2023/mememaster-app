@@ -76,7 +76,7 @@
                 <v-img 
                   src="/img/icons/discord.png" 
                   style="width:24px;height:24px;padding-top:4px"
-                  @click="gotoLink('https://discord.gg/KCvYMQSW')"
+                  @click="gotoLink('https://discord.gg/4WbkJEfBzG')"
                   v-bind="props"
                 />
               </v-btn>

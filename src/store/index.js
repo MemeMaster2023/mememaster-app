@@ -12,7 +12,7 @@ export default createStore({
                 uid: localStorage.getItem('mm-uid') === null ? '' : localStorage.getItem('mm-uid'),
                 docId: '',
                 email: localStorage.getItem('mm-email') === null ? '' : localStorage.getItem('mm-email'),
-                displayName: localStorage.getItem('mm-displayName') === null ? '' : localStorage.getItem('mm-displayName'),
+                displayName: localStorage.getItem('mm-displayName') === null || localStorage.getItem('mm-displayName') === '' ? null : localStorage.getItem('mm-displayName'),
                 aboutMe: '',
                 fullName: '',
                 address: '',
@@ -23,9 +23,10 @@ export default createStore({
                 hasCoinbase: false,
                 hasWeb3InjectedBrowser: false,
                 accounts: [],
+                walletconnect: localStorage.getItem('walletconnect') === null ? '' : localStorage.getItem('walletconnect'),
                 walletProvider: localStorage.getItem('provider') === null ? '' : localStorage.getItem('provider'),
-                mmConnected: localStorage.getItem('mm-mmConnected') === null ? false : localStorage.getItem('mm-mmConnected'),
-                isEmailConnected: localStorage.getItem('mm-isEmailConnected') === null ? false : localStorage.getItem('mm-isEmailConnected'),
+                mmConnected: false,
+                isEmailConnected: localStorage.getItem('mm-isEmailConnected') === null ? false : localStorage.getItem('mm-isEmailConnected') === 'false' ? false : true,
                 mmInstalled: false,
                 mmCount: 0,
                 newCount: 10,
@@ -132,6 +133,7 @@ export default createStore({
             localStorage.setItem('mm-memberSince', payload.memberSince)
         },
         SetMetaMaskChanges (state, payload) {
+            console.log('SetMetaMaskChanges')
             console.log(payload)
             state.user.accounts = payload.accounts
             state.user.mmConnected = payload.mmConnected
@@ -139,18 +141,25 @@ export default createStore({
             localStorage.setItem('provider', payload.walletProvider)
             localStorage.setItem('mm-mmConnected', payload.mmConnected)
             state.user.isLoggedIn = payload.isLoggedIn
+            localStorage.setItem('mm-isEmailConnected', payload.isEmailConnected);
+            localStorage.setItem('mm-uid', payload.uid)
         },
         SetDisplayName(state, payload){
             state.user.displayName = payload.newName;
             localStorage.setItem('mm-displayName', payload.newName)
         },
         SetWalletConnectChanges (state, payload) {
+            console.log('SetWalletConnectChanges')
+            console.log(payload)
             state.user.accounts = payload.accounts
-            state.user.walletConnected = payload.mmConnected
+            state.user.walletConnected = payload.walletConnected
             state.user.walletProvider = payload.walletProvider
             localStorage.setItem('provider', payload.walletProvider)
             localStorage.setItem('mm-mmConnected', payload.mmConnected)
             state.user.isLoggedIn = payload.isLoggedIn
+            localStorage.setItem('mm-isEmailConnected', payload.isEmailConnected);
+            state.user.isEmailConnected = payload.isEmailConnected
+            localStorage.setItem('mm-uid', payload.uid)
         },
         SetEmpty(state){
             state.dark = true

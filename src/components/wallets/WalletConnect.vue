@@ -33,52 +33,6 @@
 
     </v-layout>
 
-    <v-dialog
-      v-model="setDisplayNameDialog"
-      persistent
-      max-width="400"
-    >
-      <v-card pa-4 :dark="dark">
-        <v-card-title class="wrap-text text-h5">
-          Please enter your Display Name or Nickname
-        </v-card-title>
-        <v-card-text>This can be your real name or not, we leave that up to you.</v-card-text>
-
-        <v-layout class="pa-4" >
-          <v-text-field
-            v-model="getUser.displayName"
-            label="Display Name"
-            placeholder="Please, enter your display name..."
-            maxlength="50"
-            variant="outlined"
-            v-on:keyup="submitDisplayNameClicked"
-            @click:append="submitDisplayNameClicked('click')"
-            :rules="[v => !!v]"
-          ></v-text-field>
-        </v-layout>
-        <v-layout class="pl-4 pr-4" style="margin-top:-30px" >
-          <v-checkbox 
-              v-model="ageConfirm" 
-              label="I confirm that I am at least 13 years old.">
-          </v-checkbox>
-        </v-layout>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn 
-            variant="outlined"
-            :disabled="(getUser.displayName.length < 2 || getUser.displayName === ' ' || getUser.displayName === '  ') || !ageConfirm"
-            :color="dark ? '#388E3C' : 'green lighten-4'"
-            @click="submitDisplayName"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-
   </div>
 </template>
 
@@ -104,9 +58,8 @@
     data(){
       return {
         connector: null,
-        userExists: false,
-        setDisplayNameDialog: false,
         displayName: '',
+        userExists: false,
         accounts: [],
         chainId: 0,
         ageConfirm: false
@@ -129,8 +82,33 @@
         return this.$store.state.user
       }
     },
+    watch: {
+      walletConnected () {
+      if (!this.walletConnected) {
+          this.disconnectWallet ()
+        }
+      }
+      /* binanceConnected () {
+        if (this.binanceConnected) {
+          setTimeout(() => {
+            this.connectWalletDialog = false
+          }, 2000)
+        }
+      },
+      walletConnected () {
+        if (this.walletConnected) {
+          setTimeout(() => {
+            this.connectWalletDialog = false
+          }, 2000)
+        }
+      } */
+    },
     created() {
       if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
+        console.log(this.getUser.walletconnect)
+        let walletconnect = JSON.parse(this.getUser.walletconnect)
+        this.accounts = walletconnect.accounts
+        this.chainId = walletconnect.chainId
         this.walletConnectInit('init')
       } else {
         store.commit('SetConnectedUserFalse', {
@@ -139,17 +117,25 @@
       }
     },
     methods:{
-      walletConnectInit (type) {
+      async walletConnectInit (type) {
         console.log(type)
-        this.connector = new WalletConnect({
-          bridge: "https://bridge.walletconnect.org", // Required
-          qrcodeModal: QRCodeModal,
-        })
+        if (type === 'button') {
+          this.connector = new WalletConnect({
+            bridge: "https://bridge.walletconnect.org", // Required
+            qrcodeModal: QRCodeModal,
+          })
+        } else {
+          // TODO
+          let walletconnect = JSON.parse(this.getUser.walletconnect)
+          this.connector = new WalletConnect(walletconnect)
+          this.enableWalletConnect()
+        }
 
         // Check if connection is already established
         if (!this.connector.connected) {
           // create new session
           this.connector.createSession()
+          // this.enableWalletConnect()
         }
 
         // Subscribe to connection events
@@ -193,12 +179,22 @@
             walletConnected: false,
             walletProvider: '',
             isLoggedIn: false,
+            isEmailConnected: false,
+            uid: '',
           })
           firebase.auth().signOut()
         })
       },
-      disconnecWallet () {
-
+      disconnectWallet () {
+        store.commit('SetWalletConnectChanges', {
+          accounts: [],
+          walletConnected: false,
+          walletProvider: '',
+          isLoggedIn: false,
+          isEmailConnected: false,
+          uid: ''
+        })
+        firebase.auth().signOut()
       },
       submitDisplayName () {
         let obj = {
@@ -211,7 +207,7 @@
           displayName: this.getUser.displayName
         }).then(function () {
           // Update successful.
-          // console.log('Display Name Updated - Firebase')
+          console.log('Display Name Updated - Firebase')
         }, (error) => {
           // An error happened.
           console.log(error)
@@ -219,11 +215,12 @@
       },
       submitDisplayNameClicked (e) {
         if (e === 'click' && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
+          alert('Click was pressed')
           this.submitDisplayName()
           return
         }
         if (e.keyCode === 13 && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
-          // alert('Enter was pressed')
+          alert('Enter was pressed')
           this.submitDisplayName()
           return
         }
@@ -233,13 +230,15 @@
           .then(() => {
               // console.log('User Account in bucket updated')
               // Snackbar That confirms
-              this.setDisplayNameDialog = false
+              // this.setDisplayNameDialog = false
             })
           .catch(error => {
               console.log(error)
             })
       },
       enableWalletConnect () {
+        console.log('########### is this code happening ###########')
+        console.log(this.accounts)
         var nw = parseInt(this.chainId).toString(16)
         store.commit('SetUserDetails', {
           accounts: this.accounts,
@@ -267,7 +266,7 @@
               // Create user record in 'users' bucket
               let funkyName = generate().dashed
               this.emailAddress = funkyName + '@nft.app'
-              firebase.auth().createUserWithEmailAndPassword(this.emailAddress, userAddress[0]).then(
+              firebase.auth().createUserWithEmailAndPassword(this.emailAddress, userAddress).then(
                 () => {
                   this.currentUser = firebase.auth().currentUser
                   // Create user in fb if not exists yet
@@ -290,7 +289,7 @@
                     this.$store.dispatch(action, dispatchObj)
                       .then(() => {
                         // console.log('User Created in db')
-                        this.setDisplayNameDialog = true
+                        // this.setDisplayNameDialog = true
                       }).catch(error => {
                         console.log(error)
                       })
@@ -363,7 +362,7 @@
                     })
                     // console.log('Set User Details in Store success!')
                     if (this.getUser.displayName === '') {
-                      this.setDisplayNameDialog = true
+                      // this.setDisplayNameDialog = true
                     }
 
                     /* this.$store.dispatch('setUserTier', { address: userAddress[0] })
@@ -418,7 +417,7 @@
                 })
                 // console.log('Set User Details in Store success!')
                 if (this.getUser.displayName === '') {
-                  this.setDisplayNameDialog = true
+                  // this.setDisplayNameDialog = true
                 }
 
                 /* this.$store.dispatch('setUserTier', { address: userAddress[0] })

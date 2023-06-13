@@ -105,7 +105,22 @@
                     </v-row>
                     </v-img>
 
-                    <v-img
+                    <vue3-video-player
+                      v-if="generatedArr.length > 0"
+                      autoplay
+                      :src="source"
+                      :title="videoName"
+                      @ended="playEnded"
+                      :cover="cover"
+                      :view-core="viewCore.bind(null, 'video1')"
+                    >
+                      <template #cusControls>
+                        <picture-in-picture :player="players['video1']" />
+                        <span class="btn-play" @click="play('video1')">play</span>
+                      </template>
+                    </vue3-video-player>
+
+                    <!-- <v-img
                       v-if="generatedArr.length > 0"
                       :style="generatedArr[index - 1].selected ? 'border: 4px solid green;border-radius: 5px;' : 'border-radius: 5px;'"
                       :src="'data:image/png;base64,' + generatedArr[index -1].base64"
@@ -153,7 +168,7 @@
                         icon="mdi-check-circle-outline"
                       >
                       </v-btn>
-                    </v-img>
+                    </v-img> -->
                 </v-col>
               </template>
             </v-row>
@@ -658,6 +673,11 @@ import CreateMemeText from './CreateMemeText'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import imageCompression from 'browser-image-compression'
 // import { readAndCompressImage } from 'browser-image-resizer'
+
+import HLSCore from '@cloudgeek/playcore-hls';
+import PictureInPicture from './PictureInPicture.vue';
+import { Vitar } from '@cloudgeek/vitar';
+
 export default {
   props: {
     isMobileDevice: Boolean,
@@ -720,6 +740,7 @@ export default {
     },
     draftPrompt: '',
     promptUsed: '',
+    taskPending: false,
     generatedArr: [],
     enableStopGenerating: false,
     generationStopped: false,
@@ -737,9 +758,17 @@ export default {
     imageStrength: 0.35,
     showRowAlert: false,
     showRowAlertText: '',
+    players: {},
+    HLSCore,
+    volume: 80,
+    source: '',
+    cover: '',
+    videoName: ''
   }),
   components: {
-    CreateMemeText
+    CreateMemeText,
+    PictureInPicture,
+    Vitar,
   },
   watch: {
     toDrafts () {
@@ -1000,11 +1029,8 @@ export default {
       this.promptGuideDialog = true
     },
     async startMemeGeneration () {
-      console.log(this.toUpload)
-      if (this.toUpload && this.uploadImageUrl !== '') {
-        this.startImagetoImageGeneration()
-        return
-      }
+      this.pollTask()
+      return
       this.generationStopped = false
       setTimeout(() => {
         this.enableStopGenerating = true
@@ -1012,30 +1038,31 @@ export default {
       this.generateLoading = true
       this.generatedArr = []
       this.selectedImage = null
+      let seed = Math.random().toString().slice(2,11)
       let genObject = {
-        text_prompts: [
-          {
-            text: this.prompt,
-            weight: parseFloat(this.promptStrength)
+          taskType: "gen2",
+          internal: false,
+          options: {
+              seconds: 4,
+              gen2Options: {
+                  interpolate: false,
+                  seed: seed, // 
+                  upscale: false,
+                  text_prompt: this.prompt,
+                  watermark: false,
+                  mode: "gen2"
+              },
+              name: "Gen-2 " +  seed,
+              assetGroupName: "Gen-2"
           },
-        ],
-        cfg_scale: 7, // Default
-        clip_guidance_preset: 'NONE', // Default
-        style_preset: this.stylePreset.id,
-        height: parseInt(this.w_x_h.split('x')[1]),
-        width: parseInt(this.w_x_h.split('x')[0]),
-        samples: parseInt(this.imagesCount),
-        steps: parseInt(this.generationSteps),
-        seed: parseInt(this.seed),
+          asTeamId: 3842372
       }
       let configObj = {
-        engine_id: this.model.id,
         uid: this.getUser.uid,
         username: this.getUser.displayName
       }
       console.log(genObject)
-      console.log(configObj)
-      Promise.resolve(MemeMasterAPI.generateTextToImage(genObject, configObj))
+      Promise.resolve(MemeMasterAPI.generateTextToVideo(genObject, configObj))
         .then(result => {
           console.log(result)
           // Handle Result
@@ -1043,12 +1070,45 @@ export default {
             return;
           }
           this.generatedArr = []
-          this.generatedArr = result.data.message.artifacts
-          for (var i in this.generatedArr) {
-            this.generatedArr[i].selected = false
+          console.log(result)
+          this.pendingTaskId = result.data.message.task.id
+          // poll task 
+          this.pollTask()
+          this.taskPending = true
+        })
+        .catch(err => {
+          // this.loading = false
+          console.log('Error generating Meme.', err)
+          // show friendly error in user screen
+        })
+    },
+    pollTask () {
+      this.pendingTaskId = '40bf7902-90c9-47b2-9ed6-f1eb7ca612f0'
+      let configObj = {
+        uid: this.getUser.uid,
+        username: this.getUser.displayName
+      }
+      Promise.resolve(MemeMasterAPI.generateTextToVideoTask(this.pendingTaskId, configObj))
+        .then(result => {
+          console.log(result)
+          // Handle Result
+          let status = result.data.message.task.status
+          if (status === 'RUNNING') {
+            setTimeout(() => {
+              this.pollTask()
+              return
+            }, 5000);
           }
+          this.generatedArr = result.data.message.task.artifacts
+          this.source = this.generatedArr[0].url
+          this.cover = this.generatedArr[0].previewUrls[0]
+          this.videoName = result.data.message.task.name
+          this.taskPending = false
+
+          // this.generatedArr = result.data.message.artifacts
           this.generateLoading = false
           this.enableStopGenerating = false
+          console.log(this.generatedArr)
         })
         .catch(err => {
           // this.loading = false
@@ -1370,6 +1430,49 @@ export default {
         // Uh-oh, an error occurred!
       });
 
+    },
+    // Video methods
+    viewCore(id, player) {
+      console.log(id, player);
+      this.players[id] = player;
+    },
+    play(id) {
+      console.log('custom play: id =', id);
+      this.players && this.players[id] && this.players[id].play();
+    },
+    destroy(id) {
+      this.players && this.players[id] && this.players[id].destroy();
+    },
+    playEnded(e) {
+      console.log(e);
+      if (e.target === document.pictureInPictureElement) {
+        document.exitPictureInPicture();
+      }
+    },
+    volumeUp(id) {
+      this.volume += 5;
+      if (this.volume > 100) {
+        this.volume = 100;
+      }
+      this.players &&
+        this.players[id] &&
+        this.players[id].setVolume(this.volume / 100, true);
+    },
+    volumeDown(id) {
+      this.volume -= 5;
+      if (this.volume < 0) {
+        this.volume = 0;
+      }
+      this.players &&
+        this.players[id] &&
+        this.players[id].setVolume(this.volume / 100, true);
+    },
+    pip(id) {
+      // you can also use this.players[id].$video to do what u want just like playEnded
+      console.log(this.players[id].$video);
+      this.players &&
+        this.players[id] &&
+        this.players[id].requestPictureInPicture();
     }
   }
 }
@@ -1381,5 +1484,19 @@ export default {
   } 
   .image-upload>input {
     display: none;
+  }
+  .test-player-wrap {
+    width: 720px;
+    height: 405px;
+    position: relative;
+    margin: 20px auto;
+  }
+  .btn-play {
+    color: white;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  .btn-play svg {
+    width: 16px;
   }
 </style>

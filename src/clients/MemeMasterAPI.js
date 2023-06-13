@@ -122,6 +122,51 @@ class MemeMasterAPI {
   }
 
   // ###################################################################################
+  // ############################# TEXT TO VIDEO ##########################
+  // ###################################################################################
+  async generateTextToVideo(genObj, configObj) {
+    var payload = {
+      generate: genObj,
+      config: configObj
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    console.log(MEME_MASTER_API)
+    return await axios.post(MEME_MASTER_API + 'generate-text-to-video', payload, config)
+      .then(response => {
+        // console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  async generateTextToVideoTask (taskId, configObj) {
+    var payload = {
+      taskId: taskId,
+      config: configObj
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    console.log(MEME_MASTER_API)
+    return await axios.post(MEME_MASTER_API + 'generate-text-to-video-task', payload, config)
+      .then(response => {
+        // console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  // ###################################################################################
   // ############################# GET ENGINES/MODELS FROM API  ########################
   // ###################################################################################
 

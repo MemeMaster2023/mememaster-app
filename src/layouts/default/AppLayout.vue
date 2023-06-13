@@ -41,13 +41,15 @@
       >
         Connect
       </v-btn>
+
       <v-btn v-if="mmConnected"
         variant="outlined"
         color="white"
         theme="dark"
         style="width:100%"
       >
-      <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>Connected
+      <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>
+        Connected
       </v-btn>
 
       <v-btn v-if="emailConnected"
@@ -57,7 +59,7 @@
         style="width:100%"
       >
        <v-icon class="mr-2">mdi-email</v-icon> 
-      Connected
+        Connected
       </v-btn>
 
     </v-layout>
@@ -187,9 +189,9 @@
         Connect 
       </v-btn>
 
-      <v-menu v-if="!drawer && env && (mmConnected || emailConnected)" >
+      <v-menu v-if="!drawer && env && (mmConnected || emailConnected || walletConnected)" >
         <template v-slot:activator="{ props }">
-          <v-btn v-if="!drawer && env && (mmConnected || emailConnected)"
+          <v-btn v-if="!drawer && env && (mmConnected || emailConnected || walletConnected)"
             style="margin-right:10px;margin-top:-7px"
             variant="outlined"
             color="white"
@@ -197,8 +199,10 @@
             v-bind="props"
             offset="-20"
           >
-          <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/> 
-          <v-icon v-if="emailConnected" class="mr-2">mdi-email</v-icon>Connected
+            <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/> 
+            <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px" v-else-if="walletConnected  && !mmConnected"/> 
+            <v-icon v-else-if="emailConnected && !mmConnected && !walletConnected" class="mr-2">mdi-email</v-icon>
+              Connected
           </v-btn>
         </template>
         <v-card 
@@ -233,7 +237,7 @@
           <v-row class="pt-2" style="width:280px">
             <v-col :align="'center'" class="mt-2" style="width:280px">
               <div class="row" style="width:280px" v-if="mmConnected || walletConnected">
-                <span class="font-weight-bold">{{ (this.getUser.accounts[0]).substring(0, 8) + '...' + (this.getUser.accounts[0]).substring(34, 42) }}</span>
+                <span class="font-weight-bold">{{ mmConnected || walletConnected ? (this.getUser.accounts[0]).substring(0, 8) + '...' + (this.getUser.accounts[0]).substring(34, 42) : '' }}</span>
                 <v-icon 
                   size="x-small" 
                   class="ml-2"
@@ -285,17 +289,7 @@
         Disconnect
       </v-btn>
 
-      <v-btn v-else-if="!drawer && env && (walletConnected || emailConnected)"
-        style="margin-right:10px;margin-top:-7px"
-        variant="outlined"
-        color="white"
-        theme="dark"
-      >
-      <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px" v-if="walletConnected"/> 
-      <v-icon v-if="emailConnected" class="mr-2">mdi-email</v-icon>Connected
-      </v-btn>
-
-      <v-btn v-if="!drawer && !isMobileDevice && env && (isLoggedIn || mmConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
+      <v-btn v-if="!drawer && !isMobileDevice && env && (emailConnected || mmConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
         style="margin-right:30px;margin-top:-7px"
         variant="outlined"
         color="white"
@@ -306,8 +300,11 @@
         Generate
       </v-btn>
 
-      <MetaMaskConnect v-show="false" style="width:190px" ref="mmConnect" >
+      <MetaMaskConnect v-show="false" ref="mmConnect" >
       </MetaMaskConnect>
+
+      <WalletConnect v-show="false" ref="walletConnectref" >
+      </WalletConnect>
 
       <v-img v-if="!drawer"
         @click.stop="drawer = !drawer"
@@ -368,7 +365,7 @@
                   :isMobileDevice="isMobileDevice" 
                   class="pt-6"
                   style="width:100%;" 
-                  ref="walletConnect" 
+                  ref="walletConnectref" 
                   buttonType="large" 
                   :windowWidth="windowWidth" 
                   :windowHeight="windowHeight" 
@@ -446,7 +443,7 @@
                   :isMobileDevice="isMobileDevice" 
                   class="pt-6"
                   style="width:100%;" 
-                  ref="walletConnect" 
+                  ref="walletConnectref" 
                   buttonType="large" 
                   :windowWidth="windowWidth" 
                   :windowHeight="windowHeight" 
@@ -651,7 +648,7 @@ export default {
         // if(this.persistentUser !== null){
         //   return store.state.auth.persistentUser.isEmailConnected;
         // }
-        return store.state.user.isEmailConnected;
+        return this.$store.state.user.isEmailConnected
       },
       isLoggedIn () {
         return this.$store.state.user.isLoggedIn || this.getUser.uid !== '';
@@ -821,7 +818,7 @@ export default {
         if (this.mmConnected) {
           this.$refs.mmConnect.disconnectMetamask()
         } else if (this.walletConnected) {
-          this.$refs.walletConnect.disconnecWallet()
+          this.$refs.walletConnectref.disconnectWallet()
         }
         /* else if (this.binanceConnected) {
           this.$refs.mmConnect.disconnectBinance()
@@ -847,7 +844,7 @@ export default {
       // ############################## Web 3 ##################################
       waitGetUserBalance () {
         setTimeout(() => {
-          if (this.getUser.uid === '') {
+          if (this.getUser.uid === '' || typeof this.getUser.accounts[0] === 'undefined' || this.getUser.accounts[0] === '0') {
             this.waitGetUserBalance()
           } else {
             this.getWalletBalance()
@@ -857,7 +854,7 @@ export default {
       },
       getWalletBalance () {
 
-        console.log('this.getUser.accounts[0]')
+        console.log('############## this.getUser.accounts[0] #################')
         console.log(this.getUser.accounts[0])
 
         if (this.getUser.networkChainID === '0x38') {
