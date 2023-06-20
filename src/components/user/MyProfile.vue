@@ -1,37 +1,54 @@
 <template>
-  <v-container id="collections" class="mt-12 pt-12">
+  <v-container class="mt-12 pt-12" v-if="isLoading">
+    <v-row class="my-16 py-16">
+              <v-col cols="12" class="d-flex justify-center align-center">
+                <v-progress-circular
+                  indeterminate
+                  :size="70"
+                  :width="7"
+                  color="purple"
+                ></v-progress-circular>
+              </v-col>
+            </v-row>
+  </v-container>
+  <v-container class="mt-12 pt-12" v-else>
     <v-row class="mx-md-12 mb-md-6 px-md-12 mx-auto px-auto mt-12">
         <v-col cols="12" class="d-flex justify-center" >
             <div>
             <v-avatar color="blue-lighten-1" size="120" style="border-radius: 10px;">
-                <v-icon v-if="'default' === 'default'" size="80" color="white">mdi-image-multiple-outline
+                <v-icon v-if="getUser.photo === ''" size="80" color="white">mdi-image-multiple-outline
                 </v-icon>
-            <!-- <v-img v-else :src="selectedCollection.icon" style="width: 120px; height:120px;border-radius: 10px;">
-            </v-img> -->
+            <v-img v-else :src="getUser.photo" style="width: 120px; height:120px;border-radius: 10px;">
+            </v-img>
             </v-avatar>
             <v-btn size="small" 
                 icon="mdi-camera-outline" 
                 color="grey" 
                 style="position: absolute;margin-top: 90px;margin-left: -30px;"
-                @click=""
+                @click="imageDialog = true"
             >
             </v-btn>
             </div>
             <div class="ml-6 text-left d-flex flex-column">
-                <span class="text-md-h3 text-h4 text-left">{{ displayName }}</span>
-                <span class="text-p font-weight-medium pl-1 mt-2">Member Since: 22 May 2023</span>
+                <span class="text-md-h3 text-h4 text-left">{{ getUser.displayName }}</span>
+                <span class="text-p font-weight-medium pl-1 mt-2">Member Since: {{ makeDate(getUser.memberSince) }}</span>
             </div>
         </v-col>
     </v-row>
     <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto">
-        <v-col cols="12" class="text-h6">Account Information</v-col>
+        <v-col cols="12" class="d-flex">
+            <span class="text-h6">Account Information</span>
+            <v-spacer></v-spacer>
+            <v-btn size="small" variant="outlined" rounded color="green" @click="isEdit = true" v-if="!isEdit"><v-icon>mdi-pencil-outline</v-icon>Edit Profile</v-btn>
+            <v-btn size="small" variant="outlined" rounded color="red" @click="isEdit = false" v-else><v-icon>mdi-close-outline</v-icon>Cancel Edit</v-btn>
+        </v-col>
         <v-col cols="12" md="6">
             <v-text-field
             label="Display Name"
             placeholder="Enter your display name..."
             type="text"
             density="comfortable"
-            v-model="displayName"
+            v-model="getUser.displayName"
             variant="outlined"
           ></v-text-field>
         </v-col>
@@ -41,17 +58,17 @@
             placeholder="Enter your display name..."
             type="text"
             density="comfortable"
-            v-model="email"
+            v-model="getUser.email"
             variant="outlined"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="12">
             <v-text-field
-            label="Metamask Address"
+            label="Wallet Address"
             placeholder="Enter your display name..."
             type="text"
             density="comfortable"
-            v-model="address"
+            v-model="getUser.accounts[0]"
             variant="outlined"
           ></v-text-field>
         </v-col>
@@ -64,7 +81,7 @@
             placeholder="Enter your display name..."
             type="text"
             density="comfortable"
-            v-model="fullName"
+            v-model="getUser.fullName"
             variant="outlined"
           ></v-text-field>
         </v-col>
@@ -72,21 +89,25 @@
             <v-text-field
             label="Date of Birth"
             placeholder="Enter your display name..."
-            type="text"
+            type="date"
             density="comfortable"
-            v-model="dob"
+            v-model="getUser.dob"
             variant="outlined"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
-            <v-text-field
+          <v-combobox
             label="Gender"
-            placeholder="Enter your display name..."
-            type="text"
+            placeholder="Enter your Gender..."
+            :readonly="!isEdit"
             density="comfortable"
-            v-model="gender"
+            hide-details="auto"
+            :items="genders"
+            item-title="name"
+            item-value="id"
+            v-model="getUser.gender"
             variant="outlined"
-          ></v-text-field>
+          ></v-combobox>
         </v-col>
         <v-col cols="12" md="6">
             <v-text-field
@@ -94,132 +115,21 @@
             placeholder="Enter your display name..."
             type="text"
             density="comfortable"
-            v-model="location"
+            v-model="getUser.location"
             variant="outlined"
           ></v-text-field>
         </v-col>
     </v-row>
-    <!-- #########################  COLLECTION  DETAIL DIALOG #########################-->
-    <v-dialog
-      v-model="collectionDetailsDialog"
-      fullscreen
-      transition="dialog-bottom-transition"
-      persistent
-    >
-        <v-card theme="dark">
-          <v-toolbar
-            color="#241d43"
-            :title="'Collection Details - ' + selectedCollection.name"
-            class="text-white"
-          >
-          <v-spacer></v-spacer>
-           <v-btn
-              icon
-              color="white"
-              @click="collectionDetailsDialog = false"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-toolbar>
-
-          <v-row class="pa-12">
-                
-            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'right'">
-
-              <v-avatar color="blue-lighten-1" size="120" style="border-radius: 10px;">
-                <v-icon v-if="selectedCollection.icon === 'default'" size="80" color="white">mdi-image-multiple-outline
-                </v-icon>
-                <v-img v-else :src="selectedCollection.icon" style="width: 120px; height:120px;border-radius: 10px;">
-                </v-img>
-              </v-avatar>
-              
-              <v-btn size="small" 
-                     icon="mdi-camera-outline" 
-                     color="grey" 
-                     style="position: fixed;margin-top: 90px;margin-left: -30px;"
-                     @click="collectionImageDialog = true"
-              >
-              </v-btn>
-              
-            </v-col>
-
-            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'left'">
-              <v-card
-              :dark="dark"
-              flat
-              class="pa-4"
-              > 
-                <v-layout v-if="!collectionNameEdit">
-                  <div style="text-transform: uppercase;" class="text-h4 font-weight-bold">{{ selectedCollection.name }}</div>
-                  <v-icon
-                    style="margin-left:10px"
-                    size="small"
-                    @click="collectionNameEditClicked"
-                   >
-                    mdi-pencil-box-outline
-                  </v-icon>
-                </v-layout>
-
-                <v-layout v-if="collectionNameEdit">
-                  <v-text-field
-                    v-model="selectedCollection.name"
-                    maxlength="70"
-                    variant="outlined"
-                  >
-                  </v-text-field>
-                  <v-btn
-                    icon
-                    size="large"
-                    @click="updateCollectionSettings" 
-                    v-if="collectionNameEdit"
-                  >
-                    <v-icon color="green">mdi-content-save-outline</v-icon>
-                  </v-btn>
-                  <v-btn
-                    icon
-                    size="large"
-                    @click="collectionNameEditCancel"
-                    v-if="collectionNameEdit"
-                  >
-                    <v-icon color="grey">mdi-close-circle</v-icon>
-                  </v-btn>
-                </v-layout>
-
-                <div class="text-h7 mb-3 font-weight-bold">Created: {{ makeDate(selectedCollection.created) }}</div>
-
-                <v-layout style="padding-top: 5px">
-                  <div class="text-h7 mb-3 font-weight-bold">Public: {{ selectedCollection.public ? 'Yes' : 'No' }}</div>
-                  <v-switch
-                    style="margin-left:20px;margin-top: -14px"
-                    v-model="selectedCollection.public"
-                    hide-details
-                    inset
-                    @change="updateCollectionSettings"
-                  >
-                  </v-switch>
-                  
-                  <v-icon
-                    style="margin-top:-3px"
-                    size="large"
-                    color="green"
-                    @click="privatePublicDialog = true"
-                   >
-                    mdi-information-outline
-                  </v-icon>
-                  <v-spacer></v-spacer>
-                </v-layout>
-              </v-card>
-            </v-col>
-
-          </v-row>
-
-        </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="collectionImageDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto mb-12" v-if="isEdit">
+              <v-col cols="12" md="12">
+                <v-btn @click="update()" block color="purple" variant="flat"  :loading="loading">Update Profile</v-btn>           
+              </v-col>
+            </v-row>
+    <!-- #########################  PROFILE PICTURE  DETAIL DIALOG #########################-->
+    <v-dialog v-model="imageDialog" fullscreen hide-overlay transition="dialog-bottom-transition" persistent>
           <v-card theme="dark">
             <v-toolbar flat color="grey-darken-3">
-              <v-btn icon @click.native="collectionImageDialog = false">
+              <v-btn icon @click.native="imageDialog = false">
                 <v-icon>mdi-arrow-left</v-icon>
               </v-btn>
               <v-toolbar-title>{{ 'Select an Image' }}</v-toolbar-title>
@@ -237,37 +147,41 @@
                   <label for="file-input">
 
                     <div class="text-center mb-2">Click or tab to select an image.</div>
-                    <v-avatar color="blue-lighten-1" size="150"  v-if="collectionImage === ''" style="border-radius: 10px;">
+                    <v-avatar color="blue-lighten-1" size="150"  v-if="profilePicture === ''" style="border-radius: 10px;">
                       <v-icon size="80" color="white">{{ isMobileDevice ? 'mdi-gesture-tap' : 'mdi-selection-search' }}
                       </v-icon>
                     </v-avatar>
-                    <v-img v-else :src="collectionImageUrl" style="width: 150px;height:150px;border-radius: 10px;">
+                    <v-img v-else 
+                           :src="profilePictureUrl" 
+                           style="width: 150px;height:150px;border-radius: 10px;">
                     </v-img>
 
                   </label>
 
                   <input 
-                      id="file-input" 
-                      type="file" 
-                      accept="image/jpg,image/jpeg,image/png"
-                      @change="handleFiles"
-                    />
-                  </div>
+                    id="file-input" 
+                    type="file" 
+                    accept="image/jpg,image/jpeg,image/png"
+                    @change="handleFiles"
+                  />
+                </div>
 
                 <v-row>
                   <v-col cols="12" md="12">
                     <v-btn color="#388E3C" 
-                          @click="setCollectionImage" 
+                          @click="setProfilePicture" 
+                          :loading="loadingImage"
                           class="mt-4"
-                          :disabled="collectionImage === ''">
+                          :disabled="profilePicture === ''">
                       <v-icon class="mr-2">mdi-check-circle-outline</v-icon>{{ 'Use this Image' }}
                     </v-btn>
 
-                    <v-btn color="grey" 
+                    <v-btn color="grey-lighten-2" 
                           @click="onRemove()" 
                           class="mt-4 ml-2"
                           variant="outlined"
-                          :disabled="collectionImage === ''">
+                          :loading="loadingImage"
+                          :disabled="profilePicture === ''">
                       {{ 'Change' }}
                     </v-btn>
                   </v-col>
@@ -281,14 +195,15 @@
             </v-row>
           </v-card>
       </v-dialog>
-
      <!-- ############################## SNACKBARS ####################################### -->
       <v-snackbar
         v-model="snackbar"
+        :color="snackbarColor"
         :timeout="4000"
       >
       <v-layout>
-        <v-icon color="green" left>mdi-check-circle-outline</v-icon>
+        <v-icon v-if="snackbarColor === 'red'">mdi-alert-outline</v-icon>
+        <v-icon v-if="snackbarColor === 'green'">mdi-check-circle-outline</v-icon>
         {{ snackbarText }}
       </v-layout>
 
@@ -307,10 +222,10 @@
 
 <script>
 // @ is an alias to /src
-import { db } from '@/main'
 import dateformat from "dateformat"
+import imageCompression from 'browser-image-compression'
 export default {
-  name: 'My Collections',
+  name: 'My Profile',
   props: {
     isMobileDevice: Boolean,
     dark: Boolean,
@@ -341,13 +256,29 @@ export default {
         return 'Name must be alphanumeric'
       },
     ],
-    displayName: 'Michael',
-    email: 'gunawan.michael20@gmail.com',
-    address:'0x770e725359cd9a3cf34feeb832a16969a8d21660',
-    dob:'21 December 1998',
-    gender:'Male',
-    location: 'Indonesia',
-    fullName: 'Michael Gunawan'
+    isEdit: false,
+    imageDialog: false,
+    profilePicture: '',
+    profilePictureUrl: '',
+    snackbarColor: 'green',
+    snackbar: false,
+    snackbarText: '',
+    loadingImage: false,
+    loadingPage: true,
+    genders: [
+      {
+        id: 0,
+        name: 'None'
+      },
+      {
+        id: 1,
+        name: 'Male'
+      },
+      {
+        id: 2,
+        name: 'Female'
+      },
+    ]
   }),
   components: {
   },
@@ -358,6 +289,9 @@ export default {
     getCollections () {
       return this.$store.state.fb.collections
     },
+    isLoading(){
+      return this.getUser.uid === ''
+    }
   },
   watch: {
   },
@@ -365,10 +299,109 @@ export default {
   },
   methods: {
     makeDate (date) {
-      return dateformat(new Date(date), 'dd mmm, yyyy')
+      let dateBeforeFormat = Number.parseInt(date.toString());
+      if([undefined,null,0,''].includes(date)){
+        dateBeforeFormat = 1
+      }
+      console.log(new Date(dateBeforeFormat))
+      return dateformat(new Date(dateBeforeFormat), 'dd mmm, yyyy')
     },
     makeDateTime (date) {
       return dateformat(new Date(date), 'dd mmm, yyyy HH:MM')
+    },
+    getBase64(file) {
+      console.log(file)
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    },
+    onRemove () {
+      // console.log('Picture removed!')
+      this.profilePicture = ''
+      this.profilePictureUrl = ''
+    },
+    async handleFiles(image) {
+      const picture = image.target.files[0];
+      if (picture === undefined) {
+        this.profilePicture = '';
+        this.snackbarColor = 'red'
+        this.snackbarText = 'Image not detected!'
+        this.snackbar = true
+        return;
+      }
+      if (picture.size > 2000000) {
+        // === 500 KB
+        this.profilePicture = '';
+        this.snackbarColor = 'red'
+        this.snackbarText = 'Maximum file size of 500KB exeeded for ' + picture.name + '!'
+        this.snackbar = true
+        return;
+      } else {
+        console.log(image)
+        const options = {
+          maxSizeMB: 0.2,
+          maxWidthOrHeight: 960,
+          useWebWorker: true
+        }
+        this.profilePicture = await imageCompression(picture, options)
+        this.filesValid = true
+        console.log(this.profilePicture)
+        this.getBase64(this.profilePicture).then((data) => (this.profilePictureUrl = data));
+        console.log(this.profilePictureUrl)
+      }
+    },
+    setProfilePicture () {
+      this.loadingImage = true;
+      let dispatchObj = {
+        docId: this.getUser.docId,
+        photo: this.profilePictureUrl
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch('updateProfilePicture', dispatchObj)
+        .then(() => {
+          this.loadingImage = false;
+          this.imageDialog = false;
+          this.snackbarColor = 'green'
+          this.snackbarText = 'Profile Picture Updated!'
+          this.snackbar = true
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingImage = false;
+          this.snackbarColor = 'red'
+          this.snackbarText = 'Something Went Wrong!'
+          this.snackbar = true
+        })
+    },
+    update(){
+      this.loading = true
+      console.log(this.getUser.scout);
+      const payload = {
+        email: this.getUser.email,
+        fullName: this.getUser.fullName,
+        dob: this.getUser.dob,
+        phone: this.getUser.phone,
+        gender: this.getUser.gender,
+        accounts: this.getUser.accounts,
+        docId: this.getUser.docId
+      }
+      this.$store.dispatch('updateProfile', payload)
+        .then(() => {
+            this.loading = false;
+            this.snackbarColor = 'green'
+            this.snackbarText = 'Profile Updated!'
+            this.snackbar = true
+          })
+          .catch(error => {
+            console.log(error)
+            this.loading = false;
+            this.snackbarColor = 'red'
+            this.snackbarText = 'Something Went Wrong!'
+            this.snackbar = true
+          })
     }
   }
 }

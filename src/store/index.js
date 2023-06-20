@@ -52,7 +52,8 @@ export default createStore({
                 likes: localStorage.getItem('likes') === null ? [] : JSON.parse(localStorage.getItem('likes')),
                 welcome: null,
                 showWelcomeSession: false,
-                showWelcome: localStorage.getItem('welcome') === null ? false : JSON.parse(localStorage.getItem('welcome'))
+                showWelcome: localStorage.getItem('welcome') === null ? false : JSON.parse(localStorage.getItem('welcome')),
+                photo: '',
             },
             count: 0,
             drawer: false
@@ -127,6 +128,7 @@ export default createStore({
             state.user.memberSince = payload.memberSince
             state.user.favorites = payload.favorites
             state.user.welcome = payload.welcome
+            state.user.photo = payload.photo
             localStorage.setItem('mm-displayName', payload.displayName)
             localStorage.setItem('mm-email', payload.email)
             localStorage.setItem('mm-uid', payload.uid)
@@ -205,6 +207,7 @@ export default createStore({
             state.welcome = null
             state.showWelcomeSession = false
             state.showWelcome = null
+            state.photo = ''
             localStorage.removeItem('provider')
             localStorage.removeItem('mm-mmConnected')
             localStorage.removeItem('mm-uid')
@@ -215,7 +218,10 @@ export default createStore({
         },
         SetNetworkChainID (state, payload) {
             state.user.networkChainID = payload.networkChainID
-         }
+         },
+        SetPhoto(state, payload){
+            state.user.photo = payload.photo
+        }
     },
     modules: {
         // More Modules Go Here

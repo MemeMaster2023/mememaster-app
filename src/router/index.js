@@ -31,7 +31,7 @@ const routes = [
           import(/* webpackChunkName: "home" */ "@/views/Authorize.vue"),
       },
       {
-        path: "/myprofile",
+        path: "/account",
         name: "My Profile",
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
