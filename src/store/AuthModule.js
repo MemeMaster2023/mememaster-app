@@ -276,6 +276,29 @@ const AuthModule = {
         newName: payload
       })
     },
+    async updateProfilePicture({commit}, payload){
+      console.log(payload)
+      try{
+        const obj = {
+          photo: payload.photo
+        }
+        console.log(obj)
+        await db.collection("users").doc(payload.docId).update(obj);
+        commit('SetPhoto', obj);
+      }
+      catch(err){
+        console.log(err)
+      }
+    },
+    async updateProfile({commit}, payload){
+      try{
+        await db.collection("users").doc(payload.docId).update(payload);
+        commit('setUserState', payload);
+      }
+      catch(err){
+        console.log(err)
+      }
+    },
     logout({ commit }) {
       firebase.auth().signOut();
       commit("SetEmpty");
