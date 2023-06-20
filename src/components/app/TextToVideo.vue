@@ -701,7 +701,7 @@ export default {
     panel: ['settings'],
     stylePreset: {name: 'Enhance', id: 'enhance', img: '/img/styles/enhance.png'},
     imagesCount: 1,
-    aspect: '1:1',
+    aspect: '7:4',
     showAdvanced: false,
     prompt: '',
     promptStrength: 0.5,

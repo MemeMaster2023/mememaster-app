@@ -1,223 +1,224 @@
 <template>
-  <v-container class="mt-12 pt-12" v-if="isLoading">
-    <v-row class="my-16 py-16">
-              <v-col cols="12" class="d-flex justify-center align-center">
-                <v-progress-circular
-                  indeterminate
-                  :size="70"
-                  :width="7"
-                  color="purple"
-                ></v-progress-circular>
-              </v-col>
-            </v-row>
-  </v-container>
-  <v-container class="mt-12 pt-12" v-else>
-    <v-row class="mx-md-12 mb-md-6 px-md-12 mx-auto px-auto mt-12">
-        <v-col cols="12" class="d-flex justify-center" >
-            <div>
-            <v-avatar color="blue-lighten-1" size="120" style="border-radius: 10px;">
-                <v-icon v-if="getUser.photo === ''" size="80" color="white">mdi-image-multiple-outline
-                </v-icon>
-            <v-img v-else :src="getUser.photo" style="width: 120px; height:120px;border-radius: 10px;">
-            </v-img>
-            </v-avatar>
-            <v-btn size="small" 
-                icon="mdi-camera-outline" 
-                color="grey" 
-                style="position: absolute;margin-top: 90px;margin-left: -30px;"
-                @click="imageDialog = true"
-            >
-            </v-btn>
-            </div>
-            <div class="ml-6 text-left d-flex flex-column">
-                <span class="text-md-h3 text-h4 text-left">{{ getUser.displayName }}</span>
-                <span class="text-p font-weight-medium pl-1 mt-2">Member Since: {{ makeDate(getUser.memberSince) }}</span>
-            </div>
+  <v-card theme="dark">
+    <v-container class="mt-12 pt-12" v-if="isLoading">
+      <v-row class="my-16 py-16">
+        <v-col cols="12" class="d-flex justify-center align-center">
+          <v-progress-circular
+            indeterminate
+            :size="70"
+            :width="7"
+            color="purple"
+          ></v-progress-circular>
         </v-col>
-    </v-row>
-    <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto">
-        <v-col cols="12" class="d-flex">
-            <span class="text-h6">Account Information</span>
-            <v-spacer></v-spacer>
-            <v-btn size="small" variant="outlined" rounded color="green" @click="isEdit = true" v-if="!isEdit"><v-icon>mdi-pencil-outline</v-icon>Edit Profile</v-btn>
-            <v-btn size="small" variant="outlined" rounded color="red" @click="isEdit = false" v-else><v-icon>mdi-close-outline</v-icon>Cancel Edit</v-btn>
-        </v-col>
-        <v-col cols="12" md="6">
-            <v-text-field
-            label="Display Name"
-            placeholder="Enter your display name..."
-            type="text"
-            density="comfortable"
-            v-model="getUser.displayName"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-            <v-text-field
-            label="Email"
-            placeholder="Enter your display name..."
-            type="text"
-            density="comfortable"
-            v-model="getUser.email"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="12">
-            <v-text-field
-            label="Wallet Address"
-            placeholder="Enter your display name..."
-            type="text"
-            density="comfortable"
-            v-model="getUser.accounts[0]"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-    </v-row>
-    <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto">
-        <v-col cols="12" class="text-h6">User Information</v-col>
-        <v-col cols="12" md="6">
-            <v-text-field
-            label="Full Name"
-            placeholder="Enter your display name..."
-            type="text"
-            density="comfortable"
-            v-model="getUser.fullName"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-            <v-text-field
-            label="Date of Birth"
-            placeholder="Enter your display name..."
-            type="date"
-            density="comfortable"
-            v-model="getUser.dob"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-combobox
-            label="Gender"
-            placeholder="Enter your Gender..."
-            :readonly="!isEdit"
-            density="comfortable"
-            hide-details="auto"
-            :items="genders"
-            item-title="name"
-            item-value="id"
-            v-model="getUser.gender"
-            variant="outlined"
-          ></v-combobox>
-        </v-col>
-        <v-col cols="12" md="6">
-            <v-text-field
-            label="Location"
-            placeholder="Enter your display name..."
-            type="text"
-            density="comfortable"
-            v-model="getUser.location"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-    </v-row>
-    <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto mb-12" v-if="isEdit">
-              <v-col cols="12" md="12">
-                <v-btn @click="update()" block color="purple" variant="flat"  :loading="loading">Update Profile</v-btn>           
-              </v-col>
-            </v-row>
-    <!-- #########################  PROFILE PICTURE  DETAIL DIALOG #########################-->
-    <v-dialog v-model="imageDialog" fullscreen hide-overlay transition="dialog-bottom-transition" persistent>
-          <v-card theme="dark">
-            <v-toolbar flat color="grey-darken-3">
-              <v-btn icon @click.native="imageDialog = false">
-                <v-icon>mdi-arrow-left</v-icon>
+      </v-row>
+    </v-container>
+    <v-container class="mt-12 pt-12" v-else>
+      <v-row class="mx-md-12 mb-md-6 px-md-12 mx-auto px-auto mt-12">
+          <v-col cols="12" class="d-flex justify-center" >
+              <div>
+              <v-avatar color="deep-purple-lighten-4" size="120" style="border-radius: 10px;">
+                <v-img v-if="getUser.avatar === ''" :src="'https://robohash.org/' + getUser.displayName" style="width: 120px;height:120px;">
+                </v-img>
+                <v-img v-else :src="getUser.avatar" style="width: 120px;height:120px;">
+                </v-img>
+              </v-avatar>
+              <v-btn size="small" 
+                  icon="mdi-camera-outline" 
+                  color="grey" 
+                  style="position: absolute;margin-top: 90px;margin-left: -30px;"
+                  @click="imageDialog = true"
+              >
               </v-btn>
-              <v-toolbar-title>{{ 'Select an Image' }}</v-toolbar-title>
+              </div>
+              <div class="ml-6 text-left d-flex flex-column">
+                  <span class="text-md-h3 text-h4 text-left">{{ getUser.displayName }}</span>
+                  <span class="text-p font-weight-medium pl-1 mt-2">Member Since: {{ makeDate(getUser.memberSince) }}</span>
+              </div>
+          </v-col>
+      </v-row>
+      <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto">
+          <v-col cols="12" class="d-flex">
+              <span class="text-h6">Account Information</span>
               <v-spacer></v-spacer>
-            </v-toolbar>
+              <v-btn size="small" variant="outlined" rounded color="green" @click="isEdit = true" v-if="!isEdit"><v-icon>mdi-pencil-outline</v-icon>Edit Profile</v-btn>
+              <v-btn size="small" variant="outlined" rounded color="red" @click="isEdit = false" v-else><v-icon>mdi-close-outline</v-icon>Cancel Edit</v-btn>
+          </v-col>
+          <v-col cols="12" md="6">
+              <v-text-field
+              label="Display Name"
+              placeholder="Enter your display name..."
+              type="text"
+              density="comfortable"
+              v-model="getUser.displayName"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+              <v-text-field
+              label="Email"
+              placeholder="Enter your display name..."
+              type="text"
+              density="comfortable"
+              v-model="getUser.email"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="12">
+              <v-text-field
+              label="Wallet Address"
+              placeholder="Enter your display name..."
+              type="text"
+              density="comfortable"
+              v-model="getUser.accounts[0]"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+      </v-row>
+      <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto">
+          <v-col cols="12" class="text-h6">User Information</v-col>
+          <v-col cols="12" md="6">
+              <v-text-field
+              label="Full Name"
+              placeholder="Enter your display name..."
+              type="text"
+              density="comfortable"
+              v-model="getUser.fullName"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+              <v-text-field
+              label="Date of Birth"
+              placeholder="Enter your display name..."
+              type="date"
+              density="comfortable"
+              v-model="getUser.dob"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-combobox
+              label="Gender"
+              placeholder="Enter your Gender..."
+              :readonly="!isEdit"
+              density="comfortable"
+              hide-details="auto"
+              :items="genders"
+              item-title="name"
+              item-value="id"
+              v-model="getUser.gender"
+              variant="outlined"
+            ></v-combobox>
+          </v-col>
+          <v-col cols="12" md="6">
+              <v-text-field
+              label="Location"
+              placeholder="Enter your display name..."
+              type="text"
+              density="comfortable"
+              v-model="getUser.location"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+      </v-row>
+      <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto mb-12" v-if="isEdit">
+        <v-col cols="12" md="12">
+          <v-btn @click="update()" block color="purple" variant="flat"  :loading="loading">Update Profile</v-btn>           
+        </v-col>
+      </v-row>
+      <!-- #########################  PROFILE PICTURE  DETAIL DIALOG #########################-->
+      <v-dialog v-model="imageDialog" fullscreen hide-overlay transition="dialog-bottom-transition" persistent>
+            <v-card theme="dark">
+              <v-toolbar flat color="grey-darken-3">
+                <v-btn icon @click.native="imageDialog = false">
+                  <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
+                <v-toolbar-title>{{ 'Select an Image' }}</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
 
-            <v-row :align="'center'" class="pa-2">
-              <p class="mt-2"></p>
-              <v-col cols="12" md="3" :align="'center'">
-              </v-col>
-              
-              <v-col cols="12" md="6" :align="'center'">
+              <v-row :align="'center'" class="pa-2">
+                <p class="mt-2"></p>
+                <v-col cols="12" md="3" :align="'center'">
+                </v-col>
+                
+                <v-col cols="12" md="6" :align="'center'">
 
-                <div class="image-upload">
-                  <label for="file-input">
+                  <div class="image-upload">
+                    <label for="file-input">
 
-                    <div class="text-center mb-2">Click or tab to select an image.</div>
-                    <v-avatar color="blue-lighten-1" size="150"  v-if="profilePicture === ''" style="border-radius: 10px;">
-                      <v-icon size="80" color="white">{{ isMobileDevice ? 'mdi-gesture-tap' : 'mdi-selection-search' }}
-                      </v-icon>
-                    </v-avatar>
-                    <v-img v-else 
-                           :src="profilePictureUrl" 
-                           style="width: 150px;height:150px;border-radius: 10px;">
-                    </v-img>
+                      <div class="text-center mb-2">Click or tab to select an image.</div>
+                      <v-avatar color="blue-lighten-1" size="150"  v-if="profilePicture === ''" style="border-radius: 10px;">
+                        <v-icon size="80" color="white">{{ isMobileDevice ? 'mdi-gesture-tap' : 'mdi-selection-search' }}
+                        </v-icon>
+                      </v-avatar>
+                      <v-img v-else 
+                            :src="profilePictureUrl" 
+                            style="width: 150px;height:150px;border-radius: 10px;">
+                      </v-img>
 
-                  </label>
+                    </label>
 
-                  <input 
-                    id="file-input" 
-                    type="file" 
-                    accept="image/jpg,image/jpeg,image/png"
-                    @change="handleFiles"
-                  />
-                </div>
+                    <input 
+                      id="file-input" 
+                      type="file" 
+                      accept="image/jpg,image/jpeg,image/png"
+                      @change="handleFiles"
+                    />
+                  </div>
 
-                <v-row>
-                  <v-col cols="12" md="12">
-                    <v-btn color="#388E3C" 
-                          @click="setProfilePicture" 
-                          :loading="loadingImage"
-                          class="mt-4"
-                          :disabled="profilePicture === ''">
-                      <v-icon class="mr-2">mdi-check-circle-outline</v-icon>{{ 'Use this Image' }}
-                    </v-btn>
+                  <v-row>
+                    <v-col cols="12" md="12">
+                      <v-btn color="#388E3C" 
+                            @click="setProfilePicture" 
+                            :loading="loadingImage"
+                            class="mt-4"
+                            :disabled="profilePicture === ''">
+                        <v-icon class="mr-2">mdi-check-circle-outline</v-icon>{{ 'Use this Image' }}
+                      </v-btn>
 
-                    <v-btn color="grey-lighten-2" 
-                          @click="onRemove()" 
-                          class="mt-4 ml-2"
-                          variant="outlined"
-                          :loading="loadingImage"
-                          :disabled="profilePicture === ''">
-                      {{ 'Change' }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
+                      <v-btn color="grey-lighten-2" 
+                            @click="onRemove()" 
+                            class="mt-4 ml-2"
+                            variant="outlined"
+                            :loading="loadingImage"
+                            :disabled="profilePicture === ''">
+                        {{ 'Change' }}
+                      </v-btn>
+                    </v-col>
+                  </v-row>
 
-              </v-col>
+                </v-col>
 
-              <v-col cols="12" md="3" :align="'center'">
-              </v-col>
+                <v-col cols="12" md="3" :align="'center'">
+                </v-col>
 
-            </v-row>
-          </v-card>
-      </v-dialog>
-     <!-- ############################## SNACKBARS ####################################### -->
-      <v-snackbar
-        v-model="snackbar"
-        :color="snackbarColor"
-        :timeout="4000"
-      >
-      <v-layout>
-        <v-icon v-if="snackbarColor === 'red'">mdi-alert-outline</v-icon>
-        <v-icon v-if="snackbarColor === 'green'">mdi-check-circle-outline</v-icon>
-        {{ snackbarText }}
-      </v-layout>
+              </v-row>
+            </v-card>
+        </v-dialog>
+      <!-- ############################## SNACKBARS ####################################### -->
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="4000"
+        >
+        <v-layout>
+          <v-icon v-if="snackbarColor === 'red'">mdi-alert-outline</v-icon>
+          <v-icon v-if="snackbarColor === 'green'">mdi-check-circle-outline</v-icon>
+          {{ snackbarText }}
+        </v-layout>
 
-        <template v-slot:actions>
-          <v-btn
-            color="pink"
-            variant="text"
-            @click="snackbar = false"
-          >
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
-  </v-container>
+          <template v-slot:actions>
+            <v-btn
+              color="pink"
+              variant="text"
+              @click="snackbar = false"
+            >
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -357,7 +358,7 @@ export default {
       this.loadingImage = true;
       let dispatchObj = {
         docId: this.getUser.docId,
-        photo: this.profilePictureUrl
+        avatar: this.profilePictureUrl
       }
       console.log(dispatchObj)
       this.$store.dispatch('updateProfilePicture', dispatchObj)
@@ -374,6 +375,9 @@ export default {
           this.snackbarColor = 'red'
           this.snackbarText = 'Something Went Wrong!'
           this.snackbar = true
+        })
+        this.$store.commit('setAvatar', {
+          avatar: this.profilePictureUrl
         })
     },
     update(){

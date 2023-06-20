@@ -18,13 +18,25 @@
             Whether you're an artist looking to showcase your talent and monetize your work, a collector seeking rare and exclusive digital assets, or simply an enthusiast eager to explore the vibrant world of NFTs, our marketplace offers a seamless and secure platform to engage with this exciting ecosystem.      
           </div>
           <v-alert
-            class="mt-8 mb-16"
+            class="mt-8 mb-8"
             color="deep-purple-darken-4"
             theme="dark"
             icon="mdi-code-braces"
           >
             <p style="font-size: 1.3rem;margin-top: -5px;">The Marketplace is under development.<br>Stay tuned for information about the 1st release.</p>
-          </v-alert>                                
+          </v-alert>        
+          
+          <v-btn
+            variant="outlined"
+            color="deep-purple-lighten-2"
+            size="large"
+            style="width: 100%"
+            to="/exclusive"
+          >
+            
+            Take a look k at our "Exclusive NFT Collections"
+          </v-btn>
+
         </v-col>
 
         <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">

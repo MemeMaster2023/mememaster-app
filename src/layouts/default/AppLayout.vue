@@ -126,6 +126,7 @@
         
       <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes')"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="NFT Marketplace" value="nftmarket" @click="routerGo('/nfts')"></v-list-item>
+      <v-list-item prepend-icon="mdi-circle-multiple-outline" title="Token Listings" value="tokens"></v-list-item>
       <v-list-item prepend-icon="mdi-shape-plus" title="Games" value="games" @click="routerGo('/games')"></v-list-item>
       <v-list-item prepend-icon="mdi-music" title="Music" value="music" @click="routerGo('/music')"></v-list-item>
       <v-list-item prepend-icon="mdi-account-group" title="Team" value="Team" @click="gotoTeamLink()"></v-list-item>
@@ -218,7 +219,9 @@
             >
             <template v-slot:prepend>
               <v-avatar color="deep-purple-lighten-4" style="border-radius: 10px;" size="65">
-                <v-img :src="'https://robohash.org/' + getUser.displayName" style="width: 65px;height:65px;">
+                <v-img v-if="getUser.avatar === ''" :src="'https://robohash.org/' + getUser.displayName" style="width: 65px;height:65px;">
+                </v-img>
+                <v-img v-else :src="getUser.avatar" style="width: 65px;height:65px;">
                 </v-img>
               </v-avatar>
             </template>

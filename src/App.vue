@@ -81,6 +81,37 @@
     </v-dialog>
 
     <v-snackbar
+      v-model="versionSnackbar"
+      color="deep-purple-lighten-4"
+      location="top"
+      :timeout="-1"
+      elevation="24"
+    >
+      <v-row>
+        <v-col cols="12" md="1" v-if="!isMobileDevice" >
+          <v-icon size="large">mdi-information-outline</v-icon>
+        </v-col>
+        <v-col cols="12" md="8">
+          <div class="font-weight-bold pb-2">New Version</div>
+           <p>A new version of Meme Master is available.</p>
+        </v-col>
+
+        <v-col cols="12" md="3" class="mt-2">
+            <v-btn
+              style="width: 150px;"
+              size="small"
+              color="indigo"
+              variant="outlined"
+              :loading="loading"
+              @click="updateUserVersion()"
+            >
+              Refresh Now
+            </v-btn>
+        </v-col>
+      </v-row>
+    </v-snackbar>
+
+    <v-snackbar
       :color="snackbarColor"
       :timeout="isOnline ? 3000 : -1"
       v-model="snackbar"
@@ -100,6 +131,7 @@
         </v-btn>
       </template>
     </v-snackbar>
+
 </template>
 
 <script>
@@ -112,6 +144,7 @@ export default {
   name: 'App',
   props: {},
   data: () => ({
+    loading: false,
     dark: true,
     isMobileDevice: false,
     switchNWDialog: false,
@@ -123,6 +156,7 @@ export default {
     },
     isShowLogin: false,
     name: '',
+    versionSnackbar: false,
     snackbarText: "",
     snackbarColor: "green",
     snackbarTimeout: 2000,
@@ -171,6 +205,9 @@ export default {
         uid = localStorage.getItem('mm-uid');
       }else{
         uid = user.uid;
+        if (this.getUser.version !== import.meta.env.VITE_APP_VERSION) {
+          this.versionSnackbar = true
+        }
       }
       this.$store.dispatch("getUser", uid);
     }, 2000);
@@ -327,6 +364,19 @@ export default {
         .catch(error => {
             console.log(error)
           })
+    },
+    updateUserVersion() {
+      let obj = {
+        version: import.meta.env.VITE_APP_VERSION
+      }
+      this.saveSettingsData(obj)
+      this.loading  = true
+      setTimeout(() => {
+        this.versionSnackbar = false
+        this.$router.push('/');
+        window.location.reload();
+        // firstScrollTo('#hometoolbar');
+      }, 1000);
     },
     getNetworkName () {
       let nwId = parseInt(this.getChain, 16)

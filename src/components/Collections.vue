@@ -2,99 +2,177 @@
   <div id="collections">
     <v-responsive style="background-color: #000;">
       
-      <v-img :src="'/img/home/collections_bg_0' + tab + '.webp'"
+      <v-img :src="view === 0 ? '/img/home/collections_bg_V14_00' + colIndex + '.webp' : '/img/home/collections_bg_V14_0' + view + '.webp'"
             :max-height="isMobileDevice ? 500 : 400"
             cover
             class="align-end"
             gradient="to bottom, rgba(0,0,0,.7), rgba(0,0,0,.4)"
       > 
-        <v-card-title v-if="!isMobileDevice" :style="tab === '1' ? 'color: #e8c5ff' : 'color: #d4a863'" class="text-h4" >Sample NFT Collections</v-card-title>
-        <v-card-title v-if="isMobileDevice" :style="tab === '1' ? 'color: #e8c5ff' : 'color: #d4a863'" class="text-h5" >Sample NFT Collections</v-card-title>
+        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 4" style="color: #99c1f1" class="text-h4" >Tim Burton NFTs - Exclusive Rare Edition</v-card-title>
+        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 4" style="color: #99c1f1" class="text-h6" >Tim Burton NFTs - Exclusive Rare Edition</v-card-title>
+
+        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 0" style="color: #99c1f1" class="text-h4" >Andy Warhol NFTs - Exclusive Rare Edition</v-card-title>
+        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 0" style="color: #99c1f1" class="text-h6" >Andy Warhol NFTs - Exclusive Rare Edition</v-card-title>
+
+        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 2" style="color: #99c1f1" class="text-h4" >Shiba INU NEONs NFTs - Limited Edition NFTs</v-card-title>
+        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 2" style="color: #99c1f1" class="text-h6" >Shiba INU NEONs NFTs - Limited Edition NFTs</v-card-title>
+
+        <v-card-title v-if="!isMobileDevice && view === 1" :style="view === 1 ? 'color: #e8c5ff' : 'color: #d4a863'" class="text-h4" >Sample NFT Collections</v-card-title>
+        <v-card-title v-if="isMobileDevice && view === 1" :style="view === 1 ? 'color: #e8c5ff' : 'color: #d4a863'" class="text-h6" >Sample NFT Collections</v-card-title>
+
+        <v-card-title v-if="!isMobileDevice && view === 2" style="color: #31c46c" class="text-h4" >Early Gaming Insights</v-card-title>
+        <v-card-title v-if="isMobileDevice && view === 2" style="color: #31c46c" class="text-h6" >Early Gaming Insights</v-card-title>
+
+        <v-card-title v-if="!isMobileDevice && view === 3" style="color: #c5d73d" class="text-h4" >Exclusive NFT Collections</v-card-title>
+        <v-card-title v-if="isMobileDevice && view === 3" style="color: #c5d73d" class="text-h6" >Exclusive NFT Collections</v-card-title>
+
       </v-img>
 
       <v-card theme="dark">
 
-        <v-tabs
+        <!-- <v-tabs
           v-model="tab"
-          :color="tab === '1' ? '#e8c5ff' : '#d4a863'"
+          :color="tab === '1' ? '#e8c5ff' : '#99c1f1'"
           align-tabs="center"
         >
-          <v-tab value="1">Women Warriors</v-tab>
-          <!-- <v-tab value="2">Monsters & Wizzards</v-tab> -->
-        </v-tabs>
+          <v-tab value="1">Women Warriors NFTs</v-tab>
+          <v-tab value="2">Tim Burton collection</v-tab>
+        </v-tabs> -->
 
-        <v-window v-model="tab">
-          <v-window-item value="1"
-          >
-            <v-container fluid>
-              <v-row class="ma-4">
-                <v-col
-                  v-for="image in collection_01"
-                  :key="image"
-                  class="d-flex child-flex"
-                  cols="12" md="4"
+        <v-toolbar v-if="!isMobileDevice"
+              color="transparent"
+              class="overflow-fix"
+            >
+            <v-spacer v-if="!drawer"></v-spacer>
+
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(4)">
+              Tim Burton NFTs
+            </v-btn>
+
+            <v-btn variant="text" color="#99c1f1" @click="openExclusiveCollection(0)">
+              Andy Warhol NFTs
+            </v-btn>
+
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(2)">
+              Shiba INU NEONs NFTs
+            </v-btn>
+
+            <v-btn  variant="text" color="#e8c5ff" @click="openWomanWarriors()">
+              Women Warriors NFTs
+            </v-btn>
+
+            <v-btn  variant="text" color="#31c46c" @click="openEarlyGamesInsights()">
+              Early Gaming Insights
+            </v-btn>
+
+            <v-btn  variant="text" color="#c5d73d" @click="openExclusiveCollection2(-1)">
+              More Exclusive NFT Collections
+            </v-btn>
+
+            <v-spacer></v-spacer>
+
+       </v-toolbar>
+
+       <v-row v-if="isMobileDevice" class="pt-8">
+        <v-col cols="12" md="4" :align="'center'" style="margin-top: -10px;">
+          <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(4)">
+            Tim Burton
+          </v-btn>
+
+          <v-btn variant="text" color="#99c1f1" @click="openExclusiveCollection(0)">
+            Andy Warhol
+          </v-btn>
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'" style="margin-top: -10px;">
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(2)">
+              Shiba INU NEONs
+            </v-btn>
+
+            <v-btn  variant="text" color="#e8c5ff" @click="view = 1">
+              Women Warriors
+            </v-btn>
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'" style="margin-top: -10px;margin-bottom:16px">
+            <v-btn  variant="text" color="#31c46c" @click="openEarlyGamesInsights()">
+              Early Gaming Insights
+            </v-btn>
+
+            <v-btn  variant="text" color="#c5d73d" @click="openExclusiveCollection2(-1)">
+              Exclusive NFTs
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-divider></v-divider>
+
+          <v-container fluid  v-if="view === 1" class="ma-4">
+            <v-row class="ma-4">
+              <v-col
+                v-for="image in collection_01"
+                :key="image"
+                class="d-flex child-flex"
+                cols="12" md="4"
+              >
+                <v-img
+                  :src="'/img/memes/girl_fighter_01/' + image.name"
+                  :lazy-src="'/img/memes/girl_fighter_01/' + image.name"
+                  aspect-ratio="1"
+                  cover
+                  class="bg-grey-lighten-2"
                 >
-                  <v-img
-                    :src="'/img/memes/girl_fighter_01/' + image.name"
-                    :lazy-src="'/img/memes/girl_fighter_01/' + image.name"
-                    aspect-ratio="1"
-                    cover
-                    class="bg-grey-lighten-2"
-                  >
-                    <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="grey-lighten-5"
-                        ></v-progress-circular>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-window-item>
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      :align="'center'"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey-lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-col>
+            </v-row>
+          </v-container>
 
-          <v-window-item value="2"
-          >
-            <v-container fluid>
-              <v-row class="ma-4">
-                <v-col
-                  v-for="image in collection_02"
-                  :key="image"
-                  class="d-flex child-flex"
-                  cols="12" md="4"
-                >
-                  <v-img
-                    :src="'/img/memes/monsters_wizzards/' + image.name"
-                    :lazy-src="'/img/memes/monsters_wizzards/' + image.name"
-                    aspect-ratio="1"
-                    cover
-                    class="bg-grey-lighten-2"
-                  >
-                    <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="grey-lighten-5"
-                        ></v-progress-circular>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-window-item>
+          <v-container fluid v-else-if="view === 2">
+            <v-row :class="isMobileDevice ? 'ma-1' : 'ma-4'">
+              <v-col cols="12">
+                <GamesInsightsFiltered ref="gamesInsightsFiltered"
+                                       :isMobileDevice="isMobileDevice">
+                </GamesInsightsFiltered>
+              </v-col>
+            </v-row>
+          </v-container>
 
-        </v-window>
+          <v-container fluid v-else-if="view === 3">
+            <v-row :class="isMobileDevice ? 'ma-1' : 'ma-4'">
+              <v-col cols="12">
+                <ExclusiveNFTsFiltered ref="exclusiveNFTs" 
+                                       :openCollectionIndex="-1"
+                                       :isMobileDevice="isMobileDevice">
+                </ExclusiveNFTsFiltered>
+              </v-col>
+            </v-row>
+          </v-container>
+
+         <v-container fluid v-if="viewCol === 2">
+            <v-row c:class="isMobileDevice ? 'ma-1' : 'ma-4'">
+              <v-col cols="12">
+                <ExclusiveNFTsFiltered ref="exclusiveNFTsFiltered" 
+                                       :openCollectionIndex="colIndex"
+                                       :isMobileDevice="isMobileDevice">
+                </ExclusiveNFTsFiltered>
+              </v-col>
+            </v-row>
+          </v-container>
+
+
+
       </v-card>
   
     </v-responsive>
@@ -104,17 +182,23 @@
 <script>
 // @ is an alias to /src
 import { scroller } from 'vue-scrollto/src/scrollTo'
+import ExclusiveNFTsFiltered from './collections/ExclusiveNFTsFiltered'
+import GamesInsightsFiltered from './collections/GamesInsightsFiltered'
 export default {
   name: 'Collections',
   props: {
     isMobileDevice: Boolean,
     dark: Boolean,
     windowWidth: Number,
-    windowHeight: Number
+    windowHeight: Number,
+    drawer: Boolean
   },
   data: () => ({
     loading: false,
     tab: 0,
+    view: 0,
+    viewCol: 2,
+    colIndex: -2,
     collection_01: [
       {
         "name": "Girl fighter 1.jpg"
@@ -141,7 +225,7 @@ export default {
         "name": "Fighter girl.png"
       },
       {
-        "name": "Fighter girl 1.png"
+        "name": "Fighter girl 2.png"
       },
       {
         "name": "Princeess warrior COREL.png"
@@ -188,71 +272,11 @@ export default {
       {
         "name": "Woman warrior Leonardo 21.jpg"
       }
-    ],
-    collection_02: [
-      {
-        "name": "CAPTION Deal with it.png"
-      },
-      {
-        "name": "Dragon 1.png"
-      },
-      {
-        "name": "Dragon danger 1.png"
-      },
-      {
-        "name": "Dragons with caption.png"
-      },
-      {
-        "name": "Dragons.png"
-      },
-      {
-        "name": "Frog and Jar.png"
-      },
-      {
-        "name": "Group of spell makers.png"
-      },
-      {
-        "name": "Lion warrior.png"
-      },
-      {
-        "name": "Master challanger.png"
-      },
-      {
-        "name": "Master meme (1).png"
-      },
-      {
-        "name": "Master meme.png"
-      },
-      {
-        "name": "Monster MM.png"
-      },
-      {
-        "name": "Princess warrior.png"
-      },
-      {
-        "name": "Snake warrior.png"
-      },
-      {
-        "name": "Wait, it's Monday already.png"
-      },
-      {
-        "name": "Warrior 1.png"
-      },
-      {
-        "name": "Wizard and children.png"
-      },
-      {
-        "name": "Wizards talking with caption.png"
-      },
-      {
-        "name": "Woman warrior 1.png"
-      },
-      {
-        "name": "Woman warrior 2.png"
-      }
     ]
   }),
   components: {
+    ExclusiveNFTsFiltered,
+    GamesInsightsFiltered
   },
   computed: {
 
@@ -266,7 +290,29 @@ export default {
   },
   methods: {
     init () {
-     
+     this.openExclusiveCollection(4)
+    },
+    openExclusiveCollection (index) {
+      this.view = 0
+      this.viewCol = 2
+      this.colIndex = index
+      setTimeout(() => {
+        this.$refs.exclusiveNFTsFiltered.openCollectionFromIndex()
+      }, 200)
+    },
+    openExclusiveCollection2 (index) {
+      this.viewCol = 0
+      this.view = 3
+      this.colIndex = index
+    },
+    openEarlyGamesInsights () {
+      this.viewCol = 0
+      console.log('openEarlyGamesInsights')
+      this.view = 2
+    },
+    openWomanWarriors () {
+      this.viewCol = 0
+      this.view = 1
     },
     scrollToTop () {
       const firstScrollTo = scroller();
@@ -320,5 +366,8 @@ export default {
     opacity: 1 !important;
     position: absolute;
     width: 100%;
+  }
+  .overflow-fix .v-toolbar__content {
+    flex-wrap: wrap;
   }
 </style>

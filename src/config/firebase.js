@@ -20,10 +20,10 @@ const FIREBASE_CONFIG_PROD_ENV = { /// Change Later
 
 var FIREBASE_CONFIG = {};
 
-if (process.env.VITE_APP_ENVIRONMENT === "production") {
+if (import.meta.env.VITE_APP_ENVIRONMENT === "production") {
   console.log("PROD ENVIRONMENT");
   FIREBASE_CONFIG = FIREBASE_CONFIG_PROD_ENV;
-} else if (process.env.VITE_APP_ENVIRONMENT === "testnet") {
+} else if (import.meta.env.VITE_APP_ENVIRONMENT === "testnet") {
   console.log("STAGING ENVIRONMENT");
   FIREBASE_CONFIG = FIREBASE_CONFIG_TEST_ENV;
 } else {
@@ -32,3 +32,6 @@ if (process.env.VITE_APP_ENVIRONMENT === "production") {
 }
 
 export default FIREBASE_CONFIG;
+
+
+

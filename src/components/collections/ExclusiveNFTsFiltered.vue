@@ -1,6 +1,6 @@
 <template>
   <div id="nftcollections">
-    <v-responsive style="background-color: #2b2b2b;">
+    <v-responsive style="background-color: #2b2b2b;" v-if="openCollectionIndex === -1">
       
       <!-- <v-img :src="'/img/home/collections_bg_01.webp'"
             :max-height="isMobileDevice ? 500 : 400"
@@ -12,16 +12,16 @@
         <v-card-title v-if="isMobileDevice" :style="tab === '1' ? 'color: #e8c5ff' : 'color: #d4a863'" class="text-h5" >Sample NFT Collections</v-card-title>
       </v-img> -->
 
-      <v-card theme="dark">
+      <v-card theme="dark" v-if="openCollectionIndex === -1">
         <v-row class="pt-8">
           <v-col cols="12" :align="center">
-            <div class="text-h4 text-center" style="margin-left: 20px; margin-top: 80px">Exclusive NFT Collections</div>
+            <div class="text-h4 text-center" style="margin-left: 20px;">Exclusive NFT Collections</div>
           </v-col>
         </v-row>
 
         <v-row>
           <v-col cols="12" :align="center">
-            <div style="text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;">
+            <div :style="isMobileDevice ? 'text-align: justify;margin-left: 5%;margin-right: 5%;font-size: 1rem;' : 'text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;'">
               These "Exclusive NFT Collections" will be part of the limited airdrops made to holders of the required quantity our EMAS tokens in their wallets.<br><br>
 
               These will act as VIP passes and allow holders a host of advantages such as early access to new features like as our music integration and our games 
@@ -33,7 +33,7 @@
           </v-col>
         </v-row>
 
-        <v-row class="ma-8">
+        <v-row class="ma-4">
 
             <v-col
               v-for="(col, index) in collections"
@@ -44,8 +44,7 @@
               <v-card
                 class="mx-auto"
                 max-width="400"
-                min-width="100%"
-                @click="openCollection(col, index)"
+                @click="openCollection(index)"
               >
                 <v-img
                   :src="lookupImageAndSubtitle(col.name).img"
@@ -66,7 +65,7 @@
                   <v-btn
                     color="deep-purple-lighten-2"
                     variant="text"
-                    @click="openCollection(col, index)"
+                    @click="openCollection(index)"
                   >
                     OPEN
                   </v-btn>
@@ -80,7 +79,7 @@
 
       </v-card>
       
-      <v-dialog
+      <v-dialog v-if="openCollectionIndex === -1"
           v-model="collectionDialog"
           fullscreen
         >
@@ -90,9 +89,20 @@
             <v-toolbar
               color="transparent"
             >
-            <v-toolbar-title style="font-size: 1.5rem" class="ml-8 text-wrap">{{ selectedCollection.name }}</v-toolbar-title>
+            <v-btn v-if="isMobileDevice"
+                class="mr-2"
+                variant="outlined"
+                size="small"
+                icon="mdi-arrow-left-bold"
+                @click="collectionDialog = false"
+              >
+              </v-btn>
+            <v-col>
+              <v-toolbar-title :style="isMobileDevice ? 'font-size: 1rem' : 'font-size: 1.5rem;margin-left:16px'" class="text-wrap">{{ lookupName() }}</v-toolbar-title>
+              <v-toolbar-title v-if="!isMobileDevice" style="font-size: 1rem;margin-left:16px" class="text-wrap">{{ 'The NFTs below are samples from this collection. More will be added.' }}</v-toolbar-title>
+            </v-col>
             <v-spacer></v-spacer>
-              <v-btn
+              <v-btn v-if="!isMobileDevice"
                 class="mr-8"
                 variant="outlined"
                 size="small"
@@ -102,7 +112,7 @@
               </v-btn>
             </v-toolbar>
 
-            <v-row class="ma-4">
+            <v-row :class="isMobileDevice ? 'ma-2' : 'ma-4'">
               <v-col
                 v-for="image in collectionImagesArr"
                 :key="image"
@@ -136,8 +146,51 @@
           </v-container>
         </v-card>
       </v-dialog>
-  
     </v-responsive>
+
+    <v-card theme="dark" v-else>
+      <v-container fluid class="pa-0">
+
+        <v-toolbar
+          color="transparent"
+          height="50"
+        >
+        <p style="font-size: 1.1rem" class="ml-8">{{ 'The NFTs below are samples from this collection. More will be added.' }}</p>
+        </v-toolbar>
+
+        <v-row :class="isMobileDevice ? 'ma-2' : 'ma-4'">
+          <v-col
+            v-for="image in collectionImagesArr"
+            :key="image"
+            class="d-flex child-flex"
+            cols="12" md="4"
+          >
+            <v-img
+              :src="image.url"
+              :lazy-src="image.url"
+              aspect-ratio="1"
+              cover
+              class="bg-grey-lighten-2"
+              style="border-radius: 10px;"
+            >
+              <template v-slot:placeholder>
+                <v-row
+                  class="fill-height ma-0"
+                  :align="'center'"
+                >
+                  <v-col cols="12" :align="'center'">
+                    <v-progress-circular
+                      indeterminate
+                      color="grey-lighten-5"
+                    ></v-progress-circular>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-img>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
   </div>
 </template>
 
@@ -152,13 +205,16 @@ export default {
     isMobileDevice: Boolean,
     dark: Boolean,
     windowWidth: Number,
-    windowHeight: Number
+    windowHeight: Number,
+    openCollectionIndex: Number
   },
   data: () => ({
     loading: false,
     collections: [],
     collectionImagesArr: [],
-    selectedCollection: {},
+    selectedCollection: {
+      name: ''
+    },
     collectionDialog: false,
     storageRef: null
   }),
@@ -172,7 +228,7 @@ export default {
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
-    this.scrollToTop()
+    // this.scrollToTop()
     this.storageRef = firebase.storage().ref()
     this.loadCollections()
   },
@@ -206,6 +262,8 @@ export default {
   
           });
           console.log(this.collections)
+          if (this.openCollectionIndex === -1) return
+          this.openCollection(this.openCollectionIndex)
           // this.collections.reverse()
         }).catch((error) => {
           // Uh-oh, an error occurred!
@@ -254,7 +312,16 @@ export default {
 
       
     },
-    openCollection (item, index) {
+    openCollectionFromIndex () {
+      console.log('openCollectionIndex')
+      console.log(this.openCollectionIndex)
+      this.openCollection(this.openCollectionIndex)
+    },
+    openCollection (index) {
+      console.log(index)
+      console.log(this.collections)
+      let item =  this.collections[index]
+      console.log(item)
       this.selectedCollection = item
       this.collectionImagesArr = []
       this.collectionDialog = true
@@ -290,11 +357,19 @@ export default {
       })
 
     },
+    lookupName () {
+      console.log(typeof this.selectedCollection)
+      if (typeof this.selectedCollection === 'undefined') {
+        return ''
+      } else {
+        return this.selectedCollection.name
+      }
+    },
     scrollToTop () {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#nftcollections', 500, { offset: -64 });
+        firstScrollTo('#nftcollections', 500, { offset: -100 });
       }, 200);
     }
   }

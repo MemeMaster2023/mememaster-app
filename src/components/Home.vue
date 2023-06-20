@@ -329,9 +329,26 @@
     <div id="gallery">
         <v-row :style="scrollClicked ? 'margin-top:32px' : ''">
           <v-col class="mt-4">
-            <div class="text-center gallery">Get inspired by our gallery!</div>
+            <div class="text-center gallery">Sample of our Meme gallery!</div>
           </v-col>
         </v-row>
+
+        <v-row :align="'center'" class="ma-4">
+          <v-col cols="12" md="12" :align="'center'">
+            <v-btn 
+                prepend-icon="mdi-collage" 
+                size="x-large" 
+                variant="outlined"
+                theme="dark"
+                color="white"
+                to="/collections"
+                style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
+            >
+              Get inspired by our gallery!
+            </v-btn>
+          </v-col>
+        </v-row>
+
         <v-row class="mt-8 ml-2 mr-2 mb-4">
           <template v-for="(image,imgIdx) in images1" :key="imgIdx">
             <v-col cols="12" :md="image.cols">
@@ -365,22 +382,6 @@
               </v-img>
             </v-col>
           </template>
-        </v-row>
-
-        <v-row :align="'center'" class="ma-4">
-          <v-col cols="12" md="12" :align="'center'">
-            <v-btn 
-                prepend-icon="mdi-collage" 
-                size="large" 
-                variant="outlined"
-                theme="dark"
-                color="white"
-                to="/collections"
-                style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
-            >
-              See more Collections
-            </v-btn>
-          </v-col>
         </v-row>
       </div>
 

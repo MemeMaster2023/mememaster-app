@@ -371,7 +371,8 @@
                             credits: this.userData.credits ?? 0,
                             memberSince: this.userData.created,
                             favorites: this.userData.favorites,
-                            welcome: this.userData.welcome
+                            welcome: this.userData.welcome,
+                            version: this.userData.version ?? import.meta.env.VITE_APP_VERSION
                           })
                           // console.log('Set User Details in Store success!')
                           if (this.getUser.displayName === '') {
@@ -426,7 +427,8 @@
                         credits: this.userData.credits ?? 0,
                         memberSince: this.userData.created,
                         favorites: this.userData.favorites,
-                        welcome: this.userData.welcome
+                        welcome: this.userData.welcome,
+                        version: this.userData.version ?? import.meta.env.VITE_APP_VERSION
                       })
                       // console.log('Set User Details in Store success!')
                       if (this.getUser.displayName === '') {

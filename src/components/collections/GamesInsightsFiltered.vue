@@ -13,15 +13,15 @@
       </v-img> -->
 
       <v-card theme="dark">
-        <v-row class="pt-8">
+        <v-row class="pt-4">
           <v-col cols="12" :align="center">
-            <div class="text-h4 text-center" style="margin-left: 20px; margin-top: 80px">Early Gaming Insights</div>
+            <div class="text-h4 text-center" style="margin-left: 20px;">Early Gaming Insights</div>
           </v-col>
         </v-row>
 
         <v-row>
           <v-col cols="12" :align="center">
-            <div style="text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;">
+            <div :style="isMobileDevice ? 'text-align: justify;margin-left: 5%;margin-right: 5%;font-size: 1rem;' : 'text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;'">
               Take a sneak peek at our "Early Gaming Insights" you can use your qualified (they will need to fit that gaming criteria) generated memes and NFTs in the game zones and then sell swap them in our gaming market place or in the general market place and the NFT's even on third party platforms such as Rarible and OpenSea.<br><br>
 
               You can earn our points in features and then use those points in the marketplaces or redeem them for our EMAS tokens.<br><br>
@@ -31,7 +31,7 @@
           </v-col>
         </v-row>
 
-        <v-row class="ma-8">
+        <v-row class="ma-4">
 
             <v-col
               v-for="(col, index) in collections"
@@ -40,8 +40,9 @@
               cols="12" md="4"
             >
               <v-card
-                min-width="100%"
+                class="mx-auto"
                 max-width="400"
+                min-width="100%"
                 @click="openCollection(col, index)"
               >
                 <v-img
@@ -87,9 +88,17 @@
             <v-toolbar
               color="transparent"
             >
-            <v-toolbar-title style="font-size: 1.5rem" class="ml-8 text-wrap">{{ selectedCollection.name }}</v-toolbar-title>
+            <v-btn v-if="isMobileDevice"
+              class="mr-2"
+              variant="outlined"
+              size="small"
+              icon="mdi-arrow-left-bold"
+              @click="collectionDialog = false"
+            >
+            </v-btn>
+            <v-toolbar-title :style="isMobileDevice ? 'font-size: 1rem' : 'font-size: 1.5rem;margin-left:32px'" class="text-wrap">{{ selectedCollection.name }}</v-toolbar-title>
             <v-spacer></v-spacer>
-              <v-btn
+              <v-btn v-if="!isMobileDevice"
                 class="mr-8"
                 variant="outlined"
                 size="small"
@@ -169,7 +178,7 @@ export default {
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
-    this.scrollToTop()
+    // this.scrollToTop()
     this.storageRef = firebase.storage().ref()
     this.loadCollections()
   },
@@ -289,7 +298,7 @@ export default {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#nftcollections', 500, { offset: -64 });
+        firstScrollTo('#nftcollections', 500, { offset: -100 });
       }, 200);
     }
   }

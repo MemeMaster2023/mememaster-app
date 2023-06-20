@@ -54,6 +54,7 @@ export default createStore({
                 showWelcomeSession: false,
                 showWelcome: localStorage.getItem('welcome') === null ? false : JSON.parse(localStorage.getItem('welcome')),
                 photo: '',
+                version: ''
             },
             count: 0,
             drawer: false
@@ -65,8 +66,12 @@ export default createStore({
             console.log(state)
         },
         setDrawer (state, payload) {
-            console.log('drawer: ' + payload.drawer)
+            // console.log('drawer: ' + payload.drawer)
             state.drawer = payload.drawer
+        },
+        setAvatar (state, payload) {
+            console.log('avatar: ' + payload.avatar)
+            state.user.avatar = payload.avatar
         },
         SetEmailConnected(state, payload) { 
             state.user.isEmailConnected = payload.isEmailConnected;
@@ -129,6 +134,7 @@ export default createStore({
             state.user.favorites = payload.favorites
             state.user.welcome = payload.welcome
             state.user.photo = payload.photo
+            state.user.version = payload.version
             localStorage.setItem('mm-displayName', payload.displayName)
             localStorage.setItem('mm-email', payload.email)
             localStorage.setItem('mm-uid', payload.uid)
@@ -208,6 +214,7 @@ export default createStore({
             state.showWelcomeSession = false
             state.showWelcome = null
             state.photo = ''
+            state.version = ''
             localStorage.removeItem('provider')
             localStorage.removeItem('mm-mmConnected')
             localStorage.removeItem('mm-uid')

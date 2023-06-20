@@ -159,7 +159,7 @@
           <span style="font-size: 16px; color:#FFF;">Copyright &copy; Meme Master, {{ new Date().getFullYear() }}</span>
         </v-col>
         <v-layout v-if="!isMobileDevice" style="width:100%" class="mr-2 ml-4">
-          <span style="font-size: 16px; color:#FFF;">&copy; Meme Master, {{ new Date().getFullYear() }}</span>
+          <span style="font-size: 16px; color:#FFF;">&copy; Meme Master, {{ new Date().getFullYear() }} - Version: {{ currentAppVersion  }}</span>
           <v-spacer v-if="!isMobileDevice"></v-spacer>
           <span style="font-size: 16px; color:#FFF;" v-if="!isMobileDevice">
             <v-btn
@@ -344,6 +344,7 @@ export default {
     loading: false,
     termsDialog: false,
     privacyDialog: false,
+    currentAppVersion: ''
   }),
   components: {
   },
@@ -354,6 +355,7 @@ export default {
   created() {
     console.log('###### this.isMobileDevice ##########')
     console.log(this.isMobileDevice)
+    this.currentAppVersion = import.meta.env.VITE_APP_VERSION
   },
   methods: {
     gotoLink(link) {

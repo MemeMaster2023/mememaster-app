@@ -565,11 +565,13 @@ export default {
     font: { name: "Nunito", id: "Nunito" },
     fonts: [
       { name: "Nunito", id: "Nunito" },
+      { name: "Open Sans", id: "Open Sans, sans-serif" },
       { name: "Roboto", id: "'Roboto', sans-serif" },
       { name: "Comfortaa", id: "Comfortaa" },
       { name: "Luckiest Guy", id: "Luckiest Guy" },
       { name: "Courgette Handwriting", id: "Courgette" },
-      { name: "Bungee Shade", id: "'Bungee Shade', cursive" }
+      { name: "Bungee Shade", id: "'Bungee Shade', cursive" },
+      { name: "Bungee Outline", id: "'Bungee Outline', cursive" },
     ],
     fontSize: 50,
     formatting: [],
@@ -855,7 +857,7 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Comfortaa:wght@400;700&family=Courgette&family=Gruppo&family=Luckiest+Guy&family=Nunito:wght@400;700;900&family=Roboto:wght@700;900&family=Saira:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bungee+Outline&family=Bungee+Shade&family=Comfortaa:wght@400;700&family=Courgette&family=Gruppo&family=Luckiest+Guy&family=Nunito:wght@400;700;900&family=Open+Sans:wght@400;700&family=Roboto:wght@700;900&family=Saira:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap');
   .homeText {
     font-family: 'Gruppo';
     font-size: 40px;

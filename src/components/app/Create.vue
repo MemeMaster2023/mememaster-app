@@ -94,9 +94,6 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
-        </v-col>
-
         <!-- <v-col cols="12" md="4" :align="center">
           <v-card
             class="mx-auto"

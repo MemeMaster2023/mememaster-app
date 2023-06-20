@@ -57,6 +57,7 @@ const AuthModule = {
         favorites: [],
         credits: 500,
         welcome: payload.welcome,
+        version: import.meta.env.VITE_APP_VERSION
       };
       console.log(newUser);
       db.collection("users")
@@ -87,6 +88,7 @@ const AuthModule = {
             memberSince: payload.created,
             favorites: [],
             credits: 500,
+            version: import.meta.env.VITE_APP_VERSION
           });
         })
         .catch((error) => {
@@ -168,6 +170,7 @@ const AuthModule = {
               payload.userData["displayName"] = payload.userData["name"];
               payload.userData["memberSince"] = payload.userData["created"];
               payload.userData["accStatus"] = payload.userData["status"];
+              payload.userData["version"] =  payload.userData["version"];
               commit("SetConnectedUserDetails", payload.userData);
             }
             localStorage.removeItem("meme-master-emailForSignIn");
@@ -217,6 +220,7 @@ const AuthModule = {
               objFromDb["displayName"] = objFromDb["name"];
               objFromDb["memberSince"] = objFromDb["created"];
               objFromDb["accStatus"] = objFromDb["status"];
+              objFromDb["version"] = objFromDb["version"];
               commit("SetConnectedUserDetails", objFromDb);
             }
             commit("SetEmailConnected", {
@@ -254,6 +258,7 @@ const AuthModule = {
         objFromDb["displayName"] = objFromDb["name"];
         objFromDb["memberSince"] = objFromDb["created"];
         objFromDb["accStatus"] = objFromDb["status"];
+        objFromDb["version"] = objFromDb["version"];
         console.log("getUser", objFromDb);
         commit("SetConnectedUserDetails", objFromDb);
         commit("SetEmailConnected", {
@@ -280,7 +285,7 @@ const AuthModule = {
       console.log(payload)
       try{
         const obj = {
-          photo: payload.photo
+          avatar: payload.avatar
         }
         console.log(obj)
         await db.collection("users").doc(payload.docId).update(obj);

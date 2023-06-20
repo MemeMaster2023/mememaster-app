@@ -355,10 +355,11 @@
                       accLevel: this.userData.acc_level,
                       accType: this.userData.acc_type,
                       accStatus: this.userData.status,
-                      credits: this.userData.credits ?? 0,
+                      credits: this.userData.credits ?? 500,
                       memberSince: this.userData.created,
                       favorites: this.userData.favorites,
-                      welcome: this.userData.welcome
+                      welcome: this.userData.welcome,
+                      version: this.userData.version ?? import.meta.env.VITE_APP_VERSION
                     })
                     // console.log('Set User Details in Store success!')
                     if (this.getUser.displayName === '') {
@@ -413,7 +414,8 @@
                   credits: this.userData.credits ?? 0,
                   memberSince: this.userData.created,
                   favorites: this.userData.favorites,
-                  welcome: this.userData.welcome
+                  welcome: this.userData.welcome,
+                  version: this.userData.version ?? import.meta.env.VITE_APP_VERSION
                 })
                 // console.log('Set User Details in Store success!')
                 if (this.getUser.displayName === '') {
