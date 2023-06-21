@@ -65,10 +65,10 @@
           </v-row>
 
           <v-row :align="'center'" v-if="!isMobileDevice" style="height:100%" class="pt-8">
-            <v-col cols="12" md="1" class="pa-4">
+            <v-col cols="12" md="1" class="pa-2">
             </v-col>
 
-            <v-col cols="12" md="3" class="pa-4" align-self="end" style="height:100%">
+            <v-col cols="12" md="3" class="pa-2" align-self="end" style="height:100%">
               <v-card
                 class="mx-auto overflow-auto"
                 max-width="100%"
@@ -80,7 +80,7 @@
               >
               <v-card-title >
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Meme Collections & Token Listings
+                  Meme Collections & New Token Listings
                 </div>
               </v-card-title>
                 <v-card-text>
@@ -103,7 +103,7 @@
               </v-card>
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-4">
+            <v-col cols="12" md="4" class="pa-2">
               <v-card
                 class="mx-auto overflow-auto"
                 max-width="100%"
@@ -120,15 +120,15 @@
               </v-card-title>
                 <v-card-text>
                   <div class="text-body-1 pb-16">
-                    Gain early access to out exclusives 'new tokens listing platform'<br><br>
-                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed (add in) in our roadmap.
+                    Gain early access to out exclusives 'new tokens listing platform'<br>
+                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed in our roadmap.
                   </div>
                 </v-card-text>
                 <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
-                    @click="learnMoreDialog = true"
+                    to="/tokens"
                   >
                     Learn More
                   </v-btn>
@@ -137,7 +137,7 @@
               </v-card>
             </v-col>
 
-            <v-col cols="12" md="3" class="pa-4">
+            <v-col cols="12" md="3" class="pa-2">
               <v-card
                 class="mx-auto overflow-auto"
                 max-width="100%"
@@ -414,7 +414,7 @@
                 <v-row>
                   <v-col cols="12" md="8">
                     <div>
-                      <h2 class="text-h4 font-weight-bold">Meme Collections & Token Listings</h2>
+                      <h2 class="text-h4 font-weight-bold">Meme Collections & New Token Listings</h2>
 
                       <div class="text-h6 mt-2 mb-2">
                         With Meme Master, you'll be able to:<br>

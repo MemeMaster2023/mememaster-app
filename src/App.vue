@@ -203,14 +203,14 @@ export default {
       const user = firebase.auth().currentUser;
       if(!user){
         uid = localStorage.getItem('mm-uid');
-      }else{
+      } else{
         uid = user.uid;
         if (this.getUser.version !== import.meta.env.VITE_APP_VERSION) {
           this.versionSnackbar = true
         }
       }
       this.$store.dispatch("getUser", uid);
-    }, 2000);
+    }, 4000);
     if (this.getChain !== '0x1') {
       this.switchNWDialog = true
       // this.addETHNetwork()

@@ -2,7 +2,7 @@
   <div id="collections">
     <v-responsive style="background-color: #000;">
       
-      <v-img :src="view === 0 ? '/img/home/collections_bg_V15_00' + colIndex + '.webp' : '/img/home/collections_bg_V14_0' + view + '.webp'"
+      <v-img :src="view === 0 ? '/img/home/collections_bg_V15_00' + colIndex + '.webp' : '/img/home/collections_bg_V15_0' + view + '.webp'"
             :max-height="isMobileDevice ? 500 : 400"
             cover
             class="align-end"

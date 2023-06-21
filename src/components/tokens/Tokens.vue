@@ -9,12 +9,12 @@
         </v-col>
 
         <v-col cols="12" md="8" :align="center" >
-          <div class="text-h4 text-center ma-2">Meme Master Token Listings</div>
+          <div class="text-h4 text-center ma-2">New Tokens Listings</div>
 
           <v-row class="mt-4">
             <v-col cols="12" md="8">
               <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
-                Welcome to our Token Listings section, where you can discover a wide array of tokens. Whether you're an investor, enthusiast, or simply curious about the latest trends in the digital asset space, this is the place to be.<br><br>
+                Welcome to our New Token Listings section, where you can discover a wide array of tokens. Whether you're an investor, enthusiast, or simply curious about the latest trends in the digital asset space, this is the place to be.<br><br>
                 
                 Explore a diverse range of tokens representing various projects, protocols, and industries. From cryptocurrencies to utility tokens and beyond, our curated selection ensures you have access to some of the most promising and innovative assets in the market.<br><br>
               </div>
@@ -34,7 +34,7 @@
             theme="dark"
             icon="mdi-code-braces"
           >
-            <p style="font-size: 1.3rem;margin-top: -5px;">The Token Listings will be launched in Phase 4.<br>Stay tuned for information about the 1st release.</p>
+            <p style="font-size: 1.3rem;margin-top: -5px;">The New Token Listings will be launched in Phase 4.<br>Stay tuned for information about the 1st release.</p>
           </v-alert>    
           
           <!-- <v-btn
@@ -45,7 +45,7 @@
             to="/games-early-insights"
           >
             
-            Take a sneak peek at our "Token Listings"
+            Take a sneak peek at our "New Token Listings"
           </v-btn> -->
         </v-col>
 
