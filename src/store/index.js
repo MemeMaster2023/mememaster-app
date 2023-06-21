@@ -73,6 +73,10 @@ export default createStore({
             console.log('avatar: ' + payload.avatar)
             state.user.avatar = payload.avatar
         },
+        setCredits (state, payload) {
+            console.log('credits: ' + payload.credits)
+            state.user.credits = payload.credits
+        },
         SetEmailConnected(state, payload) { 
             state.user.isEmailConnected = payload.isEmailConnected;
             state.user.isLoggedIn = payload.isLoggedIn;

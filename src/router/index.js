@@ -110,6 +110,15 @@ const routes = [
         component: () => import(/* webpackChunkName: "home" */ '@/views/NFTMarketplace.vue'),
       },
       {
+        path: "/tokens",
+        name: "Tokens",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/Tokens.vue"),
+      },
+      {
         path: "/games",
         name: "Games",
         // route level code-splitting

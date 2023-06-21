@@ -115,13 +115,13 @@
               >
               <v-card-title>
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Airdrops, Gaming and much more
+                  Join our limited-edition airdrops
                 </div>
               </v-card-title>
                 <v-card-text>
                   <div class="text-body-1 pb-16">
-                    Get access to join our limited-edition airdrops.<br><br>
-                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed our roadmap.
+                    Gain early access to out exclusives 'new tokens listing platform'<br><br>
+                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed (add in) in our roadmap.
                   </div>
                 </v-card-text>
                 <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">

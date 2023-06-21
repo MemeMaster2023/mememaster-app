@@ -1403,6 +1403,11 @@ export default {
           }
           this.generateLoading = false
           this.enableStopGenerating = false
+          let newBalance = this.getUser.credits - parseInt(this.imagesCount)
+          let obj = {
+            credits: newBalance
+          }
+          this.updateUserCredit(obj)
         })
         .catch(err => {
           // this.loading = false
@@ -1494,12 +1499,30 @@ export default {
           }
           this.generateLoading = false
           this.enableStopGenerating = false
+          // Update credits in user account
+          let newBalance = this.getUser.credits - parseInt(this.imagesCount)
+          let obj = {
+            credits: newBalance
+          }
+          this.updateUserCredit(obj)
         })
         .catch(err => {
           // this.loading = false
           console.log('Error generating Meme.', err)
           // show friendly error in user screen
         })
+    },
+    updateUserCredit (obj) {
+      db.collection('users').doc(this.getUser.docId).update(obj)
+        .then(() => {
+            // console.log('User Account in bucket updated')
+            this.$store.commit('setCredits', {
+              credits: obj.credits
+            })
+          })
+        .catch(error => {
+            console.log(error)
+          })
     },
     stopGenerationClicked ()  {
       this.generateLoading = false
