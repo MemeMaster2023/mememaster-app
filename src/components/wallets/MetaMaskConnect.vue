@@ -1,7 +1,7 @@
 <template>
   <div id="metamask">
 
-    <v-row v-if="buttonType === 'large'">
+    <v-row v-if="buttonType === 'large' && !trustWalletEnabled">
 
       <v-btn style="width:100%;" size="large" color="deep-purple-lighten-4" v-if="mmInstalled && mmConnected">
         <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Connected To Metamask
@@ -9,13 +9,31 @@
 
       <!-- :disabled="isMobileDevice" -->
       <v-btn style="width:100%;" size="large" color="deep-purple-lighten-4" @click="enableEthereumButton" v-if="mmInstalled && !mmConnected">
-        <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>Metamask
+        <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>MetaMask
       </v-btn>
 
       <!-- :disabled="isMobileDevice" -->
       <v-btn  style="width:100%;" size="large" color="deep-purple-lighten-4" @click="startOnboarding" v-if="!mmInstalled">
         <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>Install Metamask
       </v-btn>
+
+    </v-row>
+
+    <v-row v-if="buttonType === 'large' && trustWalletEnabled">
+
+      <v-btn style="width:100%;" size="large" color="deep-purple-lighten-5" v-if="twConnected">
+        <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Connected To Trust Wallet
+      </v-btn>
+
+      <!-- :disabled="isMobileDevice" -->
+      <v-btn style="width:100%;" size="large" color="deep-purple-lighten-5" @click="enableEthereumButton" v-if="!twConnected">
+        <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Trust Wallet
+      </v-btn>
+
+      <!-- :disabled="isMobileDevice" -->
+      <!-- <v-btn  style="width:100%;" size="large" color="deep-purple-lighten-5" @click="startOnboarding" v-if="!twInstalled">
+        <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px"/>Install TrustWallet
+      </v-btn> -->
 
     </v-row>
 
@@ -47,6 +65,7 @@
   import MetaMaskOnboarding from '@metamask/onboarding'
   const onboarding = new MetaMaskOnboarding()
   import { generate } from 'project-name-generator';
+
   export default {
     props: {
       dark: Boolean,
@@ -60,7 +79,7 @@
     data(){
       return {
         userExists: false,
-        ageConfirm: false
+        trustWalletEnabled: false
       }
     },
     computed: {
@@ -76,13 +95,24 @@
       mmInstalled () {
         return this.$store.state.user.mmInstalled
       },
+      twConnected () {
+        return this.$store.state.user.twConnected
+      },
+      twInstalled () {
+        return this.$store.state.user.twInstalled
+      },
       getUser () {
         return this.$store.state.user
       }
     },
     watch: {
-     mmConnected () {
-      if (!this.mmConnected) {
+      mmConnected () {
+        if (!this.mmConnected) {
+          this.disconnectMetamask ()
+        }
+      },
+      twConnected () {
+        if (!this.twConnected) {
           this.disconnectMetamask ()
         }
       }
@@ -103,8 +133,84 @@
     },
     created() {
       this.init('init')
+      this.initTrust()
     },
     methods:{
+      async initTrust () { 
+        const injectedProvider = await this.getTrustWalletInjectedProvider()
+        console.log(injectedProvider)
+        if (injectedProvider === null) {
+          this.trustWalletEnabled = false
+        } else {
+          this.trustWalletEnabled = true
+        }
+      },
+      async getTrustWalletInjectedProvider ({ timeout } = { timeout: 3000 }) {
+        const provider = this.getTrustWalletFromWindow();
+
+        if (provider) {
+          return provider;
+        }
+
+        return this.listenForTrustWalletInitialized({ timeout });
+      },
+      async listenForTrustWalletInitialized ({ timeout } = { timeout: 3000 }) {
+        return new Promise((resolve) => {
+          const handleInitialization = () => {
+            resolve(this.getTrustWalletFromWindow());
+          };
+
+          window.addEventListener("trustwallet#initialized", handleInitialization, {
+            once: true,
+          });
+
+          setTimeout(() => {
+            window.removeEventListener(
+              "trustwallet#initialized",
+              handleInitialization,
+              { once: true }
+            );
+            resolve(null);
+          }, timeout);
+        });
+      },
+      getTrustWalletFromWindow () {
+        const isTrustWallet = (ethereum) => {
+          // Identify if Trust Wallet injected provider is present.
+          const trustWallet = !!ethereum.isTrust;
+
+          return trustWallet;
+        };
+
+        const injectedProviderExist =
+          typeof window !== "undefined" && typeof window.ethereum !== "undefined";
+
+        // No injected providers exist.
+        if (!injectedProviderExist) {
+          return null;
+        }
+
+        // Trust Wallet was injected into window.ethereum.
+        if (isTrustWallet(window.ethereum)) {
+          return window.ethereum;
+        }
+
+        // Trust Wallet provider might be replaced by another
+        // injected provider, check the providers array.
+        if (window.ethereum?.providers) {
+          // ethereum.providers array is a non-standard way to
+          // preserve multiple injected providers. Eventually, EIP-5749
+          // will become a living standard and we will have to update this.
+          return window.ethereum.providers.find(isTrustWallet) ?? null;
+        }
+
+        // Trust Wallet injected provider is available in the global scope.
+        // There are cases that some cases injected providers can replace window.ethereum
+        // without updating the ethereum.providers array. To prevent issues where
+        // the TW connector does not recognize the provider when TW extension is installed,
+        // we begin our checks by relying on TW's global object.
+        return window["trustwallet"] ?? null;
+      },
       init (type) {
         console.log('this.getAccounts after disconnect')
         console.log(this.getAccounts)
@@ -125,7 +231,7 @@
           store.commit('SetMetaMaskInstalled', {
             mmInstalled: true,
           })
-          console.log(!this.mmConnected)
+          console.log(this.mmConnected)
           console.log(type)
           console.log(this.getUser)
           console.log(this.getUser.walletProvider)
@@ -150,48 +256,6 @@
       startOnboarding () {
         onboarding.startOnboarding()
       },
-      submitDisplayName () {
-        let obj = {
-          name: this.getUser.displayName,
-          consent_13_years: true
-        }
-        this.saveSettingsData(obj)
-        // Update Display Name
-        this.currentUser.updateProfile({
-          displayName: this.getUser.displayName
-        }).then(function () {
-          // Update successful.
-          console.log('Display Name Updated - Firebase')
-        }, (error) => {
-          // An error happened.
-          console.log(error)
-        })
-      },
-      submitDisplayNameClicked (e) {
-        // console.log(e)
-        // console.log(this.getUser.displayName)
-        // console.log(this.getUser.displayName.length)
-        if (e === 'click' && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
-          this.submitDisplayName()
-          return
-        }
-        if (e.keyCode === 13 && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
-          // alert('Enter was pressed')
-          this.submitDisplayName()
-          return
-        }
-      },
-      saveSettingsData (obj) {
-        db.collection('users').doc(this.getUser.docId).update(obj)
-          .then(() => {
-              // console.log('User Account in bucket updated')
-              // Snackbar That confirms
-              // this.setDisplayNameDialog = false
-            })
-          .catch(error => {
-              console.log(error)
-            })
-      },
       disconnectMetamask () {
         window.ethereum.request({
           method: "eth_requestAccounts",
@@ -204,6 +268,7 @@
         store.commit('SetMetaMaskChanges', {
           accounts: [],
           mmConnected: false,
+          twConnected: false,
           walletProvider: '',
           isLoggedIn: false,
           isEmailConnected: false,
@@ -211,8 +276,13 @@
         })
         console.log('disconnectMetamask SetMetaMaskChanges ')
         firebase.auth().signOut()
+        store.commit("SetEmpty")
       },
       enableEthereumButton () {
+        console.log('enableEthereumButton - this.twConnected')
+        console.log(this.twConnected)
+        console.log(window.ethereum)
+        if (this.twConnected) return
         const connectWallet = async () => {
           if (window.ethereum) { //check if Metamask is installed
             try {
@@ -248,23 +318,27 @@
 
           Promise.resolve(connectWallet())
           .then(result => {
-            // console.log(result.connectedStatus)
-            // console.log(result.address)
+            console.log(result.connectedStatus)
+            console.log(result.address)
             // console.log(result.status)
             // Set the user in the store
             if (result.connectedStatus) {
               store.commit('SetUserDetails', {
                 accounts: result.address,
                 walletProvider: 'MetaMask',
-                mmConnected: true,
-                mmInstalled: true,
+                mmConnected: this.trustWalletEnabled ? false : true,
+                mmInstalled: this.trustWalletEnabled ? false : true,
+                twConnected: this.trustWalletEnabled ? true : false,
+                twInstalled: this.trustWalletEnabled ? true : false,
                 binanceConnected: false,
                 binanceInstalled: this.getUser.binanceInstalled,
                 walletConnected: false,
                 isDAppReady: true,
+                mmCount: this.getUser.mmCount,
                 networkChainID: '0x' + nw
               })
             }
+            console.log('################ are we getting here ################')
             // console.log(this.getUser.networkChainID)
             // lookup account with address in firebase users
             if (result.connectedStatus) {
@@ -320,7 +394,7 @@
                     )
                   }
                   snapshot.forEach(doc => {
-                    // console.log('User exists!')
+                    console.log('User exists!')
                     // console.log(doc.id, '=>', doc.data())
                     this.newPostKey = doc
                     this.userExists = true
@@ -330,9 +404,10 @@
                     // console.log(this.newPostKey.id)
                     // Log User In // nickname account
                     this.currentUser = firebase.auth().currentUser
+                    console.log(this.currentUser)
                     if (this.currentUser) {
                       if (this.currentUser.uid !== doc.data().uid) {
-                        // this is same MetaMask account address but different instance crerated due to fb is  console.log('User exists!')
+                        // this is same MetaMask account address but different instance crerated due to fb is console.log('User exists!')
                         // console.log('This is same MetaMask account address but different instance created due to fb connection issue')
                         this.currentUser = null
                       }
@@ -344,8 +419,7 @@
                         () => {
                           // Logged in so user can write to fb
                           // update store maybe
-                          // console.log(user)
-                          // console.log('Login User success!')
+                          console.log('Login User success!')
                           this.userData = doc.data()
                           this.currentUser = firebase.auth().currentUser
                           store.commit('SetConnectedUserDetails', {
@@ -456,7 +530,6 @@
         })
         .catch((error) => console.log(error))
 
-
         if (typeof window.ethereum !== 'undefined' && this.getUser.mmCount === 0) {
           window.ethereum.on('accountsChanged', (accounts) => {
             // Time to reload your interface with accounts[0]!
@@ -466,6 +539,7 @@
               store.commit('SetMetaMaskChanges', {
                 accounts: [],
                 mmConnected: false,
+                twConnected: false,
                 walletProvider: '',
                 isLoggedIn: false,
                 isEmailConnected: this.getUser.isEmailConnected,

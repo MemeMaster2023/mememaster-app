@@ -171,6 +171,7 @@ const AuthModule = {
               payload.userData["memberSince"] = payload.userData["created"];
               payload.userData["accStatus"] = payload.userData["status"];
               payload.userData["version"] =  payload.userData["version"];
+              payload.userData["credits"] = payload.userData["credits"];
               commit("SetConnectedUserDetails", payload.userData);
             }
             localStorage.removeItem("meme-master-emailForSignIn");
@@ -221,6 +222,7 @@ const AuthModule = {
               objFromDb["memberSince"] = objFromDb["created"];
               objFromDb["accStatus"] = objFromDb["status"];
               objFromDb["version"] = objFromDb["version"];
+              objFromDb["credits"] = objFromDb["credits"];
               commit("SetConnectedUserDetails", objFromDb);
             }
             commit("SetEmailConnected", {
@@ -259,6 +261,7 @@ const AuthModule = {
         objFromDb["memberSince"] = objFromDb["created"];
         objFromDb["accStatus"] = objFromDb["status"];
         objFromDb["version"] = objFromDb["version"];
+        objFromDb["credits"] = objFromDb["credits"];
         console.log("getUser", objFromDb);
         commit("SetConnectedUserDetails", objFromDb);
         commit("SetEmailConnected", {
@@ -305,8 +308,8 @@ const AuthModule = {
       }
     },
     logout({ commit }) {
-      firebase.auth().signOut();
-      commit("SetEmpty");
+      firebase.auth().signOut()
+      commit("SetEmpty")
     },
   },
   getters: {

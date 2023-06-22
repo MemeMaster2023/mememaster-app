@@ -61,8 +61,7 @@
         displayName: '',
         userExists: false,
         accounts: [],
-        chainId: 0,
-        ageConfirm: false
+        chainId: 0
       }
     },
     computed: {
@@ -183,6 +182,7 @@
             uid: '',
           })
           firebase.auth().signOut()
+          store.commit("SetEmpty")
         })
       },
       disconnectWallet () {
@@ -196,46 +196,6 @@
         })
         firebase.auth().signOut()
       },
-      submitDisplayName () {
-        let obj = {
-          name: this.getUser.displayName,
-          consent_13_years: true
-        }
-        this.saveSettingsData(obj)
-        // Update Display Name
-        this.currentUser.updateProfile({
-          displayName: this.getUser.displayName
-        }).then(function () {
-          // Update successful.
-          console.log('Display Name Updated - Firebase')
-        }, (error) => {
-          // An error happened.
-          console.log(error)
-        })
-      },
-      submitDisplayNameClicked (e) {
-        if (e === 'click' && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
-          alert('Click was pressed')
-          this.submitDisplayName()
-          return
-        }
-        if (e.keyCode === 13 && this.getUser.displayName !== '' && this.getUser.displayName.length > 1) {
-          alert('Enter was pressed')
-          this.submitDisplayName()
-          return
-        }
-      },
-      saveSettingsData (obj) {
-        db.collection('users').doc(this.getUser.docId).update(obj)
-          .then(() => {
-              // console.log('User Account in bucket updated')
-              // Snackbar That confirms
-              // this.setDisplayNameDialog = false
-            })
-          .catch(error => {
-              console.log(error)
-            })
-      },
       enableWalletConnect () {
         console.log('########### is this code happening ###########')
         console.log(this.accounts)
@@ -244,6 +204,8 @@
           accounts: this.accounts,
           walletProvider: 'WalletConnect',
           mmConnected: false,
+          twConnected: false,
+          twInstalled: false,
           mmInstalled: this.getUser.mmInstalled,
           binanceConnected: false,
           binanceInstalled: this.getUser.binanceInstalled,
@@ -265,7 +227,7 @@
               // this.loading = false
               // Create user record in 'users' bucket
               let funkyName = generate().dashed
-              this.emailAddress = funkyName + '@nft.app'
+              this.emailAddress = funkyName + '@mememaster.app'
               firebase.auth().createUserWithEmailAndPassword(this.emailAddress, userAddress).then(
                 () => {
                   this.currentUser = firebase.auth().currentUser
