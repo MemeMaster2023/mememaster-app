@@ -7,7 +7,7 @@
             indeterminate
             :size="70"
             :width="7"
-            color="purple"
+            color="deep-purple-darken-2"
           ></v-progress-circular>
         </v-col>
       </v-row>
@@ -40,14 +40,13 @@
           <v-col cols="12" class="d-flex">
               <span class="text-h6">Account Information</span>
               <v-spacer></v-spacer>
-              <v-btn size="small" variant="outlined" rounded color="green" @click="isEdit = true" v-if="!isEdit"><v-icon>mdi-pencil-outline</v-icon>Edit Profile</v-btn>
-              <v-btn size="small" variant="outlined" rounded color="red" @click="isEdit = false" v-else><v-icon>mdi-close-outline</v-icon>Cancel Edit</v-btn>
           </v-col>
           <v-col cols="12" md="6">
               <v-text-field
-              label="Display Name"
+              label="Display Name / Username"
               placeholder="Enter your display name..."
               type="text"
+              maxlength="50"
               density="comfortable"
               v-model="getUser.displayName"
               variant="outlined"
@@ -55,25 +54,94 @@
           </v-col>
           <v-col cols="12" md="6">
               <v-text-field
-              label="Email"
-              placeholder="Enter your display name..."
+              label="Email Address"
+              placeholder="Enter your email address..."
               type="text"
               density="comfortable"
-              v-model="getUser.email"
+              v-model="userEmail"
               variant="outlined"
-            ></v-text-field>
+            >
+            <template v-slot:append-inner>
+                <v-tooltip location="bottom">
+                  <template v-slot:activator="{ props }">
+                    <v-icon v-if="getUser.isVerified" color="green" >mdi-shield-check-outline</v-icon>
+                    <v-icon v-if="!getUser.isVerified" color="yellow" v-bind="props">mdi-shield-alert-outline</v-icon>
+                  </template>
+                  Click to Verify Email
+                </v-tooltip>
+              </template>
+            </v-text-field>
           </v-col>
-          <v-col cols="12" md="12">
+          </v-row>
+          <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto" v-if="mmConnected || twConnected || walletConnected">
+            <v-col cols="12" md="6" >
+                <v-text-field
+                  label="Wallet Address"
+                  append-inner-icon="mdi-content-copy"
+                  @click:append-inner="doCopy(getUser.accounts[0])"
+                  type="text"
+                  density="comfortable"
+                  readonly
+                  v-model="getUser.accounts[0]"
+                  variant="outlined"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
               <v-text-field
-              label="Wallet Address"
-              placeholder="Enter your display name..."
-              type="text"
-              density="comfortable"
-              v-model="getUser.accounts[0]"
-              variant="outlined"
-            ></v-text-field>
-          </v-col>
-      </v-row>
+                  label="Balance"
+                  type="text"
+                  density="comfortable"
+                  readonly
+                  v-model="getUser.balance"
+                  suffix="ETH"
+                  variant="outlined"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                  label="Token Balance"
+                  type="text"
+                  density="comfortable"
+                  readonly
+                  v-model="getUser.tokenBalance"
+                  suffix="EMAS"
+                  variant="outlined"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+        <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto" v-if="emailConnected || mmConnected || twConnected || walletConnected">
+            <v-col cols="12" md="6" >
+              <v-btn v-if="emailConnected && !mmConnected && !twConnected && !walletConnected"
+                     size="large"
+                     prepend-icon="mdi-wallet"
+                     color="deep-purple-lighten-4"
+              >Connect your wallet
+              </v-btn>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                  label="Meme Master Credits"
+                  type="text"
+                  density="comfortable"
+                  readonly
+                  v-model="getUser.credits"
+                  suffix="Credits"
+                  variant="outlined"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                  label="Tier Info"
+                  type="text"
+                  density="comfortable"
+                  readonly
+                  v-model="userTier"
+                  :append-inner-icon="'mdi-numeric-' + getUser.userTier + '-box-outline'"
+                  variant="outlined"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+
       <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto">
           <v-col cols="12" class="text-h6">User Information</v-col>
           <v-col cols="12" md="6">
@@ -97,23 +165,21 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
-            <v-combobox
+            <v-select
+              return-object
               label="Gender"
-              placeholder="Enter your Gender..."
-              :readonly="!isEdit"
               density="comfortable"
-              hide-details="auto"
               :items="genders"
               item-title="name"
               item-value="id"
-              v-model="getUser.gender"
+              v-model="gender"
               variant="outlined"
-            ></v-combobox>
+            ></v-select>
           </v-col>
           <v-col cols="12" md="6">
               <v-text-field
               label="Location"
-              placeholder="Enter your display name..."
+              placeholder="Enter your location..."
               type="text"
               density="comfortable"
               v-model="getUser.location"
@@ -123,7 +189,7 @@
       </v-row>
       <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto mb-12" v-if="isEdit">
         <v-col cols="12" md="12">
-          <v-btn @click="update()" block color="purple" variant="flat"  :loading="loading">Update Profile</v-btn>           
+          <v-btn @click="update()" block size="large" color="deep-purple" variant="flat"  :loading="loading">Update Profile</v-btn>           
         </v-col>
       </v-row>
       <!-- #########################  PROFILE PICTURE  DETAIL DIALOG #########################-->
@@ -202,8 +268,8 @@
           :timeout="4000"
         >
         <v-layout>
-          <v-icon v-if="snackbarColor === 'red'">mdi-alert-outline</v-icon>
-          <v-icon v-if="snackbarColor === 'green'">mdi-check-circle-outline</v-icon>
+          <v-icon v-if="snackbarColor === 'red'" class="mr-2">mdi-alert-outline</v-icon>
+          <v-icon v-if="snackbarColor === 'green'" class="mr-2">mdi-check-circle-outline</v-icon>
           {{ snackbarText }}
         </v-layout>
 
@@ -223,8 +289,10 @@
 
 <script>
 // @ is an alias to /src
+import firebase from 'firebase/app'
 import dateformat from "dateformat"
 import imageCompression from 'browser-image-compression'
+import { copyText } from 'vue3-clipboard'
 export default {
   name: 'My Profile',
   props: {
@@ -234,6 +302,7 @@ export default {
     windowHeight: Number,
     drawer: Boolean
   },
+
   data: () => ({
     loading: false,
     snackbar: false,
@@ -257,7 +326,8 @@ export default {
         return 'Name must be alphanumeric'
       },
     ],
-    isEdit: false,
+    userEmail: '',
+    isEdit: true,
     imageDialog: false,
     profilePicture: '',
     profilePictureUrl: '',
@@ -266,10 +336,12 @@ export default {
     snackbarText: '',
     loadingImage: false,
     loadingPage: true,
+    userTier: 'Curren Tier',
+    gender: { id: 0, name: 'Not Set'},
     genders: [
       {
         id: 0,
-        name: 'None'
+        name: 'Not Set'
       },
       {
         id: 1,
@@ -292,13 +364,48 @@ export default {
     },
     isLoading(){
       return this.getUser.uid === ''
+    },
+    mmConnected () {
+      return this.$store.state.user.mmConnected
+    },
+    walletConnected () {
+      return this.$store.state.user.walletConnected
+    },
+    twConnected () {
+      return this.$store.state.user.twConnected
+    },
+    emailConnected () {
+      return this.$store.state.user.isEmailConnected
     }
   },
   watch: {
   },
   created() {
+    this.currentUser = firebase.auth().currentUser
+    console.log('########## this.currentUser ##########')
+    console.log(this.currentUser)
+    if (this.getUser.email.split('@')[1] !== 'mememaster.app') {
+      this.userEmail = this.getUser.email
+    }
+    this.gender = { id: this.getUser.gender, name: this.genders[this.getUser.gender].name }
+    this.userTier = 'Current Tier'
+    console.log('this.getUser.gender')
+    console.log(this.getUser.gender)
+    console.log('this.getUser.isVerified')
+    console.log(this.getUser.isVerified)
   },
   methods: {
+    doCopy (address) {
+      copyText(address, undefined, (error, event) => {
+        if (error) {
+          // alert('Can not copy')
+          console.log(error)
+        } else {
+          this.handleSuccess()
+          console.log(event)
+        }
+      })
+    },
     makeDate (date) {
       let dateBeforeFormat = Number.parseInt(date.toString());
       if([undefined,null,0,''].includes(date)){
@@ -380,16 +487,25 @@ export default {
           avatar: this.profilePictureUrl
         })
     },
+    copyToClipboard () {
+      copyText.copy(this.getUser.accounts[0])
+      this.handleSuccess()
+    },
+    handleSuccess() {
+      this.snackbarText = 'Address copied to clipboard'
+      this.snackbar = true
+    },
+    handleError(e) {
+      console.log(e);
+    },
     update(){
       this.loading = true
-      console.log(this.getUser.scout);
       const payload = {
-        email: this.getUser.email,
-        fullName: this.getUser.fullName,
-        dob: this.getUser.dob,
-        phone: this.getUser.phone,
-        gender: this.getUser.gender,
-        accounts: this.getUser.accounts,
+        // email: this.userEmail ?? '',
+        fullName: this.getUser.fullName ?? '',
+        dob: this.getUser.dob ?? '',
+        phone: this.getUser.phone ?? '',
+        gender: this.gender.id,
         docId: this.getUser.docId
       }
       this.$store.dispatch('updateProfile', payload)

@@ -310,7 +310,7 @@
                     // this.loading = false
                     // Create user record in 'users' bucket
                     let funkyName = generate().dashed
-                    this.emailAddress = funkyName + '@nft.app'
+                    this.emailAddress = funkyName + '@mememaster.app'
                     firebase.auth().createUserWithEmailAndPassword(this.emailAddress, userAddress[0]).then(
                       () => {
                         this.currentUser = firebase.auth().currentUser

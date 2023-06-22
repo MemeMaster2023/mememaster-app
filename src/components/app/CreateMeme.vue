@@ -355,7 +355,6 @@
                             item-value="id"
                             density="compact"
                             variant="outlined"
-        
                           ></v-select>
                         </v-col>
                       </v-row>

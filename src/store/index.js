@@ -29,6 +29,8 @@ export default createStore({
                 isEmailConnected: localStorage.getItem('mm-isEmailConnected') === null ? false : localStorage.getItem('mm-isEmailConnected') === 'false' ? false : true,
                 mmInstalled: false,
                 mmCount: 0,
+                twConnected: false,
+                twInstalled: false,
                 newCount: 10,
                 networkChainID: '0x1',
                 binanceConnected: false,
@@ -47,6 +49,9 @@ export default createStore({
                 accStatus: 0,
                 memberSince: localStorage.getItem('mm-memberSince') === null ? 0 : localStorage.getItem('mm-memberSince'),
                 credits: 0,
+                balance: 0,
+                tokenBlance:  0,
+                userTier: 1,
                 language: 'en', // localStorage.getItem('language') === null ? 'en' : localStorage.getItem('language'),
                 favorites: [],
                 likes: localStorage.getItem('likes') === null ? [] : JSON.parse(localStorage.getItem('likes')),
@@ -72,6 +77,14 @@ export default createStore({
         setAvatar (state, payload) {
             console.log('avatar: ' + payload.avatar)
             state.user.avatar = payload.avatar
+        },
+        setBalance (state, payload) {
+            console.log('balance: ' + payload.balance)
+            state.user.balance = payload.balance
+        },
+        setTokenBalance (state, payload) {
+            console.log('tokenBalance: ' + payload.tokenBalance)
+            state.user.tokenBalance = payload.tokenBalance
         },
         setCredits (state, payload) {
             console.log('credits: ' + payload.credits)
@@ -102,6 +115,8 @@ export default createStore({
             localStorage.setItem('provider', payload.walletProvider)
             state.user.mmConnected = payload.mmConnected
             state.user.mmInstalled = payload.mmInstalled
+            state.user.twConnected = payload.twConnected
+            state.user.twInstalled = payload.twInstalled
             state.user.binanceConnected = payload.binanceConnected
             state.user.binanceInstalled = payload.binanceInstalled
             state.user.walletConnected = payload.walletConnected
@@ -149,6 +164,7 @@ export default createStore({
             console.log(payload)
             state.user.accounts = payload.accounts
             state.user.mmConnected = payload.mmConnected
+            state.user.twConnected = payload.twConnected
             state.user.walletProvider = payload.walletProvider
             localStorage.setItem('provider', payload.walletProvider)
             localStorage.setItem('mm-mmConnected', payload.mmConnected)
@@ -173,51 +189,53 @@ export default createStore({
             localStorage.setItem('mm-uid', payload.uid)
         },
         SetEmpty(state){
-            state.dark = true
-            state.uid = ''
-            state.docId = ''
-            state.email = ''
-            state.displayName = ''
-            state.aboutMe = ''
-            state.fullName = ''
-            state.address = ''
-            state.dob = ''
-            state.gender = 0
-            state.gravatar = false
-            state.avatar = ''
-            state.hasCoinbase = false
-            state.hasWeb3InjectedBrowser = false
-            state.accounts = []
-            state.walletProvider = ''
-            state.mmConnected = false
-            state.isEmailConnected = false
-            state.mmInstalled = false
-            state.mmCount = 0
-            state.newCount = 10
-            state.networkChainID = '0x1'
-            state.binanceConnected = false
-            state.binanceInstalled = false
-            state.binanceCount = 0
-            state.walletConnected = false
-            state.isDAppReady = false
-            state.isLoggedIn = false
-            state.isVerified = false
-            state.idVerified = false
-            state.phoneVerified = false
-            state.ownsNFTs = false
-            state.nftName = ''
-            state.accLevel = 0
-            state.accType = 0
-            state.accStatus = 0
-            state.memberSince = 1
-            state.language = 'en'
-            state.favorites = []
-            state.likes = []
-            state.welcome = null
-            state.showWelcomeSession = false
-            state.showWelcome = null
-            state.photo = ''
-            state.version = ''
+            state.user.dark = true
+            state.user.uid = ''
+            state.user.docId = ''
+            state.user.email = ''
+            state.user.displayName = ''
+            state.user.aboutMe = ''
+            state.user.fullName = ''
+            state.user.address = ''
+            state.user.dob = ''
+            state.user.gender = 0
+            state.user.gravatar = false
+            state.user.avatar = ''
+            state.user.hasCoinbase = false
+            state.user.hasWeb3InjectedBrowser = false
+            state.user.accounts = []
+            state.user.walletProvider = ''
+            state.user.mmConnected = false
+            state.user.mmInstalled = false
+            state.user.twConnected = false
+            state.user.twInstalled = false
+            state.user.isEmailConnected = false
+            state.user.mmCount = 0
+            state.user.newCount = 10
+            state.user.networkChainID = '0x1'
+            state.user.binanceConnected = false
+            state.user.binanceInstalled = false
+            state.user.binanceCount = 0
+            state.user.walletConnected = false
+            state.user.isDAppReady = false
+            state.user.isLoggedIn = false
+            state.user.isVerified = false
+            state.user.idVerified = false
+            state.user.phoneVerified = false
+            state.user.ownsNFTs = false
+            state.user.nftName = ''
+            state.user.accLevel = 0
+            state.user.accType = 0
+            state.user.accStatus = 0
+            state.user.memberSince = 1
+            state.user.credits = 0
+            state.user.language = 'en'
+            state.user.favorites = []
+            state.user.likes = []
+            state.user.welcome = null
+            state.user.showWelcomeSession = false
+            state.user.showWelcome = null
+            state.user.version = ''
             localStorage.removeItem('provider')
             localStorage.removeItem('mm-mmConnected')
             localStorage.removeItem('mm-uid')

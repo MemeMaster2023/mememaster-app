@@ -32,7 +32,7 @@
     </v-layout>
 
     <v-layout class="mr-4 ml-4 mt-8 mb-4" v-if="env">
-      <v-btn v-if="!mmConnected && !emailConnected"
+      <v-btn v-if="!mmConnected && !twConnected && !emailConnected"
         variant="outlined"
         color="white"
         theme="dark"
@@ -52,7 +52,27 @@
         Connected
       </v-btn>
 
-      <v-btn v-if="emailConnected"
+      <v-btn v-else-if="twConnected"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        style="width:100%"
+      >
+      <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px"/>
+        Connected
+      </v-btn>
+
+      <v-btn v-else-if="walletConnected"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        style="width:100%"
+      >
+      <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px"/>
+        Connected
+      </v-btn>
+
+      <v-btn v-else-if="emailConnected"
         variant="outlined"
         color="white"
         theme="dark"
@@ -180,7 +200,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!drawer && env && (!mmConnected && !emailConnected && !walletConnected)"
+      <v-btn v-if="!drawer && env && (!mmConnected && !twConnected && !emailConnected && !walletConnected)"
         style="margin-right:30px;margin-top:-5px"
         variant="outlined"
         color="white"
@@ -190,9 +210,9 @@
         Connect 
       </v-btn>
 
-      <v-menu v-if="!drawer && env && (mmConnected || emailConnected || walletConnected)" >
+      <v-menu v-if="!drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)" >
         <template v-slot:activator="{ props }">
-          <v-btn v-if="!drawer && env && (mmConnected || emailConnected || walletConnected)"
+          <v-btn v-if="!drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
             style="margin-right:10px;margin-top:-7px"
             variant="outlined"
             color="white"
@@ -201,7 +221,8 @@
             offset="-20"
           >
             <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/> 
-            <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px" v-else-if="walletConnected  && !mmConnected"/> 
+            <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px" v-else-if="twConnected"/> 
+            <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px" v-else-if="walletConnected && !mmConnected && !twConnected"/> 
             <v-icon v-else-if="emailConnected && !mmConnected && !walletConnected" class="mr-2">mdi-email</v-icon>
               Connected
           </v-btn>
@@ -239,12 +260,12 @@
           <v-divider></v-divider>
           <v-row class="pt-2" style="width:280px">
             <v-col :align="'center'" class="mt-2" style="width:280px">
-              <div class="row" style="width:280px" v-if="mmConnected || walletConnected">
-                <span class="font-weight-bold">{{ mmConnected || walletConnected ? (this.getUser.accounts[0]).substring(0, 8) + '...' + (this.getUser.accounts[0]).substring(34, 42) : '' }}</span>
+              <div class="row" style="width:280px" v-if="mmConnected || twConnected || walletConnected">
+                <span class="font-weight-bold">{{ mmConnected || twConnected || walletConnected ? (this.getUser.accounts[0]).substring(0, 8) + '...' + (this.getUser.accounts[0]).substring(34, 42) : '' }}</span>
                 <v-icon 
                   size="x-small" 
                   class="ml-2"
-                  v-clipboard:copy.stop="this.getUser.accounts[0]"
+                  v-clipboard:copy.stop="getUser.accounts[0]"
                   v-clipboard:success="handleSuccess"
                   v-clipboard:error="handleError"
                   style="cursor: pointer;margin-top: -2px"
@@ -252,7 +273,7 @@
                  mdi-content-copy
                 </v-icon>
               </div>
-              <div class="row mt-2" style="width:280px" v-if="mmConnected || walletConnected">
+              <div class="row mt-2" style="width:280px" v-if="mmConnected || twConnected || walletConnected">
                 <span>{{ balance }} ETH</span><span class="ml-4">{{ tokenBalance }} EMAS</span>
               </div>
               <div class="row mt-2" style="width:280px">
@@ -280,7 +301,7 @@
         </v-card>
       </v-menu>
 
-      <v-btn v-if="!isMobileDevice && !drawer && env && (mmConnected || emailConnected || walletConnected)"
+      <v-btn v-if="!isMobileDevice && !drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
              style="margin-right:10px;margin-top:-7px"
              variant="outlined"
              color="white"
@@ -292,7 +313,7 @@
         Disconnect
       </v-btn>
 
-      <v-btn v-if="!drawer && !isMobileDevice && env && (emailConnected || mmConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
+      <v-btn v-if="!drawer && !isMobileDevice && env && (emailConnected || mmConnected || twConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
         style="margin-right:30px;margin-top:-7px"
         variant="outlined"
         color="white"
@@ -318,7 +339,7 @@
   </v-app-bar>
 
   <!-- DIALOGS AND COMPONENTS-->
-  <v-dialog v-if="!mmConnected"
+  <v-dialog v-if="!mmConnected || !walletConnected || !twConnected"
       transition="dialog-bottom-transition"
       :fullscreen="isMobileDevice"
       :min-width="isMobileDevice ? 300 : 500"
@@ -647,6 +668,9 @@ export default {
       walletConnected () {
         return this.$store.state.user.walletConnected
       },
+      twConnected () {
+        return this.$store.state.user.twConnected
+      },
       emailConnected () {
         // if(this.persistentUser !== null){
         //   return store.state.auth.persistentUser.isEmailConnected;
@@ -674,8 +698,16 @@ export default {
       // },
     },
     watch: {
-     mmConnected () {
-      if (this.mmConnected) {
+      mmConnected () {
+        if (this.mmConnected) {
+          setTimeout(() => {
+            this.connectWalletDialog = false
+            this.drawer = false
+          }, 2000)
+        }
+      },
+      twConnected () {
+        if (this.twConnected) {
           setTimeout(() => {
             this.connectWalletDialog = false
             this.drawer = false
@@ -739,7 +771,7 @@ export default {
     },
     created () {
       window.addEventListener('scroll', this.handleScroll)
-      console.log(process.env.VUE_APP_ENVIRONMENT)
+      console.log(import.meta.env.VITE_APP_ENVIRONMENT)
       console.log(this.getUser)
       this.env = true
       // this.env = process.env.VUE_APP_ENVIRONMENT === 'testnet'
@@ -818,7 +850,7 @@ export default {
         console.log(e);
       },
       disconnectClicked () {
-        if (this.mmConnected) {
+        if (this.mmConnected || this.twConnected) {
           this.$refs.mmConnect.disconnectMetamask()
         } else if (this.walletConnected) {
           this.$refs.walletConnectref.disconnectWallet()
@@ -850,8 +882,10 @@ export default {
           if (this.getUser.uid === '' || typeof this.getUser.accounts[0] === 'undefined' || this.getUser.accounts[0] === '0') {
             this.waitGetUserBalance()
           } else {
+            console.log('this.getWalletBalance()')
             this.getWalletBalance()
             this.getTokenBalance()
+            return
           }
         }, 1000);
       },
@@ -880,6 +914,9 @@ export default {
           .then((balance) => {
             console.log(balance)
             this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
+            this.$store.commit('setBalance', {
+              balance: this.balance
+            })
           })
           .catch((error) => console.log(error))
         } else if (this.getUser.walletProvider === 'BinanceChainWallet') {
@@ -894,6 +931,9 @@ export default {
           .then((balance) => {
             // console.log(balance)
             this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
+            this.$store.commit('setBalance', {
+              balance: this.balance
+            })
           })
           .catch((error) => console.log(error))
         }
@@ -922,6 +962,9 @@ export default {
           }
           this.tokenBalance = tmpBalance / (10**18)
           this.tokenBalance = this.tokenBalance.toLocaleString('en-US');
+          this.$store.commit('setTokenBalance', {
+            tokenBalance: this.tokenBalance
+          })
         })
         .catch(err => {
           // this.loading = false

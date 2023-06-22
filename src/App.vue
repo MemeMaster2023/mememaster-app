@@ -203,14 +203,12 @@ export default {
       const user = firebase.auth().currentUser;
       if(!user){
         uid = localStorage.getItem('mm-uid');
-      } else{
+      } else {
         uid = user.uid;
-        if (this.getUser.version !== import.meta.env.VITE_APP_VERSION) {
-          this.versionSnackbar = true
-        }
+        this.waitGetUserVersion()
       }
       this.$store.dispatch("getUser", uid);
-    }, 4000);
+    }, 2000);
     if (this.getChain !== '0x1') {
       this.switchNWDialog = true
       // this.addETHNetwork()
@@ -223,6 +221,9 @@ export default {
     getUser () {
       return this.$store.state.user
     },
+    getUserVersion () {
+      return this.$store.state.user.version
+    },
     displayName () {
       return this.$store.state.user.displayName
     },
@@ -231,6 +232,9 @@ export default {
     },
     mmConnected () {
       return this.$store.state.user.mmConnected
+    },
+    twConnected () {
+      return this.$store.state.user.twConnected
     },
     walletConnected () {
       return this.$store.state.user.walletConnected
@@ -256,11 +260,14 @@ export default {
       }
     },
     displayName () {
-      if (this.displayName === '' && (this.mmConnected || this.walletConnected)) {
+      if (this.displayName === '' && (this.mmConnected || this.twConnected || this.walletConnected)) {
         setTimeout(() => {
           this.setDisplayNameDialog = true
         }, 1000);
       }
+    },
+    getUserVersion () {
+      this.waitGetUserVersion()
     },
     getChain () {
       console.log('######### this.getChain ############')
@@ -308,7 +315,9 @@ export default {
       // this.window.width > 770 ? this.drawer = false : this.drawer = true
     },
     logout() {
+      this.$router.push('/')
       this.$store.dispatch('logout');
+      // window.location.reload()
     },
     getWeek () {
       return dateformat(new Date(), 'WW')
@@ -364,6 +373,22 @@ export default {
         .catch(error => {
             console.log(error)
           })
+    },
+    waitGetUserVersion () {
+      setTimeout(() => {
+        if (this.getUser.version === '') {
+          this.waitGetUserVersion()
+        } else {
+          console.log('####### this.getUser.version ###########')
+          console.log(this.getUser.version)
+          console.log(import.meta.env.VITE_APP_VERSION)
+          if (this.getUser.version !== import.meta.env.VITE_APP_VERSION) {
+            this.versionSnackbar = true
+          }
+          return;
+        }
+      }, 1000);
+      
     },
     updateUserVersion() {
       let obj = {
