@@ -60,14 +60,15 @@
               density="comfortable"
               v-model="userEmail"
               variant="outlined"
+              :readonly="getUser.isVerified"
             >
             <template v-slot:append-inner>
                 <v-tooltip location="bottom">
                   <template v-slot:activator="{ props }">
-                    <v-icon v-if="getUser.isVerified" color="green" >mdi-shield-check-outline</v-icon>
+                    <v-icon v-if="getUser.isVerified" color="green" v-bind="props">mdi-shield-check-outline</v-icon>
                     <v-icon v-if="!getUser.isVerified" color="yellow" v-bind="props">mdi-shield-alert-outline</v-icon>
                   </template>
-                  Click to Verify Email
+                  {{ getUser.isVerified ? 'Email is Verified' : 'Click to Verify Email' }}
                 </v-tooltip>
               </template>
             </v-text-field>
@@ -381,9 +382,9 @@ export default {
   watch: {
   },
   created() {
-    this.currentUser = firebase.auth().currentUser
+    // this.currentUser = firebase.auth().currentUser
     console.log('########## this.currentUser ##########')
-    console.log(this.currentUser)
+    // console.log(this.currentUser)
     if (this.getUser.email.split('@')[1] !== 'mememaster.app') {
       this.userEmail = this.getUser.email
     }
