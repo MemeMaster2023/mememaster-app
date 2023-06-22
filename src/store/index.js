@@ -174,7 +174,6 @@ export default createStore({
         },
         SetDisplayName(state, payload){
             state.user.displayName = payload.newName;
-            localStorage.setItem('mm-displayName', payload.newName)
         },
         SetWalletConnectChanges (state, payload) {
             console.log('SetWalletConnectChanges')
