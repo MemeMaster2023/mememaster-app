@@ -167,11 +167,13 @@ const AuthModule = {
               };
               await dispatch("insertUserForSignUp", dispatchObj);
             } else {
-              payload.userData["displayName"] = payload.userData["name"];
-              payload.userData["memberSince"] = payload.userData["created"];
-              payload.userData["accStatus"] = payload.userData["status"];
-              payload.userData["version"] =  payload.userData["version"];
-              payload.userData["credits"] = payload.userData["credits"];
+              payload.userData["displayName"] = payload.userData["name"]
+              payload.userData["avatar"] = payload.userData["avatar"]
+              payload.userData["memberSince"] = payload.userData["created"]
+              payload.userData["accStatus"] = payload.userData["status"]
+              payload.userData["version"] =  payload.userData["version"]
+              payload.userData["credits"] = payload.userData["credits"]
+              objFromDb["isVerified"] = user.emailVerified
               commit("SetConnectedUserDetails", payload.userData);
             }
             localStorage.removeItem("meme-master-emailForSignIn");
@@ -218,12 +220,14 @@ const AuthModule = {
               await dispatch("insertUserForSignUp", dispatchObj);
             }else{
               let objFromDb = querySnapshot.docs[0].data();
-              objFromDb["docId"] = querySnapshot.docs[0].id;
-              objFromDb["displayName"] = objFromDb["name"];
-              objFromDb["memberSince"] = objFromDb["created"];
-              objFromDb["accStatus"] = objFromDb["status"];
-              objFromDb["version"] = objFromDb["version"];
-              objFromDb["credits"] = objFromDb["credits"];
+              objFromDb["docId"] = querySnapshot.docs[0].id
+              objFromDb["displayName"] = objFromDb["name"]
+              objFromDb["avatar"] = objFromDb["avatar"]
+              objFromDb["memberSince"] = objFromDb["created"]
+              objFromDb["accStatus"] = objFromDb["status"]
+              objFromDb["version"] = objFromDb["version"]
+              objFromDb["credits"] = objFromDb["credits"]
+              objFromDb["isVerified"] = user.emailVerified
               commit("SetConnectedUserDetails", objFromDb);
             }
             commit("SetEmailConnected", {
@@ -251,6 +255,7 @@ const AuthModule = {
     },
     async getUser({ commit }, payload){
       console.log("Get User UID", payload)
+      let user = firebase.auth().currentUser
       const querySnapshot = await db
               .collection('users')
               .where('uid', '==', payload)
@@ -259,10 +264,12 @@ const AuthModule = {
         let objFromDb = querySnapshot.docs[0].data();
         objFromDb["docId"] = querySnapshot.docs[0].id;
         objFromDb["displayName"] = objFromDb["name"];
+        objFromDb["avatar"] = objFromDb["avatar"]
         objFromDb["memberSince"] = objFromDb["created"];
         objFromDb["accStatus"] = objFromDb["status"];
         objFromDb["version"] = objFromDb["version"];
         objFromDb["credits"] = objFromDb["credits"];
+        objFromDb["isVerified"] = user.emailVerified
         console.log("getUser", objFromDb);
         commit("SetConnectedUserDetails", objFromDb);
         commit("SetEmailConnected", {
