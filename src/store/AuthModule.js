@@ -196,6 +196,7 @@ const AuthModule = {
         .then(async (result) => {
           const user = result.user;
           if (user) {
+            console.log("firebase user", user)
             const querySnapshot = await db
               .collection('users')
               .where('email', '==', user.email)
@@ -279,7 +280,7 @@ const AuthModule = {
     changeDisplayName({commit}, payload) {
       commit("SetDisplayName",{
         newName: payload
-      })
+      }, { root: true })
     },
     async updateProfilePicture({commit}, payload){
       console.log(payload)

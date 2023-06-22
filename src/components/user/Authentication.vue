@@ -149,6 +149,13 @@ export default {
     },
   },
   watch: {
+    isExistingUser(v){
+      if(v){
+        setTimeout(() => {
+            this.backToHome();
+          }, 4000);
+      }
+    }
   },
   async created() {
     this.dialog = true;
@@ -199,11 +206,11 @@ export default {
         }
         this.uid = uid;
         this.isLoading = false;
-        if(this.isExistingUser){
-          setTimeout(() => {
-            this.backToHome();
-          }, 4000);
-        }
+        // if(this.isExistingUser){
+        //   setTimeout(() => {
+        //     this.backToHome();
+        //   }, 4000);
+        // }
       }
     },
     async onSignInWithLink(email, link) {
@@ -241,8 +248,9 @@ export default {
           docId = querySnapshot.docs[0].id;
         }
         await db.collection('users').doc(docId).update(payload)
-        this.$store.commit('changeDisplayName', this.displayName);
+        this.$store.dispatch('changeDisplayName', this.displayName);
         this.isExistingUser = true;
+
     },
     backToHome(){
       localStorage.removeItem('emailForSignIn');
