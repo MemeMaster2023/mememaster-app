@@ -153,7 +153,7 @@ export default {
       if(v){
         setTimeout(() => {
             this.backToHome();
-          }, 4000);
+          }, 3500);
       }
     }
   },
