@@ -238,7 +238,11 @@ export default {
     },
     walletConnected () {
       return this.$store.state.user.walletConnected
-    }
+    },
+    isLoggedIn () {
+      console.log("Login Status:", this.$store.state.user.isLoggedIn);
+      return this.$store.state.user.isLoggedIn || this.getUser.uid !== '';
+    },
   },
   watch: {
     online(v) {
@@ -277,6 +281,12 @@ export default {
         // this.addETHNetwork()
       } else {
         this.switchNWDialog = false
+      }
+    },
+    isLoggedIn(v){
+      if(v === false){
+        this.$router.push('/');
+        // window.location.reload();
       }
     }
   },
