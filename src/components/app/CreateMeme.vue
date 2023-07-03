@@ -370,12 +370,13 @@
                   size="large" 
                   style="width:100%;text-transform: none !important" 
                   color="deep-purple-lighten-1"
-                  :disabled="prompt === ''"
+                  :disabled="prompt === '' || getUser.credits === 0"
                   @click="startMemeGeneration()"
                   :loading="generateLoading"
               >
                 Start Meme Generation
               </v-btn>
+              <p class="text-center">You have {{ getUser.credits }} Credits</p>
 
               <v-btn v-if="enableStopGenerating"
                   prepend-icon="mdi-close-octagon-outline" 
@@ -1208,7 +1209,6 @@ export default {
               // to get a value that is either negative, positive, or zero.
               return new Date(a.name) - new Date(b.name);
             });
-  
           });
           console.log(this.draftsArr)
           this.draftsArr.reverse()

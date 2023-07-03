@@ -27,7 +27,7 @@
   
           <v-card-text v-if="!uploadingFile && !uploadComplete && !newCollection">
             <v-row>
-              <v-col cols="=12" md="6" :align="'end'">
+              <v-col cols="12" md="6" :align="'end'">
                 <v-text-field
                   prepend-inner-icon="mdi-feature-search-outline"
                   placeholder="Search..."

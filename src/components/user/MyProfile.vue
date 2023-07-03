@@ -61,12 +61,13 @@
               v-model="userEmail"
               variant="outlined"
               :readonly="getUser.isVerified"
+              :hint="showEmailAlert ? 'Enter a valid email' : ''"
             >
             <template v-slot:append-inner>
                 <v-tooltip location="bottom">
                   <template v-slot:activator="{ props }">
                     <v-icon v-if="getUser.isVerified" color="green" v-bind="props">mdi-shield-check-outline</v-icon>
-                    <v-icon v-if="!getUser.isVerified" color="yellow" v-bind="props">mdi-shield-alert-outline</v-icon>
+                    <v-icon v-if="!getUser.isVerified" color="yellow" v-bind="props" @click="verifyEmail()">mdi-shield-alert-outline</v-icon>
                   </template>
                   {{ getUser.isVerified ? 'Email is Verified' : 'Click to Verify Email' }}
                 </v-tooltip>
@@ -156,14 +157,39 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
+            <!-- <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="getUser.dob"
+                    label="Date of Birth"
+                    readonly
+                    v-on="on"
+                    variant="outlined"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  ref="picker"
+                  v-model="date"
+                  :max="new Date().toISOString().substr(0, 10)"
+                  min="1950-01-01"
+                  @change="save"
+                ></v-date-picker>
+              </v-menu> -->
               <v-text-field
-              label="Date of Birth"
-              placeholder="Enter your display name..."
-              type="date"
-              density="comfortable"
-              v-model="getUser.dob"
-              variant="outlined"
-            ></v-text-field>
+                label="Date of Birth"
+                placeholder="Enter your display name..."
+                type="date"
+                density="comfortable"
+                v-model="getUser.dob"
+                variant="outlined"
+              ></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
             <v-select
@@ -190,7 +216,7 @@
       </v-row>
       <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto mb-12" v-if="isEdit">
         <v-col cols="12" md="12">
-          <v-btn @click="update()" block size="large" color="deep-purple" variant="flat"  :loading="loading">Update Profile</v-btn>           
+          <v-btn @click="updateProfile()" block size="large" color="deep-purple-darken-2" variant="flat"  :loading="loading">Update Profile</v-btn>           
         </v-col>
       </v-row>
       <!-- #########################  PROFILE PICTURE  DETAIL DIALOG #########################-->
@@ -263,6 +289,19 @@
               </v-row>
             </v-card>
         </v-dialog>
+
+        <v-dialog v-model="showEmailAlertDialog" persistent min-width="290" max-width="390">
+          <v-card>
+            <v-card-title class="headline">Email already in use</v-card-title>
+            <v-card-text class="subheading">The email {{ userEmail }} is already in use by another account.</v-card-text>
+            <v-card-text class="subheading">Please, enter another email address.</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="grey darken-1" text @click="showEmailAlertDialog = false">close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
       <!-- ############################## SNACKBARS ####################################### -->
         <v-snackbar
           v-model="snackbar"
@@ -290,7 +329,7 @@
 
 <script>
 // @ is an alias to /src
-import firebase from 'firebase/app'
+import { db } from '@/main'
 import dateformat from "dateformat"
 import imageCompression from 'browser-image-compression'
 import { copyText } from 'vue3-clipboard'
@@ -309,6 +348,7 @@ export default {
     snackbar: false,
     snackbarText: '',
     privatePublicDialog: false,
+    showEmailAlertDialog: false,
     collectionDetailsDialog: false,
     collectionImageDialog: false,
     collectionImage: '',
@@ -328,6 +368,7 @@ export default {
       },
     ],
     userEmail: '',
+    showEmailAlert: false,
     isEdit: true,
     imageDialog: false,
     profilePicture: '',
@@ -337,7 +378,9 @@ export default {
     snackbarText: '',
     loadingImage: false,
     loadingPage: true,
-    userTier: 'Curren Tier',
+    userTier: 'Current Tier',
+    menu: false,
+    date: null,
     gender: { id: 0, name: 'Not Set'},
     genders: [
       {
@@ -499,7 +542,25 @@ export default {
     handleError(e) {
       console.log(e);
     },
-    update(){
+    verifyEmail () {
+      console.log(this.userEmail )
+      if (this.userEmail === '') {
+        this.showEmailAlert = true
+        return
+      }
+      let emailInUse = false
+      db.collection('users').where('email' , '==', this.userEmail).limit(1).get()
+      .then(snapshot => {
+        // console.log(snapshot)
+        if (snapshot.empty) {
+          emailInUse = false
+        } else {
+          emailInUse = true
+          this.showEmailAlertDialog = true
+        }
+      })
+    },
+    updateProfile (){
       this.loading = true
       const payload = {
         // email: this.userEmail ?? '',

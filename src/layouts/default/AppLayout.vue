@@ -236,7 +236,7 @@
           <v-list>
             <v-list-item
               :title="getUser.displayName"
-              :subtitle="makeDate(getUser.memberSince)"
+              :subtitle="'Joined: ' + makeDate(getUser.memberSince)"
             >
             <template v-slot:prepend>
               <v-avatar color="deep-purple-lighten-4" style="border-radius: 10px;" size="65">
