@@ -47,7 +47,7 @@
               </template>
 
               <template v-if="i === 5">
-                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for July 2023, get in early.</p>
+                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
               </template>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
@@ -201,7 +201,7 @@
             <v-col cols="12" md="12" >
               <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
               <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
-              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our token offer, targeted for July 2023, get in early.</p>
+              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
                       variant="outlined"

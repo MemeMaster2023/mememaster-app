@@ -201,7 +201,7 @@
       <v-spacer></v-spacer>
 
       <v-btn v-if="!drawer && env && (!mmConnected && !twConnected && !emailConnected && !walletConnected)"
-        style="margin-right:30px;margin-top:-5px"
+        style="margin-right:10px;margin-top:-7px"
         variant="outlined"
         color="white"
         theme="dark"
@@ -314,7 +314,7 @@
       </v-btn>
 
       <v-btn v-if="!drawer && !isMobileDevice && env && (emailConnected || mmConnected || twConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
-        style="margin-right:30px;margin-top:-7px"
+        style="margin-right:10px;margin-top:-7px"
         variant="outlined"
         color="white"
         theme="dark"
@@ -323,6 +323,25 @@
       >
         Generate
       </v-btn>
+
+      <v-tooltip location="top">
+        <template v-slot:activator="{ props }">
+          <v-btn v-if="!drawer && !isMobileDevice"
+            style="margin-right:30px;margin-top:-7px"
+            variant="outlined"
+            color="white"
+            theme="dark"
+            @click="gotoTokenLink('')"
+            v-bind="props"
+          >
+            <img src="/img/icons/token_security.png" style="max-width:32px;padding-right:10px"/> 
+            Token Security
+          </v-btn>
+        </template>
+        <span>Please, note that the 2 'Attention items' highlighted in the report are because the EMAS Token is not yet launched.<br>
+              After launch these will clear as EMAS Tokens will have 0% tax.
+        </span>
+      </v-tooltip>
 
       <MetaMaskConnect v-show="false" ref="mmConnect" >
       </MetaMaskConnect>
@@ -802,6 +821,12 @@ export default {
         // window.open(link, "_blank")
         this.drawer = false
         this.$emit("teamLinkClicked")
+      },
+      gotoTokenLink() {
+        // console.log('wpClicked')
+        // window.open(link, "_blank")
+        this.drawer = false
+        this.$emit("tokenLinkClicked")
       },
       gotoContact () {
         this.drawer = false

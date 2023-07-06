@@ -108,6 +108,18 @@
               </v-btn>
             </template>
           </v-tooltip>
+
+          <v-tooltip text="Github" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                class="mx-2 mt-1"
+                icon="mdi-github"
+                variant="text"
+                @click="gotoLink('https://github.com/MemeMaster2023/')"
+                v-bind="props"
+              ></v-btn>
+            </template>
+          </v-tooltip>
         </div>
       </v-col>
 
