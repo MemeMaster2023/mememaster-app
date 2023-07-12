@@ -104,7 +104,7 @@ const AuthModule = {
         MM_URL = import.meta.env.VITE_APP_MM;
       } else if (environment === "testnet") {
         console.log("API TEST ENVIRONMENT");
-        MM_URL = import.meta.env.VITE_APP_MM_TEST;
+        MM_URL = 'https://mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
       } else {
         console.log("API LOCAL ENVIRONMENT");
         MM_URL = import.meta.env.VITE_APP_MM_LOCAL;
