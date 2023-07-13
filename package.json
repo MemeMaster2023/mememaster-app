@@ -30,6 +30,7 @@
     "mobile-device-detect": "^0.4.3",
     "npm": "^9.6.6",
     "project-name-generator": "^2.1.9",
+    "protobufjs": "^7.2.4",
     "regenerator-runtime": "^0.13.11",
     "roboto-fontface": "*",
     "vue": "^3.2.0",

@@ -4503,7 +4503,7 @@
     "@types/node" ">=13.7.0"
     "long" "^4.0.0"
 
-"protobufjs@^7.0.0":
+"protobufjs@^7.0.0", "protobufjs@^7.2.4":
   "integrity" "sha512-AT+RJgD2sH8phPmCf7OUZR8xGdcJRga4+1cOaXJ64hvcSkVhNcRHOwIxUatPH15+nj59WAGTDv3LSGZPEQbJaQ=="
   "resolved" "https://registry.npmjs.org/protobufjs/-/protobufjs-7.2.4.tgz"
   "version" "7.2.4"
