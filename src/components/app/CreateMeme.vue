@@ -376,7 +376,7 @@
               >
                 Start Meme Generation
               </v-btn>
-              <p class="text-center">You have {{ getUser.credits }} Credits</p>
+              <p class="text-center text-green pt-2 font-weight-bold">You have {{ getUser.credits }} Credits</p>
 
               <v-btn v-if="enableStopGenerating"
                   prepend-icon="mdi-close-octagon-outline" 
@@ -790,11 +790,11 @@
               </v-btn>
             </v-toolbar>
             <v-card-text :class="isMobileDevice ? 'ml-4 mr-4' : 'ml-16 mr-16'">
-              <p class="text-h6 mb-8">After reading this document and applying these simple steps, you’ll be able to generate better images with the same amount of effort.</p>
+              <p class="text-h6 mb-8">After reading this guide and applying these simple steps, you’ll be able to generate better images with the same amount of effort.</p>
 
               <v-expansion-panels multiple>
                 <v-expansion-panel>
-                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">1. Raw prompt</v-expansion-panel-title>
+                  <v-expansion-panel-title class="text-h5 pt-2 font-weight-bold">1. Raw prompt</v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <p>Raw prompt is the simplest way of describing what you want to generate, for instance;<br><br>
                       1. Princess<br>
@@ -808,7 +808,7 @@
                 </v-expansion-panel>
 
                 <v-expansion-panel>
-                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">2. Style</v-expansion-panel-title>
+                  <v-expansion-panel-title class="text-h5 pt-2 font-weight-bold">2. Style</v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <p>Style is a crucial part of the prompt. The AI, when missing a specified style, usually chooses the one it has seen the most in related images, for example, if we generate a landscape, it would probably generate realistic or oil painting looking images. Having a well chosen style + raw prompt is sometimes enough, as the style influences the image the most right after the raw prompt.<br><br>
                       The most commonly used styles include:<br><br>
@@ -831,7 +831,7 @@
                 </v-expansion-panel>
 
                 <v-expansion-panel>
-                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">3. Artist</v-expansion-panel-title>
+                  <v-expansion-panel-title class="text-h5 pt-2 font-weight-bold">3. Artist</v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <p>
                       To make your style more specific, or the image more coherent, you can use artists’ names in your prompt. For instance, if you want a very abstract image, you can add “made by Pablo Picasso” or just simply, “Picasso”.<br>
@@ -862,7 +862,7 @@
                 </v-expansion-panel>
 
                 <v-expansion-panel>
-                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">4. Finishing touches</v-expansion-panel-title>
+                  <v-expansion-panel-title class="text-h5 pt-2 font-weight-bold">4. Finishing touches</v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <p>
                       This is the part that some people take to extremes, leading to longer prompts than this article. 
@@ -877,7 +877,7 @@
                 </v-expansion-panel>
 
                 <v-expansion-panel>
-                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">5. Conclusion</v-expansion-panel-title>
+                  <v-expansion-panel-title class="text-h5 pt-2 font-weight-bold">5. Conclusion</v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <p>
                       Prompt engineering allows you to have better control of what the image will look like.<br>
@@ -887,7 +887,7 @@
                 </v-expansion-panel>
 
                 <v-expansion-panel>
-                  <v-expansion-panel-title class="text-h5 mt-2 font-weight-bold">6. Prompt samples</v-expansion-panel-title>
+                  <v-expansion-panel-title class="text-h5 pt-2 font-weight-bold">6. Prompt samples</v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <p>
                       <span class="text-h5 font-weight-bold">Add these prompts after your subject choice, ie A car on a mountain... then add prompts below after it... example below.</span><br><br>
@@ -1243,8 +1243,10 @@ export default {
             // Uh-oh, an error occurred!
           })
         })
+        console.log('this.draftsImagesArr')
         console.log(this.draftsImagesArr)
         this.draftsArr[index].files = this.draftsImagesArr
+        console.log(this.draftsArr)
       }).catch((error) => {
         // Uh-oh, an error occurred!
       })
@@ -1713,10 +1715,23 @@ export default {
       this.uploadImageUrl = ''
     },
     deleteDraftImage (item, index) {
-      console.log(this.draftsArr)
+      console.log(item)
       this.selectedItem = item
       this.selectedItem.index = index
       this.deleteDraftDialog = true
+      for (var i in this.draftsArr) {
+        console.log(this.draftsArr[i])
+        console.log(typeof this.draftsArr[i].files)
+        if (typeof this.draftsArr[i].files === 'object') {
+          console.log(this.draftsArr[i].files)
+          console.log(this.selectedItem)
+          if (this.draftsArr[i].files.findIndex(item => item.url === this.selectedItem.url) > -1 ) {
+            // this.draftsArr[i].files.splice(this.selectedItem.index, 1)
+            console.log('File found')
+            console.log(i)
+          }
+        }
+      }
     },
     deleteDraftConfirm () {
       // Create a reference to the file to delete
@@ -1733,15 +1748,18 @@ export default {
         this.snackbarText = 'Draft deleted!'
         let index
         for (var i in this.draftsArr) {
-          if (Array.isArray(this.draftsArr[i].files)) {
+          console.log(this.draftsArr[i])
+          console.log(typeof this.draftsArr[i].files)
+          if (typeof this.draftsArr[i].files === 'object') {
+            console.log(this.draftsArr[i].files)
+            console.log(this.selectedItem)
             if (this.draftsArr[i].files.findIndex(item => item.url === this.selectedItem.url) > -1 ) {
-              index = i
+              this.draftsArr[i].files.splice(this.selectedItem.index, 1)
+              console.log('File found')
+              console.log(i)
             }
-          } else {
-            return
-          }
+          } 
         }
-        this.draftsArr[index].files.splice(this.selectedItem.index, 1)
       }).catch((error) => {
         // Uh-oh, an error occurred!
       });

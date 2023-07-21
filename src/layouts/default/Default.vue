@@ -41,7 +41,7 @@
   }
   function teamLinkClicked() {
     // console.log('teamLinkClicked Received')
-    window.open('https://haven-associates.com/#tabs', '_blank');
+    window.open('https://haven-associates.com', '_blank');
   }
   function tokenLinkClicked () {
     // console.log('tokenLinkClicked Received')

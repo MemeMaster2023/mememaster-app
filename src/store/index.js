@@ -145,7 +145,7 @@ export default createStore({
             state.user.isVerified = payload.isVerified
             state.user.idVerified = payload.idVerified
             state.user.phoneVerified = payload.phoneVerified
-            // state.user.accLevel = payload.accLevel
+            state.user.accLevel = payload.accLevel
             state.user.accType = payload.accType
             state.user.accStatus = payload.accStatus
             state.user.credits = payload.credits

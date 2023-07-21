@@ -101,13 +101,13 @@ const AuthModule = {
       const environment = import.meta.env.VITE_APP_ENVIRONMENT;
       if (environment === "production") {
         console.log("API PRODUCTION ENVIRONMENT");
-        MM_URL = import.meta.env.VITE_APP_MM;
+        MM_URL = 'https://mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
       } else if (environment === "testnet") {
         console.log("API TEST ENVIRONMENT");
         MM_URL = 'https://mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
       } else {
         console.log("API LOCAL ENVIRONMENT");
-        MM_URL = import.meta.env.VITE_APP_MM_LOCAL;
+        MM_URL = 'https://mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
       }
       var actionCodeSettings = {
         url: MM_URL + "authorise/" + btoa(payload.email),
@@ -170,6 +170,7 @@ const AuthModule = {
               payload.userData["displayName"] = payload.userData["name"]
               payload.userData["avatar"] = payload.userData["avatar"]
               payload.userData["memberSince"] = payload.userData["created"]
+              payload.userData["accLevel"] = payload.userData["acc_level"]
               payload.userData["accStatus"] = payload.userData["status"]
               payload.userData["version"] =  payload.userData["version"]
               payload.userData["credits"] = payload.userData["credits"]
@@ -224,6 +225,7 @@ const AuthModule = {
               objFromDb["displayName"] = objFromDb["name"]
               objFromDb["avatar"] = objFromDb["avatar"]
               objFromDb["memberSince"] = objFromDb["created"]
+              objFromDb["accLevel"] = objFromDb["acc_level"]
               objFromDb["accStatus"] = objFromDb["status"]
               objFromDb["version"] = objFromDb["version"]
               objFromDb["credits"] = objFromDb["credits"]
@@ -266,6 +268,7 @@ const AuthModule = {
         objFromDb["displayName"] = objFromDb["name"];
         objFromDb["avatar"] = objFromDb["avatar"]
         objFromDb["memberSince"] = objFromDb["created"];
+        objFromDb["accLevel"] = objFromDb["acc_level"];
         objFromDb["accStatus"] = objFromDb["status"];
         objFromDb["version"] = objFromDb["version"];
         objFromDb["credits"] = objFromDb["credits"];

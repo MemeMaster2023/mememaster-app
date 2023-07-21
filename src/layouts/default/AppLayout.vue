@@ -112,6 +112,13 @@
 
         <v-list-item
           v-bind="props"
+          prepend-icon="mdi-card-account-details-outline"
+          title="My Profile"
+          @click="routerGo('/account')"
+        ></v-list-item>
+
+        <v-list-item
+          v-bind="props"
           prepend-icon="mdi-view-grid-plus"
           title="Generate"
           @click="routerGo('/generate/default')"
@@ -141,6 +148,23 @@
           @click="routerGo('/generate/drafts')"
         ></v-list-item>
 
+        <v-list-group v-if="isLoggedIn && getUser.accLevel === 10" value="admin">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              prepend-icon="mdi-account-key-outline"
+              title="Admin Menu"
+            ></v-list-item>
+          </template>
+
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-cube-unfolded"
+            title="NFT Management"
+            @click="routerGo('/admin/nfts')"
+          ></v-list-item>
+        </v-list-group>
+
 
       </v-list-group>
         
@@ -149,7 +173,8 @@
       <v-list-item prepend-icon="mdi-circle-multiple-outline" title="New Token Listings" value="tokens" @click="routerGo('/tokens')"></v-list-item>
       <v-list-item prepend-icon="mdi-shape-plus" title="Games" value="games" @click="routerGo('/games')"></v-list-item>
       <v-list-item prepend-icon="mdi-music" title="Music" value="music" @click="routerGo('/music')"></v-list-item>
-      <v-list-item prepend-icon="mdi-account-group" title="Team" value="Team" @click="gotoTeamLink()"></v-list-item>
+      <v-list-item prepend-icon="mdi-account-group" title="Team" value="Team" @click="routerGo('/team')"></v-list-item>
+      <v-list-item prepend-icon="mdi-handshake-outline" title="Partners" value="Partners" @click="gotoTeamLink()"></v-list-item>
       <v-list-item prepend-icon="mdi-at" title="Contact Us" value="contact" @click="gotoContact()" v-scroll-to="'#footer'"></v-list-item>
       <v-list-item prepend-icon="mdi-transit-connection-variant" title="Roadmap" value="Roadmap" @click="routerGo('/roadmap')"></v-list-item>
       <v-list-item prepend-icon="mdi-file-outline" title="Whitepaper" value="whitepaper" @click="openWhitePaper()"></v-list-item>
@@ -161,7 +186,7 @@
       app 
       style="opacity:0.9"
       :color="!scrolled && ($route.name === 'Home' || $route.name === 'Collections') ? 'transparent' : '#000'" 
-      class="pa-4"
+      class="pa-2"
   >
 
     <!--<v-layout >
@@ -201,11 +226,12 @@
       <v-spacer></v-spacer>
 
       <v-btn v-if="!drawer && env && (!mmConnected && !twConnected && !emailConnected && !walletConnected)"
-        style="margin-right:10px;margin-top:-7px"
+        style="margin-right:10px;margin-top:-5px"
         variant="outlined"
         color="white"
         theme="dark"
         @click="connectWalletDialog = true"
+        size="small"
       >
         Connect 
       </v-btn>
@@ -213,12 +239,13 @@
       <v-menu v-if="!drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)" >
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
-            style="margin-right:10px;margin-top:-7px"
+            style="margin-right:10px;margin-top:-5px"
             variant="outlined"
             color="white"
             theme="dark"
             v-bind="props"
             offset="-20"
+            size="small"
           >
             <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/> 
             <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px" v-else-if="twConnected"/> 
@@ -295,17 +322,31 @@
                   prepend-icon="mdi-account-box-outline"
                   to="/account"
             >
-              GoTo My Profile
+              GoTo My Account
             </v-btn>
           </div>
         </v-card>
       </v-menu>
 
       <v-btn v-if="!isMobileDevice && !drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
-             style="margin-right:10px;margin-top:-7px"
+             style="margin-right:10px;margin-top:-5px"
+             variant="outlined"
+             color="white"
+             to="/account"
+             size="small"
+      > 
+        <template v-slot:prepend>        
+          <v-icon size="large">mdi-account-box-outline</v-icon>  
+        </template>
+        My Account
+      </v-btn>
+
+      <v-btn v-if="!isMobileDevice && !drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
+             style="margin-right:10px;margin-top:-5px"
              variant="outlined"
              color="white"
              @click="disconnectClicked"
+             size="small"
       > 
         <template v-slot:prepend>        
           <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>  
@@ -314,12 +355,13 @@
       </v-btn>
 
       <v-btn v-if="!drawer && !isMobileDevice && env && (emailConnected || mmConnected || twConnected || walletConnected) && $router.currentRoute.value.path !== '/generate/default' && $router.currentRoute.value.path !== '/generate/drafts' && $router.currentRoute.value.path !== '/generate/upload'"
-        style="margin-right:10px;margin-top:-7px"
+        style="margin-right:10px;margin-top:-5px"
         variant="outlined"
         color="white"
         theme="dark"
         @click="routerGo('/generate/default')"
         prepend-icon="mdi-view-grid-plus" 
+        size="small"
       >
         Generate
       </v-btn>
@@ -327,12 +369,13 @@
       <v-tooltip location="top">
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && !isMobileDevice"
-            style="margin-right:30px;margin-top:-7px"
+            style="margin-right:30px;margin-top:-5px"
             variant="outlined"
             color="white"
             theme="dark"
             @click="gotoTokenLink('')"
             v-bind="props"
+            size="small"
           >
             <img src="/img/icons/token_security.png" style="max-width:32px;padding-right:10px"/> 
             Token Security

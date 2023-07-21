@@ -33,6 +33,7 @@
               <div class="ml-6 text-left d-flex flex-column">
                   <span class="text-md-h3 text-h4 text-left">{{ getUser.displayName }}</span>
                   <span class="text-p font-weight-medium pl-1 mt-2">Member Since: {{ makeDate(getUser.memberSince) }}</span>
+                  <span v-if="getUser.accLevel === 10" class="text-p font-weight-bold pl-1 mt-2">MM - Admin User</span>
               </div>
           </v-col>
       </v-row>

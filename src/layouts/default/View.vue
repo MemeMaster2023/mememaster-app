@@ -109,6 +109,18 @@
             </template>
           </v-tooltip>
 
+          <v-tooltip text="Linked In" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                class="mx-2 mt-1"
+                icon="mdi-linkedin"
+                variant="text"
+                @click="gotoLink('https://www.linkedin.com/company/mememaster/')"
+                v-bind="props"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+
           <v-tooltip text="Github" location="top">
             <template v-slot:activator="{ props }">
               <v-btn

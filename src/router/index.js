@@ -137,12 +137,29 @@ const routes = [
           import(/* webpackChunkName: "home" */ "@/views/Music.vue"),
       },
       {
+        path: '/team',
+        name: 'Team',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/Team.vue'),
+      },
+      {
         path: '/roadmap',
         name: 'Roadmap',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "home" */ '@/views/Roadmap.vue'),
+      },
+      // Admin Modules
+      {
+        path: '/admin/nfts',
+        name: 'NFT Management',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/NFTmanagement.vue'),
       },
     ],
   },
