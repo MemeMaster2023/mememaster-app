@@ -118,7 +118,7 @@
                      size="large"
                      prepend-icon="mdi-wallet"
                      color="deep-purple-lighten-4"
-              >Connect your wallet
+              >Connect with Email
               </v-btn>
             </v-col>
             <v-col cols="12" md="3">
