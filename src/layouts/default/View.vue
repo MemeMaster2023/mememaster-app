@@ -387,7 +387,7 @@ export default {
       window.open(link, "_blank");
     },
     openWhitePaper(link) {
-      window.open('https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/whitepaper%2FMemeMaster2023%20-%20Whitepaper.pdf?alt=media&token=f3c58534-dd4f-4a63-a699-4cfb3a7b7129', '_blank');
+      window.open('https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/whitepaper%2FMemeMaster2023%20-%20Whitepaper.pdf?alt=media&token=2b11d3cc-dd05-46bf-840d-f95a4154a4b8', '_blank');
     }
     
   }

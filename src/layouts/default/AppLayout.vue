@@ -257,8 +257,8 @@
         <v-card 
             min-width="300" 
             max-width="300" 
-            max-height="400"
-            class="mt-2"
+            max-height="500"
+            class="mt-2 mb-2"
          >
           <v-list>
             <v-list-item
@@ -314,7 +314,7 @@
               </div>
             </v-col>
           </v-row>
-          <div class="text-center">
+          <div class="text-center  mb-4">
             <v-btn style="width:280px;text-transform: none !important;" 
                   class="ma-2"
                   variant="outlined"
@@ -323,6 +323,17 @@
                   to="/account"
             >
               GoTo My Account
+            </v-btn>
+
+            <v-btn v-if="!isMobileDevice && !drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
+                  style="width:280px;" 
+                  variant="outlined"
+                  @click="disconnectClicked"
+            > 
+              <template v-slot:prepend>        
+                <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>  
+              </template>
+              Disconnect
             </v-btn>
           </div>
         </v-card>
@@ -369,7 +380,7 @@
       <v-tooltip location="top">
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && !isMobileDevice"
-            style="margin-right:30px;margin-top:-5px"
+            style="margin-right:20px;margin-top:-5px"
             variant="outlined"
             color="white"
             theme="dark"
@@ -381,10 +392,33 @@
             Token Security
           </v-btn>
         </template>
-        <span>Please, note that the 2 'Attention items' highlighted in the report are because the EMAS Token is not yet launched.<br>
-              After launch these will clear as EMAS Tokens will have 0% tax.
+        <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
+              DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
       </v-tooltip>
+
+      <!-- <v-btn v-if="!drawer && !isMobileDevice"
+        style="margin-right:10px;margin-top:-5px"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        @click="routerGo('/tokens')"
+        prepend-icon="mdi-circle-multiple-outline" 
+        size="small"
+      >
+        New Token Listings
+      </v-btn>
+
+      <v-btn v-if="!drawer && !isMobileDevice"
+        style="margin-right:20px;margin-top:-5px"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        @click="routerGo('/nfts')"
+        size="small"
+      >
+      <img src="/img/icons/nfts.png" style="max-width:20px;max-height:20px;margin-right:5px;"/>NFT Minting
+      </v-btn> -->
 
       <MetaMaskConnect v-show="false" ref="mmConnect" >
       </MetaMaskConnect>

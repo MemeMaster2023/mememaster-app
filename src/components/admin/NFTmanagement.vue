@@ -53,7 +53,7 @@
                 color="deep-purple-lighten-1" 
                 style="width:100%" 
                 prepend-icon="mdi-seed-plus-outline" 
-                @click="view = 2"
+                to="/admin/mint"
               >
                 Mint
               </v-btn>

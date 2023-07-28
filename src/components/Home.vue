@@ -120,7 +120,7 @@
               </v-card-title>
                 <v-card-text>
                   <div class="text-body-1 pb-16">
-                    Gain early access to out exclusives 'new tokens listing platform'<br>
+                    Gain early access to our exclusives 'new tokens listing platform'<br>
                     These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed in our roadmap.
                   </div>
                 </v-card-text>

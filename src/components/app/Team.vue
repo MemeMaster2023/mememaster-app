@@ -112,19 +112,18 @@ export default {
     teamArr: [
       {
         name: 'Davey',
-        title: 'Co-Founder',
-        description: 'Experienced blockchain and AI enthousiast!',
+        title: 'Founder',
+        description: 'Experienced blockchain and AI enthusiast!',
         type: 'both',
         link: 'https://www.linkedin.com/in/david-clark-1483861a/',
         email: 'mailto:info@mememaster.app'
       },
       {
-        name: 'Simon',
-        title: 'Partner',
-        description: 'Managing Director of our Partners - Haven Associates Ltd',
-        type: 'email',
-        link: 'https://haven-associates.com/#tabs',
-        email: 'https://haven-associates.com/#tabs'
+        name: 'David',
+        title: 'Marketing & PR',
+        description: 'Holding a Major in marketing David lectures in Monarch and oversees all marketing and PR',
+        type: 'linkedin',
+        link: 'https://www.linkedin.com/in/david-henderson-52a520106/',
       },
       {
         name: 'Martin',

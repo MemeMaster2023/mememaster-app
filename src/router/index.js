@@ -161,6 +161,14 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "home" */ '@/views/NFTmanagement.vue'),
       },
+      {
+        path: '/admin/mint',
+        name: 'Mint NFT',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/MintERC1155.vue'),
+      },
     ],
   },
 ];
