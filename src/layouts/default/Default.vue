@@ -33,7 +33,7 @@
 
   function openWhitepaper() {
     // console.log('openWhitepaper Received')
-    window.open('https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/whitepaper%2FMemeMaster2023%20-%20Whitepaper.pdf?alt=media&token=2b11d3cc-dd05-46bf-840d-f95a4154a4b8', '_blank');
+    window.open('https://mememaster.app/whitepaper/MemeMaster2023%20White%20Paper.pdf', '_blank');
   }
   function mmMobileClicked() {
     // console.log('mmMobileClicked Received')
