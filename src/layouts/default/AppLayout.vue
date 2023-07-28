@@ -384,6 +384,36 @@
             variant="outlined"
             color="white"
             theme="dark"
+            v-bind="props"
+            size="small"
+            prepend-icon="mdi-tag-outline"
+          >
+            Presale
+          </v-btn>
+        </template>
+        <span>Presale coming soon, follow our social media channels below for details...
+        </span>
+      </v-tooltip>
+
+      <v-btn v-if="!drawer && !isMobileDevice"
+        style="margin-right:10px;margin-top:-5px"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        v-scroll-to="'#footer'"
+        size="small"
+        prepend-icon="mdi-shield-star-outline"
+      >
+        KYC - AUDIT
+      </v-btn>
+
+      <v-tooltip location="top">
+        <template v-slot:activator="{ props }">
+          <v-btn v-if="!drawer && !isMobileDevice"
+            style="margin-right:20px;margin-top:-5px"
+            variant="outlined"
+            color="white"
+            theme="dark"
             @click="gotoTokenLink('')"
             v-bind="props"
             size="small"
@@ -394,24 +424,6 @@
         </template>
         <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
-        </span>
-      </v-tooltip>
-
-      <v-tooltip location="top">
-        <template v-slot:activator="{ props }">
-          <v-btn v-if="!drawer && !isMobileDevice"
-            style="margin-right:20px;margin-top:-5px"
-            variant="outlined"
-            color="white"
-            theme="dark"
-            v-bind="props"
-            size="small"
-            prepend-icon="mdi-tag-outline"
-          >
-            Presale
-          </v-btn>
-        </template>
-        <span>Presale coming soon, follow our social media channels below for details...
         </span>
       </v-tooltip>
 
