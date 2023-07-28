@@ -387,7 +387,7 @@ export default {
       window.open(link, "_blank");
     },
     openWhitePaper(link) {
-      window.open('https://mememaster.app/whitepaper/MemeMaster2023%20White%20Paper.pdf', '_blank');
+      window.open('https://mememaster.app/whitepaper/MemeMaster2023%20-%20Whitepaper.pdf', '_blank');
     }
     
   }

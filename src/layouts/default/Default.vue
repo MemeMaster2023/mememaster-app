@@ -33,7 +33,7 @@
 
   function openWhitepaper() {
     // console.log('openWhitepaper Received')
-    window.open('https://mememaster.app/whitepaper/MemeMaster2023%20White%20Paper.pdf', '_blank');
+    window.open('https://mememaster.app/whitepaper/MemeMaster2023%20-%20Whitepaper.pdf', '_blank');
   }
   function mmMobileClicked() {
     // console.log('mmMobileClicked Received')

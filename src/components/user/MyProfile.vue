@@ -114,12 +114,12 @@
         </v-row>
         <v-row class="mx-md-12 px-md-12 mx-lg-16 px-lg-16 mt-4 mx-auto px-auto" v-if="emailConnected || mmConnected || twConnected || walletConnected">
             <v-col cols="12" md="6" >
-              <v-btn v-if="emailConnected && !mmConnected && !twConnected && !walletConnected"
+              <!-- <v-btn v-if="emailConnected && !mmConnected && !twConnected && !walletConnected"
                      size="large"
                      prepend-icon="mdi-wallet"
                      color="deep-purple-lighten-4"
-              >Connect with Email
-              </v-btn>
+              >Connect your Wallet
+              </v-btn> -->
             </v-col>
             <v-col cols="12" md="3">
               <v-text-field
