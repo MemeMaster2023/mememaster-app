@@ -214,7 +214,7 @@
       ></v-img> -->
       <v-img v-if="!isMobileDevice"
         src="/img/logos/mememaster_logo.png"
-        style="max-height: 62px; max-width: 300px;cursor: pointer;"
+        style="max-height: 62px; max-width: 300px;min-height: 62px; min-width: 300px;cursor: pointer;"
         @click="routerGo('/')"
       ></v-img>
       <v-img v-if="isMobileDevice"
@@ -400,10 +400,10 @@
         variant="outlined"
         color="white"
         theme="dark"
-        v-scroll-to="'#footer'"
         size="small"
-        prepend-icon="mdi-shield-star-outline"
+        @click="gotoKYCLink('')"
       >
+        <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:10px"/> 
         KYC - AUDIT
       </v-btn>
 
@@ -418,7 +418,7 @@
             v-bind="props"
             size="small"
           >
-            <img src="/img/icons/token_security.png" style="max-width:32px;padding-right:10px"/> 
+            <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:10px"/> 
             Token Security
           </v-btn>
         </template>
@@ -660,7 +660,7 @@
 
     <!-- ############### ChatBot ################### -->
     <ChatGPT
-    v-if="(mmConnected || walletConnected || emailConnected)"
+    v-if="(mmConnected || walletConnected || twConnected || emailConnected)"
         v-model="chatActive"
         :isMobileDevice="isMobileDevice" 
         :windowWidth="windowWidth" 
@@ -928,6 +928,12 @@ export default {
         // window.open(link, "_blank")
         this.drawer = false
         this.$emit("teamLinkClicked")
+      },
+      gotoKYCLink() {
+        // console.log('wpClicked')
+        // window.open(link, "_blank")
+        this.drawer = false
+        this.$emit("KYCLinkClicked")
       },
       gotoTokenLink() {
         // console.log('wpClicked')

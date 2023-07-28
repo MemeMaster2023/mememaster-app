@@ -9,6 +9,7 @@
         v-on:mmMobileClicked="mmMobileClicked()"
         v-on:teamLinkClicked="teamLinkClicked()"
         v-on:tokenLinkClicked="tokenLinkClicked()"
+        v-on:KYCLinkClicked="KYCLinkClicked()"
     />
     <default-view 
         :isMobileDevice="isMobileDevice" 
@@ -37,11 +38,15 @@
   }
   function mmMobileClicked() {
     // console.log('mmMobileClicked Received')
-    window.open('https://metamask.app.link/dapp/mememaster.app/mmobile', '_blank');
+    window.open('https://metamask.app.link/dapp/testnet.mememaster.app/mmobile', '_blank');
   }
   function teamLinkClicked() {
     // console.log('teamLinkClicked Received')
     window.open('https://haven-associates.com', '_blank');
+  }
+  function KYCLinkClicked () {
+    // console.log('tokenLinkClicked Received')
+    window.open('https://coinsult.net/projects/mememaster/', '_blank');
   }
   function tokenLinkClicked () {
     // console.log('tokenLinkClicked Received')
