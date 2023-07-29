@@ -179,7 +179,7 @@ export default {
       
       // Read user storage folder
       // Create a reference under which you want to list
-      var listRef = this.storageRef.child('Game Insights//')
+      var listRef = this.storageRef.child('GameInsights//')
 
       // Find all the prefixes and items.
       // var firstPage = await listRef.list({ maxResults: 100});
@@ -214,37 +214,37 @@ export default {
       if (name === 'Battleship game') {
         obj = {
           subtitle: '',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FBattleship%20game%2FBattleship%20game%206.png?alt=media&token=edf6e9c0-0c42-4fa1-8eec-a3a4ee1fc7d8&_gl=1*j8itiy*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjIwODQ1Ny40My4xLjE2ODYyMDg3OTAuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FBattleship%20game%2FBattleship%20game%206.png?alt=media&token=2131b02b-01d1-4c98-84e3-e37382fec060'
         }
         return obj
       } else if (name === 'Cyber pulse game') {
         obj = {
           subtitle: '',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FCyber%20pulse%20game%2FCyber%20pulse%20game%206.png?alt=media&token=de02acaf-addc-43f5-9d9a-ae5aa391cdc8&_gl=1*ug252s*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjIwODQ1Ny40My4xLjE2ODYyMDkwNjcuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FCyber%20pulse%20game%2FCyber%20pulse%20game%206.png?alt=media&token=7ac05d8d-7e89-464f-948e-83a0ddb328dc'
         }
         return obj
       } else if (name === 'Dungeons game') {
         obj = {
           subtitle: '',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FDungeons%20game%2FDungeons%20and%20Dragons%20game.png?alt=media&token=6b35e486-9dc4-4c9d-8f8e-8f6a707a1e80&_gl=1*1uy4t79*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjIwODQ1Ny40My4xLjE2ODYyMDkxNTguMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FDungeons%20game%2FDungeons%20and%20Dragons%20game.png?alt=media&token=a43c2157-f19d-42a8-a961-4794a93876c1'
         }
         return obj
       } else if (name === 'Galactic game') {
         obj = {
           subtitle: '',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FGalactic%20game%2FGalactica%20game%206.png?alt=media&token=911a6b43-36c2-4a2b-8a76-dc85186c2f2a&_gl=1*16yhfph*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjIwODQ1Ny40My4xLjE2ODYyMDkyNzYuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FGalactic%20game%2FGalactica%20game%206.png?alt=media&token=68e0deb0-fc68-4cc7-b474-9a74528027da'
         }
         return obj
       } else if (name === 'WAR game') {
         obj = {
           subtitle: '',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FWAR%20game%2FWar%20games%201.png?alt=media&token=ab2dd340-2c88-4c97-bde6-b07704edb983&_gl=1*s0upk7*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjIwODQ1Ny40My4xLjE2ODYyMDkzMzAuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FWAR%20game%2FWar%20games%201.png?alt=media&token=9148cd25-dd09-4868-978f-23656b07dbb7'
         }
         return obj
       } else if (name === 'Aircraft war game') {
         obj = {
           subtitle: '',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FAircraft%20war%20game%2FAircraft%20war%20game%203.jpeg?alt=media&token=7baff989-eff1-4ea9-b6ce-1633d04bf1b8'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FAircraft%20war%20game%2FAircraft%20war%20game%203.jpeg?alt=media&token=775771dd-6f9d-42be-bf60-1f2ffd4addba'
         }
         return obj
       } 

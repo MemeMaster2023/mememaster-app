@@ -325,7 +325,7 @@
               GoTo My Account
             </v-btn>
 
-            <v-btn v-if="!isMobileDevice && !drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
+            <v-btn v-if="!drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
                   style="width:280px;" 
                   variant="outlined"
                   @click="disconnectClicked"
@@ -903,7 +903,7 @@ export default {
       // this.env = process.env.VUE_APP_ENVIRONMENT === 'testnet'
       console.log(import.meta.env.VITE_APP_ENVIRONMENT)
       // this.env = true
-      this.env = import.meta.env.VITE_APP_ENVIRONMENT === 'local' || import.meta.env.VITE_APP_ENVIRONMENT === 'testnet'
+      this.env = import.meta.env.VITE_APP_ENVIRONMENT === 'local' || import.meta.env.VITE_APP_ENVIRONMENT === 'testnet' || import.meta.env.VITE_APP_ENVIRONMENT === 'production'
       console.log('this.getUser.mmConnected')
       console.log(this.getUser.mmConnected)
       this.waitGetUserBalance()

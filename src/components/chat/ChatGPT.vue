@@ -143,7 +143,7 @@ export default {
      
     },
     keyPressed(e) {
-      console.log(e)
+      // console.log(e)
       if (this.prompt === '' || this.prompt === '\n') return
       if (e.keyCode === 16) {
         return;
@@ -168,7 +168,7 @@ export default {
             text: "..."
         }
         this.chatLog.push(message)
-        console.log('scrolling to bottom')
+        // console.log('scrolling to bottom')
         this.$refs.bottomEl.scrollIntoView({ behavior: 'smooth', block: "end", inline: "nearest" })
         Promise.resolve(MemeMasterAPI.sendChatGPTmessage(usePrompt))
         .then(result => {
@@ -180,7 +180,7 @@ export default {
             text: result.data.message.choices[0].text
           }
           this.chatLog.push(responseMessage)
-          console.log('scrolling to bottom')
+          // console.log('scrolling to bottom')
           this.$refs.bottomEl.scrollIntoView({ behavior: 'smooth', block: "end", inline: "nearest" })
           // this.scrollToBottom()
         })
@@ -191,7 +191,7 @@ export default {
         })
     },
     scrollToBottom () {
-      console.log('scrolling to bottom')
+      // console.log('scrolling to bottom')
       const firstScrollTo = scroller();
       this.scrollClicked = true
       let element = '#list-item-' + index

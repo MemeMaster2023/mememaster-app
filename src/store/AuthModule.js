@@ -101,13 +101,13 @@ const AuthModule = {
       const environment = import.meta.env.VITE_APP_ENVIRONMENT;
       if (environment === "production") {
         console.log("API PRODUCTION ENVIRONMENT");
-        MM_URL = 'https://www.mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
+        MM_URL = 'https://www.mememaster.app/' // import.meta.env.VITE_APP_MM;
       } else if (environment === "testnet") {
         console.log("API TEST ENVIRONMENT");
-        MM_URL = 'https://www.mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
+        MM_URL = 'https://testnet.mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
       } else {
         console.log("API LOCAL ENVIRONMENT");
-        MM_URL = 'https://www.mememaster.app/' // import.meta.env.VITE_APP_MM_TEST;
+        MM_URL = 'https://www.mememaster.app/' // import.meta.env.VITE_APP_MM_LOCAL;
       }
       var actionCodeSettings = {
         url: MM_URL + "authorise/" + btoa(payload.email),

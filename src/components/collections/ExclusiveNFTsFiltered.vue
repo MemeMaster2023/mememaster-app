@@ -238,7 +238,7 @@ export default {
       
       // Read user storage folder
       // Create a reference under which you want to list
-      var listRef = this.storageRef.child('Exclusive Collections/')
+      var listRef = this.storageRef.child('ExclusiveCollections/')
 
       // Find all the prefixes and items.
       // var firstPage = await listRef.list({ maxResults: 100});
@@ -275,42 +275,40 @@ export default {
       if (name === 'Andy Warhol - Limited Edition NFTs') {
         obj = {
           subtitle: 'Artist and leader of the Pop Art movement who created unique NFTs with limited editions available.',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Exclusive%20Collections%2FAndy%20Warhol%20-%20Limited%20Edition%20NFTs%2FAndy%20warwhol%20style%206.png?alt=media&token=02dc2856-8a3e-489c-830d-97dd376df2ea&_gl=1*1hb4df8*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjE4NjI5Ny40MS4xLjE2ODYxODgwNzIuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FAndy%20Warhol%20-%20Limited%20Edition%20NFTs%2FAndy%20warwhol%20style%206.png?alt=media&token=ea387c8c-2518-4cd7-a5bb-70e42f41e268'
         }
         return obj
       } else if (name === 'Pepe Frogs NEON - Limited Edition NFTs') {
         obj = {
           subtitle: 'Collectible, one-of-a-kind digital art cards featuring the iconic Pepe character.',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Exclusive%20Collections%2FPepe%20Frogs%20NEON%20-%20Limited%20Edition%20NFTs%2FPEPE%20NEON%20FROG%202.png?alt=media&token=a5f33630-846b-4fd9-bcd1-a865f7f7b57c&_gl=1*xa5hx6*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjE4NjI5Ny40MS4xLjE2ODYxODg0NTIuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FPepe%20Frogs%20NEON%20-%20Limited%20Edition%20NFTs%2FPEPE%20NEON%20FROG%202.png?alt=media&token=0d4d2262-8026-455b-8a58-1f311c533e85'
         }
         return obj
       } else if (name === 'Shiba INU NEONs NFTs - Limited Edition NFTs') {
         obj = {
           subtitle: 'Unique Non-Fungible Tokens featuring Shiba Inu themed artwork, available in a limited quantity.',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Exclusive%20Collections%2FShiba%20INU%20NEONs%20NFTs%20-%20Limited%20Edition%20NFTs%2FNeon%20shiba%2021.png?alt=media&token=5307eec4-5c93-4c80-b0a1-f78a93670824&_gl=1*1g2xboi*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjE4NjI5Ny40MS4xLjE2ODYxODg5NjcuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FShiba%20INU%20NEONs%20NFTs%20-%20Limited%20Edition%20NFTs%2FNeon%20shiba%2021.png?alt=media&token=d0576491-cbc2-4e80-8484-10debbff62ad'
         }
         return obj
       } else if (name === 'Shiba Pixels NFTs - Exclusive Rare Edition') {
         obj = {
           subtitle: 'Exclusive rare digital artworks, limited in supply and value, using Shiba Inu characters. Unlocks high access to games!',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Exclusive%20Collections%2FShiba%20Pixels%20NFTs%20-%20Exclusive%20Rare%20Edition%2FShiba%20Pixel%2015.png?alt=media&token=366061b0-500c-4874-b29f-b1ec44004e46&_gl=1*1yj8uen*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjE5Nzg2OS40Mi4xLjE2ODYxOTkxNzYuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FShiba%20Pixels%20NFTs%20-%20Exclusive%20Rare%20Edition%2FShiba%20Pixel%2015.png?alt=media&token=2ce17032-904b-487e-99d6-3b0c52612f0f'
         }
         return obj
       } else if (name === 'Tim Burton collection - Exclusive Rare Edition') {
         obj = {
           subtitle: 'A rare set of Tim Burton creations, including rare editions and special features. Unlocks high access to games!',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Exclusive%20Collections%2FTim%20Burton%20collection%20-%20Exclusive%20Rare%20Edition%2FTim%20Mad%20Hatter%202.png?alt=media&token=dad2d83b-610f-40fc-a72c-5bf96fb7cebb&_gl=1*6r9uvc*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjE5Nzg2OS40Mi4xLjE2ODYxOTk0NzQuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FTim%20Burton%20collection%20-%20Exclusive%20Rare%20Edition%2FTim%20Mad%20Hatter%202.png?alt=media&token=f28dd984-1f86-480a-a698-7424d8a645b7'
         }
         return obj
       } else if (name === 'Van Gogh style - Limited Edition NFTs') {
         obj = {
           subtitle: 'Art pieces created in the style of Vincent Van Gogh, digitally crafted as non-fungible tokens with limited availability.',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Exclusive%20Collections%2FVan%20Gogh%20style%20-%20Limited%20Edition%20NFTs%2Fpuppets%204.png?alt=media&token=d7803af9-d6f4-4260-9736-4a7f6650b9af&_gl=1*yl1ufc*_ga*Njc3NjE5NjEwLjE2ODUxNTUxODY.*_ga_CW55HF8NVT*MTY4NjE5Nzg2OS40Mi4xLjE2ODYxOTk5MDMuMC4wLjA.'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FVan%20Gogh%20style%20-%20Limited%20Edition%20NFTs%2Fpuppets%204.png?alt=media&token=1e755728-fd6d-491a-9d5b-06c413d87847'
         }
         return obj
-      }
-
-      
+      }      
     },
     openCollectionFromIndex () {
       console.log('openCollectionIndex')

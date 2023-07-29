@@ -8,7 +8,7 @@ const FIREBASE_CONFIG_TEST_ENV = {
   measurementId: "G-XXD2M21N04"
 };
 
-const FIREBASE_CONFIG_PROD_ENV = { /// Change Later
+const FIREBASE_CONFIG_PROD_ENV = {
   apiKey: "AIzaSyCsDzN40b7Yrebq2QVkZP1_X5b7gHKLph4",
   authDomain: "meme-master-app.firebaseapp.com",
   projectId: "meme-master-app",
