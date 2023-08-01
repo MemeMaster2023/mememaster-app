@@ -200,7 +200,7 @@
                     <v-spacer></v-spacer>
                     <v-list-item-action>
                       <v-switch
-                          v-model="puOnSale"
+                          v-model="putOnSale"
                           @change="instantSale = !instantSale"
                           hide-details
                           color="green-lighten-2"
@@ -220,7 +220,7 @@
                     <v-list-item-action>
                       <v-switch
                           v-model="instantSale"
-                          @change="puOnSale = !puOnSale"
+                          @change="putOnSale = !putOnSale"
                           hide-details
                           color="green-lighten-2"
                           inset
@@ -312,6 +312,7 @@
                       </v-list-item-action>
                     </v-layout>
                   </v-list-item>
+
                   <template>
 
                   </template>
@@ -345,6 +346,7 @@
 
 <script>
 // @ is an alias to /src
+import { db } from '@/main'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import imageCompression from 'browser-image-compression'
 export default {
@@ -358,6 +360,9 @@ export default {
   },
   data: () => ({
     loading: false,
+    NFT1155_ADDRESS: '',
+    TRADE_ADDRESS: '',
+    PROXY_ADDRESS: '',
     view: 1,
     toDrafts: false,
     toUpload: false,
@@ -381,13 +386,17 @@ export default {
     nftName: '',
     nftDesctiption: '',
     nftCopies: 1,
-    puOnSale: false,
+    putOnSale: false,
     instantSale: false,
     instantSalePrice: 0,
     unlockableContent: false,
     unlockableContentText: '',
+    useRoyalties: false,
     nftType: 'erc1155',
     newContract: false,
+    selectedContract: {},
+    imageHash: '',
+    metadataHash: ''
   }),
   components: {
   },
@@ -395,6 +404,9 @@ export default {
     getUser () {
       return this.$store.state.user
     },
+    getNFTcontracts () {
+      return this.$store.state.mint.contracts
+    }
   },
   watch: {
   
@@ -407,10 +419,20 @@ export default {
         this.waitGetUser()
       } else {
         if (this.getUser.accLevel === 10) {
-            // this.getNFTs()
+            this.loadNFTcontracts()
           } else {
             this.$router.push('/')
           }
+      }
+      // Initialize NFT contracts
+      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+        this.NFT1155_ADDRESS = ''
+        this.TRADE_ADDRESS = ''
+        this.PROXY_ADDRESS = ''
+      } else {
+        this.NFT1155_ADDRESS = '0x37ed30D3c1D0C3C606e2f37Eda042E5035F514A9'
+        this.TRADE_ADDRESS = '0xd1feda4F9350c2454da043b54131990104Ca1bBc'
+        this.PROXY_ADDRESS = '0x075649DD03084D53b3A5C9c5bf9F5aAC82714D4d'
       }
   },
   methods: {
@@ -428,8 +450,20 @@ export default {
         }
       }, 2000);
     },
-    getNFTs () {
-
+    loadNFTcontracts () {
+      let dispatchObj = {
+        uid: this.getUser.uid,
+        limit: 100
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch("getNFTcontracts", dispatchObj)
+        .then(() => {
+          console.log(this.getNFTcontracts)
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
     },
     async handleFiles(image) {
       if (image.target.files[0] === undefined) {
@@ -549,9 +583,74 @@ export default {
         reader.onerror = (error) => reject(error);
       });
     },
-    createAndMint () {
-
+    selectExistingContract (item) {
+      this.selectedContract = item
     },
+    // ###########################################################################
+    // ############################## Create and Mint NFT Process ################
+    // ###########################################################################
+    createAndMint () {
+      // Create and Mint NFT Process Start
+      this.createNewNFTcontract()
+    },
+    createNewNFTcontract () {
+      if (this.newContract) {
+        this.newContractId = 0 // Will be set after creating the contract
+        // Form to ask for Name, Description, Symbol images etc
+        // create the new NFT contract
+
+        // NFT Contract done go to next step
+        this.uploadIPFS()
+      } else {
+        this.uploadIPFS()
+      }
+    },
+    uploadIPFS () {
+      // Upload & Pin Image to IPFS and get image_hash and metadata_hash
+
+      // IPFS done go to next step
+      this.createNFT()
+    },
+    createNFT () {
+      // Create item in nft_collections
+      let postkey = db.collection('nft_collections').doc()
+      var nftObject = {
+        id: postkey.id,
+        category: this.category.id,
+        name: this.nftName,
+        description: this.nftDesctiption,
+        no_of_copies: this.nftCopies,
+        owned_tokens: this.nftCopies,
+        put_on_sale: this.putOnSale,
+        instant_sale_price: this.instantSale,
+        sign_instant_sale_price: parseFloat(this.instantSalePrice),
+        unlock_on_purchase: this.unlockableContent,
+        unlock_on_purchase_content: this.unlockableContentText,
+        is_active: 1,
+        image_hash: this.imageHash,
+        metadata_hash: this.metadataHash, 
+        created: new Date().getTime(),
+        creator_id: this.getUser.uid,
+        owner_id: this.getUser.uid,
+        owner_name: this.getUser.displayName,
+        modified: 0,
+        modified_by_id: this.getUser.uid,
+        modified_by: this.getUser.displayName,
+        nft_contract_id: this.newContract ? this.newContractId : this.selectedContract.contract_id,
+        transaction_hash: '',
+        network_id: this.getUser.networkChainID, // 1 ETH Mainnet, 5 ETH Goerli
+        royalty: this.useRoyalties,
+        multi_royalty: {} // {"royalties": [0], "wallet_address": ["0xf251d1b5215dd88dda288689b2cedc5f0843d7f4"]}
+      }
+      console.log(nftObject)
+      // Create item in nft_contracts if new
+      // if (this.newContract) {
+      //   this.createNewNFTcontract()
+      // }
+    },
+    // ###########################################################################
+    // ###################################### END ################################
+    // ###########################################################################
     removeImage () {
       this.uploadImage = ''
       this.uploadImageUrl = ''

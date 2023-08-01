@@ -26,17 +26,21 @@
     <v-layout v-if="isMobileDevice" :style="'margin-left:' + ((windowWidth / 2) - 65) + 'px;margin-top:-30px'">
       <v-img
         src="/img/logos/logo.png"
-        style="max-height: 130px; max-width: 130px;cursor: pointer;"
+        style="max-height: 100px; max-width: 100px;cursor: pointer;"
         @click="routerGo('/')" v-scroll-to="'#home'"
       ></v-img>
     </v-layout>
 
-    <v-layout class="mr-4 ml-4 mt-8 mb-4" v-if="env">
+    
+    <v-layout class="pr-4 pl-4 pt-4 pb-2" v-if="env">
+
+      <v-spacer></v-spacer>
+
       <v-btn v-if="!mmConnected && !twConnected && !emailConnected"
         variant="outlined"
         color="white"
         theme="dark"
-        style="width:100%"
+        :style="isMobileDevice ? 'width:55%' : 'width:100%'"
         @click="connectWalletDialog = true"
       >
         Connect
@@ -46,7 +50,7 @@
         variant="outlined"
         color="white"
         theme="dark"
-        style="width:100%"
+        :style="isMobileDevice ? 'width:55%' : 'width:100%'"
       >
       <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px"/>
         Connected
@@ -56,7 +60,7 @@
         variant="outlined"
         color="white"
         theme="dark"
-        style="width:100%"
+        :style="isMobileDevice ? 'width:55%' : 'width:100%'"
       >
       <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px"/>
         Connected
@@ -66,7 +70,7 @@
         variant="outlined"
         color="white"
         theme="dark"
-        style="width:100%"
+        :style="isMobileDevice ? 'width:55%' : 'width:100%'"
       >
       <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px"/>
         Connected
@@ -76,11 +80,75 @@
         variant="outlined"
         color="white"
         theme="dark"
-        style="width:100%"
+        :style="isMobileDevice ? 'width:55%' : 'width:100%'"
       >
        <v-icon class="mr-2">mdi-email</v-icon> 
         Connected
       </v-btn>
+    
+      <v-spacer></v-spacer>
+
+      <v-tooltip location="top" v-if="isMobileDevice">
+        <template v-slot:activator="{ props }">
+          <v-btn 
+            variant="outlined"
+            style="margin-left:5px;"
+            color="white"
+            theme="dark"
+            v-bind="props"
+            prepend-icon="mdi-tag-outline"
+            :style="isMobileDevice ? 'width:45%' : 'width:100%'"
+          >
+            Presale
+          </v-btn>
+        </template>
+        <span>Presale coming soon, follow our social media channels below for details...
+        </span>
+      </v-tooltip>
+
+      <v-spacer></v-spacer>
+
+    </v-layout>
+
+    <v-layout class="pr-4 pl-4 pt-4 pb-4" v-if="env">
+
+      <v-spacer></v-spacer>
+
+      <v-tooltip location="top">
+        <template v-slot:activator="{ props }">
+          <v-btn v-if="drawer && isMobileDevice"
+            style="margin-right:5px;margin-top:-5px"
+            variant="outlined"
+            color="white"
+            theme="dark"
+            @click="gotoTokenLink('')"
+            v-bind="props"
+            :style="isMobileDevice ? 'width:55%' : 'width:100%'"
+          >
+            <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:5px"/> 
+            Token Security
+          </v-btn>
+        </template>
+        <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
+              DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
+        </span>
+      </v-tooltip>
+
+      <v-spacer></v-spacer>
+
+      <v-btn v-if="drawer && isMobileDevice"
+        style="margin-top:-5px"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        @click="gotoKYCLink('')"
+        :style="isMobileDevice ? 'width:45%' : 'width:100%'"
+      >
+        <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:5px"/> 
+        KYC - AUDIT
+      </v-btn>
+
+      <v-spacer></v-spacer>
 
     </v-layout>
 

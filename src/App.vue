@@ -38,7 +38,7 @@
     <v-dialog
       v-model="setDisplayNameDialog"
       persistent
-      max-width="400"
+      max-width="550"
     >
       <v-card pa-4 theme="dark">
         <v-card-title class="wrap-text text-h5">
@@ -61,7 +61,7 @@
         <v-layout class="pl-4 pr-4" style="margin-top:-30px" >
           <v-checkbox 
               v-model="ageConfirm" 
-              label="I confirm that I am at least 13 years old.">
+              label="I confirm that I am at least 13 (thirteen) years old.">
           </v-checkbox>
         </v-layout>
 
@@ -209,7 +209,7 @@ export default {
       }
       this.$store.dispatch("getUser", uid);
     }, 2000);
-    if (this.getChain !== '0x1') {
+    if (this.getChain !== '0x1' && (this.mmConnected || this.walletConnected || this.twConnected) && import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
       this.switchNWDialog = true
       // this.addETHNetwork()
     }
@@ -276,7 +276,7 @@ export default {
     getChain () {
       console.log('######### this.getChain ############')
       console.log(this.getChain)
-      if (this.getChain !== '0x1' && (this.mmConnected || this.walletConnected)) {
+      if (this.getChain !== '0x1' && (this.mmConnected || this.walletConnected || this.twConnected) && import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
         this.switchNWDialog = true
         // this.addETHNetwork()
       } else {

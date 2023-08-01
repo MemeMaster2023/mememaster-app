@@ -238,7 +238,10 @@ export default {
       
       // Read user storage folder
       // Create a reference under which you want to list
-      var listRef = this.storageRef.child('ExclusiveCollections/')
+      var listRef = this.storageRef.child('Exclusive Collections/')
+      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+        listRef = this.storageRef.child('ExclusiveCollections/')
+      }
 
       // Find all the prefixes and items.
       // var firstPage = await listRef.list({ maxResults: 100});

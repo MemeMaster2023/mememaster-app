@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 // More Modules Go Here
 import AuthModule from './AuthModule'
 import FirebaseModule from './FirebaseModule'
+import MintModule from './mint'
 
 // Create a new store instance.
 export default createStore({
@@ -254,6 +255,7 @@ export default createStore({
     modules: {
         // More Modules Go Here
         auth: AuthModule,
-        fb: FirebaseModule
+        fb: FirebaseModule,
+        mint: MintModule
     }
 })

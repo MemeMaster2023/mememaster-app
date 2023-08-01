@@ -11,7 +11,7 @@
     > 
         <v-card 
             v-if="chatOpen"
-            style="margin: -10px"
+            :style="isMobileDevice ? 'margin: -10px;padding-right: 25px;' :'margin: -10px;'"
             width="400"
             max-width="400"
             color="white" 
@@ -66,7 +66,7 @@
         </v-card>
         <v-card 
             v-if="chatOpen"
-            style="margin: -10px;"
+            :style="isMobileDevice ? 'margin: -10px;padding-right: 25px;' :'margin: -10px;'"
             color="white" 
             variant="flat" 
         >
@@ -143,7 +143,7 @@ export default {
      
     },
     keyPressed(e) {
-      // console.log(e)
+      console.log(e)
       if (this.prompt === '' || this.prompt === '\n') return
       if (e.keyCode === 16) {
         return;
@@ -191,7 +191,7 @@ export default {
         })
     },
     scrollToBottom () {
-      // console.log('scrolling to bottom')
+      //console.log('scrolling to bottom')
       const firstScrollTo = scroller();
       this.scrollClicked = true
       let element = '#list-item-' + index

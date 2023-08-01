@@ -9,7 +9,7 @@
         hide-delimiters
         :show-arrows="false"
         cycle
-        :interval="6000"
+        :interval="7500"
       >
       <v-carousel-item
         v-for="(item, i) in carouselItems"
@@ -21,7 +21,7 @@
       >
         <div :class="isMobileDevice ? 'ma-2' : ''">
           
-          <v-row style="margin-top:250px;" :align="'center'">
+          <v-row style="margin-top:280px;" :align="'center'">
             <v-col cols="12" md="3" class="pa-4">
             </v-col>
             <v-col cols="12" md="6">
@@ -47,7 +47,7 @@
               </template>
 
               <template v-if="i === 5">
-                 <p v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
+                 <p style="margin-right: -30px;margin-right: -30px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
               </template>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
@@ -64,11 +64,9 @@
             </v-col>
           </v-row>
 
-          <v-row :align="'center'" v-if="!isMobileDevice" style="height:100%" class="pt-8">
-            <v-col cols="12" md="1" class="pa-2">
-            </v-col>
+          <v-row :align="'center'" v-if="!isMobileDevice" style="height:100%;margin-left:10%;margin-right:10%" class="pt-8"> 
 
-            <v-col cols="12" md="3" class="pa-2" align-self="end" style="height:100%">
+            <v-col cols="12" md="4" class="pa-2" style="height:100%">
               <v-card
                 class="mx-auto overflow-auto"
                 max-width="100%"
@@ -80,14 +78,16 @@
               >
               <v-card-title >
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Meme Collections & New Token Listings
+                  Meme Collections & NFTs
                 </div>
               </v-card-title>
                 <v-card-text>
-                  <div class="text-body-1">
-                    With Meme Master, you'll be able to: <br>
-                    Mint your own memes and turn them into NFTs.<br>
-                    Import, trade, and store your memes and NFTs in our marketplace.
+                  <div id="newlist" class="text-body-1 ml-2">
+                    <ul>
+                      <li>Create your own memes</li>
+                      <li>Turn them into NFTs</li>
+                      <li>Import, trade, and store your memes and NFTs in our marketplace.</li>
+                    </ul>
                   </div>
                 </v-card-text>
                 <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
@@ -115,20 +115,23 @@
               >
               <v-card-title>
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Join our limited-edition airdrops
+                  New tokens listing & airdrops
                 </div>
               </v-card-title>
                 <v-card-text>
-                  <div class="text-body-1 pb-16">
-                    Gain early access to our exclusives 'new tokens listing platform'<br>
-                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed in our roadmap.
+                  <div id="newlist" class="text-body-1 ml-2">
+                    <ul>
+                      <li>Get first look access to exclusive new token listing platform</li>
+                      <li>Receive limited edition air-drops</li>
+                      <li>Enjoy exclusive benefits</li>
+                    </ul>
                   </div>
                 </v-card-text>
                 <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
-                    to="/tokens"
+                    @click="learnMoreDialog2 = true"
                   >
                     Learn More
                   </v-btn>
@@ -137,7 +140,7 @@
               </v-card>
             </v-col>
 
-            <v-col cols="12" md="3" class="pa-2">
+            <v-col cols="12" md="4" class="pa-2">
               <v-card
                 class="mx-auto overflow-auto"
                 max-width="100%"
@@ -154,15 +157,19 @@
               </v-card-title>
               
                 <v-card-text>
-                  <div class="text-body-1">
-                    Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
+                  <div id="newlist" class="text-body-1 ml-2">
+                    <ul>
+                      <li>Connect or sign up now and get 500 Free credits</li>
+                      <li>Use web3 wallets or your regular email</li>
+                      <li>No blockchain knowledge required</li>
+                    </ul>
                   </div>
                 </v-card-text>
                 <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
-                    @click="learnMoreDialog = true"
+                    @click="learnMoreDialog3 = true"
                   >
                     Learn More
                   </v-btn>
@@ -171,8 +178,6 @@
               </v-card>
             </v-col>
 
-            <v-col cols="12" md="1" class="pa-4">
-            </v-col>
           </v-row>
         </div>
  
@@ -237,16 +242,19 @@
                 </div>
               </v-card-title>
                 <v-card-text>
-                  <div class="text-body-1">
-                    With Meme Master, you'll be able to: <br>
-                    Mint your own memes and turn them into NFTs.<br>
-                    <p style="margin-top:10px">Import, trade, and store your memes and NFTs in our marketplace.</p>
+                  <div id="newlist" class="text-body-1 ml-2">
+                    <ul>
+                      <li>Create your own memes</li>
+                      <li>Turn them into NFTs</li>
+                      <li>Import, trade, and store your memes and NFTs in our marketplace.</li>
+                    </ul>
                   </div>
                 </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%">
+                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
+                    @click="learnMoreDialog = true"
                   >
                     Learn More
                   </v-btn>
@@ -260,26 +268,30 @@
               class="mx-auto overflow-auto"
               max-width="100%"
               min-width="100%"
-              height="280"
-              max-height="350"
+              height="240"
+              max-height="300"
               style="opacity:0.8"
               color="deep-purple-lighten-4"
             >
               <v-card-title>
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Airdrops, Gaming and much more
+                  New tokens listing & airdrops
                 </div>
               </v-card-title>
                 <v-card-text>
-                  <div class="text-body-1 pb-16">
-                    Get access to join our limited-edition airdrops.<br><br>
-                    These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed our roadmap.
+                  <div id="newlist" class="text-body-1 ml-2">
+                    <ul>
+                      <li>Get first look access to exclusive new token listing platform</li>
+                      <li>Receive limited edition air-drops</li>
+                      <li>Enjoy exclusive benefits</li>
+                    </ul>
                   </div>
                 </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%">
+                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
+                    @click="learnMoreDialog2 = true"
                   >
                     Learn More
                   </v-btn>
@@ -305,14 +317,19 @@
               </v-card-title>
               
                 <v-card-text>
-                  <div class="text-body-1">
-                    Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
+                  <div id="newlist" class="text-body-1 ml-2">
+                    <ul>
+                      <li>Connect or sign up now and get 500 Free credits</li>
+                      <li>Use web3 wallets or your regular email</li>
+                      <li>No blockchain knowledge required</li>
+                    </ul>
                   </div>
                 </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%">
+                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="text"
+                    @click="learnMoreDialog3 = true"
                   >
                     Learn More
                   </v-btn>
@@ -406,7 +423,7 @@
             <v-card-text >
 
               <v-sheet
-                class="d-flex flex-wrap mx-auto px-8 py-8"
+                :class="isMobileDevice ? 'd-flex flex-wrap mx-auto px-2 py-2' : 'd-flex flex-wrap mx-auto px-8 py-8'"
                 elevation="4"
                 rounded
                 width="100%"
@@ -414,14 +431,22 @@
                 <v-row>
                   <v-col cols="12" md="8">
                     <div>
-                      <h2 class="text-h4 font-weight-bold">Meme Collections & New Token Listings</h2>
+                      <h2 class="text-h4 font-weight-bold">Meme Collections & NFTs</h2>
 
                       <div class="text-h6 mt-2 mb-2">
-                        With Meme Master, you'll be able to:<br>
-                        Mint your own memes and turn them into NFTs.<br>
-                        Import, trade, and store your memes and NFTs in our marketplace.<br><br>
-                        Create NFTs from your memes or directly for integration in our gaming platforms.<br><br>
-                        Get early access to new token listings from our own token finder complete with features such as anti- rug pull, compliance, project KYC. Our daily top listings and much more to allow you to get early access into many projects with peace of mind, this will be exclusive to MemeMaster.
+                        With Meme Master, you'll be able to:
+
+                        <div id="newlist" class="text-h6 ml-4">
+                          <ul>
+                            <li>Create and Manage your collections.</li>
+                            <li>Keep them proviate or make them public.</li>
+                            <li>Create your own memes and turn them into NFTs.</li>
+                            <li>Import, trade, and store your memes and NFTs in our marketplace.</li>
+                            <li>Holding our EMAS tokens is the first step to opening these possibilities.</li>
+                          </ul>
+                        </div><br>
+                        Create NFTs from your memes or directly for integration in our gaming platform.<br><br>
+                        <!-- Get early access to new token listings from our own token finder complete with features such as anti- rug pull, compliance, project KYC. Our daily top listings and much more to allow you to get early access into many projects with peace of mind, this will be exclusive to MemeMaster. -->
                       </div>
                     </div>
                   </v-col>
@@ -431,6 +456,29 @@
                   </v-col>
                 </v-row>
               </v-sheet>
+              
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog
+          v-model="learnMoreDialog2"
+          fullscreen
+        >
+          <v-card theme="dark" color="#2b2b2b">
+            <v-toolbar
+              color="deep-purple-darken-4"
+            >
+            <v-toolbar-title>Learn More...</v-toolbar-title>
+            <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="learnMoreDialog2 = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text >
 
               <v-sheet
                 class="d-flex flex-wrap mx-auto px-8 py-8 mt-4"
@@ -439,27 +487,61 @@
                 width="100%"
               >
                 <v-row>
-                  <v-col cols="12" md="4" :align="'left'" align-self="center">
+                  <v-col cols="12" md="4" :align="'left'" align-self="top">
                     <v-img style="max-width: 350px; border-radius: 10px;"
                            src="/img/home/airdrops_and_gaming.webp"></v-img>
                   </v-col>
 
                   <v-col cols="12" md="8">
                     <div>
-                      <h2 class="text-h4 font-weight-bold">Airdrops Gaming and much more</h2>
+                      <h2 class="text-h4 font-weight-bold">New tokens listing & airdrops</h2>
 
-                      <div class="text-h6 mt-2 mb-2">
-                        Get access to join our limited-edition airdrops.<br><br>
-                        These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed our roadmap, early access to new token listings, higher free allocation of our MemeMaster points that you can use in the games (that you will also have early access too) and later convert to our EMAS tokens.<br><br>
-                        Access to our future limited-edition airdrops and also early access to join our partners of listed tokens (coming soon) plus so much more...<br>
-                        All of these features can be managed from your Meme Master dashboard, allowing seamless storage, trading, and transfer on memes, NFTs, Games, music and more.<br><br>
-                        Holding our EMAS tokens is the first step to opening these possibilities.<br><br>
-                        Token Martix (this later will be a link to show users what they need to hold in order to be eligible)                  
+                      <div style="text-align: justify;" class="text-h6 mt-2 mb-2">
+                        Get <strong><u>FIRST LOOK</u></strong> access to new token listings from our own token finder complete with features such as anti- rug pull, compliance and project KYC. Our daily top listings allow you to get early access into many projects with peace of mind, this will be <strong><u>EXCLUSIVE</u></strong> to MemeMaster. Airdrops Gaming and much more<br><br>
+
+                        Get our <strong><u>LIMITED EDITION AIRDROPS.</u></strong><br><br>
+
+                        These NFTs, when held in your wallet (with a min quantity of EMAS tokens) will give many benefits including early access to our new features that are listed in our roadmap, first look to new token listings, higher free allocation of our MemeMaster points to use in games (that you will also have early access too) and later convert to our EMAS tokens.<br><br>
+                        
                         </div>
                     </div>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <v-col cols="12" md="12" :align="'left'" align-self="center">
+                    <div style="text-align: justify;" class="text-h6 mt-2 mb-2">
+                        Receive our future limited-edition airdrops and also early access to join our partners of listed tokens (coming soon) plus so much more...<br>
+                        All of these features can be managed from your Meme Master dashboard, allowing seamless storage, trading, and transfer of memes, NFTs, Games, music and more.<br><br>
+                        
+                        Holding our EMAS tokens is the first step to opening these possibilities.<br><br>
+                      <!-- Token Martix -->     
+                    </div>
+                  </v-col>
+                </v-row>
               </v-sheet>
+              
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog
+          v-model="learnMoreDialog3"
+          fullscreen
+        >
+          <v-card theme="dark" color="#2b2b2b">
+            <v-toolbar
+              color="deep-purple-darken-4"
+            >
+            <v-toolbar-title>Learn More...</v-toolbar-title>
+            <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="learnMoreDialog3 = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text >
 
               <v-sheet
                 class="d-flex flex-wrap mx-auto px-8 py-8 mt-4"
@@ -469,12 +551,25 @@
               >
                 <v-row>
                   <v-col cols="12" md="8">
-                    <div>
+                    <div id="learnmore_3">
                       <h2 class="text-h4 font-weight-bold">Connect Wallet or Walletless</h2>
 
-                      <div class="text-h6 mt-2 mb-2">
-                        Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.<br><br>
-                        New to crypto? Click the guide below to help you onboard.<br><br>
+                      <div class="text-h6 mt-2 mb-4">
+                        Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
+                      </div>
+
+                        <div id="newlist" class="text-h6 ml-2">
+                          <ul>
+                            <li>Connect or sign up now and get 500 Free credits</li>
+                            <li>Use web3 wallets or your regular email</li>
+                            <li>No blockchain knowledge required</li>
+                          </ul>
+                        </div>
+                        <br>
+
+                        <div class="text-h6 mt-2 mb-4">
+                          New to crypto? Click the guide below to help you onboard.
+                        </div>
 
                         <v-btn
                           style="text-transform: none !important;"
@@ -482,11 +577,10 @@
                           size="large"
                           color="indigo-lighten-2"
                           prepend-icon="mdi-wallet"
-                          @click="addETHNetwork"
+                          @click="gotoLink('https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask')"
                         >
                         How to Create a Wallet?
                         </v-btn>
-                      </div>
                     </div>
                   </v-col>
                   <v-col cols="12" md="4" :align="'right'" align-self="center">
@@ -506,6 +600,7 @@
 
 <script>
 // @ is an alias to /src
+import TokenListings from '@/components/tokens/Tokens'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 export default {
   name: 'Home',
@@ -519,6 +614,8 @@ export default {
   data: () => ({
     loading: false,
     learnMoreDialog: false,
+    learnMoreDialog2: false,
+    learnMoreDialog3: false,
     imageLayout: [
       { cols: 4 },
       {
@@ -570,6 +667,7 @@ export default {
     scrollClicked: false
   }),
   components: { 
+    TokenListings
   },
   computed: {
 
@@ -590,6 +688,10 @@ export default {
       setTimeout(() => {
         firstScrollTo('#gallery', 500, { offset: -64 });
       }, 200);
+    },
+    gotoLink(link) {
+      console.log('button clicked')
+      window.open(link, "_blank");
     },
     scrollToTop () {
       const firstScrollTo = scroller();
@@ -648,5 +750,19 @@ export default {
     opacity: 1 !important;
     position: absolute;
     width: 100%;
+  }
+  #newlist ul {
+    list-style: none;
+  }
+  #newlist li {
+    list-style: none;
+    counter-increment: foo;
+    display: table-row;
+  }
+  //* standard Unicode method *//
+  #newlist ul li:before {
+    content: "\27A2";
+    padding-right:5px;
+    display: table-cell;
   }
 </style>

@@ -1,20 +1,20 @@
 <template>
-  <div id="mynfts">
-    <v-responsive style="background-color: #000;">
+  <div id="tokens">
+    <v-responsive style="background-color: #212121;">
       
-      <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 1">
+      <v-card theme="dark" :class="isMobileDevice ? 'mt-2' : 'mt-16 mb-16'" height="100%" v-if="view === 1">
 
-       <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" :align="center">
+       <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2' : 'mt-12'" :align="center">
         <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
         </v-col>
 
         <v-col cols="12" md="8" :align="center" >
-          <div class="text-h4 text-center ma-2">New Tokens Listings</div>
+          <div class="text-h4 text-center ma-2">New Tokens Listing</div>
 
           <v-row class="mt-4">
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="8" :class="isMobileDevice ? 'pa-4' : ''">
               <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
-                Welcome to our New Token Listings section, where you can discover a wide array of tokens. Whether you're an investor, enthusiast, or simply curious about the latest trends in the digital asset space, this is the place to be.<br><br>
+                Welcome to our New Tokens Listing section, where you can discover a wide array of tokens. Whether you're an investor, enthusiast, or simply curious about the latest trends in the digital asset space, this is the place to be.<br><br>
                 
                 Explore a diverse range of tokens representing various projects, protocols, and industries. From cryptocurrencies to utility tokens and beyond, our curated selection ensures you have access to some of the most promising and innovative assets in the market.<br><br>
               </div>
@@ -63,13 +63,13 @@
 // @ is an alias to /src
 import { scroller } from 'vue-scrollto/src/scrollTo'
 export default {
-  name: 'My NFTs',
+  name: 'New Token Listings',
   props: {
     isMobileDevice: Boolean,
     dark: Boolean,
     windowWidth: Number,
     windowHeight: Number,
-    drawer: Boolean
+    drawer: Boolean,
   },
   data: () => ({
     loading: false,
