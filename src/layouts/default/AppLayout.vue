@@ -1092,6 +1092,10 @@ export default {
         this.drawer = false
         this.$emit("tokenLinkClicked")
       },
+      gotoLink(link) {
+        console.log('button clicked')
+        window.open(link, "_blank");
+      },
       gotoContact () {
         this.drawer = false
       },
