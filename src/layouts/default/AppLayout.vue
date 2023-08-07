@@ -114,7 +114,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-tooltip location="top">
+      <v-tooltip location="top" v-if="!isMobileDevice">
         <template v-slot:activator="{ props }">
           <v-btn v-if="drawer && isMobileDevice"
             style="margin-right:5px;margin-top:-5px"
@@ -133,6 +133,17 @@
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
       </v-tooltip>
+      <v-btn v-if="drawer && isMobileDevice"
+        style="margin-right:5px;margin-top:-5px"
+        variant="outlined"
+        color="white"
+        theme="dark"
+        @click="gotoTokenLink('')"
+        :style="isMobileDevice ? 'width:55%' : 'width:100%'"
+      >
+        <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:5px"/> 
+        Token Security
+      </v-btn>
 
       <v-spacer></v-spacer>
 
