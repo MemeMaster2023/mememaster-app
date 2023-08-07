@@ -563,7 +563,10 @@
           </v-toolbar>
           <div class="text-center ma-4" v-if="showConfirmation === false">
             If you don't have a wallet, you can select a provider and create one now.<br>
-            <v-btn variant="text">Learn more</v-btn>
+            <v-btn variant="text" class="ma-4" 
+            >
+              Learn more
+            </v-btn>
           </div>
 
           <v-row v-if="getChain === '0x1' && !isMobileDevice" style="margin-left:15%;margin-right:15%">
@@ -980,6 +983,9 @@ export default {
       routerGo (route) {
         this.$router.push(route);
         this.drawer = false
+      },
+      connectWalletDialogClicked () {
+        this.connectWalletDialog = true
       },
       openWhitePaper() {
         // console.log('wpClicked')
