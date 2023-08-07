@@ -281,7 +281,7 @@ export default {
             {text: 'Confirm Coinmarketcap and Coingecko listing.', completed: false},
             {text: 'Create New Token Listing Platform: This will provide users with access to newly minted tokens, enhancing the ecosystem\'s dynamism.', completed: false},  
             {text: 'Gaming App Integration: Develop a mini-game section where users can play with/against each other. The games can be meme-themed or utilize user\'s NFTs', completed: false},
-            {text: 'Introducing Music to Meme Master. Add music to your Memes. Experiment with an AI DJ mixing a playlist for you.', completed: false} 
+            {text: 'Introducing AI Music to Meme Master. Add music to your Memes. Experiment with an AI DJ mixing a playlist for you.', completed: false} 
           ],
           date: 'Phase 4',
           color: '#463552',

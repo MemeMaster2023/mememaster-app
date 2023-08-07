@@ -44,6 +44,7 @@
               <v-card
                 class="mx-auto"
                 max-width="400"
+                min-width="100%"
                 @click="openCollection(index)"
               >
                 <v-img
@@ -65,7 +66,7 @@
                   <v-btn
                     color="deep-purple-lighten-2"
                     variant="text"
-                    @click="openCollection(index)"
+                    @click.stop="openCollection(index)"
                   >
                     OPEN
                   </v-btn>
@@ -311,7 +312,13 @@ export default {
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FVan%20Gogh%20style%20-%20Limited%20Edition%20NFTs%2Fpuppets%204.png?alt=media&token=1e755728-fd6d-491a-9d5b-06c413d87847'
         }
         return obj
-      }      
+      } else if (name === 'MM GOLD EMAS') {
+        obj = {
+          subtitle: 'MM GOLD EMAS',
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/ExclusiveCollections%2FMM%20GOLD%20EMAS%2FD%202.png?alt=media&token=0a2857a3-ef4c-47f2-8be5-a2ddd09e2ae2'
+        }
+        return obj
+      }     
     },
     openCollectionFromIndex () {
       console.log('openCollectionIndex')

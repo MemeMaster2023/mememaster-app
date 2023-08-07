@@ -561,9 +561,10 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
-          <div class="text-center ma-4" v-if="showConfirmation === false">
+
+          <div class="text-center ma-6" v-if="showConfirmation === false">
             If you don't have a wallet, you can select a provider and create one now.<br>
-            <v-btn variant="text">Learn more</v-btn>
+            <v-btn variant="text" color="grey" @click="learnMoreDialog = true">Learn more</v-btn>
           </div>
 
           <v-row v-if="getChain === '0x1' && !isMobileDevice" style="margin-left:15%;margin-right:15%">
@@ -726,6 +727,76 @@
         </v-card>
     </v-dialog>
 
+    <v-dialog
+          v-model="learnMoreDialog"
+          fullscreen
+        >
+          <v-card theme="dark" color="#2b2b2b">
+            <v-toolbar
+              color="deep-purple-darken-4"
+            >
+            <v-toolbar-title>Learn More...</v-toolbar-title>
+            <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="learnMoreDialog = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text >
+
+              <v-sheet
+                class="d-flex flex-wrap mx-auto px-8 py-8 mt-4"
+                elevation="4"
+                rounded
+                width="100%"
+              >
+                <v-row>
+                  <v-col cols="12" md="8">
+                    <div id="learnmore_3">
+                      <h2 class="text-h4 font-weight-bold">Connect Wallet or Walletless</h2>
+
+                      <div class="text-h6 mt-2 mb-4">
+                        Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
+                      </div>
+
+                        <div id="newlist" class="text-h6 ml-2">
+                          <ul>
+                            <li>Connect or sign up now and get 500 Free credits</li>
+                            <li>Use web3 wallets or your regular email</li>
+                            <li>No blockchain knowledge required</li>
+                          </ul>
+                        </div>
+                        <br>
+
+                        <div class="text-h6 mt-2 mb-4">
+                          New to crypto? Click the guide below to help you onboard.
+                        </div>
+
+                        <v-btn
+                          style="text-transform: none !important;"
+                          variant="outlined"
+                          size="large"
+                          color="indigo-lighten-2"
+                          prepend-icon="mdi-wallet"
+                          @click="gotoLink('https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask')"
+                        >
+                        How to Create a Wallet?
+                        </v-btn>
+                    </div>
+                  </v-col>
+                  <v-col cols="12" md="4" :align="'right'" align-self="center">
+                    <v-img style="max-width: 350px; border-radius: 10px;"
+                           src="/img/home/crypto_onboarding.webp"></v-img>
+                  </v-col>
+                </v-row>
+              </v-sheet>
+              
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
     <!-- ############### ChatBot ################### -->
     <ChatGPT
     v-if="(mmConnected || walletConnected || twConnected || emailConnected)"
@@ -804,6 +875,7 @@ export default {
       scrolled: false,
       chatActive: true,
       connectWalletDialog: false,
+      learnMoreDialog: false,
       loadingEmailAuth: false,
       emailDialog: false,
       isExistingUser: false,

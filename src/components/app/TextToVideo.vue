@@ -759,7 +759,7 @@ export default {
     showRowAlert: false,
     showRowAlertText: '',
     players: {},
-    HLSCore,
+    HLSCore: '',
     volume: 80,
     source: '',
     cover: '',

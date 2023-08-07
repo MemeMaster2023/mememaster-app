@@ -31,7 +31,7 @@
               </template>
 
               <template v-if="i === 1">
-                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're creating a hub where memes, NFTs, and social media intersect.</p>
+                <p style="margin-right: -20px;margin-right: -20px;" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're creating an AI based hub where memes, NFTs, and social media intersect.</p>
               </template>
               
               <template v-if="i === 2">
@@ -43,7 +43,7 @@
               </template>
 
               <template v-if="i === 4">
-                <p style="margin-right: -20px;margin-right: -20px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We are an evolving project: Try our current features then follow our roadmap.</p>
+                <p style="margin-right: -20px;margin-right: -20px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We are an evolving AI inspired project: Try our current features then follow our roadmap.</p>
               </template>
 
               <template v-if="i === 5">
@@ -78,7 +78,7 @@
               >
               <v-card-title >
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Meme Collections & NFTs
+                  AI generated memes & NFTs
                 </div>
               </v-card-title>
                 <v-card-text>
@@ -152,16 +152,16 @@
               >
               <v-card-title>
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Connect Wallet or Walletless
+                  Join in our AI gaming and music
                 </div>
               </v-card-title>
               
                 <v-card-text>
                   <div id="newlist" class="text-body-1 ml-2">
                     <ul>
-                      <li>Connect or sign up now and get 500 Free credits</li>
-                      <li>Use web3 wallets or your regular email</li>
-                      <li>No blockchain knowledge required</li>
+                      <li>Add your AI generated memes and NFTs to our games</li>
+                      <li>Integrate music into memes and NFTs</li>
+                      <li>Experiment with our AI DJ</li>
                     </ul>
                   </div>
                 </v-card-text>
@@ -238,7 +238,7 @@
             >
               <v-card-title >
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Meme Collections & Token Listings
+                  AI generated memes & NFTs
                 </div>
               </v-card-title>
                 <v-card-text>
@@ -312,16 +312,16 @@
             >
               <v-card-title>
                 <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Connect Wallet or Walletless
+                  Join in our AI gaming and music
                 </div>
               </v-card-title>
               
                 <v-card-text>
                   <div id="newlist" class="text-body-1 ml-2">
                     <ul>
-                      <li>Connect or sign up now and get 500 Free credits</li>
-                      <li>Use web3 wallets or your regular email</li>
-                      <li>No blockchain knowledge required</li>
+                      <li>Add your AI generated memes and NFTs to our games</li>
+                      <li>Integrate music into memes and NFTs</li>
+                      <li>Experiment with our AI DJ</li>
                     </ul>
                   </div>
                 </v-card-text>
@@ -431,7 +431,7 @@
                 <v-row>
                   <v-col cols="12" md="8">
                     <div>
-                      <h2 class="text-h4 font-weight-bold">Meme Collections & NFTs</h2>
+                      <h2 class="text-h4 font-weight-bold">AI generated memes & NFTs</h2>
 
                       <div class="text-h6 mt-2 mb-2">
                         With Meme Master, you'll be able to:
@@ -544,50 +544,65 @@
             <v-card-text >
 
               <v-sheet
-                class="d-flex flex-wrap mx-auto px-8 py-8 mt-4"
+                class="d-flex flex-wrap mx-auto px-8 py-8"
                 elevation="4"
                 rounded
                 width="100%"
               >
-                <v-row>
-                  <v-col cols="12" md="8">
-                    <div id="learnmore_3">
-                      <h2 class="text-h4 font-weight-bold">Connect Wallet or Walletless</h2>
+              <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2' : 'mt-2'" :align="center">
+                <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
+                </v-col>
 
-                      <div class="text-h6 mt-2 mb-4">
-                        Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
+                <v-col cols="12" md="8" :align="center">
+                  <div class="text-h4 text-center ma-2">Join in our AI gaming and music</div>
+
+                  <v-row class="mt-8">
+                    <v-col cols="12" md="4" :align="isMobileDevice ? 'center' : 'right'">
+                      <v-img style="max-width: 300px; border-radius: 10px;"
+                      src="/img/music/mememaster_music_01.png">
+                    </v-img>
+                    </v-col>
+
+                    <v-col cols="12" md="8">
+                      <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
+                        Take your memes to the next level with our latest feature: Music Integration. Elevate the humor, emotion, and impact of your memes by seamlessly blending them with catchy tunes. Our platform allows you to easily add music to your memes, enhancing the overall experience for your audience. From upbeat tracks to sentimental melodies, choose the perfect soundtrack to complement your witty creations. With Music Integration, your memes will have an irresistible charm that resonates with viewers on a whole new level.
                       </div>
+                    </v-col>
+                  </v-row>
+                
+                  
+                  <v-row>
+                    <v-col cols="12" md="8">
+                      <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
+                        Experiment with an AI DJ: Let Our Virtual DJ Curate Your Playlist
+                        Dive into the world of AI-driven music curation with our innovative feature: AI DJ. Say goodbye to the hassle of creating playlists manually and let our virtual DJ take the reins. Our intelligent algorithm analyzes your music preferences, understands your mood, and crafts customized playlists tailored specifically for you. With AI DJ, you'll discover a seamless blend of your favorite tunes and new, exciting tracks. Sit back, relax, and enjoy the perfect mix as our AI DJ expertly navigates through genres, tempos, and styles to create an immersive musical journey personalized just for you.
+                      </div>
+                    </v-col>
+                    
+                    <v-col cols="12" md="4" :align="isMobileDevice ? 'center' : 'right'">
+                      <v-img style="max-width: 300px; border-radius: 10px;"
+                        src="/img/music/mememaster_music_03.png">
+                        </v-img>
+                    </v-col>
+                  </v-row>
 
-                        <div id="newlist" class="text-h6 ml-2">
-                          <ul>
-                            <li>Connect or sign up now and get 500 Free credits</li>
-                            <li>Use web3 wallets or your regular email</li>
-                            <li>No blockchain knowledge required</li>
-                          </ul>
-                        </div>
-                        <br>
 
-                        <div class="text-h6 mt-2 mb-4">
-                          New to crypto? Click the guide below to help you onboard.
-                        </div>
+                
+                  <v-alert
+                    class="mt-8 mb-8"
+                    color="deep-purple-darken-4"
+                    theme="dark"
+                    icon="mdi-code-braces"
+                  >
+                    <p style="font-size: 1.3rem;margin-top: -5px;">The AI Music features will be developed in Phase 4.<br>Stay tuned for information about the 1st release.</p>
+                  </v-alert>    
+                  
+                </v-col>
 
-                        <v-btn
-                          style="text-transform: none !important;"
-                          variant="outlined"
-                          size="large"
-                          color="indigo-lighten-2"
-                          prepend-icon="mdi-wallet"
-                          @click="gotoLink('https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask')"
-                        >
-                        How to Create a Wallet?
-                        </v-btn>
-                    </div>
-                  </v-col>
-                  <v-col cols="12" md="4" :align="'right'" align-self="center">
-                    <v-img style="max-width: 350px; border-radius: 10px;"
-                           src="/img/home/crypto_onboarding.webp"></v-img>
-                  </v-col>
-                </v-row>
+                <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
+                </v-col>
+
+              </v-row>
               </v-sheet>
               
             </v-card-text>
