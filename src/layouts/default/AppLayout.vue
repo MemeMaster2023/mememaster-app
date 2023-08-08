@@ -98,6 +98,7 @@
             v-bind="props"
             prepend-icon="mdi-tag-outline"
             :style="isMobileDevice ? 'width:45%' : 'width:100%'"
+            to="/presale"
           >
             Presale
           </v-btn>
@@ -293,7 +294,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!drawer && env && (!mmConnected && !twConnected && !emailConnected && !walletConnected)"
+      <v-btn v-if="!drawer && env && (!mmConnected && !twConnected && !emailConnected && !walletConnected) && $router.currentRoute.value.path !== '/presale'"
         style="margin-right:10px;margin-top:-5px"
         variant="outlined"
         color="white"
@@ -455,6 +456,7 @@
             v-bind="props"
             size="small"
             prepend-icon="mdi-tag-outline"
+            to="/presale"
           >
             Presale
           </v-btn>

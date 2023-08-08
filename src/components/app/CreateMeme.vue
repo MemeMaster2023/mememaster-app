@@ -1356,7 +1356,7 @@ export default {
     },
     async startMemeGeneration () {
       console.log(this.toUpload)
-      if (this.toUpload && this.uploadImageUrl !== '') {
+      if (this.uploadImageUrl !== '') {
         this.startImagetoImageGeneration()
         return
       }
