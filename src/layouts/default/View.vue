@@ -148,7 +148,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <div class="pt-4 mb-4 mr-8 ml-8" style="text-align: justify;">
-            Unleash your creativity, explore trends, and connect with meme aficionados across multiple social media platforms. Our generative platform brings you a universe of endless meme, NFT music and gaming possibilities. Join the meme revolution now!
+            Unleash your creativity, explore trends, and connect with meme aficionados across multiple social media platforms. Our AI generative platform brings you a universe of endless meme, NFT music and gaming possibilities. Join the meme revolution now!
           </div>
           <div :class="isMobileDevice ? 'pt-4 text-center' : 'pt-4 text-center'">
             <p class="text-h6">Key Partner</p>

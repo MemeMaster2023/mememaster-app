@@ -2,26 +2,29 @@
   <div id="collections">
     <v-responsive style="background-color: #000;">
       
-      <v-img :src="view === 0 ? '/img/home/collections_bg_V15_00' + colIndex + '.webp' : '/img/home/collections_bg_V15_0' + view + '.webp'"
+      <v-img :src="view === 0 ? '/img/home/collections_bg_V16_00' + colIndex + '.webp' : '/img/home/collections_bg_V16_0' + view + '.webp'"
             :max-height="isMobileDevice ? 500 : 400"
             cover
             class="align-end"
             gradient="to bottom, rgba(0,0,0,.7), rgba(0,0,0,.4)"
       > 
-        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 4" style="color: #99c1f1" class="text-h4" >Tim Burton NFTs - Exclusive Rare Edition</v-card-title>
-        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 4" style="color: #99c1f1" class="text-h6" >Tim Burton NFTs - Exclusive Rare Edition</v-card-title>
+        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 5" style="color: #99c1f1" class="text-h4" >Tim Burton NFTs - Exclusive Rare Edition</v-card-title>
+        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 5" style="color: #99c1f1" class="text-h6" >Tim Burton NFTs - Exclusive Rare Edition</v-card-title>
 
-        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 0" style="color: #99c1f1" class="text-h4" >Andy Warhol NFTs - Exclusive Rare Edition</v-card-title>
-        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 0" style="color: #99c1f1" class="text-h6" >Andy Warhol NFTs - Exclusive Rare Edition</v-card-title>
+        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 1" style="color: #99c1f1" class="text-h4" >MM GOLD EMAS - Exclusive Rare Edition</v-card-title>
+        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 1" style="color: #99c1f1" class="text-h6" >MM GOLD EMAS - Exclusive Rare Edition</v-card-title>
 
-        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 2" style="color: #99c1f1" class="text-h4" >Shiba INU NEONs NFTs - Limited Edition NFTs</v-card-title>
-        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 2" style="color: #99c1f1" class="text-h6" >Shiba INU NEONs NFTs - Limited Edition NFTs</v-card-title>
+        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 3" style="color: #99c1f1" class="text-h4" >Shiba INU NEONs NFTs - Limited Edition NFTs</v-card-title>
+        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 3" style="color: #99c1f1" class="text-h6" >Shiba INU NEONs NFTs - Limited Edition NFTs</v-card-title>
+
+        <v-card-title v-if="!isMobileDevice && viewCol === 2 && colIndex === 2" style="color: #99c1f1" class="text-h4" >Pepe Frogs NEON - Limited Edition NFTs</v-card-title>
+        <v-card-title v-if="isMobileDevice && viewCol === 2  && colIndex === 2" style="color: #99c1f1" class="text-h6" >Pepe Frogs NEON - Limited Edition NFTs</v-card-title>
 
         <v-card-title v-if="!isMobileDevice && view === 1" :style="view === 1 ? 'color: #e8c5ff' : 'color: #d4a863'" class="text-h4" >Sample NFT Collections</v-card-title>
         <v-card-title v-if="isMobileDevice && view === 1" :style="view === 1 ? 'color: #e8c5ff' : 'color: #d4a863'" class="text-h6" >Sample NFT Collections</v-card-title>
 
-        <v-card-title v-if="!isMobileDevice && view === 2" style="color: #31c46c" class="text-h4" >Early Gaming Insights</v-card-title>
-        <v-card-title v-if="isMobileDevice && view === 2" style="color: #31c46c" class="text-h6" >Early Gaming Insights</v-card-title>
+        <v-card-title v-if="!isMobileDevice && view === 2" style="color: #31c46c" class="text-h4" >Early AI Gaming Insights</v-card-title>
+        <v-card-title v-if="isMobileDevice && view === 2" style="color: #31c46c" class="text-h6" >Early AI Gaming Insights</v-card-title>
 
         <v-card-title v-if="!isMobileDevice && view === 3" style="color: #c5d73d" class="text-h4" >Exclusive NFT Collections</v-card-title>
         <v-card-title v-if="isMobileDevice && view === 3" style="color: #c5d73d" class="text-h6" >Exclusive NFT Collections</v-card-title>
@@ -45,20 +48,20 @@
             >
             <v-spacer v-if="!drawer"></v-spacer>
 
-            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(4)">
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(5)">
               Tim Burton NFTs
             </v-btn>
 
-            <v-btn variant="text" color="#99c1f1" @click="openExclusiveCollection(0)">
-              Andy Warhol NFTs
+            <v-btn variant="text" color="#99c1f1" @click="openExclusiveCollection(1)">
+              MM GOLD EMAS
             </v-btn>
 
-            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(2)">
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(3)">
               Shiba INU NEONs NFTs
             </v-btn>
 
-            <v-btn  variant="text" color="#e8c5ff" @click="openWomanWarriors()">
-              Women Warriors NFTs
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(2)">
+              Pepe Frogs NEON
             </v-btn>
 
             <v-btn  variant="text" color="#31c46c" @click="openEarlyGamesInsights()">
@@ -75,22 +78,22 @@
 
        <v-row v-if="isMobileDevice" class="pt-8">
         <v-col cols="12" md="4" :align="'center'" style="margin-top: -10px;">
-          <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(4)">
+          <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(5)">
             Tim Burton
           </v-btn>
 
-          <v-btn variant="text" color="#99c1f1" @click="openExclusiveCollection(0)">
-            Andy Warhol
+          <v-btn variant="text" color="#99c1f1" @click="openExclusiveCollection(1)">
+            MM GOLD EMAS
           </v-btn>
           </v-col>
 
           <v-col cols="12" md="4" :align="'center'" style="margin-top: -10px;">
-            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(2)">
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(3)">
               Shiba INU NEONs
             </v-btn>
 
-            <v-btn  variant="text" color="#e8c5ff" @click="view = 1">
-              Women Warriors
+            <v-btn  variant="text" color="#99c1f1" @click="openExclusiveCollection(2)">
+              Pepe Frogs NEON
             </v-btn>
           </v-col>
 
@@ -291,7 +294,7 @@ export default {
   },
   methods: {
     init () {
-     this.openExclusiveCollection(4)
+     this.openExclusiveCollection(5)
     },
     openExclusiveCollection (index) {
       this.view = 0

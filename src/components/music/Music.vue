@@ -9,7 +9,7 @@
         </v-col>
 
         <v-col cols="12" md="8" :align="center">
-          <div class="text-h4 text-center ma-2">Introducing Music to Meme Master</div>
+          <div class="text-h4 text-center ma-2">Introducing AI Music to Meme Master</div>
 
           <v-row class="mt-8">
             <v-col cols="12" md="4" :align="isMobileDevice ? 'center' : 'right'">
@@ -49,7 +49,7 @@
             theme="dark"
             icon="mdi-code-braces"
           >
-            <p style="font-size: 1.3rem;margin-top: -5px;">The Music features will be developed in Phase 4.<br>Stay tuned for information about the 1st release.</p>
+            <p style="font-size: 1.3rem;margin-top: -5px;">The AI Music features will be developed in Phase 4.<br>Stay tuned for information about the 1st release.</p>
           </v-alert>    
           
         </v-col>

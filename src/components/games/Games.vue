@@ -9,7 +9,7 @@
         </v-col>
 
         <v-col cols="12" md="8" :align="center">
-          <div class="text-h4 text-center ma-2">Meme Master Games</div>
+          <div class="text-h4 text-center ma-2">Meme Master AI Games</div>
 
           <v-row>
             <v-col cols="12" md="8">
@@ -34,7 +34,7 @@
             theme="dark"
             icon="mdi-code-braces"
           >
-            <p style="font-size: 1.3rem;margin-top: -5px;">The Games will be developed in Phase 4.<br>Stay tuned for information about the 1st game releases.</p>
+            <p style="font-size: 1.3rem;margin-top: -5px;">The Games will be developed in Phase 4.<br>Stay tuned for information about the 1st AI game releases.</p>
           </v-alert>    
           
           <v-btn
@@ -44,8 +44,7 @@
             style="width: 100%"
             to="/games-early-insights"
           >
-            
-            Take a sneak peek at our "Early Gaming Insights"
+           {{ isMobileDevice ? 'Take a sneak peek' : 'Take a sneak peek at our "Early AI Gaming Insights"' }}
           </v-btn>
         </v-col>
 

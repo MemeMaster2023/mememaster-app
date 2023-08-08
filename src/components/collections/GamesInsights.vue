@@ -15,14 +15,14 @@
       <v-card theme="dark">
         <v-row class="pt-8">
           <v-col cols="12" :align="center">
-            <div class="text-h4 text-center" style="margin-left: 20px; margin-top: 80px">Early Gaming Insights</div>
+            <div class="text-h4 text-center" style="margin-left: 20px; margin-top: 80px">Early AI Gaming Insights</div>
           </v-col>
         </v-row>
 
         <v-row>
           <v-col cols="12" :align="center">
             <div style="text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;">
-              Take a sneak peek at our "Early Gaming Insights" you can use your qualified (they will need to fit that gaming criteria) generated memes and NFTs in the game zones and then sell swap them in our gaming market place or in the general market place and the NFT's even on third party platforms such as Rarible and OpenSea.<br><br>
+              Take a sneak peek at our "Early AI Gaming Insights" you can use your qualified (they will need to fit that gaming criteria) generated memes and NFTs in the game zones and then sell swap them in our gaming market place or in the general market place and the NFT's even on third party platforms such as Rarible and OpenSea.<br><br>
 
               You can earn our points in features and then use those points in the marketplaces or redeem them for our EMAS tokens.<br><br>
 
@@ -63,7 +63,7 @@
                   <v-btn
                     color="deep-purple-lighten-2"
                     variant="text"
-                    @click="openCollection(col, index)"
+                    @click.stop="openCollection(col, index)"
                   >
                     OPEN
                   </v-btn>
@@ -238,10 +238,10 @@ export default {
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FGalactic%20game%2FGalactica%20game%206.png?alt=media&token=68e0deb0-fc68-4cc7-b474-9a74528027da'
         }
         return obj
-      } else if (name === 'WAR game') {
+      } else if (name === 'Tank game') {
         obj = {
           subtitle: '',
-          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FWAR%20game%2FWar%20games%201.png?alt=media&token=9148cd25-dd09-4868-978f-23656b07dbb7'
+          img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FTank%20game%2FWar%20games%204.png?alt=media&token=adf9c1a2-3e75-4ea4-8b59-a58b4cd55cc7'
         }
         return obj
       } else if (name === 'Aircraft war game') {

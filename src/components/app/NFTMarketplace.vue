@@ -34,7 +34,7 @@
             to="/exclusive"
           >
             
-            Take a look k at our "Exclusive NFT Collections"
+            {{ isMobileDevice ? 'Explore our Collections' : 'Take a look at our "Exclusive NFT Collections'}}
           </v-btn>
 
         </v-col>
