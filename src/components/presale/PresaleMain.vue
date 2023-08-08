@@ -52,6 +52,7 @@
                   </v-col>
 
                 </v-row>
+
                 <v-row class="pt-16" v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <v-btn size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
@@ -63,26 +64,170 @@
 
                 <v-row class="mb-8">
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn size="large" style="width:100%" >How to Buy</v-btn>
+                    <v-btn size="large" style="width:100%" @click="scrollToHowToBuy()">How to Buy</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
                     <v-btn size="large" style="width:100%">New to Crypto</v-btn>
                   </v-col>
                 </v-row>
 
-
-          
-
             </v-card>
           </v-col>
-
         </v-row>
-
-        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" :align="center">
-        
-        </v-row>
-
       </v-img>
+
+      <!-- ######################################################################################## -->
+      <!-- ###############################     HOW TO BUY         ################################# -->
+      <!-- ######################################################################################## -->
+
+      <div id="howtobuy">
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
+          <v-col cols="12" md="12" :align="'center'">
+              <div class="text-h3 ma-2 text-purple-lighten-3">HOW TO BUY</div>
+              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>          
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
+          <v-col cols="12" md="6" >
+
+            <v-layout class="mb-2">
+              <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon> 
+              <div class="text-h5 text-purple-lighten-3 pt-1">Install a Wallet</div>
+            </v-layout>
+
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
+                    min-height="220"
+                    max-height="100%"
+                    max-width="450"
+                    variant="outlined"
+            >
+            <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
+              To start with, ensure you have a MetaMask wallet installed on your browser in order to connect your wallet to the platform.<br><br>
+              If you are purchasing on mobile, we recommend using MetaMask In-App browser. Meme Master's Connect button will automatically launch MetaMask App on the mobile device.
+            </v-card-text>
+            </v-card>
+                    
+          </v-col>
+
+          <v-col cols="12" md="6" >
+
+            <v-layout class="mb-2">
+              <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon> 
+              <div class="text-h5 text-purple-lighten-3 pt-1">Connect your Wallet</div>
+            </v-layout>
+
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
+                    min-height="220"
+                    max-height="100%"
+                    max-width="450"
+                    variant="outlined"
+            >
+              <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
+                Once you’ve connected your wallet, you’ll be presented with the options with which you can purchase EMAS token.<br><br>
+                Read below for more information on these options, and select the option which is right for you.
+              </v-card-text>
+            </v-card>
+            
+          </v-col>
+        </v-row>
+      </div>
+
+      <!-- ######################################################################################## -->
+      <!-- #################################     BUY OPTIONS      ################################# -->
+      <!-- ######################################################################################## -->
+
+      <div id="buyoptions" style="background-color: #F3E5F5;height:100%">
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
+          <v-col cols="12" md="12" :align="'center'" class="mt-8">
+              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>      
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
+          <v-col cols="12" md="6" >
+
+            <v-layout class="mb-2">
+              <v-icon size="40" color="purple-darken-3">mdi-ethereum</v-icon> 
+              <div class="text-h5 text-purple-darken-3 pt-1">Buy with Ethereum</div>
+            </v-layout>
+
+            <v-card theme="light" 
+                    color="purple-darken-3" 
+                    min-height="420"
+                    max-height="100%"
+                    max-width="450"
+                    variant="outlined"
+            >
+            <v-card-text style="font-size: 1.3rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
+              If you have enough ETH in your wallet, you can use the purchase EMAS with ETH option in order to swap the ETH in your wallet for EMAS.<br><br>
+              Type in the amount of EMAS you wish to purchase and then click “Convert ETH”. Your wallet provider will ask you to confirm the transaction and will also show you the cost of gas fees.
+            </v-card-text>
+
+              <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
+                <v-spacer></v-spacer>
+                <v-btn
+                  style="color:#FFF;width:80%"
+                  variant="elevated"
+                  color="#360a3f"
+                  size="large"
+                  class="font-weight-bold mb-2"
+                >
+                  Buy with ETH Now
+                </v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+
+            </v-card>
+                    
+          </v-col>
+
+          <v-col cols="12" md="6" >
+
+            <v-layout class="mb-2">
+              <!-- <v-icon size="40" color="purple-darken-3">mdi-currency-usd</v-icon> -->
+              <v-img src="/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png" style="max-width:40px"></v-img>
+              <div class="text-h5 text-purple-darken-3 pt-1">Buy with USDT</div>
+            </v-layout>
+
+            <v-card theme="light" 
+                    color="purple-darken-3" 
+                    min-height="420"
+                    max-height="100%"
+                    max-width="450"
+                    variant="outlined"
+            >
+              <v-card-text style="font-size: 1.3rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
+                Before you start trading, make sure you have at least $30 USDT in your wallet. Enter the amount of EMAS you wish to purchase (minimum 20,000). Click "Convert USDT".<br><br>
+                You will then be asked to approve the purchase twice. The first approval is for the USDT contract and the second approval is for the transaction amount. Please make sure you go through two approval steps to complete the transaction.
+              </v-card-text>
+
+              <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
+                <v-spacer></v-spacer>
+                <v-btn
+                  style="color:#FFF;width:80%"
+                  variant="elevated"
+                  color="#360a3f"
+                  size="large"
+                  class="font-weight-bold mb-2"
+                >
+                  Buy with USDT Now
+                </v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+            
+          </v-col>
+        </v-row>
+      </div>
+
+      <!-- ######################################################################################## -->
+      <!-- ###############################     PRESALE  STAGES        ############################# -->
+      <!-- ######################################################################################## -->
+
+      
 
 
       <!-- DIALOGS AND COMPONENTS-->
@@ -196,9 +341,9 @@
 
 <script>
 // @ is an alias to /src
-import { scroller } from 'vue-scrollto/src/scrollTo'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
+import { scroller } from 'vue-scrollto/src/scrollTo'
 export default {
   name: 'Presale',
   props: {
@@ -259,7 +404,6 @@ export default {
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
-    this.scrollToTop()
     this.init()
   },
   methods: {
@@ -269,11 +413,11 @@ export default {
     connectWalletClicked () {
       this.connectWalletDialog = true
     },
-    scrollToTop () {
+    scrollToHowToBuy () {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#presale', 500, { offset: -64 });
+        firstScrollTo('#howtobuy', 500, { offset: -64 });
       }, 200);
     },
   }
