@@ -2,12 +2,12 @@
   <div id="presale">
     <v-responsive style="background-color: #000;" class="pt-16">
 
-      <v-img src="/img/presale/presale_home.png" 
+      <v-img src="/img/presale/presale_home.png"
            cover
            :style="isMobileDevice ? 'height:100%' : ''"
            gradient="to bottom, rgba(0,0,0,.8), rgba(0,0,0,.6)"
       >
-      
+
 
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" >
@@ -16,7 +16,7 @@
           </v-col>
 
           <v-col cols="12" md="6" :align="'center'">
-            
+
             <v-card theme="dark" color="#FFF" :max-width="isMobileDevice ? '100%' : '70%'" height="100%">
               <v-toolbar
                 color="#360a3f"
@@ -26,7 +26,7 @@
                <v-toolbar-title>$0.005</v-toolbar-title>
               </v-toolbar>
 
-         
+
                 <div class="pt-8 text-h5 ma-2 text-black">Aug 20 - Sept 20</div>
                 <div class="text-h6 ma-2 text-black">1 EMAS = $0.005</div>
                 <div style="font-size: 1rem;" class="ma-2 text-black">Hurry and buy before Stage 2 Price Increases To $0.006</div>
@@ -55,10 +55,10 @@
 
                 <v-row class="pt-16" v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="handleShowDiaLogEth(true)" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="handleShowDiaLogUsdt(true)" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -84,7 +84,7 @@
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
               <div class="text-h3 ma-2 text-purple-lighten-3">HOW TO BUY</div>
-              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>          
+              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>
           </v-col>
         </v-row>
 
@@ -92,12 +92,12 @@
           <v-col cols="12" md="6" >
 
             <v-layout class="mb-2">
-              <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon> 
+              <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon>
               <div class="text-h5 text-purple-lighten-3 pt-1">Install a Wallet</div>
             </v-layout>
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
                     max-width="450"
@@ -108,18 +108,18 @@
               If you are purchasing on mobile, we recommend using MetaMask In-App browser. Meme Master's Connect button will automatically launch MetaMask App on the mobile device.
             </v-card-text>
             </v-card>
-                    
+
           </v-col>
 
           <v-col cols="12" md="6" >
 
             <v-layout class="mb-2">
-              <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon> 
+              <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon>
               <div class="text-h5 text-purple-lighten-3 pt-1">Connect your Wallet</div>
             </v-layout>
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
                     max-width="450"
@@ -130,7 +130,7 @@
                 Read below for more information on these options, and select the option which is right for you.
               </v-card-text>
             </v-card>
-            
+
           </v-col>
         </v-row>
       </div>
@@ -142,7 +142,7 @@
       <div id="buyoptions" style="background-color: #F3E5F5;height:100%">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
-              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>      
+              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>
           </v-col>
         </v-row>
 
@@ -150,12 +150,12 @@
           <v-col cols="12" md="6" >
 
             <v-layout class="mb-2">
-              <v-icon size="40" color="purple-darken-3">mdi-ethereum</v-icon> 
+              <v-icon size="40" color="purple-darken-3">mdi-ethereum</v-icon>
               <div class="text-h5 text-purple-darken-3 pt-1">Buy with Ethereum</div>
             </v-layout>
 
-            <v-card theme="light" 
-                    color="purple-darken-3" 
+            <v-card theme="light"
+                    color="purple-darken-3"
                     min-height="420"
                     max-height="100%"
                     max-width="450"
@@ -174,6 +174,7 @@
                   color="#360a3f"
                   size="large"
                   class="font-weight-bold mb-2"
+                  @click="handleShowDiaLogEth(false)"
                 >
                   Buy with ETH Now
                 </v-btn>
@@ -181,7 +182,7 @@
               </v-card-actions>
 
             </v-card>
-                    
+
           </v-col>
 
           <v-col cols="12" md="6" >
@@ -192,8 +193,8 @@
               <div class="text-h5 text-purple-darken-3 pt-1">Buy with USDT</div>
             </v-layout>
 
-            <v-card theme="light" 
-                    color="purple-darken-3" 
+            <v-card theme="light"
+                    color="purple-darken-3"
                     min-height="420"
                     max-height="100%"
                     max-width="450"
@@ -212,13 +213,14 @@
                   color="#360a3f"
                   size="large"
                   class="font-weight-bold mb-2"
+                  @click="handleShowDiaLogUsdt(false)"
                 >
                   Buy with USDT Now
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
-            
+
           </v-col>
         </v-row>
       </div>
@@ -227,7 +229,7 @@
       <!-- ###############################     PRESALE  STAGES        ############################# -->
       <!-- ######################################################################################## -->
 
-      
+
 
 
       <!-- DIALOGS AND COMPONENTS-->
@@ -261,7 +263,7 @@
           </v-toolbar>
           <div class="text-center ma-4" v-if="showConfirmation === false">
             If you don't have a wallet, you can select a provider and create one now.<br>
-            <v-btn variant="text" class="ma-4" 
+            <v-btn variant="text" class="ma-4"
             >
               Learn more
             </v-btn>
@@ -269,32 +271,32 @@
 
           <v-row v-if="getChain === '0x1' && !isMobileDevice" style="margin-left:15%;margin-right:15%">
             <v-col cols="12" v-if="showConfirmation === false">
-              <MetaMaskConnect 
-                  :isMobileDevice="isMobileDevice" 
-                  style="width:100%;" 
-                  ref="mmConnect" 
-                  buttonType="large" 
-                  :windowWidth="windowWidth" 
-                  :windowHeight="windowHeight" 
+              <MetaMaskConnect
+                  :isMobileDevice="isMobileDevice"
+                  style="width:100%;"
+                  ref="mmConnect"
+                  buttonType="large"
+                  :windowWidth="windowWidth"
+                  :windowHeight="windowHeight"
                   :dark="dark"
               >
               </MetaMaskConnect>
-              
-              <WalletConnect 
-                  :isMobileDevice="isMobileDevice" 
+
+              <WalletConnect
+                  :isMobileDevice="isMobileDevice"
                   class="pt-6"
-                  style="width:100%;" 
-                  ref="walletConnectref" 
-                  buttonType="large" 
-                  :windowWidth="windowWidth" 
-                  :windowHeight="windowHeight" 
+                  style="width:100%;"
+                  ref="walletConnectref"
+                  buttonType="large"
+                  :windowWidth="windowWidth"
+                  :windowHeight="windowHeight"
                   :dark="dark"
               >
               </WalletConnect>
 
               <p class="mt-0"></p>
               <p style="font-size:14px" class="font-weight-medium text-center mt-6 mb-2">Works best with Chrome or Brave</p>
-              
+
             </v-col>
           </v-row>
 
@@ -312,20 +314,20 @@
               <MetaMaskConnect v-if="$route.name === 'MMobile'" :isMobileDevice="isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
               </MetaMaskConnect>
 
-              <WalletConnect 
-                  :isMobileDevice="isMobileDevice" 
+              <WalletConnect
+                  :isMobileDevice="isMobileDevice"
                   class="pt-6"
-                  style="width:100%;" 
-                  ref="walletConnectref" 
-                  buttonType="large" 
-                  :windowWidth="windowWidth" 
-                  :windowHeight="windowHeight" 
+                  style="width:100%;"
+                  ref="walletConnectref"
+                  buttonType="large"
+                  :windowWidth="windowWidth"
+                  :windowHeight="windowHeight"
                   :dark="dark"
               >
               </WalletConnect>
 
-              <p style="font-size:14px" class="font-weight-medium text-center mt-6 mb-2">Works best with Chrome or Brave</p>  
-              
+              <p style="font-size:14px" class="font-weight-medium text-center mt-6 mb-2">Works best with Chrome or Brave</p>
+
             </v-col>
           </v-row>
 
@@ -334,6 +336,103 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
+
+      <!-- DIALOG buyWithEthDialog -->
+      <v-dialog v-model="buyWithEthDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
+        :min-width="isMobileDevice ? 300 : 500" max-width="600">
+        <v-card height="100%" color="#F3E5F5">
+          <v-toolbar color="#241d43">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Buy with ETH</span>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text class="mb-8">
+            <v-row>
+              <v-col cols="12">
+                <label for="" style="font-weight: bold;">Selling</label>
+                <v-text-field placeholder="0" class="mt-2">
+                  <template v-slot:append-inner>
+                    <v-icon size="28px" color="purple-darken-4">mdi-ethereum</v-icon>
+                    <span style="font-weight: 400; margin-left: 10px;">ETH</span>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <label for="" style="font-weight: bold;">Buying</label>
+                <v-text-field placeholder="0" class="mt-2">
+                  <template v-slot:append-inner>
+                    <v-icon color="green-lighten-2"><img
+                        style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
+                        src="/public/img/logos/logo.png" alt="Icon" /></v-icon>
+                    <span style="font-weight: 400; margin-left: 10px;">EMAS</span>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-btn class="text-white" size="large" style="width:100%" color="#360a3f">
+                  Convert to ETH
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
+      <!-- DIALOG buyWithUsdtDialog -->
+      <v-dialog v-model="buyWithUsdtDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
+        :min-width="isMobileDevice ? 300 : 500" max-width="600">
+        <v-card height="100%" color="#F3E5F5">
+          <v-toolbar color="#241d43">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Buy with USDT</span>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text class="mb-8">
+            <v-row>
+              <v-col cols="12">
+                <label for="" style="font-weight: bold;">Selling</label>
+                <v-text-field placeholder="0" class="mt-2">
+                  <template v-slot:append-inner>
+                    <v-icon size="28px">
+                      <img style="width: 28px;"
+                        src="/public/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png"
+                        alt="Icon" />
+                    </v-icon>
+                    <span style="font-weight: 400; margin-left: 10px;">USDT</span>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <label for="" style="font-weight: bold;">Buying</label>
+                <v-text-field placeholder="0" class="mt-2">
+                  <template v-slot:append-inner>
+                    <v-icon color="green-lighten-2">
+                      <img style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
+                        src="/public/img/logos/logo.png" alt="Icon" />
+                    </v-icon>
+                    <span style="font-weight: 400; margin-left: 10px;">EMAS</span>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f">
+                  Convert to USDT
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
 
     </v-responsive>
   </div>
@@ -356,7 +455,9 @@ export default {
   data: () => ({
     loading: false,
     connectWalletDialog: false,
-    showConfirmation: false
+    showConfirmation: false,
+    buyWithEthDialog: false,
+    buyWithUsdtDialog: false
   }),
   components: {
     MetaMaskConnect,
@@ -408,7 +509,7 @@ export default {
   },
   methods: {
     init () {
-     
+
     },
     connectWalletClicked () {
       this.connectWalletDialog = true
@@ -420,6 +521,29 @@ export default {
         firstScrollTo('#howtobuy', 500, { offset: -64 });
       }, 200);
     },
+    handleShowDialog(isTop, dialogType) {
+      const isConnected = this.mmConnected || this.walletConnected || this.twConnected;
+
+      if (isTop) {
+        this[dialogType] = isConnected;
+        this.connectWalletDialog = !isConnected;
+      } else {
+        const firstScrollTo = scroller();
+        this.scrollClicked = true;
+        firstScrollTo('#presale', 500, { offset: -64 });
+
+        setTimeout(() => {
+          this[dialogType] = isConnected;
+          this.connectWalletDialog = !isConnected;
+        }, 500);
+      }
+    },
+    handleShowDiaLogUsdt(isTop) {
+      this.handleShowDialog(isTop, 'buyWithUsdtDialog');
+    },
+    handleShowDiaLogEth(isTop) {
+      this.handleShowDialog(isTop, 'buyWithEthDialog');
+    }
   }
 }
 </script>
