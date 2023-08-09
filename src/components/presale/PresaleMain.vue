@@ -85,9 +85,9 @@
               </v-toolbar>
 
 
-                <div class="pt-8 text-h5 ma-2 text-black">Aug 2023 - Sept 2023</div>
+                <div class="pt-4 text-h5 ma-2 text-black">Aug 2023 - Sept 2023</div>
                 <div class="text-h6 ma-2 text-black">1 EMAS = $0.005</div>
-                <div style="font-size: 1rem;" class="ma-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0061</div>
+                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0061</div>
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
@@ -103,10 +103,10 @@
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 120,000,000 / 350,000,000</div>
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $600,000 / $1,750,000</div>
 
-                <v-row class="pt-8" v-if="mmConnected || walletConnected || twConnected">
+                <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-chip variant="outlined" class="ma-2" color="#360a3f">
-                      <v-icon start icon="mdi-wallet"></v-icon>
+                      <v-icon start icon="mdi-wallet" color="#360a3f"></v-icon>
                       {{ this.getUser.accounts[0] }}
                     </v-chip>
                   </v-col>
@@ -473,7 +473,7 @@
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
           <v-col cols="12" md="4" :align="'center'">
-              <div class="text-h5 ma-2 text-purple-lighten-3">TOTAL TO BE RAISED</div>
+              <div class="text-h5 ma-2 text-purple-lighten-3">HARD CAP</div>
               <div class="text-h6 ma-2 text-white">$4,345,000</div>          
           </v-col>
 
@@ -490,7 +490,7 @@
       </div>
 
       <!-- ######################################################################################## -->
-      <!-- #################################     BUY OPTIONS      ################################# -->
+      <!-- #######################################     TIERS      ################################# -->
       <!-- ######################################################################################## -->
 
       <div id="tiers" style="background-color: #F3E5F5;padding-bottom: 16px;">
@@ -581,6 +581,55 @@
 
           </v-col>
         </v-row>
+      </div>
+
+
+      <!-- ######################################################################################## -->
+      <!-- ###############################     PRESALE  STAGES        ############################# -->
+      <!-- ######################################################################################## -->
+
+      <div id="donate">
+        
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
+          <v-col cols="12" md="12" :align="'center'">
+              <div class="text-h3 ma-2 text-purple-lighten-3">CONTRIBUTE / DONATE</div>
+              <div class="text-h4 ma-2 text-white">Donate to the Meme Master Project</div>          
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16'" >
+
+          <v-col cols="12" md="2" :align="'center'">
+          </v-col>
+
+          <v-col cols="12" md="8" :align="'center'">
+            Donations text donations text text donations text text donations text text donations text text donations text text donations text<br><br>
+            Donations text donations text text donations text text donations text text donations text text donations text text donations text<br><br>
+            Donations text donations text text donations text text donations text text donations text text donations text text donations text<br><br>
+          </v-col>
+
+          <v-col cols="12" md="2" :align="'center'">
+          </v-col>
+
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16  mb-16'" >
+
+          <v-col cols="12" md="2" :align="'center'">
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+            DONATE ETH
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+            DONATE USDT
+          </v-col>
+
+          <v-col cols="12" md="2" :align="'center'">
+          </v-col>
+
+          </v-row>
       </div>
 
       <!-- ######################################################################################## -->
