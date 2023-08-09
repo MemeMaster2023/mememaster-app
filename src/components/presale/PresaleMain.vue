@@ -341,7 +341,7 @@
       <v-dialog v-model="buyWithEthDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
-          <v-toolbar color="#241d43">
+          <v-toolbar color="#700070">
             <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -368,7 +368,7 @@
                   <template v-slot:append-inner>
                     <v-icon color="green-lighten-2"><img
                         style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
-                        src="/public/img/logos/logo.png" alt="Icon" /></v-icon>
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
                     <span style="font-weight: 400; margin-left: 10px;">EMAS</span>
                   </template>
                 </v-text-field>
@@ -387,7 +387,7 @@
       <v-dialog v-model="buyWithUsdtDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
-          <v-toolbar color="#241d43">
+          <v-toolbar color="#700070">
             <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -405,7 +405,7 @@
                   <template v-slot:append-inner>
                     <v-icon size="28px">
                       <img style="width: 28px;"
-                        src="/public/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png"
+                        src="/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png"
                         alt="Icon" />
                     </v-icon>
                     <span style="font-weight: 400; margin-left: 10px;">USDT</span>
@@ -418,7 +418,7 @@
                   <template v-slot:append-inner>
                     <v-icon color="green-lighten-2">
                       <img style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
-                        src="/public/img/logos/logo.png" alt="Icon" />
+                        src="/img/logos/logo.png" alt="Icon" />
                     </v-icon>
                     <span style="font-weight: 400; margin-left: 10px;">EMAS</span>
                   </template>
