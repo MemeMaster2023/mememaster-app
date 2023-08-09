@@ -88,24 +88,18 @@
     
       <v-spacer></v-spacer>
 
-      <v-tooltip location="top" v-if="isMobileDevice">
-        <template v-slot:activator="{ props }">
-          <v-btn 
-            variant="outlined"
-            style="margin-left:5px;"
-            color="white"
-            theme="dark"
-            v-bind="props"
-            prepend-icon="mdi-tag-outline"
-            :style="isMobileDevice ? 'width:45%' : 'width:100%'"
-            to="/presale"
-          >
-            Presale
-          </v-btn>
-        </template>
-        <span>Presale coming soon, follow our social media channels below for details...
-        </span>
-      </v-tooltip>
+      <v-btn v-if="isMobileDevice"
+        variant="outlined"
+        style="margin-left:5px;"
+        color="white"
+        theme="dark"
+        v-bind="props"
+        prepend-icon="mdi-tag-outline"
+        :style="isMobileDevice ? 'width:45%' : 'width:100%'"
+        to="/presale"
+      >
+        Presale
+      </v-btn>
 
       <v-spacer></v-spacer>
 
@@ -457,7 +451,7 @@
         Generate
       </v-btn>
 
-      <v-tooltip location="top">
+      <v-tooltip location="top" v-if="$router.currentRoute.value.path !== '/presale'">
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && !isMobileDevice"
             style="margin-right:10px;margin-top:-5px"
@@ -919,18 +913,8 @@ export default {
     },
     computed: {
       getUser () {
-        console.log(this.$store.state.user);
-        // if(!this.emailConnected) {
-        //   return store.state.user 
-        // }
         return store.state.user 
-
-        //return store.state.auth.persistentUser
       },
-      // persistentUser() {
-      //   console.log(store.state.auth.persistentUser)
-      //   return store.state.auth.persistentUser;
-      // },
       gravatar () {
         return this.$store.state.user.gravatar
       },

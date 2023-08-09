@@ -7,7 +7,6 @@
            gradient="to bottom, rgba(0,0,0,.8), rgba(0,0,0,.6)"
       >
 
-
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" >
             <div class="text-h3 ma-2 text-white">Meme Master Presale is starting soon!</div>
@@ -15,19 +14,28 @@
 
             <v-row  class="mt-4">
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-view-dashboard" style="font-size: 0.7rem;width: 100%">
+                <v-btn prepend-icon="mdi-view-dashboard" 
+                       style="font-size: 0.7rem;width: 100%"
+                       color="purple-lighten-4"
+                >
                   NFT Marketplace
                 </v-btn>
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-circle-multiple-outline" style="font-size: 0.7rem;width: 100%">
+                <v-btn prepend-icon="mdi-circle-multiple-outline" 
+                       style="font-size: 0.7rem;width: 100%"
+                       color="purple-lighten-4"
+                >
                   {{ drawer ? 'Token Listings' : 'New Token Listings' }}
                 </v-btn>
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-shape-plus" style="font-size: 0.7rem;width: 100%">
+                <v-btn prepend-icon="mdi-shape-plus" 
+                       style="font-size: 0.7rem;width: 100%"
+                       color="purple-lighten-4"
+                >
                   Games
                 </v-btn>
               </v-col>
@@ -35,19 +43,29 @@
 
             <v-row >
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-music" style="font-size: 0.7rem;width: 100%">
+                <v-btn prepend-icon="mdi-music" 
+                       style="font-size: 0.7rem;width: 100%"
+                       color="purple-lighten-4"
+                >
                   Music
                 </v-btn>
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-transit-connection-variant" style="font-size: 0.7rem;width: 100%">
+                <v-btn prepend-icon="mdi-transit-connection-variant" 
+                       style="font-size: 0.7rem;width: 100%"
+                       color="purple-lighten-4"
+                >
                   Roadmap
                 </v-btn>
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-layers-triple-outline" style="font-size: 0.7rem;width: 100%">
+                <v-btn prepend-icon="mdi-layers-triple-outline" 
+                       style="font-size: 0.7rem;width: 100%"
+                       color="purple-lighten-4"
+                       @click="scrollToTiers()"
+                >
                   Tiers
                 </v-btn>
               </v-col>
@@ -85,15 +103,24 @@
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 120,000,000 / 350,000,000</div>
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $600,000 / $1,750,000</div>
 
-                <v-row class="pt-16" v-if="!mmConnected && !walletConnected && !twConnected">
-
+                <v-row class="pt-8" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
+                    <v-chip variant="outlined" class="ma-2" color="#360a3f">
+                      <v-icon start icon="mdi-wallet"></v-icon>
+                      {{ this.getUser.accounts[0] }}
+                    </v-chip>
+                  </v-col>
+                </v-row>
+
+                <v-row v-if="!mmConnected && !walletConnected && !twConnected">
+
+                  <v-col cols="12" md="12" class="pt-8 pl-8 pr-8">
                     <v-btn @click="connectWalletClicked" size="large" style="width:100%" color="#360a3f">Connect your Wallet</v-btn>
                   </v-col>
 
                 </v-row>
 
-                <v-row class="pt-16" v-else>
+                <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <v-btn @click="handleShowDiaLogEth(true)" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
@@ -462,8 +489,103 @@
         </v-row>
       </div>
 
+      <!-- ######################################################################################## -->
+      <!-- #################################     BUY OPTIONS      ################################# -->
+      <!-- ######################################################################################## -->
 
-      <!-- DIALOGS AND COMPONENTS-->
+      <div id="tiers" style="background-color: #F3E5F5;padding-bottom: 16px;">
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
+          <v-col cols="12" md="12" :align="'center'" class="mt-8">
+              <div class="text-h3 ma-2 text-purple-darken-3">MEME MASTER TIERS INFORMATION</div>
+              <div class="text-h5 ma-2 text-purple-darken-3">Holding token tiers will give more access and discounted entry to early new token listing,<br>new project releases, airdrops and much more.</div>
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
+          <v-col cols="12" md="12" >
+
+            <v-expansion-panels
+              v-model="panel"
+              multiple
+            >
+              <v-expansion-panel >
+                <v-expansion-panel-title style="background-color: #7B1FA2;">
+                  <v-icon color="#FFF" size="35">mdi-numeric-1-box-outline</v-icon>
+                  <div style="font-size:1.3rem;color:#FFF;margin-left:5px;font-weight:bold">Tier 1 AGI (Artificial Intelligence)</div>
+                </v-expansion-panel-title>
+
+                <v-expansion-panel-text>
+                  <v-col>
+                    <div style="font-size:1rem;font-weight:bold">Min holding:  300,000 EMAS Tokens</div>
+                    <ul class="ml-4 pt-4" style="font-size:1rem;">
+                      <li>Discounted rates on current and future features</li>
+                      <li>Airdrops level 1 EMAS Collections and New Token Contributors</li>
+                      <li>Limited Early access to music and gaming</li>
+                      <li>Limited early access to new products and services</li>
+                      <li>MEME and NFT generation discounts on the mememaster trading platform</li>
+                      <li>Level 1 EMAS points bonuses throughout the gaming sectors</li>
+                    </ul>
+                  </v-col>
+                </v-expansion-panel-text>
+
+              </v-expansion-panel>
+
+              <v-expansion-panel>
+                <v-expansion-panel-title style="background-color: #6A1B9A;">
+                  <v-icon color="#FFF" size="35">mdi-numeric-2-box-outline</v-icon>
+                  <div style="font-size:1.3rem;color:#FFF;margin-left:5px;font-weight:bold">Tier 2 ASI (Artificial Super Intelligence)</div>
+                </v-expansion-panel-title>
+
+                <v-expansion-panel-text>
+                  <v-col>
+                    <div style="font-size:1rem;font-weight:bold">Min holding:  500,000 EMAS Tokens</div>
+                    <ul class="ml-4 pt-4" style="font-size:1rem;">
+                      <li>Discounted rates on current and future features</li>
+                      <li>Airdrops level 2 premium EMAS Collections and from New Token Contributors</li>
+                      <li>Early full access to music and gaming</li>
+                      <li>1st and discounted options on limited NFTs offers</li>
+                      <li>Early access to new token launcher and offers</li>
+                      <li>Access to AI new products and services</li>
+                      <li>MEME and NFT generation discounts on the trading platform</li>
+                      <li>Level 2 EMAS points bonuses throughout the gaming sectors</li>
+                    </ul>
+                  </v-col>
+                </v-expansion-panel-text>
+                
+              </v-expansion-panel>
+
+              <v-expansion-panel>
+                <v-expansion-panel-title style="background-color: #4A148C;">
+                  <v-icon color="#FFF" size="35">mdi-numeric-3-box-outline</v-icon>
+                  <div style="font-size:1.3rem;color:#FFF;margin-left:5px;font-weight:bold">Tier 3 SAI (Self Awareness)</div>
+                </v-expansion-panel-title>
+                
+                <v-expansion-panel-text>
+                  <v-col>
+                    <div style="font-size:1rem;font-weight:bold">Min holding:  1,000,000 EMAS Tokens</div>
+                    <ul class="ml-4 pt-4" style="font-size:1rem;">
+                      <li>Discounted rates on current and future features</li>
+                      <li>Airdrops level 3 premium / limited addition EMAS Collections and from New Token Contributors</li>
+                      <li>Early full access to premium and limited edition music and gaming</li>
+                      <li>1st and discounted options on limited NFTs offers including premium</li>
+                      <li>1st access to new token launcher and offers</li>
+                      <li>Full Access to newly released AI products and services</li>
+                      <li>MEME and NFT generation discounts on the trading platform</li>
+                      <li>Level 3 EMAS points bonuses throughout the gaming sectors</li>
+                    </ul>
+                  </v-col>
+                </v-expansion-panel-text>
+
+              </v-expansion-panel>
+            </v-expansion-panels> 
+
+          </v-col>
+        </v-row>
+      </div>
+
+      <!-- ######################################################################################## -->
+      <!-- ############################     DIALOGS AND COMPONENTS   ###############################-->
+      <!-- ######################################################################################## -->
       <v-dialog v-if="!mmConnected || !walletConnected || !twConnected"
           transition="dialog-bottom-transition"
           :fullscreen="isMobileDevice"
@@ -599,7 +721,7 @@
                   <template v-slot:append-inner>
                     <v-icon color="green-lighten-2"><img
                         style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
-                        src="img/logos/logo.png" alt="Icon" /></v-icon>
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
                     <span style="font-weight: 400; margin-left: 10px;">EMAS</span>
                   </template>
                 </v-text-field>
@@ -671,6 +793,7 @@
 
 <script>
 // @ is an alias to /src
+import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
@@ -688,7 +811,8 @@ export default {
     connectWalletDialog: false,
     showConfirmation: false,
     buyWithEthDialog: false,
-    buyWithUsdtDialog: false
+    buyWithUsdtDialog: false,
+    panel: [0, 1, 2],
   }),
   components: {
     MetaMaskConnect,
@@ -707,13 +831,16 @@ export default {
     twConnected () {
       return this.$store.state.user.twConnected
     },
+    getUser () {
+      return store.state.user 
+    },
   },
   watch: {
     mmConnected () {
       if (this.mmConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
-          this.drawer = false
+          // this.drawer = false
         }, 2000)
       }
     },
@@ -721,7 +848,7 @@ export default {
       if (this.twConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
-          this.drawer = false
+          // this.drawer = false
         }, 2000)
       }
     },
@@ -729,7 +856,7 @@ export default {
       if (this.walletConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
-          this.drawer = false
+          // this.drawer = false
         }, 2000)
       }
     },
@@ -750,6 +877,13 @@ export default {
       this.scrollClicked = true
       setTimeout(() => {
         firstScrollTo('#howtobuy', 500, { offset: -64 });
+      }, 200);
+    },
+    scrollToTiers () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#tiers', 500, { offset: -64 });
       }, 200);
     },
     handleShowDialog(isTop, dialogType) {

@@ -24,7 +24,9 @@
             <div style="text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;">
               Take a sneak peek at our "Early AI Gaming Insights" you can use your qualified (they will need to fit that gaming criteria) generated memes and NFTs in the game zones and then sell swap them in our gaming market place or in the general market place and the NFT's even on third party platforms such as Rarible and OpenSea.<br><br>
 
-              You can earn our points in features and then use those points in the marketplaces or redeem them for our EMAS tokens.<br><br>
+              Players can use Meme Master’s EMAS points to gain ‘more’ EMAS points for various actions throughout the games and these can later be converted to real EMAS tokens, the higher your tier the more free points you get as bonuses when you first buy the starter EMAS points with EMAS tokens and the higher your rewards when you win.<br><br>
+
+              Extra ammo can be purchased with points and players may play other users on the platform and enter tournaments for EMAS token prizes.<br><br>
 
               This is just a snapshot of the games we are developing and we are in negotiations to include third party game access to our gaming eco system, so mush is going on don't forget to join all of our social media channels so you are kept in the loop...
             </div>
@@ -53,10 +55,6 @@
                 <v-card-title>
                   {{ col.name }}
                 </v-card-title>
-
-                <!-- <v-card-subtitle class="text-wrap">
-                  <div>{{ lookupImageAndSubtitle(col.name).subtitle }}</div>
-                </v-card-subtitle> -->
 
                 <v-card-actions class="card-actions" style="width:100%">
                   <v-spacer></v-spacer>
@@ -87,7 +85,9 @@
             <v-toolbar
               color="transparent"
             >
+              
             <v-toolbar-title style="font-size: 1.5rem" class="ml-8 text-wrap">{{ selectedCollection.name }}</v-toolbar-title>
+
             <v-spacer></v-spacer>
               <v-btn
                 class="mr-8"
@@ -98,6 +98,10 @@
               >
               </v-btn>
             </v-toolbar>
+
+            <div style="font-size: 1rem;margin-left:32px;max-width:1000px;text-align: justify;" 
+                 class="text-wrap">{{ lookupImageAndSubtitle(selectedCollection.name).description }}
+            </div>
 
             <v-row class="ma-4">
               <v-col
@@ -217,36 +221,42 @@ export default {
       if (name === 'Battleship game') {
         obj = {
           subtitle: '',
+          description: "A turn-based strategy game where the objective is to sink your opponent's battleship before they sink yours. Players take turns placing their ships on the grid, which is hidden from the opponent's view. On each turn, players must guess the location of their opponent's ships using limited information. If the player guesses correctly, the opponent's ship sinks and marks a point for the successful player. The goal is to sink all the opposing ships before they can sink yours. There will be different levels of difficulty and various terrain options that give the players more strategic ways to win.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FBattleship%20game%2FBattleship%20game%206.png?alt=media&token=2131b02b-01d1-4c98-84e3-e37382fec060'
         }
         return obj
       } else if (name === 'Cyber pulse game') {
         obj = {
           subtitle: '',
+          description: "Players will take control of cyber crafts to engage in high-octane battles. Cyber crafts are powered by advanced weaponry and armor that can be customized and upgraded throughout the game. These advanced ships are capable of engaging in intense combat against enemy cyber crafts or defending friendly vessels. The goal of the game is to build up a strong fleet of cyber crafts to conquer territories and become the most powerful in the sector. Each cyber craft has its own unique strengths and weaknesses, so the player must choose the right strategies and equipment to emerge victorious. Through strategic planning and tactical maneuvering, the game offers a thrilling and action-packed experience that keeps players engaged until the end.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FCyber%20pulse%20game%2FCyber%20pulse%20game%206.png?alt=media&token=7ac05d8d-7e89-464f-948e-83a0ddb328dc'
         }
         return obj
       } else if (name === 'Dungeons game') {
         obj = {
           subtitle: '',
+          description: "Dungeons game is a type of role-playing game where the player takes on the role of a dungeon master, controlling the layout and environment of the game. They use their skills to create interesting dungeons for other players to explore, setting up traps and monsters for them to encounter. The main goal is to protect your own dungeon while trying to take control of someone else’s. You can customize the layout of your own dungeon, adding in items to make it more difficult to traverse. As the dungeon master, you can also control the various monsters that are inside the dungeon, moving them around to create different challenges for the players. Different creatures will have different strengths and weaknesses, so it's important to plan ahead and find the right balance.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FDungeons%20game%2FDungeons%20and%20Dragons%20game.png?alt=media&token=a43c2157-f19d-42a8-a961-4794a93876c1'
         }
         return obj
       } else if (name === 'Galactic game') {
         obj = {
           subtitle: '',
+          description: "In this galactic game, each player controls a fleet of starships with different abilities and strengths. Each player will use their fleet to challenge the other players in battles of strategy and tactics as they compete to win control of the galaxies. Players must build fleets of ships while managing resources and reaching objectives in order to win the game. The game progresses over multiple scenarios in which players attack and defend planets, battle enemy fleets, trade resources, and employ special strategies in order to gain an advantage over their opponents. Players can also enter into alliances with other players and build powerful fleets from those agreements. The ultimate goal is to become the ruler of the galaxy by taking control of its capital planet. Victory can only be achieved through careful planning, resource management, and the takeover of apposing star fleets.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FGalactic%20game%2FGalactica%20game%206.png?alt=media&token=68e0deb0-fc68-4cc7-b474-9a74528027da'
         }
         return obj
       } else if (name === 'Tank game') {
         obj = {
           subtitle: '',
+          description: "A strategy and shooting game about two teams of tanks battling to be the last one standing. The battlefield is divided into a grid and each team's tanks are randomly placed when the game starts. The objective of the game is to defend your own tanks and destroy the tanks of the opposing team. At the start of each turn, players may choose to move their tanks on the grid on either the X or the Y axes, or fire their weapons at an enemy tank. Tanks come with various levels of defense which can make them harder to hit. When firing weapons, players must also consider wind direction and the angle of their aim in order to maximize the effect of their shot.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-staging.appspot.com/o/Game%20Insights%2FTank%20game%2FWar%20games%204.png?alt=media&token=adf9c1a2-3e75-4ea4-8b59-a58b4cd55cc7'
         }
         return obj
       } else if (name === 'Aircraft war game') {
         obj = {
           subtitle: '',
+          description: "A real-time strategy game, featuring fast-paced and tactical scenarios as players command squadrons of aircraft in aerial combat. Players will have to build their air wings, develop their battle strategies, and attack enemy forces. They will need to acquire better aircraft and new weapons by giving up their kills or buying more points, as well as researching technologies which can give them an advantage in combat. The game will have single player campaigns, allowing players to progress through a storyline, as well as intense multiplayer skirmishes to test their aerial prowess against human opponents.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FAircraft%20war%20game%2FAircraft%20war%20game%203.jpeg?alt=media&token=775771dd-6f9d-42be-bf60-1f2ffd4addba'
         }
         return obj
