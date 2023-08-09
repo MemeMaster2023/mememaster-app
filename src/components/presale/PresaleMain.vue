@@ -4,15 +4,55 @@
 
       <v-img src="/img/presale/presale_home.png"
            cover
-           :style="isMobileDevice ? 'height:100%' : ''"
            gradient="to bottom, rgba(0,0,0,.8), rgba(0,0,0,.6)"
       >
 
 
-        <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2' : 'mt-12 ml-16 mr-16'" >
+        <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" >
             <div class="text-h3 ma-2 text-white">Meme Master Presale is starting soon!</div>
-            <div style="text-align: justify;" class="text-h5 ma-2 text-white">The Meme Master 2023 Presale is just around the corner, and we can't wait to share this epic journey with you! Get ready to join the revolution of creativity as we launch our exclusive Presale event on August 20, 2023. <br><br>As a pioneer in the world of memes, we're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect the most iconic and side-splitting memes of all time.</div>
+            <div style="text-align: justify;" class="text-h5 ma-2 text-white">The Meme Master 2023 Presale is just around the corner, and we can't wait to share this epic journey with you! Get ready to join the revolution of creativity as we launch our exclusive Presale event in August 2023. <br><br>We're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect Memes music and NFTs, interact with our games, find new projects on our new token listing platform and a host of the features that are in development, please check out the information below including our roadmap, video and tier offers for more information.</div>
+
+            <v-row  class="mt-4">
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-view-dashboard" style="font-size: 0.7rem;width: 100%">
+                  NFT Marketplace
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-circle-multiple-outline" style="font-size: 0.7rem;width: 100%">
+                  {{ drawer ? 'Token Listings' : 'New Token Listings' }}
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-shape-plus" style="font-size: 0.7rem;width: 100%">
+                  Games
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <v-row >
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-music" style="font-size: 0.7rem;width: 100%">
+                  Music
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-transit-connection-variant" style="font-size: 0.7rem;width: 100%">
+                  Roadmap
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-layers-triple-outline" style="font-size: 0.7rem;width: 100%">
+                  Tiers
+                </v-btn>
+              </v-col>
+            </v-row>
+
           </v-col>
 
           <v-col cols="12" md="6" :align="'center'">
@@ -27,9 +67,9 @@
               </v-toolbar>
 
 
-                <div class="pt-8 text-h5 ma-2 text-black">Aug 20 - Sept 20</div>
+                <div class="pt-8 text-h5 ma-2 text-black">Aug 2023 - Sept 2023</div>
                 <div class="text-h6 ma-2 text-black">1 EMAS = $0.005</div>
-                <div style="font-size: 1rem;" class="ma-2 text-black">Hurry and buy before Stage 2 Price Increases To $0.006</div>
+                <div style="font-size: 1rem;" class="ma-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0061</div>
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
@@ -77,60 +117,106 @@
       </v-img>
 
       <!-- ######################################################################################## -->
-      <!-- ###############################     HOW TO BUY         ################################# -->
+      <!-- ###############################       WELCOME          ################################# -->
       <!-- ######################################################################################## -->
 
-      <div id="howtobuy">
+      <div id="welcome">
+        
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
-              <div class="text-h3 ma-2 text-purple-lighten-3">HOW TO BUY</div>
-              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>
+              <div class="text-h3 ma-2 text-purple-lighten-3">WELCOME TO MEME MASTER 2023</div>      
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
-          <v-col cols="12" md="6" >
+          <v-col cols="12" md="12" :align="'center'">
+          
 
-            <v-layout class="mb-2">
-              <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon>
-              <div class="text-h5 text-purple-lighten-3 pt-1">Install a Wallet</div>
-            </v-layout>
-
-            <v-card theme="dark"
-                    color="purple-lighten-3"
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
                     min-height="220"
                     max-height="100%"
-                    max-width="450"
+                    max-width="1068"
                     variant="outlined"
             >
-            <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
-              To start with, ensure you have a MetaMask wallet installed on your browser in order to connect your wallet to the platform.<br><br>
-              If you are purchasing on mobile, we recommend using MetaMask In-App browser. Meme Master's Connect button will automatically launch MetaMask App on the mobile device.
-            </v-card-text>
+              <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
+                <iframe width="100%" :height="isMobileDevice ? '350' : '584'" src="https://www.youtube.com/embed/0zLTr7uP648" title="MemeMaster2023" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </v-card-text>
             </v-card>
-
+                    
           </v-col>
 
-          <v-col cols="12" md="6" >
+        </v-row>
+      </div>
 
-            <v-layout class="mb-2">
-              <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon>
-              <div class="text-h5 text-purple-lighten-3 pt-1">Connect your Wallet</div>
-            </v-layout>
+      <!-- ######################################################################################## -->
+      <!-- ###############################     HOW TO BUY         ################################# -->
+      <!-- ######################################################################################## -->
 
-            <v-card theme="dark"
-                    color="purple-lighten-3"
-                    min-height="220"
+      <div id="howtobuy">
+        
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
+          <v-col cols="12" md="12" :align="'center'">
+              <div class="text-h3 ma-2 text-purple-lighten-3">HOW TO BUY</div>
+              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>          
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
+          <v-col cols="12" md="6" :align="'center'">
+            
+            <v-card theme="dark" 
+                    color="transparent" 
+                    max-width="450"
+                    flat
+            >
+              <v-layout class="mb-2">
+                <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon> 
+                <div class="text-h5 text-purple-lighten-3 pt-1">Install a Wallet</div>
+              </v-layout>
+            </v-card>
+
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
+                    min-height="240"
                     max-height="100%"
                     max-width="450"
                     variant="outlined"
             >
               <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
-                Once you’ve connected your wallet, you’ll be presented with the options with which you can purchase EMAS token.<br><br>
-                Read below for more information on these options, and select the option which is right for you.
+                Ensure you have a MetaMask wallet or compatible web3 wallet installed on in your browser in order to connect your wallet to the platform.<br><br>
+                If you are purchasing on a mobile phone we recommend using the MetaMask In-App browser. Meme Master's 'Connect' button will automatically launch the MetaMask App on the mobile device.
               </v-card-text>
             </v-card>
+                    
+          </v-col>
 
+          <v-col cols="12" md="6" :align="'center'">
+
+            <v-card theme="dark" 
+                    color="transparent" 
+                    max-width="450"
+                    flat
+            >
+              <v-layout class="mb-2" >
+                <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon> 
+                <div class="text-h5 text-purple-lighten-3 pt-1">Connect your Wallet</div>
+              </v-layout>
+            </v-card>
+
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
+                    min-height="240"
+                    max-height="100%"
+                    max-width="450"
+                    variant="outlined"
+            >
+              <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
+                Once you’ve connected your wallet, you’ll be presented with the options with which you can purchase our EMAS token.<br><br>
+                Read below for more information on these options and select your choice of payment.
+              </v-card-text>
+            </v-card>
+            
           </v-col>
         </v-row>
       </div>
@@ -139,31 +225,39 @@
       <!-- #################################     BUY OPTIONS      ################################# -->
       <!-- ######################################################################################## -->
 
-      <div id="buyoptions" style="background-color: #F3E5F5;height:100%">
+      <div id="buyoptions" style="background-color: #F3E5F5;padding-bottom: 16px;">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
-              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>
+              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>      
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
-          <v-col cols="12" md="6" >
+          <v-col cols="12" md="6" :align="'center'">
 
-            <v-layout class="mb-2">
-              <v-icon size="40" color="purple-darken-3">mdi-ethereum</v-icon>
-              <div class="text-h5 text-purple-darken-3 pt-1">Buy with Ethereum</div>
-            </v-layout>
+            <v-card theme="dark" 
+                    color="transparent" 
+                    max-width="450"
+                    flat
+            >
+              <v-layout class="mb-2">
+                <v-icon size="40" color="purple-darken-3">mdi-ethereum</v-icon> 
+                <div class="text-h5 text-purple-darken-3 pt-1">Buy EMAS with Ethereum</div>
+              </v-layout>
+            </v-card>
 
-            <v-card theme="light"
-                    color="purple-darken-3"
+
+            <v-card theme="light" 
+                    color="purple-darken-3" 
                     min-height="420"
                     max-height="100%"
                     max-width="450"
                     variant="outlined"
             >
-            <v-card-text style="font-size: 1.3rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
-              If you have enough ETH in your wallet, you can use the purchase EMAS with ETH option in order to swap the ETH in your wallet for EMAS.<br><br>
-              Type in the amount of EMAS you wish to purchase and then click “Convert ETH”. Your wallet provider will ask you to confirm the transaction and will also show you the cost of gas fees.
+            <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
+              Make sure you have enough ETH in your wallet for the gas fees as well as your purchase, you can then use the swap ETH to EMAS and follow the instructions in your wallet.<br><br>
+                Type in the amount of ETH you wish to change for EMAS tokens and then click “Convert ETH”. Your wallet provider will ask you to confirm the transaction and will also show you the cost of gas fees.<br><br>
+                You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.
             </v-card-text>
 
               <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
@@ -182,27 +276,35 @@
               </v-card-actions>
 
             </v-card>
-
+                    
           </v-col>
 
-          <v-col cols="12" md="6" >
+          <v-col cols="12" md="6" :align="'center'">
 
-            <v-layout class="mb-2">
-              <!-- <v-icon size="40" color="purple-darken-3">mdi-currency-usd</v-icon> -->
-              <v-img src="/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png" style="max-width:40px"></v-img>
-              <div class="text-h5 text-purple-darken-3 pt-1">Buy with USDT</div>
-            </v-layout>
 
-            <v-card theme="light"
-                    color="purple-darken-3"
-                    min-height="420"
+            <v-card theme="dark" 
+                    color="transparent" 
+                    max-width="450"
+                    flat
+            >
+              <v-layout class="mb-2">
+                <!-- <v-icon size="40" color="purple-darken-3">mdi-currency-usd</v-icon> -->
+                <v-img src="/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png" style="max-width:40px"></v-img>
+                <div class="text-h5 text-purple-darken-3 pt-1">Buy with USDT</div>
+              </v-layout>
+            </v-card>
+
+            <v-card theme="light" 
+                    color="purple-darken-3" 
+                    :min-height="isMobileDevice ? '460' : '420'"
                     max-height="100%"
                     max-width="450"
                     variant="outlined"
             >
-              <v-card-text style="font-size: 1.3rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
-                Before you start trading, make sure you have at least $30 USDT in your wallet. Enter the amount of EMAS you wish to purchase (minimum 20,000). Click "Convert USDT".<br><br>
-                You will then be asked to approve the purchase twice. The first approval is for the USDT contract and the second approval is for the transaction amount. Please make sure you go through two approval steps to complete the transaction.
+              <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
+                Make sure you have at least $30 USDT in your wallet. Enter the amount of USDT you wish to purchase EMAS tokens with then Click "Convert USDT".<br><br>
+                You will then be asked to approve the purchase twice by your wallet. Please make sure you go through two approval steps to complete the transaction.<br><br>
+                You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.
               </v-card-text>
 
               <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
@@ -220,7 +322,7 @@
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
-
+            
           </v-col>
         </v-row>
       </div>
@@ -229,17 +331,146 @@
       <!-- ###############################     PRESALE  STAGES        ############################# -->
       <!-- ######################################################################################## -->
 
+      <div id="stages">
+        
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
+          <v-col cols="12" md="12" :align="'center'">
+              <div class="text-h3 ma-2 text-purple-lighten-3">PRESALE STAGES</div>
+              <div class="text-h4 ma-2 text-white">Meme Master 2023 will have 3 Presale stages</div>          
+          </v-col>
+        </v-row>
 
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16'" >
+          <v-col cols="12" md="4" :align="'center'">
+            
+            <v-card theme="dark" 
+                    color="transparent" 
+                    max-width="350"
+                    flat
+            >
+              <v-layout class="mb-2">
+                <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon> 
+                <div class="text-h5 text-purple-lighten-3 pt-1">Stage 1</div>
+              </v-layout>
+            </v-card>
+
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
+                    min-height="220"
+                    max-height="100%"
+                    max-width="350"
+                    variant="outlined"
+            >
+              <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
+                <div class="text-center font-weight-bold">Total Tokens</div>
+                <div class="text-center">350 million</div>
+                <br>
+                <div class="text-center font-weight-bold">Price per EMAS token</div>
+                <div class="text-center">$0.005</div>
+                <br>
+                <div class="text-center font-weight-bold">Total to be raised</div>
+                <div class="text-center">$1,750,000</div>
+              </v-card-text>
+            </v-card>
+                    
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+            
+            <v-card theme="dark" 
+                    color="transparent" 
+                    max-width="350"
+                    flat
+            >
+              <v-layout class="mb-2">
+                <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon> 
+                <div class="text-h5 text-purple-lighten-3 pt-1">Stage 2</div>
+              </v-layout>
+            </v-card>
+
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
+                    min-height="220"
+                    max-height="100%"
+                    max-width="350"
+                    variant="outlined"
+            >
+              <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
+                <div class="text-center font-weight-bold">Total Tokens</div>
+                <div class="text-center">250 million</div>
+                <br>
+                <div class="text-center font-weight-bold">Price per EMAS token</div>
+                <div class="text-center">$0.0055</div>
+                <br>
+                <div class="text-center font-weight-bold">Total to be raised</div>
+                <div class="text-center">$1,375,000</div>
+              </v-card-text>
+            </v-card>
+                    
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+
+            <v-card theme="dark" 
+                    color="transparent" 
+                    max-width="350"
+                    flat
+            >
+              <v-layout class="mb-2" >
+                <v-icon size="40" color="purple-lighten-3">mdi-numeric-3-box-outline</v-icon> 
+                <div class="text-h5 text-purple-lighten-3 pt-1">Stage 3</div>
+              </v-layout>
+            </v-card>
+
+            <v-card theme="dark" 
+                    color="purple-lighten-3" 
+                    min-height="220"
+                    max-height="100%"
+                    max-width="350"
+                    variant="outlined"
+            >
+              <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
+                <div class="text-center font-weight-bold">Total Tokens</div>
+                <div class="text-center">200 million</div>
+                <br>
+                <div class="text-center font-weight-bold">Price per EMAS token</div>
+                <div class="text-center">$0.0061</div>
+                <br>
+                <div class="text-center font-weight-bold">Total to be raised</div>
+                <div class="text-center">$1,220,000</div>
+              </v-card-text>
+            </v-card>
+            
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
+          <v-col cols="12" md="4" :align="'center'">
+              <div class="text-h5 ma-2 text-purple-lighten-3">TOTAL TO BE RAISED</div>
+              <div class="text-h6 ma-2 text-white">$4,345,000</div>          
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+              <div class="text-h5 ma-2 text-purple-lighten-3">TOKEN LAUNCH PRICE</div>
+              <div class="text-h6 ma-2 text-white">$0.0065</div>          
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+              <div class="text-h5 ma-2 text-purple-lighten-3">TOKEN CLAIM LIVE</div>
+              <div class="text-h6 ma-2 text-white">14 days after stage 3 is completed</div>          
+          </v-col>
+        </v-row>
+      </div>
 
 
       <!-- DIALOGS AND COMPONENTS-->
-  <v-dialog v-if="!mmConnected || !walletConnected || !twConnected"
-      transition="dialog-bottom-transition"
-      :fullscreen="isMobileDevice"
-      :min-width="isMobileDevice ? 300 : 500"
-      max-width="600"
-      v-model="connectWalletDialog"
-    >
+      <v-dialog v-if="!mmConnected || !walletConnected || !twConnected"
+          transition="dialog-bottom-transition"
+          :fullscreen="isMobileDevice"
+          :min-width="isMobileDevice ? 300 : 500"
+          max-width="600"
+          v-model="connectWalletDialog"
+      >
         <v-card height="100%" theme="dark">
           <v-toolbar
             color="#241d43"
@@ -341,11 +572,11 @@
       <v-dialog v-model="buyWithEthDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
-          <v-toolbar color="#700070">
+          <v-toolbar color="#241d43">
             <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <span class="text-white ml-4" style="font-size: 1.2rem">Buy with ETH</span>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Buy EMAS with ETH</span>
             <v-spacer></v-spacer>
             <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
               <v-icon>mdi-close</v-icon>
@@ -368,14 +599,14 @@
                   <template v-slot:append-inner>
                     <v-icon color="green-lighten-2"><img
                         style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
-                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
+                        src="img/logos/logo.png" alt="Icon" /></v-icon>
                     <span style="font-weight: 400; margin-left: 10px;">EMAS</span>
                   </template>
                 </v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-btn class="text-white" size="large" style="width:100%" color="#360a3f">
-                  Convert to ETH
+                  Convert ETH
                 </v-btn>
               </v-col>
             </v-row>
@@ -387,7 +618,7 @@
       <v-dialog v-model="buyWithUsdtDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
-          <v-toolbar color="#700070">
+          <v-toolbar color="#241d43">
             <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -426,7 +657,7 @@
               </v-col>
               <v-col cols="12">
                 <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f">
-                  Convert to USDT
+                  Convert USDT
                 </v-btn>
               </v-col>
             </v-row>

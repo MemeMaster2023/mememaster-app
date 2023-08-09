@@ -23,7 +23,7 @@
 
           <v-tooltip text="Telegram" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn variant="text" class="mx-2 mt-1">
+              <v-btn variant="text" class="mx-2">
                 <v-img 
                   src="/img/icons/telegram.png" 
                   style="width:24px;height:24px;padding-top:4px" 
@@ -34,15 +34,17 @@
             </template>
           </v-tooltip>
 
-          <v-tooltip text="Twitter" location="top">
+
+          <v-tooltip text="X (Twitter)" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn
-                class="mx-2"
-                icon="mdi-twitter"
-                variant="text"
-                @click="gotoLink('https://twitter.com/MemeMaster_2023')"
-                v-bind="props"
-              ></v-btn>
+              <v-btn variant="text" class="mx-2">
+                <v-img 
+                  src="/img/icons/x_logo.png" 
+                  style="width:22px;height:22px;padding-top:4px"
+                  @click="gotoLink('https://twitter.com/MemeMaster_2023')"
+                  v-bind="props"
+                />
+              </v-btn>
             </template>
           </v-tooltip>
 
