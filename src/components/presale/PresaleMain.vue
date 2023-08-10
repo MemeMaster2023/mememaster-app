@@ -122,7 +122,7 @@
 
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="handleShowDiaLogEth(true)" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="handleShowDiaLogEth(true)" size="large" style="width:100%" color="#360a3f">Buy EMAS with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
                     <v-btn @click="handleShowDiaLogUsdt(true)" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
@@ -899,7 +899,7 @@
             <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <span class="text-white ml-4" style="font-size: 1.2rem">Buy with USDT</span>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Buy EMAS with USDT</span>
             <v-spacer></v-spacer>
             <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
               <v-icon>mdi-close</v-icon>
@@ -963,6 +963,9 @@ export default {
   },
   data: () => ({
     loading: false,
+    stage1: 0.005,
+    stage2: 0.0055,
+    stage3: 0.0061,
     connectWalletDialog: false,
     showConfirmation: false,
     buyWithEthDialog: false,
