@@ -14,7 +14,7 @@
 
             <v-row  class="mt-4">
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-view-dashboard" 
+                <v-btn prepend-icon="mdi-view-dashboard"
                        style="font-size: 0.7rem;width: 100%"
                        color="purple-lighten-4"
                 >
@@ -23,7 +23,7 @@
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-circle-multiple-outline" 
+                <v-btn prepend-icon="mdi-circle-multiple-outline"
                        style="font-size: 0.7rem;width: 100%"
                        color="purple-lighten-4"
                 >
@@ -32,7 +32,7 @@
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-shape-plus" 
+                <v-btn prepend-icon="mdi-shape-plus"
                        style="font-size: 0.7rem;width: 100%"
                        color="purple-lighten-4"
                 >
@@ -43,7 +43,7 @@
 
             <v-row >
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-music" 
+                <v-btn prepend-icon="mdi-music"
                        style="font-size: 0.7rem;width: 100%"
                        color="purple-lighten-4"
                 >
@@ -52,7 +52,7 @@
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-transit-connection-variant" 
+                <v-btn prepend-icon="mdi-transit-connection-variant"
                        style="font-size: 0.7rem;width: 100%"
                        color="purple-lighten-4"
                 >
@@ -61,7 +61,7 @@
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-layers-triple-outline" 
+                <v-btn prepend-icon="mdi-layers-triple-outline"
                        style="font-size: 0.7rem;width: 100%"
                        color="purple-lighten-4"
                        @click="scrollToTiers()"
@@ -122,10 +122,10 @@
 
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="handleShowDiaLogEth(true)" size="large" style="width:100%" color="#360a3f">Buy EMAS with ETH</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy EMAS with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="handleShowDiaLogUsdt(true)" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -148,19 +148,19 @@
       <!-- ######################################################################################## -->
 
       <div id="welcome">
-        
+
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
-              <div class="text-h3 ma-2 text-purple-lighten-3">WELCOME TO MEME MASTER 2023</div>      
+              <div class="text-h3 ma-2 text-purple-lighten-3">WELCOME TO MEME MASTER 2023</div>
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
           <v-col cols="12" md="12" :align="'center'">
-          
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
                     max-width="1068"
@@ -170,7 +170,7 @@
                 <iframe width="100%" :height="isMobileDevice ? '350' : '584'" src="https://www.youtube.com/embed/0zLTr7uP648" title="MemeMaster2023" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
               </v-card-text>
             </v-card>
-                    
+
           </v-col>
 
         </v-row>
@@ -181,30 +181,30 @@
       <!-- ######################################################################################## -->
 
       <div id="howtobuy">
-        
+
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
               <div class="text-h3 ma-2 text-purple-lighten-3">HOW TO BUY</div>
-              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>          
+              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
           <v-col cols="12" md="6" :align="'center'">
-            
-            <v-card theme="dark" 
-                    color="transparent" 
+
+            <v-card theme="dark"
+                    color="transparent"
                     max-width="450"
                     flat
             >
               <v-layout class="mb-2">
-                <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon> 
+                <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon>
                 <div class="text-h5 text-purple-lighten-3 pt-1">Install a Wallet</div>
               </v-layout>
             </v-card>
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="240"
                     max-height="100%"
                     max-width="450"
@@ -215,24 +215,24 @@
                 If you are purchasing on a mobile phone we recommend using the MetaMask In-App browser. Meme Master's 'Connect' button will automatically launch the MetaMask App on the mobile device.
               </v-card-text>
             </v-card>
-                    
+
           </v-col>
 
           <v-col cols="12" md="6" :align="'center'">
 
-            <v-card theme="dark" 
-                    color="transparent" 
+            <v-card theme="dark"
+                    color="transparent"
                     max-width="450"
                     flat
             >
               <v-layout class="mb-2" >
-                <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon> 
+                <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon>
                 <div class="text-h5 text-purple-lighten-3 pt-1">Connect your Wallet</div>
               </v-layout>
             </v-card>
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="240"
                     max-height="100%"
                     max-width="450"
@@ -243,7 +243,7 @@
                 Read below for more information on these options and select your choice of payment.
               </v-card-text>
             </v-card>
-            
+
           </v-col>
         </v-row>
       </div>
@@ -255,27 +255,27 @@
       <div id="buyoptions" style="background-color: #F3E5F5;padding-bottom: 16px;">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
-              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>      
+              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
           <v-col cols="12" md="6" :align="'center'">
 
-            <v-card theme="dark" 
-                    color="transparent" 
+            <v-card theme="dark"
+                    color="transparent"
                     max-width="450"
                     flat
             >
               <v-layout class="mb-2">
-                <v-icon size="40" color="purple-darken-3">mdi-ethereum</v-icon> 
+                <v-icon size="40" color="purple-darken-3">mdi-ethereum</v-icon>
                 <div class="text-h5 text-purple-darken-3 pt-1">Buy EMAS with Ethereum</div>
               </v-layout>
             </v-card>
 
 
-            <v-card theme="light" 
-                    color="purple-darken-3" 
+            <v-card theme="light"
+                    color="purple-darken-3"
                     :min-height="isMobileDevice ? '500' : '420'"
                     max-height="100%"
                     max-width="450"
@@ -295,7 +295,7 @@
                   color="#360a3f"
                   size="large"
                   class="font-weight-bold mb-2"
-                  @click="handleShowDiaLogEth(false)"
+                  @click="handleShowDialog(false, 'buyWithEthDialog')"
                 >
                   Buy with ETH Now
                 </v-btn>
@@ -303,14 +303,14 @@
               </v-card-actions>
 
             </v-card>
-                    
+
           </v-col>
 
           <v-col cols="12" md="6" :align="'center'">
 
 
-            <v-card theme="dark" 
-                    color="transparent" 
+            <v-card theme="dark"
+                    color="transparent"
                     max-width="450"
                     flat
             >
@@ -321,8 +321,8 @@
               </v-layout>
             </v-card>
 
-            <v-card theme="light" 
-                    color="purple-darken-3" 
+            <v-card theme="light"
+                    color="purple-darken-3"
                     :min-height="isMobileDevice ? '470' : '420'"
                     max-height="100%"
                     max-width="450"
@@ -342,14 +342,14 @@
                   color="#360a3f"
                   size="large"
                   class="font-weight-bold mb-2"
-                  @click="handleShowDiaLogUsdt(false)"
+                  @click="handleShowDialog(false, 'buyWithUsdtDialog')"
                 >
                   Buy with USDT Now
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
-            
+
           </v-col>
         </v-row>
       </div>
@@ -359,19 +359,19 @@
       <!-- ######################################################################################## -->
 
       <div id="stages">
-        
+
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
               <div class="text-h3 ma-2 text-purple-lighten-3">PRESALE STAGES</div>
-              <div class="text-h4 ma-2 text-white">Meme Master 2023 will have 3 Presale stages</div>          
+              <div class="text-h4 ma-2 text-white">Meme Master 2023 will have 3 Presale stages</div>
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16'" >
           <v-col cols="12" md="4" :align="'center'">
-            
-            <v-card theme="dark" 
-                    color="transparent" 
+
+            <v-card theme="dark"
+                    color="transparent"
                     max-width="350"
                     flat
             >
@@ -383,8 +383,8 @@
               </v-layout>
             </v-card>
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
                     max-width="350"
@@ -401,13 +401,13 @@
                 <div class="text-center">$1,750,000</div>
               </v-card-text>
             </v-card>
-                    
+
           </v-col>
 
           <v-col cols="12" md="4" :align="'center'">
-            
-            <v-card theme="dark" 
-                    color="transparent" 
+
+            <v-card theme="dark"
+                    color="transparent"
                     max-width="350"
                     flat
             >
@@ -419,8 +419,8 @@
               </v-layout>
             </v-card>
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
                     max-width="350"
@@ -437,13 +437,13 @@
                 <div class="text-center">$1,375,000</div>
               </v-card-text>
             </v-card>
-                    
+
           </v-col>
 
           <v-col cols="12" md="4" :align="'center'">
 
-            <v-card theme="dark" 
-                    color="transparent" 
+            <v-card theme="dark"
+                    color="transparent"
                     max-width="350"
                     flat
             >
@@ -455,8 +455,8 @@
               </v-layout>
             </v-card>
 
-            <v-card theme="dark" 
-                    color="purple-lighten-3" 
+            <v-card theme="dark"
+                    color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
                     max-width="350"
@@ -473,24 +473,24 @@
                 <div class="text-center">$1,220,000</div>
               </v-card-text>
             </v-card>
-            
+
           </v-col>
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
           <v-col cols="12" md="4" :align="'center'">
               <div class="text-h5 ma-2 text-purple-lighten-3">HARD CAP</div>
-              <div class="text-h6 ma-2 text-white">$4,345,000</div>          
+              <div class="text-h6 ma-2 text-white">$4,345,000</div>
           </v-col>
 
           <v-col cols="12" md="4" :align="'center'">
               <div class="text-h5 ma-2 text-purple-lighten-3">TOKEN LAUNCH PRICE</div>
-              <div class="text-h6 ma-2 text-white">$0.0065</div>          
+              <div class="text-h6 ma-2 text-white">$0.0065</div>
           </v-col>
 
           <v-col cols="12" md="4" :align="'center'">
               <div class="text-h5 ma-2 text-purple-lighten-3">TOKEN CLAIM LIVE</div>
-              <div class="text-h6 ma-2 text-white">14 days after stage 3 is completed</div>          
+              <div class="text-h6 ma-2 text-white">14 days after stage 3 is completed</div>
           </v-col>
         </v-row>
       </div>
@@ -561,7 +561,7 @@
                     </ul>
                   </v-col>
                 </v-expansion-panel-text>
-                
+
               </v-expansion-panel>
 
               <v-expansion-panel>
@@ -571,7 +571,7 @@
                         src="/img/logos/logo.png" alt="Icon" /></v-icon>
                   <div style="font-size:1.3rem;color:#FFF;margin-left:5px;font-weight:bold">Tier 3 SAI (Self Awareness)</div>
                 </v-expansion-panel-title>
-                
+
                 <v-expansion-panel-text>
                   <v-col>
                     <div style="font-size:1rem;font-weight:bold">Min holding:  1,000,000 EMAS Tokens</div>
@@ -589,7 +589,7 @@
                 </v-expansion-panel-text>
 
               </v-expansion-panel>
-            </v-expansion-panels> 
+            </v-expansion-panels>
 
           </v-col>
         </v-row>
@@ -600,12 +600,12 @@
       <!-- ###############################     PRESALE  DONATIONS     ############################# -->
       <!-- ######################################################################################## -->
 
-      <div id="donate">
-        
+      <div id="donate" style="color: #FFF;">
+
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
               <div class="text-h3 ma-2 text-purple-lighten-3">CONTRIBUTE</div>
-              <div class="text-h4 ma-2 text-white">Contribute to the Meme Master Project</div>          
+              <div class="text-h4 ma-2 text-white">Contribute to the Meme Master Project</div>
           </v-col>
         </v-row>
 
@@ -631,11 +631,15 @@
           </v-col>
 
           <v-col cols="12" md="4" :align="'center'">
-            DONATE ETH
+            <v-btn size="large" color="#360a3f" @click="handleShowDialog(true, 'donateEthDialog')">
+              DONATE ETH
+            </v-btn>
           </v-col>
 
           <v-col cols="12" md="4" :align="'center'">
-            DONATE USDT
+            <v-btn size="large" color="#360a3f" @click="handleShowDialog(true, 'donateUsdtDialog')">
+              DONATE USDT
+            </v-btn>
           </v-col>
 
           <v-col cols="12" md="2" :align="'center'">
@@ -666,7 +670,7 @@
         </v-row>
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-12 mr-12'" >
-          
+
           <v-col cols="12" md="4" :align="'center'">
             <v-chip
               class="pa-6"
@@ -714,9 +718,9 @@
 
         </v-row>
 
-        
+
         <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-12 mr-12 mb-16'" >
-        
+
           <v-col cols="12" md="12" :align="'center'">
 
               <v-sheet
@@ -863,7 +867,16 @@
             <v-row>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
-                <v-text-field placeholder="0" class="mt-2">
+                <v-text-field
+                  placeholder="0"
+                  class="mt-2"
+                  v-on:keyup="convertAmount('ethToEmas', amountEth)"
+                  v-model="amountEth"
+                  @focus="clearOnFocus('amountEth')"
+                  @input="ensureNonNegative('amountEth')"
+                  type="number"
+                  min="0"
+                >
                   <template v-slot:append-inner>
                     <v-icon size="28px" color="purple-darken-4">mdi-ethereum</v-icon>
                     <span style="font-weight: 400; margin-left: 10px;">ETH</span>
@@ -872,7 +885,16 @@
               </v-col>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Buying</label>
-                <v-text-field placeholder="0" class="mt-2">
+                <v-text-field
+                  class="mt-2"
+                  placeholder="0"
+                  v-model="amountEmasForEthDiagLog"
+                  v-on:keyup="convertAmount('emasToEth', amountEmasForEthDiagLog)"
+                  @focus="clearOnFocus('amountEmasForEthDiagLog')"
+                  @input="ensureNonNegative('amountEmasForEthDiagLog')"
+                  type="number"
+                  min="0"
+                >
                   <template v-slot:append-inner>
                     <v-icon color="green-lighten-2"><img
                         style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
@@ -909,7 +931,16 @@
             <v-row>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
-                <v-text-field placeholder="0" class="mt-2">
+                <v-text-field
+                  placeholder="0"
+                  class="mt-2"
+                  v-model="amountUsdt"
+                  v-on:keyup="convertAmount('usdtToEmas', amountUsdt)"
+                  @focus="clearOnFocus('amountUsdt')"
+                  @input="ensureNonNegative('amountUsdt')"
+                  type="number"
+                  min="0"
+                >
                   <template v-slot:append-inner>
                     <v-icon size="28px">
                       <img style="width: 28px;"
@@ -922,7 +953,16 @@
               </v-col>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Buying</label>
-                <v-text-field placeholder="0" class="mt-2">
+                <v-text-field
+                  placeholder="0"
+                  class="mt-2"
+                  v-model="amountEmasForUsdtDiagLog"
+                  v-on:keyup="convertAmount('emasToUsdt', amountEmasForUsdtDiagLog)"
+                  @focus="clearOnFocus('amountEmasForUsdtDiagLog')"
+                  @input="ensureNonNegative('amountEmasForUsdtDiagLog')"
+                  type="number"
+                  min="0"
+                >
                   <template v-slot:append-inner>
                     <v-icon color="green-lighten-2">
                       <img style="width: 28px; background-color: rgb(159, 155, 155); border-radius: 50%"
@@ -935,6 +975,96 @@
               <v-col cols="12">
                 <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f">
                   Convert USDT
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
+      <!-- DIALOG donateEthDialog -->
+      <v-dialog v-model="donateEthDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
+        :min-width="isMobileDevice ? 300 : 500" max-width="600">
+        <v-card height="100%" color="#F3E5F5">
+          <v-toolbar color="#241d43">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="donateEthDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Donate with ETH</span>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="donateEthDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text class="mb-8">
+            <v-row>
+              <v-col cols="12">
+                <label for="" style="font-weight: bold;">Quantity</label>
+                <v-text-field
+                  placeholder="0"
+                  class="mt-2"
+                  type="number"
+                  min="0"
+                >
+                  <template v-slot:append-inner>
+                    <v-icon size="28px" color="purple-darken-4">mdi-ethereum</v-icon>
+                    <span style="font-weight: 400; margin-left: 10px;">ETH</span>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum necessitatibus cumque porro possimus!</div>
+              </v-col>
+              <v-col cols="12">
+                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f">
+                  DONATE ETH
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
+      <!-- DIALOG donateEthDialog -->
+      <v-dialog v-model="donateUsdtDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
+        :min-width="isMobileDevice ? 300 : 500" max-width="600">
+        <v-card height="100%" color="#F3E5F5">
+          <v-toolbar color="#241d43">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="donateUsdtDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Donate with USDT</span>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="donateUsdtDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text class="mb-8">
+            <v-row>
+              <v-col cols="12">
+                <label for="" style="font-weight: bold;">Quantity</label>
+                <v-text-field
+                  placeholder="0"
+                  class="mt-2"
+                  type="number"
+                  min="0"
+                >
+                  <template v-slot:append-inner>
+                    <v-icon size="28px">
+                      <img style="width: 28px;"
+                        src="/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png"
+                        alt="Icon" />
+                    </v-icon>
+                    <span style="font-weight: 400; margin-left: 10px;">USDT</span>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae sequi doloremque obcaecati tempore ratione mollitia rem error quam maiores totam qui autem, sapiente non eaque dolorum in fuga ipsam ducimus.</div>
+              </v-col>
+              <v-col cols="12">
+                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f">
+                  DONATE USDT
                 </v-btn>
               </v-col>
             </v-row>
@@ -966,10 +1096,16 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
+    amountEth: 0,
+    amountUsdt: 0,
+    amountEmasForUsdtDiagLog: 0,
+    amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
-    showConfirmation: false,
     buyWithEthDialog: false,
     buyWithUsdtDialog: false,
+    donateEthDialog: false,
+    donateUsdtDialog: false,
+    showConfirmation: false,
     panel: [0, 1, 2],
     series: [80, 5, 5, 3, 2.5, 2.5, 2],
     chartOptions: {
@@ -1040,7 +1176,7 @@ export default {
       return this.$store.state.user.twConnected
     },
     getUser () {
-      return store.state.user 
+      return store.state.user
     },
   },
   watch: {
@@ -1111,12 +1247,28 @@ export default {
         }, 500);
       }
     },
-    handleShowDiaLogUsdt(isTop) {
-      this.handleShowDialog(isTop, 'buyWithUsdtDialog');
+    convertAmount(type,value) {
+      switch (type) {
+        case 'ethToEmas':
+          return this.amountEmasForEthDiagLog = value // Change this to the correct formula
+        case 'emasToEth':
+          return this.amountEth = value // Change this to the correct formula
+        case 'usdtToEmas':
+          return this.amountEmasForUsdtDiagLog = value / this.stage1
+        case 'emasToUsdt':
+          return this.amountUsdt = value * this.stage1
+        default:
+          return 0;
+      }
     },
-    handleShowDiaLogEth(isTop) {
-      this.handleShowDialog(isTop, 'buyWithEthDialog');
-    }
+    ensureNonNegative(inputField) {
+      if (this[inputField] < 0) {
+        this[inputField] = Math.abs(this[inputField]);
+      }
+    },
+    clearOnFocus(e) {
+      if (this[e] == 0) this[e]= ''
+    },
   }
 }
 </script>
@@ -1161,5 +1313,13 @@ export default {
     opacity: 1 !important;
     position: absolute;
     width: 100%;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
   }
 </style>
