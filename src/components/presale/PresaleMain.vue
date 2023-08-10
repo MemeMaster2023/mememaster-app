@@ -114,8 +114,8 @@
 
                 <v-row v-if="!mmConnected && !walletConnected && !twConnected">
 
-                  <v-col cols="12" md="12" class="pt-8 pl-8 pr-8">
-                    <v-btn @click="connectWalletClicked" size="large" style="width:100%" color="#360a3f">Connect your Wallet</v-btn>
+                  <v-col cols="12" md="12" class="pt-16 pl-8 pr-8">
+                    <v-btn @click="connectWalletClicked" class="mt-8" size="large" style="width:100%" color="#360a3f">Connect your Wallet</v-btn>
                   </v-col>
 
                 </v-row>
@@ -276,15 +276,15 @@
 
             <v-card theme="light" 
                     color="purple-darken-3" 
-                    min-height="420"
+                    :min-height="isMobileDevice ? '500' : '420'"
                     max-height="100%"
                     max-width="450"
                     variant="outlined"
             >
             <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
               Make sure you have enough ETH in your wallet for the gas fees as well as your purchase, you can then use the swap ETH to EMAS and follow the instructions in your wallet.<br><br>
-                Type in the amount of ETH you wish to change for EMAS tokens and then click “Convert ETH”. Your wallet provider will ask you to confirm the transaction and will also show you the cost of gas fees.<br><br>
-                You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.
+              Type in the amount of ETH you wish to change for EMAS tokens and then click “Convert ETH”. Your wallet provider will ask you to confirm the transaction and will also show you the cost of gas fees.<br><br>
+              You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.
             </v-card-text>
 
               <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
@@ -323,7 +323,7 @@
 
             <v-card theme="light" 
                     color="purple-darken-3" 
-                    :min-height="isMobileDevice ? '460' : '420'"
+                    :min-height="isMobileDevice ? '470' : '420'"
                     max-height="100%"
                     max-width="450"
                     variant="outlined"
@@ -376,8 +376,10 @@
                     flat
             >
               <v-layout class="mb-2">
-                <v-icon size="40" color="purple-lighten-3">mdi-numeric-1-box-outline</v-icon> 
-                <div class="text-h5 text-purple-lighten-3 pt-1">Stage 1</div>
+                <v-icon color="green-lighten-2"><img
+                        style="width: 28px; margin-top:15px;"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
+                <div class="text-h5 text-purple-lighten-3 pt-1 pl-2">Stage 1</div>
               </v-layout>
             </v-card>
 
@@ -410,8 +412,10 @@
                     flat
             >
               <v-layout class="mb-2">
-                <v-icon size="40" color="purple-lighten-3">mdi-numeric-2-box-outline</v-icon> 
-                <div class="text-h5 text-purple-lighten-3 pt-1">Stage 2</div>
+                <v-icon color="green-lighten-2"><img
+                        style="width: 28px; margin-top:15px;"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
+                <div class="text-h5 text-purple-lighten-3 pt-1 pl-2">Stage 2</div>
               </v-layout>
             </v-card>
 
@@ -444,8 +448,10 @@
                     flat
             >
               <v-layout class="mb-2" >
-                <v-icon size="40" color="purple-lighten-3">mdi-numeric-3-box-outline</v-icon> 
-                <div class="text-h5 text-purple-lighten-3 pt-1">Stage 3</div>
+                <v-icon color="green-lighten-2"><img
+                        style="width: 28px; margin-top:15px;"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
+                <div class="text-h5 text-purple-lighten-3 pt-1 pl-2">Stage 3</div>
               </v-layout>
             </v-card>
 
@@ -510,7 +516,9 @@
             >
               <v-expansion-panel >
                 <v-expansion-panel-title style="background-color: #7B1FA2;">
-                  <v-icon color="#FFF" size="35">mdi-numeric-1-box-outline</v-icon>
+                  <v-icon color="green-lighten-2"><img
+                        style="width: 28px; border-radius: 50%"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
                   <div style="font-size:1.3rem;color:#FFF;margin-left:5px;font-weight:bold">Tier 1 AGI (Artificial Intelligence)</div>
                 </v-expansion-panel-title>
 
@@ -532,7 +540,9 @@
 
               <v-expansion-panel>
                 <v-expansion-panel-title style="background-color: #6A1B9A;">
-                  <v-icon color="#FFF" size="35">mdi-numeric-2-box-outline</v-icon>
+                  <v-icon color="green-lighten-2"><img
+                        style="width: 28px;border-radius: 50%"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
                   <div style="font-size:1.3rem;color:#FFF;margin-left:5px;font-weight:bold">Tier 2 ASI (Artificial Super Intelligence)</div>
                 </v-expansion-panel-title>
 
@@ -556,7 +566,9 @@
 
               <v-expansion-panel>
                 <v-expansion-panel-title style="background-color: #4A148C;">
-                  <v-icon color="#FFF" size="35">mdi-numeric-3-box-outline</v-icon>
+                  <v-icon color="green-lighten-2"><img
+                        style="width: 28px; border-radius: 50%"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
                   <div style="font-size:1.3rem;color:#FFF;margin-left:5px;font-weight:bold">Tier 3 SAI (Self Awareness)</div>
                 </v-expansion-panel-title>
                 
@@ -585,15 +597,15 @@
 
 
       <!-- ######################################################################################## -->
-      <!-- ###############################     PRESALE  STAGES        ############################# -->
+      <!-- ###############################     PRESALE  DONATIONS     ############################# -->
       <!-- ######################################################################################## -->
 
       <div id="donate">
         
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
-              <div class="text-h3 ma-2 text-purple-lighten-3">CONTRIBUTE / DONATE</div>
-              <div class="text-h4 ma-2 text-white">Donate to the Meme Master Project</div>          
+              <div class="text-h3 ma-2 text-purple-lighten-3">CONTRIBUTE</div>
+              <div class="text-h4 ma-2 text-white">Contribute to the Meme Master Project</div>          
           </v-col>
         </v-row>
 
@@ -631,6 +643,100 @@
 
           </v-row>
       </div>
+
+
+      <!-- ######################################################################################## -->
+      <!-- #####################################     TOKENOMICS      ############################## -->
+      <!-- ######################################################################################## -->
+
+      <div id="tiers" style="background-color: #F3E5F5;padding-bottom: 16px;">
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
+          <v-col cols="12" md="12" :align="'center'" class="mt-8">
+              <div class="text-h3 ma-2 text-purple-darken-3">MEME MASTER TOKENOMICS</div>
+              <div class="text-h4 ma-2 text-purple-darken-3">Token distibution and information</div>
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'" >
+          <v-col cols="12" md="12" :align="'center'">
+            <div id="chart" :style="isMobileDevice ? 'margin-left:-40px' : ''">
+              <apexchart type="donut" :width="isMobileDevice ? '450' : '600'" :options="chartOptions" :series="series"></apexchart>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-12 mr-12'" >
+          
+          <v-col cols="12" md="4" :align="'center'">
+            <v-chip
+              class="pa-6"
+              label
+              style="background-color: #dcb9ec;width:100%"
+              color="#4A148C"
+              size="x-large"
+              variant="outlined"
+            >
+             <v-icon size="28px" color="purple-darken-4"  class="mr-4">mdi-ethereum</v-icon>
+             <div :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">ERC-20 ETH Token</div>
+            </v-chip>
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+            <v-chip
+              class="pa-6"
+              label
+              style="background-color: #dcb9ec;width:100%"
+              color="#4A148C"
+              size="x-large"
+              variant="outlined"
+            >
+             <v-icon size="28px" color="purple-darken-4" class="mr-4">mdi-circle-multiple-outline</v-icon>
+             <div v-if="!isMobileDevice" :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000 EMAS Tokens</div>
+             <div v-else :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000 EMAS</div>
+            </v-chip>
+          </v-col>
+
+          <v-col cols="12" md="4" :align="'center'">
+            <v-chip
+              class="pa-6"
+              label
+              style="background-color: #dcb9ec;width:100%"
+              color="#4A148C"
+              size="x-large"
+              variant="outlined"
+            >
+            <v-icon color="green-lighten-2"><img
+                        style="width: 32px;margin-left:5px;"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
+              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1.3rem;font-weight:bold;margin-left:10px'">Symbol: EMAS</div>
+            </v-chip>
+          </v-col>
+
+        </v-row>
+
+        
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-12 mr-12 mb-16'" >
+        
+          <v-col cols="12" md="12" :align="'center'">
+
+              <v-sheet
+                :class="isMobileDevice ? 'pa-2' : 'pa-8'"
+                label
+                style="background-color: #dcb9ec;width:100%;border: #4A148C 1px solid;border-radius: 5px;"
+                color="#4A148C"
+                variant="outlined"
+              >
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C' : 'font-size: 1.3rem;font-weight:bold;color:#4A148C'">Contract Address: 0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72</div><br>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.3rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.3rem;font-weight:bold;color:#F44336'">We cannot return funds sent to this contract address.</div>
+              </v-sheet>
+
+          </v-col>
+
+        </v-row>
+
+      </div>
+
 
       <!-- ######################################################################################## -->
       <!-- ############################     DIALOGS AND COMPONENTS   ###############################-->
@@ -862,6 +968,56 @@ export default {
     buyWithEthDialog: false,
     buyWithUsdtDialog: false,
     panel: [0, 1, 2],
+    series: [80, 5, 5, 3, 2.5, 2.5, 2],
+    chartOptions: {
+      labels: ['Presale / project and liquidity', 'Dev', 'Community programs / bonuses', 'Gaming bonuses', 'Marketing', 'Future CEX listings', 'Team locked for 2 years'],
+      chart: {
+        width: 600,
+        type: 'donut',
+      },
+      plotOptions: {
+        pie: {
+          startAngle: -180,
+          endAngle: 180,
+          donut: {
+            size: '65%'
+          }
+        },
+      },
+      tooltip: {
+        y: {
+          formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+            return value + '%'
+          }
+        }
+      },
+      dataLabels: {
+        showAlways: true,
+        formatter: function (val) {
+          return val + "%"
+        },
+      },
+      fill: {
+        type: 'gradient',
+      },
+      legend: {
+        formatter: function(val, opts) {
+          return val + " - " + opts.w.globals.series[opts.seriesIndex] + '%'
+        },
+        fontSize: '16px',
+        position: 'bottom'
+      },
+      responsive: [{
+        options: {
+          chart: {
+            width: '100%'
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+    },
   }),
   components: {
     MetaMaskConnect,

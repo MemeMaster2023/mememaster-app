@@ -95,7 +95,7 @@
             >
             </v-btn>
 
-            <v-toolbar-title style="font-size: 1.5rem" class="ml-8 text-wrap">{{ selectedCollection.name }}</v-toolbar-title>
+            <div style="font-size: 1.5rem;" class="ml-8 grow">{{ selectedCollection.name }} - Win EMAS points and convert to EMAS tokens</div>
 
             <v-spacer></v-spacer>
               <v-btn v-if="!isMobileDevice"
