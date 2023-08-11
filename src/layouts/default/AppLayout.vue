@@ -263,29 +263,6 @@
       class="pa-2"
   >
 
-    <!--<v-layout >
-      <v-btn class="menuText" text @click.stop="routerGo('/')">{{ 'HOME' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'PRODUCT' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'FAQ' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'ABOUT' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'CONTACT' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'LOGIN' }}</v-btn>
-
-                <span style="margin-top: 5px" v-if="isUserLogin">|</span>
-      <v-btn @click="signOut" text v-if="isUserLogin">{{ lang[getLanguage].SIGN_OUT }}</v-btn>
-    </v-layout> -->
-
-
-      <!-- <v-img
-        src="/img/logos/mememaster_logo_color.png"
-        :style="isMobileDevice ? 'min-height: 50px; min-width: 236px;cursor: pointer;' : 'max-height: 64px; max-width: 300px;cursor: pointer;'"
-        @click="routerGo('/')"
-      ></v-img> -->
       <v-img v-if="!isMobileDevice"
         src="/img/logos/mememaster_logo.png"
         style="max-height: 62px; max-width: 300px;min-height: 62px; min-width: 300px;cursor: pointer;"
@@ -476,7 +453,7 @@
         color="white"
         theme="dark"
         size="small"
-        @click="gotoKYCLink('')"
+        @click="gotoKYCLink()"
       >
         <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:10px"/> 
         KYC - AUDIT
@@ -489,7 +466,7 @@
             variant="outlined"
             color="white"
             theme="dark"
-            @click="gotoTokenLink('')"
+            @click="gotoTokenLink()"
             v-bind="props"
             size="small"
           >
@@ -537,7 +514,14 @@
         :style="isMobileDevice ? 'max-height: 35px; max-width: 35px;margin-right:10px;cursor: pointer;' :  'margin-top: -5px;max-height: 35px; max-width: 35px;margin-right:20px;cursor: pointer;'"
       ></v-img>
 
+      <div v-if="!drawer && !isMobileDevice && $router.currentRoute.value.path !== '/presale'"
+           style="color:#FFF;position: fixed;right:85px;top:55px"
+      >
+       Please use the menu on the top right to access the main features of the platform
+      </div>
+      
   </v-app-bar>
+
 
   <!-- DIALOGS AND COMPONENTS-->
   <v-dialog v-if="!mmConnected || !walletConnected || !twConnected"
@@ -1082,7 +1066,7 @@ export default {
         this.$emit("tokenLinkClicked")
       },
       gotoLink(link) {
-        console.log('button clicked')
+        // console.log('button clicked')
         window.open(link, "_blank");
       },
       gotoContact () {

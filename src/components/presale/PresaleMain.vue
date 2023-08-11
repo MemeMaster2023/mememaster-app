@@ -7,62 +7,35 @@
            gradient="to bottom, rgba(0,0,0,.8), rgba(0,0,0,.6)"
       >
 
-        <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : 'mt-12 ml-16 mr-16'" >
+        <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" >
-            <div class="text-h3 ma-2 text-white">Meme Master Presale is starting soon!</div>
-            <div style="text-align: justify;" class="text-h5 ma-2 text-white">The Meme Master 2023 Presale is just around the corner, and we can't wait to share this epic journey with you! Get ready to join the revolution of creativity as we launch our exclusive Presale event in August 2023. <br><br>We're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect Memes music and NFTs, interact with our games, find new projects on our new token listing platform and a host of the features that are in development, please check out the information below including our roadmap, video and tier offers for more information.</div>
+            <div class="text-h4 ma-2 text-white">Meme Master Presale is starting soon!</div>
+            <div style="text-align: justify;" class="text-h6 ma-2 pt-4 text-white">The Meme Master 2023 Presale is just around the corner, and we can't wait to share this epic journey with you! Get ready to join the revolution of creativity as we launch our exclusive Presale event in August 2023. <br><br>We're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect Memes music and NFTs, interact with our games, find new projects on our new token listing platform and a host of the features that are in development, please check out the information below including our roadmap, video and tier offers for more information.</div>
 
-            <v-row  class="mt-4">
+            <v-row  class="mt-14" v-if="!isMobileDevice">
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-view-dashboard"
-                       style="font-size: 0.7rem;width: 100%"
+                <v-btn prepend-icon="mdi-stairs-up"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
                        color="purple-lighten-4"
+                       @click="scrollStages()"
                 >
-                  NFT Marketplace
+                  Presale Stages
                 </v-btn>
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-circle-multiple-outline"
-                       style="font-size: 0.7rem;width: 100%"
+                <v-btn prepend-icon="mdi-chart-pie"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
                        color="purple-lighten-4"
+                       @click="scrollTokenomics()"
                 >
-                  {{ drawer ? 'Token Listings' : 'New Token Listings' }}
-                </v-btn>
-              </v-col>
-
-              <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-shape-plus"
-                       style="font-size: 0.7rem;width: 100%"
-                       color="purple-lighten-4"
-                >
-                  Games
-                </v-btn>
-              </v-col>
-            </v-row>
-
-            <v-row >
-              <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-music"
-                       style="font-size: 0.7rem;width: 100%"
-                       color="purple-lighten-4"
-                >
-                  Music
-                </v-btn>
-              </v-col>
-
-              <v-col cols="12" md="4" :align="'center'">
-                <v-btn prepend-icon="mdi-transit-connection-variant"
-                       style="font-size: 0.7rem;width: 100%"
-                       color="purple-lighten-4"
-                >
-                  Roadmap
+                  Tokenomics
                 </v-btn>
               </v-col>
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-layers-triple-outline"
-                       style="font-size: 0.7rem;width: 100%"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
                        color="purple-lighten-4"
                        @click="scrollToTiers()"
                 >
@@ -71,7 +44,77 @@
               </v-col>
             </v-row>
 
+            <v-row v-if="!isMobileDevice">
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-transit-connection-variant"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       color="purple-lighten-4"
+                       to="/roadmap"
+                >
+                  Roadmap
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-shape-plus"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       color="purple-lighten-4"
+                       to="/games"
+                >
+                  Games
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-music"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       color="purple-lighten-4"
+                       to="/music"
+                >
+                  Music
+                </v-btn>
+              </v-col>
+
+            </v-row>
+
+            <v-row v-if="!isMobileDevice">
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-view-dashboard"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       color="purple-lighten-4"
+                       to="/nfts"
+                >
+                  NFT Marketplace
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-image-multiple-outline"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       color="purple-lighten-4"
+                       to="/memes"
+                >
+                  Meme Marketplace
+                </v-btn>
+              </v-col>
+
+
+              <v-col cols="12" md="4" :align="'center'">
+                <v-btn prepend-icon="mdi-circle-multiple-outline"
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       color="purple-lighten-4"
+                       to="/tokens"
+                >
+                  {{ drawer ? 'Token Listings' : 'New Token Listings' }}
+                </v-btn>
+              </v-col>
+
+            </v-row>
+
           </v-col>
+
+          <!-- ########################## PRESALE FORM ############################ -->
 
           <v-col cols="12" md="6" :align="'center'">
 
@@ -122,7 +165,7 @@
 
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy EMAS with ETH</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
                     <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
@@ -142,6 +185,105 @@
           </v-col>
         </v-row>
       </v-img>
+        
+        <v-row class="ml-2 mr-2" v-if="isMobileDevice">
+          <v-col cols="6" :align="'center'">
+            <v-btn prepend-icon="mdi-stairs-up" stacked
+                    style="font-size: 0.8rem;width:100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    @click="scrollStages()"
+            >
+              Presale Stages
+            </v-btn>
+          </v-col>
+
+          <v-col cols="6" :align="'center'">
+            <v-btn prepend-icon="mdi-chart-pie" stacked
+                    style="font-size: 0.8rem;width:100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    @click="scrollTokenomics()"
+            >
+              Tokenomics
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-row class="ml-2 mr-2" v-if="isMobileDevice">
+          <v-col cols="6" md="6" :align="'center'">
+            <v-btn prepend-icon="mdi-layers-triple-outline" stacked
+                    style="font-size: 0.8rem;width:100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    @click="scrollToTiers()"
+            >
+              Tiers
+            </v-btn>
+          </v-col>
+
+          <v-col cols="6" md="6" :align="'center'">
+            <v-btn prepend-icon="mdi-circle-multiple-outline" stacked
+                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       color="purple-lighten-4"
+                       to="/tokens"
+                >
+                  New Token Listings
+                </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-row class="ml-2 mr-2" v-if="isMobileDevice">
+          <v-col cols="6" :align="'center'">
+            <v-btn prepend-icon="mdi-shape-plus" stacked
+                    style="font-size: 0.8rem;width:100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    to="/games"
+            >
+              Games
+            </v-btn>
+          </v-col>
+
+          <v-col cols="6" :align="'center'">
+            <v-btn prepend-icon="mdi-music" stacked
+                    style="font-size: 0.8rem;width:100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    to="/music"
+            >
+              Music
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-row class="ml-2 mr-2" v-if="isMobileDevice">
+          <v-col cols="6" :align="'center'">
+            <v-btn prepend-icon="mdi-view-dashboard" stacked
+                    style="font-size: 0.8rem;width:100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    to="/nfts"
+            >
+              NFT Marketplace
+            </v-btn>
+          </v-col>
+
+          <v-col cols="6" :align="'center'">
+            <v-btn prepend-icon="mdi-image-multiple-outline" stacked
+                    style="font-size: 0.8rem;width:100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    to="/memes"
+            >
+              Meme Marketplace
+            </v-btn>
+          </v-col>
+
+
+          <!-- <v-col cols="12" md="4" :align="'center'">
+            <v-btn prepend-icon="mdi-circle-multiple-outline"
+                    style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                    color="purple-lighten-4"
+                    to="/tokens"
+            >
+              {{ drawer ? 'Token Listings' : 'New Token Listings' }}
+            </v-btn>
+          </v-col> -->
+        </v-row>
 
       <!-- ######################################################################################## -->
       <!-- ###############################       WELCOME          ################################# -->
@@ -151,7 +293,7 @@
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
-              <div class="text-h3 ma-2 text-purple-lighten-3">WELCOME TO MEME MASTER 2023</div>
+              <div class="text-h4 ma-2 text-purple-lighten-3">WELCOME TO MEME MASTER 2023</div>
           </v-col>
         </v-row>
 
@@ -184,8 +326,8 @@
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
-              <div class="text-h3 ma-2 text-purple-lighten-3">HOW TO BUY</div>
-              <div class="text-h4 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>
+              <div class="text-h4 ma-2 text-purple-lighten-3">HOW TO BUY</div>
+              <div class="text-h5 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>
           </v-col>
         </v-row>
 
@@ -255,7 +397,7 @@
       <div id="buyoptions" style="background-color: #F3E5F5;padding-bottom: 16px;">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
-              <div class="text-h3 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>
+              <div class="text-h4 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>
           </v-col>
         </v-row>
 
@@ -362,8 +504,8 @@
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
-              <div class="text-h3 ma-2 text-purple-lighten-3">PRESALE STAGES</div>
-              <div class="text-h4 ma-2 text-white">Meme Master 2023 will have 3 Presale stages</div>
+              <div class="text-h4 ma-2 text-purple-lighten-3">PRESALE STAGES</div>
+              <div class="text-h5 ma-2 text-white">Meme Master 2023 will have 3 Presale stages</div>
           </v-col>
         </v-row>
 
@@ -477,7 +619,7 @@
           </v-col>
         </v-row>
 
-        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16'" >
           <v-col cols="12" md="4" :align="'center'">
               <div class="text-h5 ma-2 text-purple-lighten-3">HARD CAP</div>
               <div class="text-h6 ma-2 text-white">$4,345,000</div>
@@ -493,6 +635,19 @@
               <div class="text-h6 ma-2 text-white">14 days after stage 3 is completed</div>
           </v-col>
         </v-row>
+
+
+        <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2' : 'mt-2 mb-16'" >
+          <v-col cols="12" md="12" :align="'center'">
+
+            <div class="text-body-1 text-white">Each stage will end when either the tokens are sold out or the stage date has expired</div>
+            <div class="text-body-1 text-white">In the case of the tokens selling out before the stage date ends then the next stage will start immediately</div>
+            <div class="text-body-1 text-white">If the tokens are not sold out in any of the stages then all of the unsold tokens will be burnt after the presale has completed and before the listing</div>
+          
+          
+          </v-col>
+        </v-row>
+
       </div>
 
       <!-- ######################################################################################## -->
@@ -502,7 +657,7 @@
       <div id="tiers" style="background-color: #F3E5F5;padding-bottom: 16px;">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
-              <div class="text-h3 ma-2 text-purple-darken-3">MEME MASTER TIERS INFORMATION</div>
+              <div class="text-h4 ma-2 text-purple-darken-3">MEME MASTER TIERS INFORMATION</div>
               <div class="text-h5 ma-2 text-purple-darken-3">Holding token tiers will give more access and discounted entry to early new token listing,<br>new project releases, airdrops and much more.</div>
           </v-col>
         </v-row>
@@ -597,55 +752,58 @@
 
 
       <!-- ######################################################################################## -->
-      <!-- ###############################     PRESALE  DONATIONS     ############################# -->
+      <!-- ###############################     SECURITY AND AUDIT     ############################# -->
       <!-- ######################################################################################## -->
 
       <div id="donate" style="color: #FFF;">
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
-              <div class="text-h3 ma-2 text-purple-lighten-3">CONTRIBUTE</div>
-              <div class="text-h4 ma-2 text-white">Contribute to the Meme Master Project</div>
+              <div class="text-h4 ma-2 text-purple-lighten-3">KYC, AUDIT & SECURITY</div>
+              <div class="text-h5 ma-2 text-white">Meme Master has passed the KYC, AUDIT and is secured</div>
           </v-col>
         </v-row>
 
-        <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16'" >
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 pt-4' : 'ml-16 mr-16 pt-8'" >
 
-          <v-col cols="12" md="2" :align="'center'">
-          </v-col>
+            <v-col cols="12" md="6" :align="'center'">
+              <v-btn variant="text">
+                <img src="/img/logos/logo_audit.png" style="max-width:100px;cursor: pointer;" @click="gotoLink('https://coinsult.net/projects/mememaster/')" /> 
+              </v-btn>
+              <div class="text-h5 ma-2 text-white pt-12">Completed KYC Verification at Coinsult</div>
+              <div style="font-size: 16px;" class="text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Date: 26 July 2023 - Project Owner Identified</div>
+            </v-col>
 
-          <v-col cols="12" md="8" :align="'center'">
-            Donations text donations text text donations text text donations text text donations text text donations text text donations text<br><br>
-            Donations text donations text text donations text text donations text text donations text text donations text text donations text<br><br>
-            Donations text donations text text donations text text donations text text donations text text donations text text donations text<br><br>
-          </v-col>
-
-          <v-col cols="12" md="2" :align="'center'">
-          </v-col>
+            <v-col cols="12" md="6" :align="'center'">
+              <v-btn variant="text">
+                <img src="/img/logos/logo_audit.png" style="max-width:100px;cursor: pointer;"  @click="gotoLink('https://github.com/MemeMaster2023/MemeMaster2023_Coinsult_KYC-AUDIT/blob/main/Coinsult_MemeMaster2023_0xfe...1e72_Audit.pdf')"/> 
+              </v-btn>
+              <div class="text-h5 ma-2 text-white pt-12">Audited by Coinsult</div>
+              <div style="font-size: 16px;" class="text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Date: 26 July 2023 - Advanced Manual Smart Contract Audit</div>
+              <div style="font-size: 16px;" class="text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Contract: Oxfe82c0F9967c1D2BD18865F817103F004F172</div>
+            </v-col>
 
         </v-row>
 
-        <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16  mb-16'" >
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 pt-4' : 'ml-16 mr-16 pt-8'" >
 
-          <v-col cols="12" md="2" :align="'center'">
-          </v-col>
-
-          <v-col cols="12" md="4" :align="'center'">
-            <v-btn size="large" color="#360a3f" @click="handleShowDialog(true, 'donateEthDialog')">
-              DONATE ETH
+          <v-col cols="12" md="6" :align="'center'">
+            <v-btn variant="text">
+              <img src="/img/icons/token_security.png" style="max-width:80px;" @click="gotoLink('https://gopluslabs.io/token-security/1/0xfe82c0ff9967c1d2bd18865f817103f00e4f1e72')"/> 
             </v-btn>
+            <div class="text-h5 ma-2 text-white pt-12">100% Security by GoPlus</div>
+            <div style="font-size: 16px;" class="ma-2 text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Contract code fully audited by GoPlus and shown to be 100% secure</div>
           </v-col>
 
-          <v-col cols="12" md="4" :align="'center'">
-            <v-btn size="large" color="#360a3f" @click="handleShowDialog(true, 'donateUsdtDialog')">
-              DONATE USDT
+          <v-col cols="12" md="6" :align="'center'" >
+            <v-btn variant="text">
+              <img src="/img/icons/team_finance.png" style="max-width:80px;cursor: pointer;" @click="gotoLink('https://www.team.finance/view-coin/0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72?name=MemeMaster2023&symbol=EMAS&chainid=0x1')"/> 
             </v-btn>
+            <div class="text-h5 ma-2 text-white pt-12">Team Lockup</div>
+            <div style="font-size: 16px;" class="ma-2 text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Team Tokens locked for 2 years with Team Finance</div>
           </v-col>
 
-          <v-col cols="12" md="2" :align="'center'">
-          </v-col>
-
-          </v-row>
+        </v-row>
       </div>
 
 
@@ -653,11 +811,11 @@
       <!-- #####################################     TOKENOMICS      ############################## -->
       <!-- ######################################################################################## -->
 
-      <div id="tiers" style="background-color: #F3E5F5;padding-bottom: 16px;">
+      <div id="tokenomics" style="background-color: #F3E5F5;padding-bottom: 16px;">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
-              <div class="text-h3 ma-2 text-purple-darken-3">MEME MASTER TOKENOMICS</div>
-              <div class="text-h4 ma-2 text-purple-darken-3">Token distibution and information</div>
+              <div class="text-h4 ma-2 text-purple-darken-3">MEME MASTER TOKENOMICS</div>
+              <div class="text-h5 ma-2 text-purple-darken-3">Token distibution and information</div>
           </v-col>
         </v-row>
 
@@ -671,7 +829,7 @@
 
         <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-12 mr-12'" >
 
-          <v-col cols="12" md="4" :align="'center'">
+          <v-col cols="12" md="3" :align="'center'">
             <v-chip
               class="pa-6"
               label
@@ -685,7 +843,7 @@
             </v-chip>
           </v-col>
 
-          <v-col cols="12" md="4" :align="'center'">
+          <v-col cols="12" md="3" :align="'center'">
             <v-chip
               class="pa-6"
               label
@@ -695,12 +853,12 @@
               variant="outlined"
             >
              <v-icon size="28px" color="purple-darken-4" class="mr-4">mdi-circle-multiple-outline</v-icon>
-             <div v-if="!isMobileDevice" :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000 EMAS Tokens</div>
-             <div v-else :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000 EMAS</div>
+             <div v-if="!isMobileDevice" :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000</div>
+             <div v-else :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000</div>
             </v-chip>
           </v-col>
 
-          <v-col cols="12" md="4" :align="'center'">
+          <v-col cols="12" md="3" :align="'center'">
             <v-chip
               class="pa-6"
               label
@@ -712,7 +870,21 @@
             <v-icon color="green-lighten-2"><img
                         style="width: 32px;margin-left:5px;"
                         src="/img/logos/logo.png" alt="Icon" /></v-icon>
-              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1.3rem;font-weight:bold;margin-left:10px'">Symbol: EMAS</div>
+              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1.3rem;font-weight:bold;margin-left:15px'">Symbol: EMAS</div>
+            </v-chip>
+          </v-col>
+
+          <v-col cols="12" md="3" :align="'center'">
+            <v-chip
+              class="pa-6"
+              label
+              style="background-color: #dcb9ec;width:100%"
+              color="#4A148C"
+              size="x-large"
+              variant="outlined"
+            >
+              <v-icon size="28px" color="purple-darken-4" class="mr-4">mdi-lock-check</v-icon>
+              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1.3rem;font-weight:bold;margin-left:10px'">Team Tokens Locked</div>
             </v-chip>
           </v-col>
 
@@ -724,15 +896,15 @@
           <v-col cols="12" md="12" :align="'center'">
 
               <v-sheet
-                :class="isMobileDevice ? 'pa-2' : 'pa-8'"
+                :class="isMobileDevice ? 'pa-2' : 'pa-2'"
                 label
                 style="background-color: #dcb9ec;width:100%;border: #4A148C 1px solid;border-radius: 5px;"
                 color="#4A148C"
                 variant="outlined"
               >
-               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C' : 'font-size: 1.3rem;font-weight:bold;color:#4A148C'">Contract Address: 0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72</div><br>
-               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.3rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
-               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.3rem;font-weight:bold;color:#F44336'">We cannot return funds sent to this contract address.</div>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C' : 'font-size: 1.1rem;font-weight:bold;color:#4A148C'">Contract Address: 0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72</div><br>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.1rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.1rem;font-weight:bold;color:#F44336'">We cannot return funds sent to this contract address.</div>
               </v-sheet>
 
           </v-col>
@@ -921,7 +1093,7 @@
             <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <span class="text-white ml-4" style="font-size: 1.2rem">Buy EMAS with USDT</span>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Buy with USDT</span>
             <v-spacer></v-spacer>
             <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
               <v-icon>mdi-close</v-icon>
@@ -1226,12 +1398,35 @@ export default {
         firstScrollTo('#howtobuy', 500, { offset: -64 });
       }, 200);
     },
+    scrollStages () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#stages', 500, { offset: -64 });
+      }, 200);
+    },
     scrollToTiers () {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
         firstScrollTo('#tiers', 500, { offset: -64 });
       }, 200);
+    },
+    scrollTokenomics () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#tokenomics', 500, { offset: -64 });
+      }, 200);
+    },
+    gotoLink(link) {
+      window.open(link, "_blank");
+    },
+    gotoTokenLink() {
+      this.$emit("tokenLinkClicked")
+    },
+    gotoKYCLink() {
+      this.$emit("KYCLinkClicked")
     },
     handleShowDialog(isTop, dialogType) {
       const isConnected = this.mmConnected || this.walletConnected || this.twConnected;

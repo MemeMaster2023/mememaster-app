@@ -86,7 +86,7 @@
               color="transparent"
             >
               
-            <div style="font-size: 1.5rem;" class="ml-8 grow">{{ selectedCollection.name }} - Win EMAS points and convert to EMAS tokens</div>
+            <div style="font-size: 1.5rem;" class="ml-8 grow">{{ selectedCollection.name }}</div>
 
             <v-spacer></v-spacer>
               <v-btn
@@ -100,7 +100,8 @@
             </v-toolbar>
 
             <div style="font-size: 1rem;margin-left:32px;max-width:1000px;text-align: justify;" 
-                 class="text-wrap">{{ lookupImageAndSubtitle(selectedCollection.name).description }}
+                 class="text-wrap">{{ lookupImageAndSubtitle(selectedCollection.name).description }}<br><br>
+                 Win EMAS points and convert them into EMAS tokens.
             </div>
 
             <v-row class="ma-4">
