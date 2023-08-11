@@ -1120,6 +1120,9 @@ export default {
           endAngle: 180,
           donut: {
             size: '65%'
+          },
+          dataLabels: {
+            minAngleToShowLabel: 0
           }
         },
       },
