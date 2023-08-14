@@ -15,10 +15,10 @@
             <v-tooltip location="bottom" v-if="!isMobileDevice">
               <template v-slot:activator="{ props }">
                 <div class="text-center">
-                  <v-btn 
-                        class="mt-4" 
-                        size="large"  
-                        color="#360a3f" 
+                  <v-btn
+                        class="mt-4"
+                        size="large"
+                        color="#360a3f"
                         style="text-transform: none !important;color:#FFF"
                         v-bind="props"
                         prepend-icon="mdi-hand-coin-outline"
@@ -32,10 +32,10 @@
             </v-tooltip>
 
             <div class="text-center" v-else>
-              <v-btn 
-                    class="mt-4" 
-                    size="large"  
-                    color="#360a3f" 
+              <v-btn
+                    class="mt-4"
+                    size="large"
+                    color="#360a3f"
                     style="text-transform: none !important;color:#FFF"
                     prepend-icon="mdi-hand-coin-outline"
               >
@@ -195,13 +195,13 @@
 
                 </v-row>
 
-                <!-- handleShowDialog(true, 'buyWithEthDialog') handleShowDialog(true, 'buyWithUsdtDialog') -->
+                <!-- presaleNotLive -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -218,7 +218,7 @@
           </v-col>
         </v-row>
       </v-img>
-        
+
         <v-row class="ml-2 mr-2" v-if="isMobileDevice">
           <v-col cols="6" :align="'center'">
             <v-btn prepend-icon="mdi-stairs-up" stacked
@@ -676,8 +676,8 @@
             <div class="text-body-1 text-white">Each stage will end when either the tokens are sold out or the stage date has expired</div>
             <div class="text-body-1 text-white">In the case of the tokens selling out before the stage date ends then the next stage will start immediately</div>
             <div class="text-body-1 text-white">If the tokens are not sold out in any of the stages then all of the unsold tokens will be burnt after the presale has completed and before the listing</div>
-          
-          
+
+
           </v-col>
         </v-row>
 
@@ -801,7 +801,7 @@
 
             <v-col cols="12" md="6" :align="'center'">
               <v-btn variant="text">
-                <img src="/img/logos/logo_audit.png" style="max-width:100px;cursor: pointer;" @click="gotoLink('https://coinsult.net/projects/mememaster/')" /> 
+                <img src="/img/logos/logo_audit.png" style="max-width:100px;cursor: pointer;" @click="gotoLink('https://coinsult.net/projects/mememaster/')" />
               </v-btn>
               <div class="text-h5 ma-2 text-white pt-12">Completed KYC Verification at Coinsult</div>
               <div style="font-size: 16px;" class="text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Date: 26 July 2023 - Project Owner Identified</div>
@@ -809,7 +809,7 @@
 
             <v-col cols="12" md="6" :align="'center'">
               <v-btn variant="text">
-                <img src="/img/logos/logo_audit.png" style="max-width:100px;cursor: pointer;"  @click="gotoLink('https://github.com/MemeMaster2023/MemeMaster2023_Coinsult_KYC-AUDIT/blob/main/Coinsult_MemeMaster2023_0xfe...1e72_Audit.pdf')"/> 
+                <img src="/img/logos/logo_audit.png" style="max-width:100px;cursor: pointer;"  @click="gotoLink('https://github.com/MemeMaster2023/MemeMaster2023_Coinsult_KYC-AUDIT/blob/main/Coinsult_MemeMaster2023_0xfe...1e72_Audit.pdf')"/>
               </v-btn>
               <div class="text-h5 ma-2 text-white pt-12">Audited by Coinsult</div>
               <div style="font-size: 16px;" class="text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Date: 26 July 2023 - Advanced Manual Smart Contract Audit</div>
@@ -822,7 +822,7 @@
 
           <v-col cols="12" md="6" :align="'center'">
             <v-btn variant="text">
-              <img src="/img/icons/token_security.png" style="max-width:80px;" @click="gotoLink('https://gopluslabs.io/token-security/1/0xfe82c0ff9967c1d2bd18865f817103f00e4f1e72')"/> 
+              <img src="/img/icons/token_security.png" style="max-width:80px;" @click="gotoLink('https://gopluslabs.io/token-security/1/0xfe82c0ff9967c1d2bd18865f817103f00e4f1e72')"/>
             </v-btn>
             <div class="text-h5 ma-2 text-white pt-12">100% Security by GoPlus</div>
             <div style="font-size: 16px;" class="ma-2 text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Contract code fully audited by GoPlus and shown to be 100% secure</div>
@@ -830,7 +830,7 @@
 
           <v-col cols="12" md="6" :align="'center'" >
             <v-btn variant="text">
-              <img src="/img/icons/team_finance.png" style="max-width:80px;cursor: pointer;" @click="gotoLink('https://www.team.finance/view-coin/0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72?name=MemeMaster2023&symbol=EMAS&chainid=0x1')"/> 
+              <img src="/img/icons/team_finance.png" style="max-width:80px;cursor: pointer;" @click="gotoLink('https://www.team.finance/view-coin/0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72?name=MemeMaster2023&symbol=EMAS&chainid=0x1')"/>
             </v-btn>
             <div class="text-h5 ma-2 text-white pt-12">Team Lockup</div>
             <div style="font-size: 16px;" class="ma-2 text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Team Tokens locked for 2 years with Team Finance</div>
@@ -1338,9 +1338,11 @@
 <script>
 // @ is an alias to /src
 import store from '@/store/index'
+import axios from 'axios'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
+import MemeMasterAPI from '../../clients/MemeMasterAPI'
 export default {
   name: 'Presale',
   props: {
@@ -1357,6 +1359,8 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
+    ethPrice: 0,
+    usdtPrice: 0,
     amountEth: 0,
     amountUsdt: 0,
     presaleNotLive: false,
@@ -1368,6 +1372,7 @@ export default {
     donateEthDialog: false,
     donateUsdtDialog: false,
     showConfirmation: false,
+    getPriceInterval: null,
     panel: [0, 1, 2],
     series: [80, 5, 5, 3, 2.5, 2.5, 2],
     chartOptions: {
@@ -1473,6 +1478,16 @@ export default {
   created() {
     // this.currentUser = firebase.auth().currentUser;
     this.init()
+    this.getLastestPrice()
+    this.priceInterval = setInterval(() => {
+      this.getLastestPrice();
+    }, 6000);
+  },
+  beforeUnmount() {
+    if (this.priceInterval) {
+      console.log('clear interval');
+      clearInterval(this.priceInterval);
+    }
   },
   methods: {
     init () {
@@ -1534,6 +1549,13 @@ export default {
           this.connectWalletDialog = !isConnected;
         }, 500);
       }
+      this.instantiateContractAbi()
+    },
+    instantiateContractAbi() {
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi('0xe40EBEA4f123D0c359A440b90dC1b373B98A5ff2', import.meta.env.VITE_APP_ENVIRONMENT))
+        .then(result => {
+        console.log(result)
+      })
     },
     handleSuccess(e) {
         console.log(e);
@@ -1546,13 +1568,13 @@ export default {
     convertAmount(type,value) {
       switch (type) {
         case 'ethToEmas':
-          return this.amountEmasForEthDiagLog = value // Change this to the correct formula
+          return this.amountEmasForEthDiagLog = value * ( this.ethPrice / this.stage1 )
         case 'emasToEth':
-          return this.amountEth = value // Change this to the correct formula
+          return this.amountEth = value * ( this.stage1 / this.ethPrice )
         case 'usdtToEmas':
-          return this.amountEmasForUsdtDiagLog = value / this.stage1
+          return this.amountEmasForUsdtDiagLog = value * ( this.usdtPrice / this.stage1 )
         case 'emasToUsdt':
-          return this.amountUsdt = value * this.stage1
+          return this.amountUsdt = value * ( this.stage1 / this.usdtPrice )
         default:
           return 0;
       }
@@ -1564,6 +1586,21 @@ export default {
     },
     clearOnFocus(e) {
       if (this[e] == 0) this[e]= ''
+    },
+    async getLastestPrice() {
+      try {
+        // await axios.get(import.meta.env.VITE_APP_MM_API_LOCAL+'/getlastpricecoinmarketcap')
+        const response = await axios.get("http://localhost:6061/api/v1/getlastpricecoinmarketcap", {
+          params: {
+            "symbols": 'ETH,USDT'
+          }
+        });
+        const { ETH: ethData, USDT: usdtData } = response.data.data;
+        this.ethPrice = ethData.quote.USD.price;
+        this.usdtPrice = usdtData.quote.USD.price;
+      } catch (error) {
+        console.log('Get new price error', error);
+      }
     },
   }
 }

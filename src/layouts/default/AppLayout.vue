@@ -508,6 +508,8 @@
       <WalletConnect v-show="false" ref="walletConnectref" >
       </WalletConnect>
 
+      <!-- language switcher -->
+
       <v-img v-if="!drawer"
         @click.stop="drawer = !drawer"
         src="/img/icons/menu.png"

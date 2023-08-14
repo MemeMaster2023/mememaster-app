@@ -7,6 +7,9 @@ import axios from 'axios'
 // Production Server
 // const MORALIS_API = 'http://209.58.172.141:3000/api/'
 //
+const ETH_API = 'https://api.etherscan.io/api'
+const ETH_API_KEY = '314RG94N1QX2JDBBVFG5T5RFJT23H6GKCV'
+const GOERLI_API = 'https://api-goerli.etherscan.io/api'
 const MORALIS_API = 'https://deep-index.moralis.io/api/v2/'
 const environment = import.meta.env.VITE_APP_ENVIRONMENT;
 var MEME_MASTER_API;
@@ -236,8 +239,33 @@ class MemeMasterAPI {
         console.log(e)
       })
   }
+  // ###################################################################################
+  // ############################# INSTANTIATE CONTRACT  ###############################
+  // ###################################################################################
 
+  instantiateContractAbi (contractAddress, network) {
 
+    let API_LINK
+    if (network === 'production') {
+      API_LINK = ETH_API
+    } else {
+      API_LINK = GOERLI_API
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+        // 'X-Authentication': token
+      }
+    }
+    return axios.post(API_LINK + '?module=contract&action=getabi&address=' + contractAddress + '&apikey=' + ETH_API_KEY, config)
+      .then(response => {
+        // console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
   
 }
 export default new MemeMasterAPI()
