@@ -27,6 +27,7 @@ import VueHtml2Canvas from 'vue-html2canvas';
 import VueClipboard from 'vue3-clipboard'
 import Vue3VideoPlayer from '@cloudgeek/vue3-video-player';
 import '@cloudgeek/vue3-video-player/dist/vue3-video-player.css';
+import VueApexCharts from 'vue3-apexcharts'
 // import Jazzicon from 'vue3-jazzicon/src/components';
 
 const app = createApp(App)
@@ -61,6 +62,8 @@ app.use(VueClipboard, {
 app.use(Vue3VideoPlayer, {
     lang: 'en',
 })
+app.use(VueApexCharts)
+
 registerPlugins(app)
 
 app.mount('#app')

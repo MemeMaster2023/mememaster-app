@@ -11,7 +11,7 @@
                 indeterminate
                 color="deep-purple-darken-2"
               ></v-progress-circular>
-              <div class="text-h6 mt-2 blue--text">Loading drafts...</div>
+              <div class="text-h6 mt-2 blue--text">Loading drafts......</div>
           </v-col>
         </v-row>
       

@@ -88,23 +88,18 @@
     
       <v-spacer></v-spacer>
 
-      <v-tooltip location="top" v-if="isMobileDevice">
-        <template v-slot:activator="{ props }">
-          <v-btn 
-            variant="outlined"
-            style="margin-left:5px;"
-            color="white"
-            theme="dark"
-            v-bind="props"
-            prepend-icon="mdi-tag-outline"
-            :style="isMobileDevice ? 'width:45%' : 'width:100%'"
-          >
-            Presale
-          </v-btn>
-        </template>
-        <span>Presale coming soon, follow our social media channels below for details...
-        </span>
-      </v-tooltip>
+      <v-btn v-if="isMobileDevice"
+        variant="outlined"
+        style="margin-left:5px;"
+        color="white"
+        theme="dark"
+        v-bind="props"
+        prepend-icon="mdi-tag-outline"
+        :style="isMobileDevice ? 'width:45%' : 'width:100%'"
+        to="/presale"
+      >
+        Presale
+      </v-btn>
 
       <v-spacer></v-spacer>
 
@@ -268,29 +263,6 @@
       class="pa-2"
   >
 
-    <!--<v-layout >
-      <v-btn class="menuText" text @click.stop="routerGo('/')">{{ 'HOME' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'PRODUCT' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'FAQ' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'ABOUT' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'CONTACT' }}</v-btn>
-      <span class="menuText" style="margin-top:2px">|</span>
-      <v-btn class="menuText" text @click.stop="routerGo('/schedule')">{{ 'LOGIN' }}</v-btn>
-
-                <span style="margin-top: 5px" v-if="isUserLogin">|</span>
-      <v-btn @click="signOut" text v-if="isUserLogin">{{ lang[getLanguage].SIGN_OUT }}</v-btn>
-    </v-layout> -->
-
-
-      <!-- <v-img
-        src="/img/logos/mememaster_logo_color.png"
-        :style="isMobileDevice ? 'min-height: 50px; min-width: 236px;cursor: pointer;' : 'max-height: 64px; max-width: 300px;cursor: pointer;'"
-        @click="routerGo('/')"
-      ></v-img> -->
       <v-img v-if="!isMobileDevice"
         src="/img/logos/mememaster_logo.png"
         style="max-height: 62px; max-width: 300px;min-height: 62px; min-width: 300px;cursor: pointer;"
@@ -304,7 +276,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!drawer && env && (!mmConnected && !twConnected && !emailConnected && !walletConnected)"
+      <v-btn v-if="!drawer && env && (!mmConnected && !twConnected && !emailConnected && !walletConnected) && $router.currentRoute.value.path !== '/presale'"
         style="margin-right:10px;margin-top:-5px"
         variant="outlined"
         color="white"
@@ -456,7 +428,7 @@
         Generate
       </v-btn>
 
-      <v-tooltip location="top">
+      <v-tooltip location="top" v-if="$router.currentRoute.value.path !== '/presale'">
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && !isMobileDevice"
             style="margin-right:10px;margin-top:-5px"
@@ -466,6 +438,7 @@
             v-bind="props"
             size="small"
             prepend-icon="mdi-tag-outline"
+            to="/presale"
           >
             Presale
           </v-btn>
@@ -480,7 +453,7 @@
         color="white"
         theme="dark"
         size="small"
-        @click="gotoKYCLink('')"
+        @click="gotoKYCLink()"
       >
         <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:10px"/> 
         KYC - AUDIT
@@ -493,7 +466,7 @@
             variant="outlined"
             color="white"
             theme="dark"
-            @click="gotoTokenLink('')"
+            @click="gotoTokenLink()"
             v-bind="props"
             size="small"
           >
@@ -541,7 +514,14 @@
         :style="isMobileDevice ? 'max-height: 35px; max-width: 35px;margin-right:10px;cursor: pointer;' :  'margin-top: -5px;max-height: 35px; max-width: 35px;margin-right:20px;cursor: pointer;'"
       ></v-img>
 
+      <div v-if="!drawer && !isMobileDevice && $router.currentRoute.value.path !== '/presale'"
+           style="color:#FFF;position: fixed;right:85px;top:55px"
+      >
+       Please use the menu on the top right to access the main features of the platform
+      </div>
+      
   </v-app-bar>
+
 
   <!-- DIALOGS AND COMPONENTS-->
   <v-dialog v-if="!mmConnected || !walletConnected || !twConnected"
@@ -917,18 +897,8 @@ export default {
     },
     computed: {
       getUser () {
-        console.log(this.$store.state.user);
-        // if(!this.emailConnected) {
-        //   return store.state.user 
-        // }
         return store.state.user 
-
-        //return store.state.auth.persistentUser
       },
-      // persistentUser() {
-      //   console.log(store.state.auth.persistentUser)
-      //   return store.state.auth.persistentUser;
-      // },
       gravatar () {
         return this.$store.state.user.gravatar
       },
@@ -1064,6 +1034,9 @@ export default {
         this.$router.push(route);
         this.drawer = false
       },
+      connectWalletDialogClicked () {
+        this.connectWalletDialog = true
+      },
       openWhitePaper() {
         // console.log('wpClicked')
         this.$emit("wpClicked")
@@ -1093,7 +1066,7 @@ export default {
         this.$emit("tokenLinkClicked")
       },
       gotoLink(link) {
-        console.log('button clicked')
+        // console.log('button clicked')
         window.open(link, "_blank");
       },
       gotoContact () {

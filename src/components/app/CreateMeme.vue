@@ -1355,8 +1355,8 @@ export default {
       this.promptGuideDialog = true
     },
     async startMemeGeneration () {
-      // console.log(this.toUpload)
-      if (this.toUpload && this.uploadImageUrl !== '') {
+      console.log(this.toUpload)
+      if (this.uploadImageUrl !== '') {
         this.startImagetoImageGeneration()
         return
       }
