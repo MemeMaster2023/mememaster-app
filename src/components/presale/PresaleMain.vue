@@ -8,11 +8,43 @@
       >
 
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
-          <v-col cols="12" md="6" >
+          <v-col cols="12" md="6" class="order-last order-md-first">
             <div class="text-h4 ma-2 text-white">Meme Master Presale is starting soon!</div>
-            <div style="text-align: justify;" class="text-h6 ma-2 pt-4 text-white">The Meme Master 2023 Presale is just around the corner, and we can't wait to share this epic journey with you! Get ready to join the revolution of creativity as we launch our exclusive Presale event in August 2023. <br><br>We're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect Memes music and NFTs, interact with our games, find new projects on our new token listing platform and a host of the features that are in development, please check out the information below including our roadmap, video and tier offers for more information.</div>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 pt-4 text-white font-weight-medium">The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET (10pm UTC). Get ready to join the revolution of creativity!<br><br>We're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect Memes music and NFTs, interact with our games, find new projects on our new token listing platform and a host of the features that are in development, please check out the information below including our roadmap, video and tier offers for more information.</div>
 
-            <v-row  class="mt-14" v-if="!isMobileDevice">
+            <v-tooltip location="bottom" v-if="!isMobileDevice">
+              <template v-slot:activator="{ props }">
+                <div class="text-center">
+                  <v-btn 
+                        class="mt-4" 
+                        size="large"  
+                        color="#360a3f" 
+                        style="text-transform: none !important;color:#FFF"
+                        v-bind="props"
+                        prepend-icon="mdi-hand-coin-outline"
+                  >
+                    Claim Your Meme Master Tokens
+                  </v-btn>
+                </div>
+              </template>
+              <span>Claiming will be available 14 days after the presale ends
+              </span>
+            </v-tooltip>
+
+            <div class="text-center" v-else>
+              <v-btn 
+                    class="mt-4" 
+                    size="large"  
+                    color="#360a3f" 
+                    style="text-transform: none !important;color:#FFF"
+                    prepend-icon="mdi-hand-coin-outline"
+              >
+                Claim Your Meme Master Tokens
+              </v-btn>
+              <div style="font-size: 0.8rem;color:#FFF">Claiming will be available 14 days after the presale ends</div>
+            </div>
+
+            <v-row  class="mt-4" v-if="!isMobileDevice">
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-stairs-up"
                        style="font-size: 0.8rem;width: 100%;font-weight: bold;"
@@ -116,13 +148,13 @@
 
           <!-- ########################## PRESALE FORM ############################ -->
 
-          <v-col cols="12" md="6" :align="'center'">
+          <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-8' : ''">
 
             <v-card theme="dark" color="#FFF" :max-width="isMobileDevice ? '100%' : '70%'" height="100%">
               <v-toolbar
                 color="#360a3f"
               >
-               <v-toolbar-title>Presale Stage 1</v-toolbar-title>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>$0.005</v-toolbar-title>
               </v-toolbar>
@@ -130,7 +162,7 @@
 
                 <div class="pt-4 text-h5 ma-2 text-black">Aug 2023 - Sept 2023</div>
                 <div class="text-h6 ma-2 text-black">1 EMAS = $0.005</div>
-                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0061</div>
+                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0055</div>
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
@@ -143,8 +175,8 @@
                   </v-progress-linear>
                 </v-layout>
 
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 120,000,000 / 350,000,000</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $600,000 / $1,750,000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 0 / 350,000,000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $0.00 / $1,750,000</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -902,9 +934,22 @@
                 color="#4A148C"
                 variant="outlined"
               >
-               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C' : 'font-size: 1.1rem;font-weight:bold;color:#4A148C'">Contract Address: 0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72</div><br>
-               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.1rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
-               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336' : 'font-size: 1.1rem;font-weight:bold;color:#F44336'">We cannot return funds sent to this contract address.</div>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
+                    v-clipboard:copy.stop="0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72"
+                    v-clipboard:success="handleSuccess"
+                    v-clipboard:error="handleError"
+                >EMAS Contract Address: 0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72</div>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
+                    v-clipboard:copy.stop="0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859"
+                    v-clipboard:success="handleSuccess"
+                    v-clipboard:error="handleError"
+                >EMAS Team Token Lockup Address: 0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859</div>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
+                    v-clipboard:copy.stop="0x000000000000000000000000000000000000dEaD"
+                    v-clipboard:success="handleSuccess"
+                    v-clipboard:error="handleError">EMAS Burn Address: 0x0000000000000......0000000000000dEaD</div><br>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336;font-size: 1rem;' : 'font-size: 1rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
+               <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336;font-size: 1rem;' : 'font-size: 1rem;font-weight:bold;color:#F44336'">We cannot return funds sent to this contract address.</div>
               </v-sheet>
 
           </v-col>
@@ -1154,6 +1199,26 @@
         </v-card>
       </v-dialog>
 
+      <!-- DIALOG TEMP PRESALE NOT LIVE -->
+      <v-dialog v-model="presaleNotLive" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
+        :min-width="isMobileDevice ? 300 : 500" max-width="600">
+        <v-card height="100%" color="#F3E5F5">
+          <v-toolbar color="#241d43">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="presaleNotLive = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Presale is starting soon!</span>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="presaleNotLive = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text class="text-h6 ma-8">
+             The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET (10pm UTC).
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
       <!-- DIALOG donateEthDialog -->
       <v-dialog v-model="donateEthDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
@@ -1244,6 +1309,27 @@
         </v-card>
       </v-dialog>
 
+      <!-- ############################## SNACKBARS ####################################### -->
+     <v-snackbar
+        v-model="snackbar"
+        :timeout="4000"
+      >
+      <v-layout>
+        <v-icon color="green" class="mr-2">mdi-check-circle-outline</v-icon>
+        {{ snackbarText }}
+      </v-layout>
+
+        <template v-slot:actions>
+          <v-btn
+            color="pink"
+            variant="text"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
     </v-responsive>
   </div>
 </template>
@@ -1265,11 +1351,14 @@ export default {
   },
   data: () => ({
     loading: false,
+    snackbar: false,
+    snackbarText: '',
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
     amountEth: 0,
     amountUsdt: 0,
+    presaleNotLive: false,
     amountEmasForUsdtDiagLog: 0,
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
@@ -1445,6 +1534,14 @@ export default {
         }, 500);
       }
     },
+    handleSuccess(e) {
+        console.log(e);
+        this.snackbarText = 'Address copied to clipboard'
+        this.snackbar = true
+      },
+      handleError(e) {
+        console.log(e);
+      },
     convertAmount(type,value) {
       switch (type) {
         case 'ethToEmas':

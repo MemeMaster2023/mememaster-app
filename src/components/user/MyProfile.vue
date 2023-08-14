@@ -555,6 +555,8 @@ export default {
         // console.log(snapshot)
         if (snapshot.empty) {
           emailInUse = false
+          // Validate Email Process
+
         } else {
           emailInUse = true
           this.showEmailAlertDialog = true
