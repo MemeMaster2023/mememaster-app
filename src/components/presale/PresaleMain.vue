@@ -195,13 +195,13 @@
 
                 </v-row>
 
-                <!-- handleShowDialog(true, 'buyWithEthDialog') handleShowDialog(true, 'buyWithUsdtDialog') -->
+                <!-- presaleNotLive -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -1341,6 +1341,7 @@ import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
+import MemeMasterAPI from '../../clients/MemeMasterAPI'
 export default {
   name: 'Presale',
   props: {
@@ -1534,6 +1535,13 @@ export default {
           this.connectWalletDialog = !isConnected;
         }, 500);
       }
+      this.instantiateContractAbi()
+    },
+    instantiateContractAbi() {
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi('0xe40EBEA4f123D0c359A440b90dC1b373B98A5ff2', import.meta.env.VITE_APP_ENVIRONMENT))
+        .then(result => {
+        console.log(result)
+      })
     },
     handleSuccess(e) {
         console.log(e);
