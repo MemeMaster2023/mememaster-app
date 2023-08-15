@@ -478,11 +478,12 @@
         </span>
       </v-tooltip>
 
+     <!-- language switcher -->
       <div class="text-center">
         <v-menu>
           <template v-slot:activator="{ props }">
             <v-btn
-              style="margin-top:-5px"
+              style="margin-top:-6px"
               class="mr-5"
               color="white"
               theme="dark"
@@ -494,11 +495,11 @@
                 <v-avatar size="16" class="mr-2">
                   <v-img :src="getFlag(lang)"></v-img>
                 </v-avatar>
-                {{ getFullWord(lang) }}
+                {{ lang }}
               </div>
             </v-btn>
           </template>
-          <v-list>
+          <v-list style="background-color: #dddddd;"  class="mt-2 mb-2">
             <v-list-item
               v-for="(item, index) in languages"
               :key="index"
@@ -506,7 +507,7 @@
             >
               <v-list-item-title @click="changeLanguage(item)">
                 <div class="d-flex">
-                  <v-avatar size="16" class="mr-2">
+                  <v-avatar size="16" class="mr-2" style="margin-top: 4px;">
                     <v-img :src="getFlag(item)"></v-img>
                   </v-avatar>
                   {{ getFullWord(item) }}
@@ -545,8 +546,6 @@
 
       <WalletConnect v-show="false" ref="walletConnectref" >
       </WalletConnect>
-
-      <!-- language switcher -->
 
       <v-img v-if="!drawer"
         @click.stop="drawer = !drawer"

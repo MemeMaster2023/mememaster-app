@@ -1552,9 +1552,9 @@ export default {
       this.instantiateContractAbi()
     },
     instantiateContractAbi() {
-      Promise.resolve(MemeMasterAPI.instantiateContractAbi('0xe40EBEA4f123D0c359A440b90dC1b373B98A5ff2', import.meta.env.VITE_APP_ENVIRONMENT))
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi('0x932C2E35793A0470d3F8bEb45E67A0A680096eD5', import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
-        console.log(result)
+        console.log(result.data.result)
       })
     },
     handleSuccess(e) {
@@ -1588,9 +1588,15 @@ export default {
       if (this[e] == 0) this[e]= ''
     },
     async getLastestPrice() {
+      var url
+      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+        url = import.meta.env.VITE_APP_MM
+      } else {
+        url = import.meta.env.VITE_APP_MM_TEST
+      }
       try {
         // await axios.get(import.meta.env.VITE_APP_MM_API_LOCAL+'/getlastpricecoinmarketcap')
-        const response = await axios.get("http://localhost:6061/api/v1/getlastpricecoinmarketcap", {
+        const response = await axios.get(url + "api/v1/getlastpricecoinmarketcap", {
           params: {
             "symbols": 'ETH,USDT'
           }
