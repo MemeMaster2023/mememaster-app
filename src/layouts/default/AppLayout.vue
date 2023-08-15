@@ -506,7 +506,7 @@
               :value="index"
             >
               <v-list-item-title @click="changeLanguage(item)">
-                <div class="d-flex">
+                <div class="d-flex whitelist-translation">
                   <v-avatar size="16" class="mr-2" style="margin-top: 4px;">
                     <v-img :src="getFlag(item)"></v-img>
                   </v-avatar>
@@ -1300,6 +1300,18 @@ export default {
         if(lang === 'en')
         {
           countryCode = 'gb'
+        }
+        if(lang === 'zh')
+        {
+          countryCode = 'cn'
+        }
+        if(lang === 'ar')
+        {
+          countryCode = 'sa'
+        }
+        if(lang === 'ko')
+        {
+          countryCode = 'kr'
         }
         console.log(`https://cdn.weglot.com/flags/circle/${countryCode}.svg`);
         return `https://cdn.weglot.com/flags/circle/${countryCode}.svg`
