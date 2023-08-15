@@ -195,7 +195,7 @@
 
                 </v-row>
 
-                <!-- handleShowDialog(true, 'buyWithEthDialog') handleShowDialog(true, 'buyWithUsdtDialog')  -->
+                <!--  handleShowDialog(true, 'buyWithEthDialog')    handleShowDialog(true, 'buyWithUsdtDialog')-->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
@@ -218,6 +218,7 @@
           </v-col>
         </v-row>
       </v-img>
+
         <v-row class="ml-2 mr-2" v-if="isMobileDevice">
           <v-col cols="6" :align="'center'">
             <v-btn prepend-icon="mdi-stairs-up" stacked
@@ -810,6 +811,9 @@
               <v-btn variant="text">
                 <img src="/img/logos/logo_audit.png" style="max-width:100px;cursor: pointer;"  @click="gotoLink('https://github.com/MemeMaster2023/MemeMaster2023_Coinsult_KYC-AUDIT/blob/main/Coinsult_MemeMaster2023_0xfe...1e72_Audit.pdf')"/>
               </v-btn>
+              <div class="text-h5 ma-2 text-white pt-12">Audited by Coinsult</div>
+              <div style="font-size: 16px;" class="text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Date: 26 July 2023 - Advanced Manual Smart Contract Audit</div>
+              <div style="font-size: 16px;" class="text-white"><v-icon style="margin-top:-5px" size="small" color="green">mdi-check</v-icon>Contract: Oxfe82c0F9967c1D2BD18865F817103F004F172</div>
             </v-col>
 
         </v-row>
@@ -1369,6 +1373,9 @@ export default {
     donateUsdtDialog: false,
     showConfirmation: false,
     getPriceInterval: null,
+    panel: [0, 1, 2],
+    series: [80, 5, 5, 3, 2.5, 2.5, 2],
+    chartOptions: {
       labels: ['Presale / project and liquidity', 'Dev', 'Community programs / bonuses', 'Gaming bonuses', 'Marketing', 'Future CEX listings', 'Team locked for 2 years'],
       chart: {
         width: 600,
@@ -1419,6 +1426,7 @@ export default {
           }
         }
       }]
+    },
   }),
   components: {
     MetaMaskConnect,
@@ -1582,13 +1590,13 @@ export default {
     async getLastestPrice() {
       var url
       if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-        url = import.meta.env.VITE_APP_MM
+        url = import.meta.env.VITE_APP_MM_API
       } else {
-        url = import.meta.env.VITE_APP_MM_TEST
+        url = import.meta.env.VITE_APP_MM_TEST_API
       }
       try {
         // await axios.get(import.meta.env.VITE_APP_MM_API_LOCAL+'/getlastpricecoinmarketcap')
-        const response = await axios.get(url + "api/v1/getlastpricecoinmarketcap", {
+        const response = await axios.get(url + "getlastpricecoinmarketcap", {
           params: {
             "symbols": 'ETH,USDT'
           }
