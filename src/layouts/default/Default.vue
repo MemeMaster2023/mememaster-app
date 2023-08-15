@@ -38,7 +38,7 @@
   }
   function mmMobileClicked() {
     // console.log('mmMobileClicked Received')
-    window.open('https://metamask.app.link/dapp/testnet.mememaster.app/mmobile', '_blank');
+    window.open('https://metamask.app.link/dapp/mememaster.app/mmobile', '_blank');
   }
   function teamLinkClicked() {
     // console.log('teamLinkClicked Received')
