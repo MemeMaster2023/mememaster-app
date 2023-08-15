@@ -269,7 +269,7 @@
       ></v-img>
       <v-img v-if="isMobileDevice"
         src="/img/logos/logo.png"
-        :style="!drawer ? 'min-height: 50px; min-width: 50px;cursor: pointer;margin-left: -20px;' : 'min-height: 50px; min-width: 50px;cursor: pointer;'"
+        :style="!drawer ? 'min-height: 50px; min-width: 50px;cursor: pointer;' : 'min-height: 50px; min-width: 50px;cursor: pointer;'"
         @click="routerGo('/')"
       ></v-img>
 

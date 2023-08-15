@@ -195,13 +195,13 @@
 
                 </v-row>
 
-                <!-- presaleNotLive -->
+                <!--  handleShowDialog(true, 'buyWithEthDialog')    handleShowDialog(true, 'buyWithUsdtDialog')-->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -1590,13 +1590,13 @@ export default {
     async getLastestPrice() {
       var url
       if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-        url = import.meta.env.VITE_APP_MM
+        url = import.meta.env.VITE_APP_MM_API
       } else {
-        url = import.meta.env.VITE_APP_MM_TEST
+        url = import.meta.env.VITE_APP_MM_TEST_API
       }
       try {
         // await axios.get(import.meta.env.VITE_APP_MM_API_LOCAL+'/getlastpricecoinmarketcap')
-        const response = await axios.get(url + "api/v1/getlastpricecoinmarketcap", {
+        const response = await axios.get(url + "getlastpricecoinmarketcap", {
           params: {
             "symbols": 'ETH,USDT'
           }
