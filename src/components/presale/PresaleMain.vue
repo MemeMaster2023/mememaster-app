@@ -210,7 +210,7 @@
                     <v-btn size="large" style="width:100%" @click="scrollToHowToBuy()">How to Buy</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn size="large" style="width:100%">New to Crypto</v-btn>
+                    <v-btn size="large" style="width:100%" @click="scrollToNewToCrypto()">New to Crypto</v-btn>
                   </v-col>
                 </v-row>
 
@@ -959,6 +959,114 @@
 
       </div>
 
+      <!-- ######################################################################################## -->
+      <!-- #####################################     NEW TO CRYPTO      ############################## -->
+      <!-- ######################################################################################## -->
+
+      <div id="newtocrypto" style="padding-bottom: 16px;">
+        <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
+          <v-col cols="12" md="12" :align="'center'" class="mt-4">
+            <div class="text-h4 ma-2 text-purple-lighten-3">NEW TO CRYPTO</div>
+          </v-col>
+        </v-row>
+        <v-form @submit.prevent="sendContactForm()" ref="newCryptoForm">
+          <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'" style="color: #fff;">
+            <v-col cols="12" md="6">
+              <v-row>
+                <v-col cols="12" md="12">
+                  <v-text-field
+                    label="First Name"
+                    class="mt-2"
+                    variant="outlined"
+                    v-model="firstName"
+                    :rules="rules"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-select
+                    label="Country Code"
+                    return-object
+                    :items="countriesCode"
+                    item-title="name"
+                    item-value="id"
+                    v-model="countryCodeSelected"
+                    variant="outlined"
+                    class="mt-2"
+                    theme="dark"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" md="8">
+                  <v-text-field
+                    label="Phone number or Email"
+                    class="mt-2"
+                    variant="outlined"
+                    v-model="phoneOrEmail"
+                    :rules="rules"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" md="12">
+                  <v-select
+                    label="Investment Budget"
+                    return-object
+                    :items="investmentBudgets"
+                    item-title="name"
+                    item-value="id"
+                    v-model="investmentBudgetSelected"
+                    variant="outlined"
+                    class="mt-2"
+                    theme="dark"
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-row>
+                <v-col cols="12" md="12">
+                  <v-text-field
+                    label="Last Name"
+                    class="mt-2"
+                    variant="outlined"
+                    v-model="lastName"
+                    :rules="rules"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" md="12">
+                  <v-select
+                    label="Best Time To Contact"
+                    return-object
+                    :items="bestTimeToContacts"
+                    item-title="name"
+                    item-value="id"
+                    v-model="bestTimeToContactSelected"
+                    variant="outlined"
+                    class="mt-2"
+                    theme="dark"
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'">
+            <v-col :align="'center'" cols="12" md="4" style="margin: 0 auto;">
+              <v-btn
+                style="color:#FFF; width: 100%;"
+                variant="elevated"
+                color="#360a3f"
+                size="large"
+                class="font-weight-bold mb-2"
+                type="submit"
+              >
+                Send Message
+              </v-btn>
+              <v-space></v-space>
+            </v-col>
+          </v-row>
+        </v-form>
+      </div>
 
       <!-- ######################################################################################## -->
       <!-- ############################     DIALOGS AND COMPONENTS   ###############################-->
@@ -1373,6 +1481,85 @@ export default {
     donateUsdtDialog: false,
     showConfirmation: false,
     getPriceInterval: null,
+    firstName: '',
+    lastName: '',
+    phoneOrEmail: '',
+    investmentBudgetSelected: { id: 0, name: '0$ - 5k$'},
+    bestTimeToContactSelected: { id: 0, name: 'Morning'},
+    countryCodeSelected: { id: 0, name: '+1'},
+    investmentBudgets: [
+      {
+        id: 0,
+        name: '0$ - 5k$'
+      },
+      {
+        id: 1,
+        name: '5k$ - 10k$'
+      },
+      {
+        id: 2,
+        name: '10k$ - 20k$'
+      },
+      {
+        id: 3,
+        name: '20k$ - 50k$'
+      }
+    ],
+    bestTimeToContacts: [
+      {
+        id: 0,
+        name: 'Morning'
+      },
+      {
+        id: 1,
+        name: 'Afternoon'
+      },
+      {
+        id: 2,
+        name: 'Evening'
+      },
+    ],
+    countriesCode: [
+      {
+        id: 0,
+        name: '+1',
+      },
+      {
+        id: 1,
+        name: '+49',
+      },
+      {
+        id: 2,
+        name: '+33',
+      },
+      {
+        id: 3,
+        name: '+61',
+      },
+      {
+        id: 4,
+        name: '+852',
+      },
+      {
+        id: 5,
+        name: '+81',
+      },
+      {
+        id: 3,
+        name: '+82',
+      },
+      {
+        id: 4,
+        name: '+86',
+      },
+      {
+        id: 5,
+        name: '+44',
+      },
+    ],
+    rules: [
+      v => !!v || 'This field is required',
+    ],
     panel: [0, 1, 2],
     series: [80, 5, 5, 3, 2.5, 2.5, 2],
     chartOptions: {
@@ -1524,6 +1711,13 @@ export default {
         firstScrollTo('#tokenomics', 500, { offset: -64 });
       }, 200);
     },
+    scrollToNewToCrypto () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#newtocrypto', 500, { offset: -64 });
+      }, 200);
+    },
     gotoLink(link) {
       window.open(link, "_blank");
     },
@@ -1608,6 +1802,37 @@ export default {
         console.log('Get new price error', error);
       }
     },
+    async sendContactForm() {
+      const isValid = await this.$refs.newCryptoForm.validate()
+      if (isValid.valid) {
+        const { firstName, lastName, phoneOrEmail, investmentBudgetSelected, bestTimeToContactSelected, countryCodeSelected } = this
+        const payload = {
+          firstName,
+          lastName,
+          phoneOrEmail,
+          investmentBudget: investmentBudgetSelected?.name,
+          bestTimeToContact: bestTimeToContactSelected?.name,
+          countryCode: countryCodeSelected?.name,
+        }
+
+        this.$store.dispatch('createMessage', payload).then(() => {
+          this.snackbarText = 'Send message success'
+          this.snackbar = true
+          this.clearForm()
+        })
+          .catch((error) => {
+            this.snackbarText = 'Send message error - please try again later'
+            this.snackbar = true
+            console.log(error)
+          })
+      }
+    },
+    clearForm() {
+      this.$refs.newCryptoForm.reset()
+      this.investmentBudgetSelected = { id: 0, name: '0$ - 5k$' }
+      this.bestTimeToContactSelected = { id: 0, name: 'Morning' }
+      this.countryCodeSelected = { id: 0, name: '+1' }
+    }
   }
 }
 </script>

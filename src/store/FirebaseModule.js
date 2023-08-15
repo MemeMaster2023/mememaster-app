@@ -642,6 +642,19 @@ const FirebaseModule = {
       .catch(error => {
           console.log(error)
         })
+    },
+    createMessage ({ commit }, payload) {
+      commit("setLoading", true);
+      var newkey = db.collection("messages").doc().id;
+      db.collection("messages")
+        .doc(newkey)
+        .set(payload)
+        .then(() => {
+          // console.log('Message created')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   },
   getters: {
