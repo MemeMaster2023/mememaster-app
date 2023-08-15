@@ -963,14 +963,14 @@
       <!-- #####################################     NEW TO CRYPTO      ############################## -->
       <!-- ######################################################################################## -->
 
-      <div id="newtocrypto" style="padding-bottom: 16px;">
+      <div id="newtocrypto">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-4">
             <div class="text-h4 ma-2 text-purple-lighten-3">NEW TO CRYPTO</div>
           </v-col>
         </v-row>
         <v-form @submit.prevent="sendContactForm()" ref="newCryptoForm">
-          <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'" style="color: #fff;">
+          <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16'" style="color: #fff;">
             <v-col cols="12" md="6">
               <v-row>
                 <v-col cols="12" md="12">
@@ -980,6 +980,7 @@
                     variant="outlined"
                     v-model="firstName"
                     :rules="rules"
+                    tabindex="1"
                   >
                   </v-text-field>
                 </v-col>
@@ -994,6 +995,7 @@
                     variant="outlined"
                     class="mt-2"
                     theme="dark"
+                    tabindex="3"
                   ></v-select>
                 </v-col>
                 <v-col cols="12" md="8">
@@ -1003,6 +1005,7 @@
                     variant="outlined"
                     v-model="phoneOrEmail"
                     :rules="rules"
+                    tabindex="4"
                   >
                   </v-text-field>
                 </v-col>
@@ -1017,6 +1020,7 @@
                     variant="outlined"
                     class="mt-2"
                     theme="dark"
+                    tabindex="6"
                   ></v-select>
                 </v-col>
               </v-row>
@@ -1030,6 +1034,7 @@
                     variant="outlined"
                     v-model="lastName"
                     :rules="rules"
+                    tabindex="2"
                   >
                   </v-text-field>
                 </v-col>
@@ -1044,13 +1049,14 @@
                     variant="outlined"
                     class="mt-2"
                     theme="dark"
+                    tabindex="5"
                   ></v-select>
                 </v-col>
               </v-row>
             </v-col>
           </v-row>
 
-          <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'">
+          <v-row :class="isMobileDevice ? 'mb-12 ml-2 mr-2' : 'ml-16 mr-16 mb-16'">
             <v-col :align="'center'" cols="12" md="4" style="margin: 0 auto;">
               <v-btn
                 style="color:#FFF; width: 100%;"
