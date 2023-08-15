@@ -351,7 +351,7 @@
         </v-row>
 
         <v-row :align="'center'" class="ma-4">
-          <v-col cols="12" md="12" :align="'center'">
+          <v-col cols="12" md="6" :align="'center'">
             <v-btn 
                 prepend-icon="mdi-collage" 
                 size="x-large" 
@@ -362,6 +362,20 @@
                 style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
             >
               Get inspired by our gallery!
+            </v-btn>
+          </v-col>
+
+          <v-col cols="12" md="6" :align="'center'">
+            <v-btn 
+                size="x-large" 
+                variant="outlined"
+                theme="dark"
+                color="white"
+                to="/latest_ai"
+                style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
+            >
+             <v-img src="/img/icons/latest_ai.png" style="width:28px;height:28px" class="mr-2"></v-img>
+             Latest AI Releases
             </v-btn>
           </v-col>
         </v-row>

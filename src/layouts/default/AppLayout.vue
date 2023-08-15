@@ -157,7 +157,6 @@
       <v-spacer></v-spacer>
 
     </v-layout>
-
     <!-- <v-layout class="mr-4 ml-4 mt-2 mb-4" v-if="env">
       <v-btn v-if="(mmConnected || emailConnected || walletConnected)"
              variant="outlined"
@@ -270,7 +269,7 @@
       ></v-img>
       <v-img v-if="isMobileDevice"
         src="/img/logos/logo.png"
-        :style="!drawer ? 'min-height: 50px; min-width: 50px;cursor: pointer;margin-left: -20px;' : 'min-height: 50px; min-width: 50px;cursor: pointer;'"
+        :style="!drawer ? 'min-height: 50px; min-width: 50px;cursor: pointer;' : 'min-height: 50px; min-width: 50px;cursor: pointer;'"
         @click="routerGo('/')"
       ></v-img>
 
@@ -462,7 +461,7 @@
       <v-tooltip location="top">
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && !isMobileDevice"
-            style="margin-right:20px;margin-top:-5px"
+            style="margin-right:10px;margin-top:-5px"
             variant="outlined"
             color="white"
             theme="dark"
@@ -478,6 +477,46 @@
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
       </v-tooltip>
+
+     <!-- language switcher -->
+      <div class="text-center">
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              style="margin-top:-6px"
+              class="mr-5"
+              color="white"
+              theme="dark"
+              variant="outlined"
+              v-bind="props"
+              size="small"
+            >
+              <div class="d-flex">
+                <v-avatar size="16" class="mr-2">
+                  <v-img :src="getFlag(lang)"></v-img>
+                </v-avatar>
+                {{ lang }}
+              </div>
+            </v-btn>
+          </template>
+          <v-list style="background-color: #dddddd;"  class="mt-2 mb-2">
+            <v-list-item
+              v-for="(item, index) in languages"
+              :key="index"
+              :value="index"
+            >
+              <v-list-item-title @click="changeLanguage(item)">
+                <div class="d-flex">
+                  <v-avatar size="16" class="mr-2" style="margin-top: 4px;">
+                    <v-img :src="getFlag(item)"></v-img>
+                  </v-avatar>
+                  {{ getFullWord(item) }}
+                </div>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
 
       <!-- <v-btn v-if="!drawer && !isMobileDevice"
         style="margin-right:10px;margin-top:-5px"
@@ -889,6 +928,8 @@ export default {
           /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
           "Email address must be valid",
       ],
+      lang: '',
+      languages: []
     }),
     components: {
       MetaMaskConnect,
@@ -1004,7 +1045,7 @@ export default {
           this.connectWalletDialog = false
           this.routerGo('/authorise')
         }
-      }
+      },
     /* binanceConnected () {
       if (this.binanceConnected) {
         setTimeout(() => {
@@ -1017,6 +1058,14 @@ export default {
       window.removeEventListener('scroll', this.handleScroll)
     },
     created () {
+      console.log("Weglot", Weglot);
+      this.languages = Weglot.options.languages
+        .map(function(language) {
+          console.log("Weglog", language)
+            return language.language_to;
+        })
+        .concat(Weglot.options.language_from);
+      this.lang = Weglot.getCurrentLang();
       window.addEventListener('scroll', this.handleScroll)
       console.log(import.meta.env.VITE_APP_ENVIRONMENT)
       console.log(this.getUser)
@@ -1237,8 +1286,24 @@ export default {
           console.log('Error getting Token Balance.', err)
           // show friendly error in user screen
         })
+      },
+      changeLanguage(lang){
+        Weglot.switchTo(lang);
+        this.lang = lang;
+      },
+      getFullWord(lang){
+        const fullLanguage = Weglot.getLanguageName(lang);
+        return fullLanguage;
+      },
+      getFlag(lang){
+        let countryCode = lang
+        if(lang === 'en')
+        {
+          countryCode = 'gb'
+        }
+        console.log(`https://cdn.weglot.com/flags/circle/${countryCode}.svg`);
+        return `https://cdn.weglot.com/flags/circle/${countryCode}.svg`
       }
-      
     }
   }
 </script>
