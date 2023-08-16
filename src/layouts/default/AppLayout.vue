@@ -109,7 +109,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-tooltip location="top" v-if="!isMobileDevice">
+      <!-- <v-tooltip location="top" v-if="!isMobileDevice">
         <template v-slot:activator="{ props }">
           <v-btn v-if="drawer && isMobileDevice"
             style="margin-right:5px;margin-top:-5px"
@@ -127,7 +127,7 @@
         <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
-      </v-tooltip>
+      </v-tooltip> --> 
       <v-btn v-if="drawer && isMobileDevice"
         style="margin-right:5px;margin-top:-5px"
         variant="outlined"
@@ -458,7 +458,7 @@
         KYC - AUDIT
       </v-btn>
 
-      <v-tooltip location="top">
+     <!--  <v-tooltip location="top">
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && !isMobileDevice"
             style="margin-right:10px;margin-top:-5px"
@@ -476,7 +476,7 @@
         <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
-      </v-tooltip>
+      </v-tooltip> -->
 
      <!-- language switcher -->
       <div class="text-center">
@@ -765,6 +765,12 @@
             <v-toolbar
               color="deep-purple-darken-4"
             >
+            <v-btn
+              icon
+              @click="learnMoreDialog = false"
+            >
+              <v-icon>mdi-arrow-left-bold</v-icon>
+            </v-btn>
             <v-toolbar-title>Learn More...</v-toolbar-title>
             <v-spacer></v-spacer>
               <v-btn
