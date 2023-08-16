@@ -492,10 +492,10 @@
               size="small"
             >
               <div class="d-flex">
-                <v-avatar size="16" class="mr-2">
+                <v-avatar size="16" class="">
                   <v-img :src="getFlag(lang)"></v-img>
                 </v-avatar>
-                {{ lang }}
+                <!-- {{ lang }} -->
               </div>
             </v-btn>
           </template>
@@ -563,6 +563,14 @@
 
 
   <!-- DIALOGS AND COMPONENTS-->
+  <Contact
+    class="mt-3"
+    :isOpen="isShowContact"
+    @close="closeContactDialog"
+    :dark="dark"
+  >
+  </Contact>
+
   <v-dialog v-if="!mmConnected || !walletConnected || !twConnected"
       transition="dialog-bottom-transition"
       :fullscreen="isMobileDevice"
@@ -891,6 +899,7 @@
 import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
+import Contact from '@/components/contact/ContactDialog'
 import MemeMasterAPI from '../../clients/MemeMasterAPI';
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
@@ -935,12 +944,14 @@ export default {
           "Email address must be valid",
       ],
       lang: '',
-      languages: []
+      languages: [],
+      isShowContact: false
     }),
     components: {
       MetaMaskConnect,
       WalletConnect,
-      ChatGPT
+      ChatGPT,
+      Contact
     },
     computed: {
       getUser () {
@@ -1126,6 +1137,11 @@ export default {
       },
       gotoContact () {
         this.drawer = false
+        this.isShowContact = true;
+      },
+      closeContactDialog(v){
+        console.log(v)
+        this.isShowContact = false;
       },
       getHash (name) {
         return md5(name)
