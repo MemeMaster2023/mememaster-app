@@ -12,7 +12,6 @@
     "@cloudgeek/playcore-hls": "^0.1.7",
     "@cloudgeek/vitar": "^0.1.11",
     "@cloudgeek/vue3-video-player": "^0.3.10",
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@mdi/font": "7.0.96",
     "@metamask/onboarding": "^1.0.1",
     "@walletconnect/client": "^1.8.0",
@@ -45,11 +44,13 @@
     "vue3-jazzicon": "^0.1.4",
     "vuetify": "^3.0.0",
     "vuex": "^4.0.2",
-    "web3": "^4.0.2",
+    "web3": "^4.1.0",
     "web3-eth": "^1.10.0",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@vitejs/plugin-vue": "^3.0.3",
     "eslint": "^8.37.0",
     "eslint-plugin-vue": "^9.3.0",

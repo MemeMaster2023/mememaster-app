@@ -150,7 +150,19 @@
           <!-- ########################## PRESALE FORM ############################ -->
           <!-- #################################################################### -->
 
-          <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-8' : ''">
+         
+
+          <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-4' : ''">
+
+            <v-btn v-if="isMobileDevice" class="mb-2"
+              color="#360a3f"
+              theme="dark"
+              @click="scrollToKYCLink()"
+              style="width:100%;color:#FFF;"
+            >
+              <img src="/img/icons/coinsult_squ.png" style="max-width:22px;padding-right:5px"/> 
+              KYC - AUDIT
+            </v-btn>
 
             <v-card theme="dark" color="#FFF" :max-width="isMobileDevice ? '100%' : '70%'" height="100%">
               <v-toolbar
@@ -168,12 +180,12 @@
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
-                    model-value="20"
+                    model-value="0"
                     height="30"
                     color="#360a3f"
                     style="background-color: #a692aa;"
                   >
-                  <strong>{{ '17' }}%</strong>
+                  <strong>{{ '0' }}%</strong>
                   </v-progress-linear>
                 </v-layout>
 
@@ -790,7 +802,7 @@
       <!-- ###############################     SECURITY AND AUDIT     ############################# -->
       <!-- ######################################################################################## -->
 
-      <div id="donate" style="color: #FFF;">
+      <div id="audit" style="color: #FFF;">
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
@@ -3010,6 +3022,13 @@ export default {
         firstScrollTo('#newtocrypto', 500, { offset: -64 });
       }, 200);
     },
+    scrollToKYCLink () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#audit', 500, { offset: -64 });
+      }, 200);
+    },
     gotoLink(link) {
       window.open(link, "_blank");
     },
@@ -3038,22 +3057,14 @@ export default {
       this.instantiateContractAbi()
     },
     instantiateContractAbi() {
-      Promise.resolve(MemeMasterAPI.instantiateContractAbi('0x932C2E35793A0470d3F8bEb45E67A0A680096eD5', import.meta.env.VITE_APP_ENVIRONMENT))
+      let contractAddress = '0x932C2E35793A0470d3F8bEb45E67A0A680096eD5'
+      let web3 = new Web3(window.ethereum);
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi(contractAddress, import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
         console.log(result.data.result)
-        /* var contractABI = "";
-        contractABI = JSON.parse(result.data.result);
-        if (contractABI != '') {
-            var MyContract = web3.eth.contract(contractABI);
-            var myContractInstance = MyContract.at("0x932C2E35793A0470d3F8bEb45E67A0A680096eD5");
-            var result = myContractInstance.memberId("0xa0d62Ba0d7B23077dDa5d2163b677025Ef3c7c8D");
-            console.log("result1 : " + result);            
-            var result = myContractInstance.members(1);
-            console.log("result2 : " + result);
-        } else {
-            console.log("Error" );
-        } */
-
+        let abi = result.data.result
+        let contract = new web3.eth.Contract(abi, contractAddress)
+        contract.methods.greet().call()
       })
     },
     handleSuccess(e) {

@@ -202,8 +202,19 @@
       >
       
         <div class="ma-8">
-          <v-row :style="'margin-top:' + (windowHeight - 460) + 'px;'" :align="'center'">
+          <v-row :style="'margin-top:' + (windowHeight - 560) + 'px;'" :align="'center'">
             <v-col cols="12" md="12" >
+              <div class="text-center pb-12">
+                <v-btn variant="outlined" 
+                       color="#FFF"
+                       size="large"
+                       prepend-icon="mdi-tag-outline"
+                       style="text-transform: none !important;"
+                       to="/presale"
+                >
+                  Meme Master Presale
+              </v-btn>
+              </div>
               <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
               <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
               <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
@@ -346,7 +357,7 @@
     <div id="gallery">
         <v-row :style="scrollClicked ? 'margin-top:32px' : ''">
           <v-col class="mt-4">
-            <div class="text-center gallery">Sample of our Meme gallery!</div>
+            <div class="text-center gallery">Sample of our AI latest releases and galleries!</div>
           </v-col>
         </v-row>
 

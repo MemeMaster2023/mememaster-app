@@ -452,7 +452,7 @@
         color="white"
         theme="dark"
         size="small"
-        @click="gotoKYCLink()"
+        @click="$router.currentRoute.value.path !== '/presale' ? gotoKYCLink() : scrollToKYCLink()"
       >
         <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:10px"/> 
         KYC - AUDIT
@@ -892,7 +892,7 @@ import store from '@/store/index'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import MemeMasterAPI from '../../clients/MemeMasterAPI';
-// import { scroller } from 'vue-scrollto/src/scrollTo'
+import { scroller } from 'vue-scrollto/src/scrollTo'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
 import md5 from 'md5'
 import dateformat from "dateformat"
@@ -1129,6 +1129,13 @@ export default {
       },
       getHash (name) {
         return md5(name)
+      },
+      scrollToKYCLink () {
+        const firstScrollTo = scroller();
+        this.scrollClicked = true
+        setTimeout(() => {
+          firstScrollTo('#audit', 500, { offset: -64 });
+        }, 200);
       },
       handleScroll () {
         // console.log(window.scrollY)
