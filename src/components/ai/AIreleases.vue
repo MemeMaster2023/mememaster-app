@@ -11,7 +11,7 @@
         <v-col cols="12" md="8" :align="center">
           <div class="text-h4 text-center ma-2">Latest AI Releases</div>
 
-          <v-row class="pt-8">
+          <v-row class="pt-8 mb-2">
             <v-col cols="12" md="8">
               <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
                 This is a section for the latest AI innovations / news and products that is updated regularly<br><br>
@@ -46,13 +46,20 @@
                     {{ item.title  }}
                   </v-list-item-title>
 
-                  <v-list-item-sub-title>
+                  <v-list-item-sub-title v-if="!isMobileDevice">
                     {{ item.subtitle  }}
                   </v-list-item-sub-title>
 
                   <template v-slot:append>
                     <v-list-item-action>
-                      <v-btn variant="text" color="yellow">open</v-btn>
+                      <v-btn variant="text" 
+                             color="yellow"
+                             size="small"
+                             width="100"
+                             @click="gotoLink(item.link)"
+                      >
+                       {{ item.type }}
+                    </v-btn>
                     </v-list-item-action>
                   </template>
 
@@ -90,19 +97,32 @@ export default {
     view: 1,
     items: [
         {
-          prependAvatar: 'https://static.vecteezy.com/system/resources/previews/021/059/827/original/chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpg',
-          title: 'The GPT Factory',
-          subtitle: `The GPT Factory is an AI development company that helps turn AI ideas into profitable products. They offer a range of services, including development of ChatGPT applications, AI chatbots, AI-based web apps, and AI company incorporation.`,
+          prependAvatar: 'https://huggingface.co/front/assets/huggingface_logo-noborder.svg',
+          title: 'Open LLM Leaderboard',
+          subtitle: `The Open LLM Leaderboard aims to track, rank and evaluate LLMs and chatbots as they are released.`,
+          link: 'https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard',
+          type: 'Website'
         },
         {
-          prependAvatar: 'https://aichatdocs.com/static/media/logoS.30b45fba09a329efe7bf.png',
-          title: 'Chat Documents',
-          subtitle: `ChatDocuments is an AI-powered app that enables users to engage in interactive chats with various document formats, including PDF, PPTX, XLSX, and DOCX.`,
+          prependAvatar: 'https://icones.pro/wp-content/uploads/2021/08/icone-cible-orange.png',
+          title: 'LLM Attacks',
+          subtitle: `Universal and Transferable Adversarial Attacks on Aligned Language Models`,
+          link: 'https://llm-attacks.org',
+          type: 'Website'
         },
         {
-          prependAvatar: 'https://play-lh.googleusercontent.com/-CetjiqKMZTjlygvTx9p4izVOPObkpZ0MdmmyB7fHb5qV1nVArpuIzTXKbfY1LA-EvIz',
-          title: 'HappyChat',
-          subtitle: "HappyChat AI is a tool that allows users to easily create conversational chatbots for their websites. Powered by ChatGPT, this tool doesn't require any coding skills to use."
+          prependAvatar: 'https://yt3.ggpht.com/ytc/AOPolaSbaST1JBNd9phht_n7tFN-VHx0FlvKPHeSDnmu4Q=s88-c-k-c0x00ffffff-no-rj',
+          title: 'UNKNOWN: Killer Robots',
+          subtitle: "Deep in the heart of the military-industrial complex, a new kind of soldier is being developed. ",
+          link: 'https://www.youtube.com/watch?v=YsSzNOpr9cE',
+          type: 'Video'
+        },
+        {
+          prependAvatar: 'data:image/png;base64,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',
+          title: 'Jupyter Notebook for Machine Learning – A Gentle Introduction',
+          subtitle: "Now available—watsonx, IBM's enterprise-ready AI and data platform designed to leverage foundation models and machine learning.",
+          link: 'https://www.ibm.com/watson',
+          type: 'Website'
         },
       ],
   }),
@@ -121,6 +141,9 @@ export default {
   methods: {
     init () {
      
+    },
+    gotoLink(link) {
+      window.open(link, "_blank");
     },
     scrollToTop () {
       const firstScrollTo = scroller();

@@ -364,7 +364,7 @@
         <v-row :align="'center'" class="ma-4">
           <v-col cols="12" md="6" :align="'center'">
             <v-btn 
-                size="x-large" 
+                :size="isMobileDevice ? 'large' : 'x-large'" 
                 variant="outlined"
                 theme="dark"
                 color="white"
@@ -378,7 +378,7 @@
 
           <v-col cols="12" md="6" :align="'center'">
             <v-btn 
-                size="x-large" 
+                :size="isMobileDevice ? 'large' : 'x-large'" 
                 variant="outlined"
                 theme="dark"
                 color="white"

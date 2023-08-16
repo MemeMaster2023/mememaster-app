@@ -9,7 +9,7 @@
 
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
-            <div class="text-h4 ma-2 text-white">Meme Master Presale is starting soon!</div>
+            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-2 text-white'">Meme Master Presale is starting soon!</div>
             <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 pt-4 text-white font-weight-medium">The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET (10pm UTC). Get ready to join the revolution of creativity!<br><br>We're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect Memes music and NFTs, interact with our games, find new projects on our new token listing platform and a host of the features that are in development, please check out the information below including our roadmap, video and tier offers for more information.</div>
 
             <v-tooltip location="bottom" v-if="!isMobileDevice">
@@ -1575,7 +1575,7 @@ import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
-// import Web3 from 'web3';
+import Web3 from 'web3';
 // const web3 = new Web3(new Web3.providers.HttpProvider());
 export default {
   name: 'Presale',
@@ -2859,6 +2859,7 @@ export default {
       }
       ],
     message: '',
+    type: '',
     rules: [
       v => !!v || 'This field is required',
     ],
@@ -3120,8 +3121,9 @@ export default {
     },
     async sendContactForm() {
       const isValid = await this.$refs.newCryptoForm.validate()
+      this.type = 'newtocrypto'
       if (isValid.valid) {
-        const { firstName, lastName, phoneOrEmail, investmentBudgetSelected, bestTimeToContactSelected, countryCodeSelected, message } = this
+        const { firstName, lastName, phoneOrEmail, investmentBudgetSelected, bestTimeToContactSelected, countryCodeSelected, message, type } = this
         const payload = {
           firstName,
           lastName,
@@ -3129,7 +3131,8 @@ export default {
           investmentBudget: investmentBudgetSelected?.name,
           bestTimeToContact: bestTimeToContactSelected?.name,
           countryCode: countryCodeSelected?.name,
-          message
+          message,
+          type
         }
 
         this.$store.dispatch('createMessage', payload).then(() => {
