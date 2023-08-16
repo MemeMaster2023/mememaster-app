@@ -228,47 +228,8 @@
           </v-toolbar>
           <v-card-text>
             <div class="pa-8">
-              Terms and Conditions<br><br>
-
-              Last Updated: 20 May, 2023<br><br>
-
-              Please read these Terms and Conditions ("Terms") carefully before using our website. By accessing or using the Website, you agree to be bound by these Terms. If you do not agree to these Terms, you may not use the Website.<br><br>
-
-              Intellectual Property<br>
-              1.1 All content and materials available on the Website, including but not limited to text, graphics, logos, images, videos, software, and other intellectual property, are the property of Meme Master or its licensors and are protected by applicable intellectual property laws.<br><br>
-
-              1.2 You may not modify, copy, reproduce, distribute, transmit, display, perform, publish, license, create derivative works from, transfer, or sell any content or materials obtained from the Website without the prior written consent of Meme Master.<br><br>
-
-              User Conduct<br>
-              2.1 You agree to use the Website for lawful purposes only and to comply with all applicable laws and regulations.<br><br>
-
-              2.2 You shall not engage in any conduct that:<br>
-              Violates or infringes upon the rights of others, including intellectual property rights.<br>
-              Is unlawful, threatening, abusive, defamatory, obscene, or offensive.<br>
-              Interferes with or disrupts the operation of the Website or the servers or networks connected to the Website.<br>
-              Attempts to gain unauthorized access to any portion or feature of the Website or any other systems or networks connected to the Website.<br>
-              Collects or stores personal information about other users without their consent.<br><br>
-              
-              Third-Party Websites and Services<br>
-              3.1 The Website may contain links to third-party websites or services that are not owned or controlled by Meme Master. We do not endorse or assume any responsibility for the content, privacy policies, or practices of any third-party websites or services.<br><br>
-
-              3.2 You acknowledge and agree that Meme Master shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with the use of or reliance on any such content, goods, or services available on or through any third-party websites or services.<br><br>
-
-              Limitation of Liability<br>
-              4.1 To the fullest extent permitted by applicable law, Meme Master and its affiliates, officers, directors, employees, agents, and suppliers shall not be liable for any indirect, incidental, special, consequential, or exemplary damages, including but not limited to damages for loss of profits, goodwill, use, data, or other intangible losses, resulting from:<br><br>
-
-              Your access to or use of or inability to access or use the Website.<br>
-              Any conduct or content of any third party on the Website.<br>
-              Any unauthorized access to or alteration of your transmissions or data.<br>
-              Any statement or conduct of any third party on the Website.<br><br>
-              
-              Indemnification<br>
-              5.1 You agree to defend, indemnify, and hold harmless Meme Master and its affiliates, officers, directors, employees, agents, and suppliers from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to your violation of these Terms or your use of the Website.<br>
-
-              Governing Law and Jurisdiction<br>
-              6.1 These Terms and Conditions and any dispute or claim arising out of or in connection with them or their subject matter or formation (including non-contractual disputes or claims) shall be governed by and construed in accordance with the law of England and Wales.<br><br>
-
-              Each party irrevocably agrees that the courts of England and Wales shall have exclusive jurisdiction to settle any dispute or claim arising out of or in connection with these Terms and Conditions or its subject matter or formation (including non-contractual disputes or claims).<br><br>
+              <iframe width="100%" :height="isMobileDevice ? '350' : '584'" src="TermsAndContitions.html" title="MemeMaster2023" frameborder="0">
+              </iframe>
             </div>
           </v-card-text>
           <v-card-actions class="justify-end">

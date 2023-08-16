@@ -2,6 +2,8 @@
 import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+// import GlobalsPolyfills from '@esbuild-plugins/node-globals-polyfill'
+// import NodeModulesPolyfills from '@esbuild-plugins/node-modules-polyfill'
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -26,12 +28,18 @@ export default defineConfig({
         // Node.js global to browser globalThis
         define: {
             global: 'globalThis'
+            // 'process.env': import.meta.env
         },
         // Enable esbuild polyfill plugins
         plugins: [
             NodeGlobalsPolyfillPlugin({
                 buffer: true
-            })
+            }),
+            /* NodeModulesPolyfills(),
+            GlobalsPolyfills({
+              process: true,
+              buffer: true, 
+            }), */
         ]
     }
   },
@@ -41,7 +49,8 @@ export default defineConfig({
   // include: ['color', 'mersenne-twister'],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      web3: 'web3/dist/web3.min.js',
     },
     extensions: [
       '.js',

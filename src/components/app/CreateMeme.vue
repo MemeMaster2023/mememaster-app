@@ -651,7 +651,19 @@
             <v-card
               class="mx-auto"
             >
-              <div class="text-h6 mt-4 ml-4">My Draft Generations</div>
+              <v-layout>
+                <div class="text-h6 mt-4 ml-4">My Draft Generations</div>
+                <v-spacer></v-spacer>
+                <v-btn v-if="selectedForDelete.length > 0"
+                       class="ma-2"
+                       color="red"
+                       variant="outlined"
+                       size="small"
+                       prepend-icon="mdi-trash-can-outline"
+                >
+                 Delete Selected
+                </v-btn>
+              </v-layout>
               <v-list color="#2b2b2b">
                 <template v-for="(item, index) in draftsArr" >
 
@@ -663,13 +675,16 @@
                       prepend-icon="mdi-account-circle"
                       @click="openDraftsFolder(item.path, index)"
                     >
+                    
                       <template v-slot:prepend>
                         <v-avatar color="blue-lighten-1">
                           <v-icon color="white">mdi-image-multiple-outline</v-icon>
                         </v-avatar>
                       </template>
 
-                      <v-list-item-title style="color: #FFF;font-weight:bold">{{ item.name  }}</v-list-item-title>
+                      <v-layout>
+                        <v-list-item-title style="color: #FFF;font-weight:bold">{{ item.name  }}</v-list-item-title>
+                      </v-layout>
                       
                     </v-list-item>
 
@@ -680,17 +695,27 @@
                         class="pa-2"
                         link
                         :value="file"
-                        @click="selectedDraftClicked(file)"
                         active-color="primary"
                       >
-                      <template v-slot:prepend>
+                      
+                      <template v-slot:prepend="{ isActive }">
+                        <v-checkbox
+                          v-model="selectedForDelete"
+                          :value="file"
+                          style="margin-top: 15px;margin-right: 10px"
+                          :input-value="isActive"
+                          color="primary"
+                          @click="fileSelected(file)"
+                        ></v-checkbox>
+
                         <v-avatar color="purple-lighten-1" style="border-radius: 2px;" size="65">
                           <v-img :src="file.url" style="width: 65px;height:65px;">
                           </v-img>
                         </v-avatar>
+
                       </template>
 
-                      <v-list-item-title style="color: #FFF;font-size: 22px;font-weight: bold;">{{ file.metadata.name  }}</v-list-item-title>
+                      <v-list-item-title style="color: #FFF;font-size: 20px;font-weight: bold;">{{ file.metadata.name  }}</v-list-item-title>
 
                       <template v-slot:append>
                         <!-- <v-icon
@@ -780,7 +805,13 @@
             <v-toolbar
               color="deep-purple-darken-2"
             >
-            <v-toolbar-title>Meme Master Prompt Guide</v-toolbar-title>
+            <v-btn
+              icon
+              @click="promptGuideDialog = false"
+            >
+              <v-icon>mdi-arrow-left-bold</v-icon>
+            </v-btn>
+            <div style="font-size: 1.2rem;">Meme Master Prompt Guide</div>
             <v-spacer></v-spacer>
               <v-btn
                 icon
@@ -1078,6 +1109,7 @@ export default {
     enableStopGenerating: false,
     generationStopped: false,
     selectedImage: null,
+    selectedForDelete: [],
     showToolbar: [
       { show: false },
       { show: false },
@@ -1713,6 +1745,10 @@ export default {
     removeImage () {
       this.uploadImage = ''
       this.uploadImageUrl = ''
+    },
+    fileSelected (file) {
+      if (this.selectedForDelete.length === 0)this.selectedForDelete.push(file)
+      console.log(this.selectedForDelete)
     },
     deleteDraftImage (item, index) {
       console.log(item)

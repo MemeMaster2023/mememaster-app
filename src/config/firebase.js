@@ -18,6 +18,17 @@ const FIREBASE_CONFIG_PROD_ENV = {
   measurementId: "G-9WQ985X5EK"
 };
 
+// const FIREBASE_CONFIG_LOCAL_ENV = {
+//   apiKey: "AIzaSyACM4-YRTvUJJoIa8hCUSXPX_FnCNBt_-Y",
+//   authDomain: "civil-array-390609.firebaseapp.com",
+//   databaseURL: "https://civil-array-390609-default-rtdb.firebaseio.com",
+//   projectId: "civil-array-390609",
+//   storageBucket: "civil-array-390609.appspot.com",
+//   messagingSenderId: "834724276047",
+//   appId: "1:834724276047:web:875a0c94f3343f5828873a",
+//   measurementId: "G-ZLPSP8YR76"
+// };
+
 var FIREBASE_CONFIG = {};
 
 if (import.meta.env.VITE_APP_ENVIRONMENT === "production") {

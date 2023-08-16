@@ -202,8 +202,19 @@
       >
       
         <div class="ma-8">
-          <v-row :style="'margin-top:' + (windowHeight - 460) + 'px;'" :align="'center'">
+          <v-row :style="'margin-top:' + (windowHeight - 560) + 'px;'" :align="'center'">
             <v-col cols="12" md="12" >
+              <div class="text-center pb-12">
+                <v-btn variant="outlined" 
+                       color="#FFF"
+                       size="large"
+                       prepend-icon="mdi-tag-outline"
+                       style="text-transform: none !important;"
+                       to="/presale"
+                >
+                  Meme Master Presale
+              </v-btn>
+              </div>
               <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
               <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
               <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
@@ -346,19 +357,19 @@
     <div id="gallery">
         <v-row :style="scrollClicked ? 'margin-top:32px' : ''">
           <v-col class="mt-4">
-            <div class="text-center gallery">Sample of our Meme gallery!</div>
+            <div class="text-center gallery">Sample of our AI latest releases and galleries!</div>
           </v-col>
         </v-row>
 
         <v-row :align="'center'" class="ma-4">
           <v-col cols="12" md="6" :align="'center'">
             <v-btn 
-                prepend-icon="mdi-collage" 
                 size="x-large" 
                 variant="outlined"
                 theme="dark"
                 color="white"
                 to="/collections"
+                :width="isMobileDevice ? '100%' : '370'"
                 style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
             >
               Get inspired by our gallery!
@@ -372,10 +383,10 @@
                 theme="dark"
                 color="white"
                 to="/latest_ai"
+                :width="isMobileDevice ? '100%' : '370'"
                 style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
             >
-             <v-img src="/img/icons/latest_ai.png" style="width:28px;height:28px" class="mr-2"></v-img>
-             Latest AI Releases
+             Latest AI Releases Coming Soon
             </v-btn>
           </v-col>
         </v-row>
@@ -425,6 +436,12 @@
             <v-toolbar
               color="deep-purple-darken-4"
             >
+            <v-btn
+              icon
+              @click="learnMoreDialog = false"
+            >
+              <v-icon>mdi-arrow-left-bold</v-icon>
+            </v-btn>
             <v-toolbar-title>Learn More...</v-toolbar-title>
             <v-spacer></v-spacer>
               <v-btn
@@ -452,14 +469,15 @@
 
                         <div id="newlist" class="text-h6 ml-4">
                           <ul>
-                            <li>Create and Manage your collections.</li>
-                            <li>Keep them proviate or make them public.</li>
                             <li>Create your own memes and turn them into NFTs.</li>
+                            <li>Create and Manage your collections.</li>
+                            <li>Keep them private or make them public.</li>
                             <li>Import, trade, and store your memes and NFTs in our marketplace.</li>
                             <li>Holding our EMAS tokens is the first step to opening these possibilities.</li>
                           </ul>
                         </div><br>
-                        Create NFTs from your memes or directly for integration in our gaming platform.<br><br>
+                        Enjoy these early features... Much more coming after launch. See our Roadmap.
+                        <br><br>
                         <!-- Get early access to new token listings from our own token finder complete with features such as anti- rug pull, compliance, project KYC. Our daily top listings and much more to allow you to get early access into many projects with peace of mind, this will be exclusive to MemeMaster. -->
                       </div>
                     </div>
@@ -467,6 +485,34 @@
                   <v-col cols="12" md="4" :align="'right'" align-self="center">
                     <v-img style="max-width: 350px; border-radius: 10px;"
                            src="/img/home/nft_machine.webp"></v-img>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+
+                  <v-col cols="12" md="4" :align="'left'" align-self="center">
+                    <v-img style="max-width: 350px; border-radius: 10px;"
+                           src="/img/home/500_free_credits.webp"></v-img>
+                  </v-col>
+
+                  <v-col cols="12" md="8">
+                    <div>
+                      <h2 class="text-h4 font-weight-bold">Get 500 Free Credits when joining</h2>
+
+                      <div class="text-h6 mt-2 mb-2">
+                        Create NFTs from your memes or directly for integration in our gaming platform.<br>
+
+                        <div id="newlist" class="text-h6 ml-4">
+                          <ul>
+                            <li>Add music to your Memes and NFTs.</li>
+                            <li>Generate Text to Video. Coming Soon!</li>
+                            <li>Create NFTs from your memes or directly for integration in our gaming platform..</li>
+                            <li>Win EMAS points and convert them into EMAS tokens.</li>
+                          </ul>
+                        </div><br>
+                        Your generations, creations with prompts are automatically saved for 30 days in your personal Drafts folder so you can easily find them back later.
+                      </div>
+                    </div>
                   </v-col>
                 </v-row>
               </v-sheet>
@@ -483,6 +529,12 @@
             <v-toolbar
               color="deep-purple-darken-4"
             >
+            <v-btn
+              icon
+              @click="learnMoreDialog2 = false"
+            >
+              <v-icon>mdi-arrow-left-bold</v-icon>
+            </v-btn>
             <v-toolbar-title>Learn More...</v-toolbar-title>
             <v-spacer></v-spacer>
               <v-btn
@@ -546,6 +598,12 @@
             <v-toolbar
               color="deep-purple-darken-4"
             >
+            <v-btn
+              icon
+              @click="learnMoreDialog3 = false"
+            >
+              <v-icon>mdi-arrow-left-bold</v-icon>
+            </v-btn>
             <v-toolbar-title>Learn More...</v-toolbar-title>
             <v-spacer></v-spacer>
               <v-btn

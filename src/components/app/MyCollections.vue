@@ -220,11 +220,18 @@
         <v-card theme="dark">
           <v-toolbar
             color="deep-purple-darken-4"
-            :title="'Collection Details - ' + selectedCollection.name"
             class="text-white"
           >
+          <v-btn
+            icon
+            color="white"
+            @click="collectionDetailsDialog = false"
+          >
+            <v-icon>mdi-arrow-left-bold</v-icon>
+          </v-btn>
+          <div style="font-size: 1.2rem;">{{ 'Collection Details - ' + selectedCollection.name }} </div>
           <v-spacer></v-spacer>
-           <v-btn
+           <v-btn v-if="!isMobileDevice"
               icon
               color="white"
               @click="collectionDetailsDialog = false"

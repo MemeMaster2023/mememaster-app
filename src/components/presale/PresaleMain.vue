@@ -146,9 +146,23 @@
 
           </v-col>
 
+          <!-- #################################################################### -->
           <!-- ########################## PRESALE FORM ############################ -->
+          <!-- #################################################################### -->
 
-          <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-8' : ''">
+         
+
+          <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-4' : ''">
+
+            <v-btn v-if="isMobileDevice" class="mb-2"
+              color="#360a3f"
+              theme="dark"
+              @click="scrollToKYCLink()"
+              style="width:100%;color:#FFF;"
+            >
+              <img src="/img/icons/coinsult_squ.png" style="max-width:22px;padding-right:5px"/> 
+              KYC - AUDIT
+            </v-btn>
 
             <v-card theme="dark" color="#FFF" :max-width="isMobileDevice ? '100%' : '70%'" height="100%">
               <v-toolbar
@@ -166,12 +180,12 @@
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
-                    model-value="20"
+                    model-value="0"
                     height="30"
                     color="#360a3f"
                     style="background-color: #a692aa;"
                   >
-                  <strong>{{ '17' }}%</strong>
+                  <strong>{{ '0' }}%</strong>
                   </v-progress-linear>
                 </v-layout>
 
@@ -195,13 +209,13 @@
 
                 </v-row>
 
-                <!--  handleShowDialog(true, 'buyWithEthDialog')    handleShowDialog(true, 'buyWithUsdtDialog')-->
+                <!--  presaleNotLive  -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -788,7 +802,7 @@
       <!-- ###############################     SECURITY AND AUDIT     ############################# -->
       <!-- ######################################################################################## -->
 
-      <div id="donate" style="color: #FFF;">
+      <div id="audit" style="color: #FFF;">
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
@@ -854,7 +868,7 @@
 
         <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'" >
           <v-col cols="12" md="12" :align="'center'">
-            <div id="chart" :style="isMobileDevice ? 'margin-left:-40px' : ''">
+            <div id="chart" :style="isMobileDevice ? 'margin-left:' + pieMargin + 'px' : ''">
               <apexchart type="donut" :width="isMobileDevice ? '450' : '600'" :options="chartOptions" :series="series"></apexchart>
             </div>
           </v-col>
@@ -963,14 +977,17 @@
       <!-- #####################################     NEW TO CRYPTO      ############################## -->
       <!-- ######################################################################################## -->
 
-      <div id="newtocrypto" style="padding-bottom: 16px;">
+      <div id="newtocrypto">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-4">
             <div class="text-h4 ma-2 text-purple-lighten-3">NEW TO CRYPTO</div>
+            <div :class="isMobileDevice ? 'pa-2 ml-2 mr-2 text-white' : 'pa-2 ml-16 mr-16 text-white'" style="font-size: 1.5rem;">
+              If you're new to the world of cryptocurrency, we're here to help you navigate this exciting journey. Please fill out the form below so we can better understand your needs and provide you with the right information and guidance.
+            </div>
           </v-col>
         </v-row>
         <v-form @submit.prevent="sendContactForm()" ref="newCryptoForm">
-          <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'" style="color: #fff;">
+          <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-16 mr-16'" style="color: #fff;">
             <v-col cols="12" md="6">
               <v-row>
                 <v-col cols="12" md="12">
@@ -980,43 +997,33 @@
                     variant="outlined"
                     v-model="firstName"
                     :rules="rules"
+                    tabindex="1"
                   >
                   </v-text-field>
                 </v-col>
-                <v-col cols="12" md="4">
-                  <v-select
-                    label="Country Code"
-                    return-object
-                    :items="countriesCode"
-                    item-title="name"
-                    item-value="id"
-                    v-model="countryCodeSelected"
-                    variant="outlined"
-                    class="mt-2"
-                    theme="dark"
-                  ></v-select>
-                </v-col>
-                <v-col cols="12" md="8">
+                <v-col cols="12" md="12">
                   <v-text-field
                     label="Phone number or Email"
                     class="mt-2"
                     variant="outlined"
                     v-model="phoneOrEmail"
                     :rules="rules"
+                    tabindex="4"
                   >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" md="12">
                   <v-select
-                    label="Investment Budget"
+                    label="Country"
                     return-object
-                    :items="investmentBudgets"
+                    :items="countriesCode"
                     item-title="name"
-                    item-value="id"
-                    v-model="investmentBudgetSelected"
+                    item-value="dial_code"
+                    v-model="countryCodeSelected"
                     variant="outlined"
                     class="mt-2"
                     theme="dark"
+                    tabindex="3"
                   ></v-select>
                 </v-col>
               </v-row>
@@ -1030,6 +1037,7 @@
                     variant="outlined"
                     v-model="lastName"
                     :rules="rules"
+                    tabindex="2"
                   >
                   </v-text-field>
                 </v-col>
@@ -1044,19 +1052,58 @@
                     variant="outlined"
                     class="mt-2"
                     theme="dark"
+                    tabindex="5"
                   ></v-select>
                 </v-col>
+                <v-col cols="12" md="12">
+                  <v-select
+                    label="Investment Budget"
+                    return-object
+                    :items="investmentBudgets"
+                    item-title="name"
+                    item-value="id"
+                    v-model="investmentBudgetSelected"
+                    variant="outlined"
+                    class="mt-2"
+                    theme="dark"
+                    tabindex="6"
+                  ></v-select>
+                </v-col>
+    
               </v-row>
             </v-col>
+
+      
+              <v-col :align="'center'" cols="12" md="12" style="margin: 0 auto;">
+                <v-textarea
+                  v-model="message"
+                  theme="dark"
+                  class="mb-2"
+                  label="Your Message"
+                  auto-grow
+                  variant="outlined"
+                  :placeholder="'Type your message here...'"
+                  persistent-placeholder
+                  clearable
+                  rows="3"
+                  maxlength="2000"
+                  row-height="25"
+                  shaped
+                  hint="Max. 2000 characters"
+                  counter
+                ></v-textarea>
+              </v-col>
+
           </v-row>
 
-          <v-row :class="isMobileDevice ? 'mb-4' : 'ml-16 mr-16 mb-8'">
-            <v-col :align="'center'" cols="12" md="4" style="margin: 0 auto;">
+
+          <v-row :class="isMobileDevice ? 'mb-12 ml-2 mr-2' : 'ml-16 mr-16 mb-16'">
+            <v-col :align="'center'" cols="12" md="12" style="margin: 0 auto;">
               <v-btn
                 style="color:#FFF; width: 100%;"
                 variant="elevated"
                 color="#360a3f"
-                size="large"
+                size="x-large"
                 class="font-weight-bold mb-2"
                 type="submit"
               >
@@ -1101,7 +1148,7 @@
           </v-toolbar>
           <div class="text-center ma-4" v-if="showConfirmation === false">
             If you don't have a wallet, you can select a provider and create one now.<br>
-            <v-btn variant="text" class="ma-4"
+            <v-btn variant="text" class="ma-4" @click="learnMoreDialog = true"
             >
               Learn more
             </v-btn>
@@ -1418,6 +1465,83 @@
         </v-card>
       </v-dialog>
 
+      <!-- ############################## LEARN MORE DIALOG ################################ -->
+      <v-dialog
+          v-model="learnMoreDialog"
+          fullscreen
+        >
+          <v-card theme="dark" color="#2b2b2b">
+            <v-toolbar
+              color="deep-purple-darken-4"
+            >
+            <v-btn
+              icon
+              @click="learnMoreDialog = false"
+            >
+              <v-icon>mdi-arrow-left-bold</v-icon>
+            </v-btn>
+            <v-toolbar-title>Learn More...</v-toolbar-title>
+            <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="learnMoreDialog = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text >
+
+              <v-sheet
+                class="d-flex flex-wrap mx-auto px-4 py-4 mt-4"
+                elevation="4"
+                rounded
+                width="100%"
+              >
+                <v-row>
+                  <v-col cols="12" md="8">
+                    <div id="learnmore_3">
+                      <h2 class="text-h4 font-weight-bold">Connect Wallet or Walletless</h2>
+
+                      <div class="text-h6 mt-2 mb-4">
+                        Signing up is a breeze! You can use your Web 3 wallets (like MetaMask or Trust Wallet) or simply use your email address for FIAT via standard OTPs, with no blockchain knowledge required.
+                      </div>
+
+                        <div id="newlist" class="text-h6 ml-2">
+                          <ul>
+                            <li>Connect or sign up now and get 500 Free credits</li>
+                            <li>Use web3 wallets or your regular email</li>
+                            <li>No blockchain knowledge required</li>
+                          </ul>
+                        </div>
+                        <br>
+
+                        <div class="text-h6 mt-2 mb-4">
+                          New to crypto? Click the guide below to help you onboard.
+                        </div>
+
+                        <v-btn
+                          style="text-transform: none !important;"
+                          variant="outlined"
+                          size="large"
+                          color="indigo-lighten-2"
+                          prepend-icon="mdi-wallet"
+                          @click="gotoLink('https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask')"
+                        >
+                        How to Create a Wallet?
+                        </v-btn>
+                    </div>
+                  </v-col>
+                  <v-col cols="12" md="4" :align="'right'" align-self="center">
+                    <v-img style="max-width: 350px; border-radius: 10px;"
+                           src="/img/home/crypto_onboarding.webp"></v-img>
+                  </v-col>
+                </v-row>
+              </v-sheet>
+              
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
       <!-- ############################## SNACKBARS ####################################### -->
      <v-snackbar
         v-model="snackbar"
@@ -1451,6 +1575,8 @@ import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
+// import Web3 from 'web3';
+// const web3 = new Web3(new Web3.providers.HttpProvider());
 export default {
   name: 'Presale',
   props: {
@@ -1472,6 +1598,7 @@ export default {
     amountEth: 0,
     amountUsdt: 0,
     presaleNotLive: false,
+    learnMoreDialog: false,
     amountEmasForUsdtDiagLog: 0,
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
@@ -1486,7 +1613,7 @@ export default {
     phoneOrEmail: '',
     investmentBudgetSelected: { id: 0, name: '0$ - 5k$'},
     bestTimeToContactSelected: { id: 0, name: 'Morning'},
-    countryCodeSelected: { id: 0, name: '+1'},
+    countryCodeSelected: { id: 0, name: 'Select your country...'},
     investmentBudgets: [
       {
         id: 0,
@@ -1521,46 +1648,1222 @@ export default {
     ],
     countriesCode: [
       {
-        id: 0,
-        name: '+1',
+      "name": "Afghanistan",
+      "dial_code": "+93",
+      "code": "AF"
       },
       {
-        id: 1,
-        name: '+49',
+      "name": "Aland Islands",
+      "dial_code": "+358",
+      "code": "AX"
       },
       {
-        id: 2,
-        name: '+33',
+      "name": "Albania",
+      "dial_code": "+355",
+      "code": "AL"
       },
       {
-        id: 3,
-        name: '+61',
+      "name": "Algeria",
+      "dial_code": "+213",
+      "code": "DZ"
       },
       {
-        id: 4,
-        name: '+852',
+      "name": "AmericanSamoa",
+      "dial_code": "+1684",
+      "code": "AS"
       },
       {
-        id: 5,
-        name: '+81',
+      "name": "Andorra",
+      "dial_code": "+376",
+      "code": "AD"
       },
       {
-        id: 3,
-        name: '+82',
+      "name": "Angola",
+      "dial_code": "+244",
+      "code": "AO"
       },
       {
-        id: 4,
-        name: '+86',
+      "name": "Anguilla",
+      "dial_code": "+1264",
+      "code": "AI"
       },
       {
-        id: 5,
-        name: '+44',
+      "name": "Antarctica",
+      "dial_code": "+672",
+      "code": "AQ"
       },
-    ],
+      {
+      "name": "Antigua and Barbuda",
+      "dial_code": "+1268",
+      "code": "AG"
+      },
+      {
+      "name": "Argentina",
+      "dial_code": "+54",
+      "code": "AR"
+      },
+      {
+      "name": "Armenia",
+      "dial_code": "+374",
+      "code": "AM"
+      },
+      {
+      "name": "Aruba",
+      "dial_code": "+297",
+      "code": "AW"
+      },
+      {
+      "name": "Australia",
+      "dial_code": "+61",
+      "code": "AU"
+      },
+      {
+      "name": "Austria",
+      "dial_code": "+43",
+      "code": "AT"
+      },
+      {
+      "name": "Azerbaijan",
+      "dial_code": "+994",
+      "code": "AZ"
+      },
+      {
+      "name": "Bahamas",
+      "dial_code": "+1242",
+      "code": "BS"
+      },
+      {
+      "name": "Bahrain",
+      "dial_code": "+973",
+      "code": "BH"
+      },
+      {
+      "name": "Bangladesh",
+      "dial_code": "+880",
+      "code": "BD"
+      },
+      {
+      "name": "Barbados",
+      "dial_code": "+1246",
+      "code": "BB"
+      },
+      {
+      "name": "Belarus",
+      "dial_code": "+375",
+      "code": "BY"
+      },
+      {
+      "name": "Belgium",
+      "dial_code": "+32",
+      "code": "BE"
+      },
+      {
+      "name": "Belize",
+      "dial_code": "+501",
+      "code": "BZ"
+      },
+      {
+      "name": "Benin",
+      "dial_code": "+229",
+      "code": "BJ"
+      },
+      {
+      "name": "Bermuda",
+      "dial_code": "+1441",
+      "code": "BM"
+      },
+      {
+      "name": "Bhutan",
+      "dial_code": "+975",
+      "code": "BT"
+      },
+      {
+      "name": "Bolivia, Plurinational State of",
+      "dial_code": "+591",
+      "code": "BO"
+      },
+      {
+      "name": "Bosnia and Herzegovina",
+      "dial_code": "+387",
+      "code": "BA"
+      },
+      {
+      "name": "Botswana",
+      "dial_code": "+267",
+      "code": "BW"
+      },
+      {
+      "name": "Brazil",
+      "dial_code": "+55",
+      "code": "BR"
+      },
+      {
+      "name": "British Indian Ocean Territory",
+      "dial_code": "+246",
+      "code": "IO"
+      },
+      {
+      "name": "Brunei Darussalam",
+      "dial_code": "+673",
+      "code": "BN"
+      },
+      {
+      "name": "Bulgaria",
+      "dial_code": "+359",
+      "code": "BG"
+      },
+      {
+      "name": "Burkina Faso",
+      "dial_code": "+226",
+      "code": "BF"
+      },
+      {
+      "name": "Burundi",
+      "dial_code": "+257",
+      "code": "BI"
+      },
+      {
+      "name": "Cambodia",
+      "dial_code": "+855",
+      "code": "KH"
+      },
+      {
+      "name": "Cameroon",
+      "dial_code": "+237",
+      "code": "CM"
+      },
+      {
+      "name": "Canada",
+      "dial_code": "+1",
+      "code": "CA"
+      },
+      {
+      "name": "Cape Verde",
+      "dial_code": "+238",
+      "code": "CV"
+      },
+      {
+      "name": "Cayman Islands",
+      "dial_code": "+ 345",
+      "code": "KY"
+      },
+      {
+      "name": "Central African Republic",
+      "dial_code": "+236",
+      "code": "CF"
+      },
+      {
+      "name": "Chad",
+      "dial_code": "+235",
+      "code": "TD"
+      },
+      {
+      "name": "Chile",
+      "dial_code": "+56",
+      "code": "CL"
+      },
+      {
+      "name": "China",
+      "dial_code": "+86",
+      "code": "CN"
+      },
+      {
+      "name": "Christmas Island",
+      "dial_code": "+61",
+      "code": "CX"
+      },
+      {
+      "name": "Cocos (Keeling) Islands",
+      "dial_code": "+61",
+      "code": "CC"
+      },
+      {
+      "name": "Colombia",
+      "dial_code": "+57",
+      "code": "CO"
+      },
+      {
+      "name": "Comoros",
+      "dial_code": "+269",
+      "code": "KM"
+      },
+      {
+      "name": "Congo",
+      "dial_code": "+242",
+      "code": "CG"
+      },
+      {
+      "name": "Congo, The Democratic Republic of the Congo",
+      "dial_code": "+243",
+      "code": "CD"
+      },
+      {
+      "name": "Cook Islands",
+      "dial_code": "+682",
+      "code": "CK"
+      },
+      {
+      "name": "Costa Rica",
+      "dial_code": "+506",
+      "code": "CR"
+      },
+      {
+      "name": "Cote d'Ivoire",
+      "dial_code": "+225",
+      "code": "CI"
+      },
+      {
+      "name": "Croatia",
+      "dial_code": "+385",
+      "code": "HR"
+      },
+      {
+      "name": "Cuba",
+      "dial_code": "+53",
+      "code": "CU"
+      },
+      {
+      "name": "Cyprus",
+      "dial_code": "+357",
+      "code": "CY"
+      },
+      {
+      "name": "Czech Republic",
+      "dial_code": "+420",
+      "code": "CZ"
+      },
+      {
+      "name": "Denmark",
+      "dial_code": "+45",
+      "code": "DK"
+      },
+      {
+      "name": "Djibouti",
+      "dial_code": "+253",
+      "code": "DJ"
+      },
+      {
+      "name": "Dominica",
+      "dial_code": "+1767",
+      "code": "DM"
+      },
+      {
+      "name": "Dominican Republic",
+      "dial_code": "+1849",
+      "code": "DO"
+      },
+      {
+      "name": "Ecuador",
+      "dial_code": "+593",
+      "code": "EC"
+      },
+      {
+      "name": "Egypt",
+      "dial_code": "+20",
+      "code": "EG"
+      },
+      {
+      "name": "El Salvador",
+      "dial_code": "+503",
+      "code": "SV"
+      },
+      {
+      "name": "Equatorial Guinea",
+      "dial_code": "+240",
+      "code": "GQ"
+      },
+      {
+      "name": "Eritrea",
+      "dial_code": "+291",
+      "code": "ER"
+      },
+      {
+      "name": "Estonia",
+      "dial_code": "+372",
+      "code": "EE"
+      },
+      {
+      "name": "Ethiopia",
+      "dial_code": "+251",
+      "code": "ET"
+      },
+      {
+      "name": "Falkland Islands (Malvinas)",
+      "dial_code": "+500",
+      "code": "FK"
+      },
+      {
+      "name": "Faroe Islands",
+      "dial_code": "+298",
+      "code": "FO"
+      },
+      {
+      "name": "Fiji",
+      "dial_code": "+679",
+      "code": "FJ"
+      },
+      {
+      "name": "Finland",
+      "dial_code": "+358",
+      "code": "FI"
+      },
+      {
+      "name": "France",
+      "dial_code": "+33",
+      "code": "FR"
+      },
+      {
+      "name": "French Guiana",
+      "dial_code": "+594",
+      "code": "GF"
+      },
+      {
+      "name": "French Polynesia",
+      "dial_code": "+689",
+      "code": "PF"
+      },
+      {
+      "name": "Gabon",
+      "dial_code": "+241",
+      "code": "GA"
+      },
+      {
+      "name": "Gambia",
+      "dial_code": "+220",
+      "code": "GM"
+      },
+      {
+      "name": "Georgia",
+      "dial_code": "+995",
+      "code": "GE"
+      },
+      {
+      "name": "Germany",
+      "dial_code": "+49",
+      "code": "DE"
+      },
+      {
+      "name": "Ghana",
+      "dial_code": "+233",
+      "code": "GH"
+      },
+      {
+      "name": "Gibraltar",
+      "dial_code": "+350",
+      "code": "GI"
+      },
+      {
+      "name": "Greece",
+      "dial_code": "+30",
+      "code": "GR"
+      },
+      {
+      "name": "Greenland",
+      "dial_code": "+299",
+      "code": "GL"
+      },
+      {
+      "name": "Grenada",
+      "dial_code": "+1473",
+      "code": "GD"
+      },
+      {
+      "name": "Guadeloupe",
+      "dial_code": "+590",
+      "code": "GP"
+      },
+      {
+      "name": "Guam",
+      "dial_code": "+1671",
+      "code": "GU"
+      },
+      {
+      "name": "Guatemala",
+      "dial_code": "+502",
+      "code": "GT"
+      },
+      {
+      "name": "Guernsey",
+      "dial_code": "+44",
+      "code": "GG"
+      },
+      {
+      "name": "Guinea",
+      "dial_code": "+224",
+      "code": "GN"
+      },
+      {
+      "name": "Guinea-Bissau",
+      "dial_code": "+245",
+      "code": "GW"
+      },
+      {
+      "name": "Guyana",
+      "dial_code": "+595",
+      "code": "GY"
+      },
+      {
+      "name": "Haiti",
+      "dial_code": "+509",
+      "code": "HT"
+      },
+      {
+      "name": "Holy See (Vatican City State)",
+      "dial_code": "+379",
+      "code": "VA"
+      },
+      {
+      "name": "Honduras",
+      "dial_code": "+504",
+      "code": "HN"
+      },
+      {
+      "name": "Hong Kong",
+      "dial_code": "+852",
+      "code": "HK"
+      },
+      {
+      "name": "Hungary",
+      "dial_code": "+36",
+      "code": "HU"
+      },
+      {
+      "name": "Iceland",
+      "dial_code": "+354",
+      "code": "IS"
+      },
+      {
+      "name": "India",
+      "dial_code": "+91",
+      "code": "IN"
+      },
+      {
+      "name": "Indonesia",
+      "dial_code": "+62",
+      "code": "ID"
+      },
+      {
+      "name": "Iran, Islamic Republic of Persian Gulf",
+      "dial_code": "+98",
+      "code": "IR"
+      },
+      {
+      "name": "Iraq",
+      "dial_code": "+964",
+      "code": "IQ"
+      },
+      {
+      "name": "Ireland",
+      "dial_code": "+353",
+      "code": "IE"
+      },
+      {
+      "name": "Isle of Man",
+      "dial_code": "+44",
+      "code": "IM"
+      },
+      {
+      "name": "Israel",
+      "dial_code": "+972",
+      "code": "IL"
+      },
+      {
+      "name": "Italy",
+      "dial_code": "+39",
+      "code": "IT"
+      },
+      {
+      "name": "Jamaica",
+      "dial_code": "+1876",
+      "code": "JM"
+      },
+      {
+      "name": "Japan",
+      "dial_code": "+81",
+      "code": "JP"
+      },
+      {
+      "name": "Jersey",
+      "dial_code": "+44",
+      "code": "JE"
+      },
+      {
+      "name": "Jordan",
+      "dial_code": "+962",
+      "code": "JO"
+      },
+      {
+      "name": "Kazakhstan",
+      "dial_code": "+77",
+      "code": "KZ"
+      },
+      {
+      "name": "Kenya",
+      "dial_code": "+254",
+      "code": "KE"
+      },
+      {
+      "name": "Kiribati",
+      "dial_code": "+686",
+      "code": "KI"
+      },
+      {
+      "name": "Korea, Democratic People's Republic of Korea",
+      "dial_code": "+850",
+      "code": "KP"
+      },
+      {
+      "name": "Korea, Republic of South Korea",
+      "dial_code": "+82",
+      "code": "KR"
+      },
+      {
+      "name": "Kuwait",
+      "dial_code": "+965",
+      "code": "KW"
+      },
+      {
+      "name": "Kyrgyzstan",
+      "dial_code": "+996",
+      "code": "KG"
+      },
+      {
+      "name": "Laos",
+      "dial_code": "+856",
+      "code": "LA"
+      },
+      {
+      "name": "Latvia",
+      "dial_code": "+371",
+      "code": "LV"
+      },
+      {
+      "name": "Lebanon",
+      "dial_code": "+961",
+      "code": "LB"
+      },
+      {
+      "name": "Lesotho",
+      "dial_code": "+266",
+      "code": "LS"
+      },
+      {
+      "name": "Liberia",
+      "dial_code": "+231",
+      "code": "LR"
+      },
+      {
+      "name": "Libyan Arab Jamahiriya",
+      "dial_code": "+218",
+      "code": "LY"
+      },
+      {
+      "name": "Liechtenstein",
+      "dial_code": "+423",
+      "code": "LI"
+      },
+      {
+      "name": "Lithuania",
+      "dial_code": "+370",
+      "code": "LT"
+      },
+      {
+      "name": "Luxembourg",
+      "dial_code": "+352",
+      "code": "LU"
+      },
+      {
+      "name": "Macao",
+      "dial_code": "+853",
+      "code": "MO"
+      },
+      {
+      "name": "Macedonia",
+      "dial_code": "+389",
+      "code": "MK"
+      },
+      {
+      "name": "Madagascar",
+      "dial_code": "+261",
+      "code": "MG"
+      },
+      {
+      "name": "Malawi",
+      "dial_code": "+265",
+      "code": "MW"
+      },
+      {
+      "name": "Malaysia",
+      "dial_code": "+60",
+      "code": "MY"
+      },
+      {
+      "name": "Maldives",
+      "dial_code": "+960",
+      "code": "MV"
+      },
+      {
+      "name": "Mali",
+      "dial_code": "+223",
+      "code": "ML"
+      },
+      {
+      "name": "Malta",
+      "dial_code": "+356",
+      "code": "MT"
+      },
+      {
+      "name": "Marshall Islands",
+      "dial_code": "+692",
+      "code": "MH"
+      },
+      {
+      "name": "Martinique",
+      "dial_code": "+596",
+      "code": "MQ"
+      },
+      {
+      "name": "Mauritania",
+      "dial_code": "+222",
+      "code": "MR"
+      },
+      {
+      "name": "Mauritius",
+      "dial_code": "+230",
+      "code": "MU"
+      },
+      {
+      "name": "Mayotte",
+      "dial_code": "+262",
+      "code": "YT"
+      },
+      {
+      "name": "Mexico",
+      "dial_code": "+52",
+      "code": "MX"
+      },
+      {
+      "name": "Micronesia, Federated States of Micronesia",
+      "dial_code": "+691",
+      "code": "FM"
+      },
+      {
+      "name": "Moldova",
+      "dial_code": "+373",
+      "code": "MD"
+      },
+      {
+      "name": "Monaco",
+      "dial_code": "+377",
+      "code": "MC"
+      },
+      {
+      "name": "Mongolia",
+      "dial_code": "+976",
+      "code": "MN"
+      },
+      {
+      "name": "Montenegro",
+      "dial_code": "+382",
+      "code": "ME"
+      },
+      {
+      "name": "Montserrat",
+      "dial_code": "+1664",
+      "code": "MS"
+      },
+      {
+      "name": "Morocco",
+      "dial_code": "+212",
+      "code": "MA"
+      },
+      {
+      "name": "Mozambique",
+      "dial_code": "+258",
+      "code": "MZ"
+      },
+      {
+      "name": "Myanmar",
+      "dial_code": "+95",
+      "code": "MM"
+      },
+      {
+      "name": "Namibia",
+      "dial_code": "+264",
+      "code": "NA"
+      },
+      {
+      "name": "Nauru",
+      "dial_code": "+674",
+      "code": "NR"
+      },
+      {
+      "name": "Nepal",
+      "dial_code": "+977",
+      "code": "NP"
+      },
+      {
+      "name": "Netherlands",
+      "dial_code": "+31",
+      "code": "NL"
+      },
+      {
+      "name": "Netherlands Antilles",
+      "dial_code": "+599",
+      "code": "AN"
+      },
+      {
+      "name": "New Caledonia",
+      "dial_code": "+687",
+      "code": "NC"
+      },
+      {
+      "name": "New Zealand",
+      "dial_code": "+64",
+      "code": "NZ"
+      },
+      {
+      "name": "Nicaragua",
+      "dial_code": "+505",
+      "code": "NI"
+      },
+      {
+      "name": "Niger",
+      "dial_code": "+227",
+      "code": "NE"
+      },
+      {
+      "name": "Nigeria",
+      "dial_code": "+234",
+      "code": "NG"
+      },
+      {
+      "name": "Niue",
+      "dial_code": "+683",
+      "code": "NU"
+      },
+      {
+      "name": "Norfolk Island",
+      "dial_code": "+672",
+      "code": "NF"
+      },
+      {
+      "name": "Northern Mariana Islands",
+      "dial_code": "+1670",
+      "code": "MP"
+      },
+      {
+      "name": "Norway",
+      "dial_code": "+47",
+      "code": "NO"
+      },
+      {
+      "name": "Oman",
+      "dial_code": "+968",
+      "code": "OM"
+      },
+      {
+      "name": "Pakistan",
+      "dial_code": "+92",
+      "code": "PK"
+      },
+      {
+      "name": "Palau",
+      "dial_code": "+680",
+      "code": "PW"
+      },
+      {
+      "name": "Palestinian Territory, Occupied",
+      "dial_code": "+970",
+      "code": "PS"
+      },
+      {
+      "name": "Panama",
+      "dial_code": "+507",
+      "code": "PA"
+      },
+      {
+      "name": "Papua New Guinea",
+      "dial_code": "+675",
+      "code": "PG"
+      },
+      {
+      "name": "Paraguay",
+      "dial_code": "+595",
+      "code": "PY"
+      },
+      {
+      "name": "Peru",
+      "dial_code": "+51",
+      "code": "PE"
+      },
+      {
+      "name": "Philippines",
+      "dial_code": "+63",
+      "code": "PH"
+      },
+      {
+      "name": "Pitcairn",
+      "dial_code": "+872",
+      "code": "PN"
+      },
+      {
+      "name": "Poland",
+      "dial_code": "+48",
+      "code": "PL"
+      },
+      {
+      "name": "Portugal",
+      "dial_code": "+351",
+      "code": "PT"
+      },
+      {
+      "name": "Puerto Rico",
+      "dial_code": "+1939",
+      "code": "PR"
+      },
+      {
+      "name": "Qatar",
+      "dial_code": "+974",
+      "code": "QA"
+      },
+      {
+      "name": "Romania",
+      "dial_code": "+40",
+      "code": "RO"
+      },
+      {
+      "name": "Russia",
+      "dial_code": "+7",
+      "code": "RU"
+      },
+      {
+      "name": "Rwanda",
+      "dial_code": "+250",
+      "code": "RW"
+      },
+      {
+      "name": "Reunion",
+      "dial_code": "+262",
+      "code": "RE"
+      },
+      {
+      "name": "Saint Barthelemy",
+      "dial_code": "+590",
+      "code": "BL"
+      },
+      {
+      "name": "Saint Helena, Ascension and Tristan Da Cunha",
+      "dial_code": "+290",
+      "code": "SH"
+      },
+      {
+      "name": "Saint Kitts and Nevis",
+      "dial_code": "+1869",
+      "code": "KN"
+      },
+      {
+      "name": "Saint Lucia",
+      "dial_code": "+1758",
+      "code": "LC"
+      },
+      {
+      "name": "Saint Martin",
+      "dial_code": "+590",
+      "code": "MF"
+      },
+      {
+      "name": "Saint Pierre and Miquelon",
+      "dial_code": "+508",
+      "code": "PM"
+      },
+      {
+      "name": "Saint Vincent and the Grenadines",
+      "dial_code": "+1784",
+      "code": "VC"
+      },
+      {
+      "name": "Samoa",
+      "dial_code": "+685",
+      "code": "WS"
+      },
+      {
+      "name": "San Marino",
+      "dial_code": "+378",
+      "code": "SM"
+      },
+      {
+      "name": "Sao Tome and Principe",
+      "dial_code": "+239",
+      "code": "ST"
+      },
+      {
+      "name": "Saudi Arabia",
+      "dial_code": "+966",
+      "code": "SA"
+      },
+      {
+      "name": "Senegal",
+      "dial_code": "+221",
+      "code": "SN"
+      },
+      {
+      "name": "Serbia",
+      "dial_code": "+381",
+      "code": "RS"
+      },
+      {
+      "name": "Seychelles",
+      "dial_code": "+248",
+      "code": "SC"
+      },
+      {
+      "name": "Sierra Leone",
+      "dial_code": "+232",
+      "code": "SL"
+      },
+      {
+      "name": "Singapore",
+      "dial_code": "+65",
+      "code": "SG"
+      },
+      {
+      "name": "Slovakia",
+      "dial_code": "+421",
+      "code": "SK"
+      },
+      {
+      "name": "Slovenia",
+      "dial_code": "+386",
+      "code": "SI"
+      },
+      {
+      "name": "Solomon Islands",
+      "dial_code": "+677",
+      "code": "SB"
+      },
+      {
+      "name": "Somalia",
+      "dial_code": "+252",
+      "code": "SO"
+      },
+      {
+      "name": "South Africa",
+      "dial_code": "+27",
+      "code": "ZA"
+      },
+      {
+      "name": "South Sudan",
+      "dial_code": "+211",
+      "code": "SS"
+      },
+      {
+      "name": "South Georgia and the South Sandwich Islands",
+      "dial_code": "+500",
+      "code": "GS"
+      },
+      {
+      "name": "Spain",
+      "dial_code": "+34",
+      "code": "ES"
+      },
+      {
+      "name": "Sri Lanka",
+      "dial_code": "+94",
+      "code": "LK"
+      },
+      {
+      "name": "Sudan",
+      "dial_code": "+249",
+      "code": "SD"
+      },
+      {
+      "name": "Suriname",
+      "dial_code": "+597",
+      "code": "SR"
+      },
+      {
+      "name": "Svalbard and Jan Mayen",
+      "dial_code": "+47",
+      "code": "SJ"
+      },
+      {
+      "name": "Swaziland",
+      "dial_code": "+268",
+      "code": "SZ"
+      },
+      {
+      "name": "Sweden",
+      "dial_code": "+46",
+      "code": "SE"
+      },
+      {
+      "name": "Switzerland",
+      "dial_code": "+41",
+      "code": "CH"
+      },
+      {
+      "name": "Syrian Arab Republic",
+      "dial_code": "+963",
+      "code": "SY"
+      },
+      {
+      "name": "Taiwan",
+      "dial_code": "+886",
+      "code": "TW"
+      },
+      {
+      "name": "Tajikistan",
+      "dial_code": "+992",
+      "code": "TJ"
+      },
+      {
+      "name": "Tanzania, United Republic of Tanzania",
+      "dial_code": "+255",
+      "code": "TZ"
+      },
+      {
+      "name": "Thailand",
+      "dial_code": "+66",
+      "code": "TH"
+      },
+      {
+      "name": "Timor-Leste",
+      "dial_code": "+670",
+      "code": "TL"
+      },
+      {
+      "name": "Togo",
+      "dial_code": "+228",
+      "code": "TG"
+      },
+      {
+      "name": "Tokelau",
+      "dial_code": "+690",
+      "code": "TK"
+      },
+      {
+      "name": "Tonga",
+      "dial_code": "+676",
+      "code": "TO"
+      },
+      {
+      "name": "Trinidad and Tobago",
+      "dial_code": "+1868",
+      "code": "TT"
+      },
+      {
+      "name": "Tunisia",
+      "dial_code": "+216",
+      "code": "TN"
+      },
+      {
+      "name": "Turkey",
+      "dial_code": "+90",
+      "code": "TR"
+      },
+      {
+      "name": "Turkmenistan",
+      "dial_code": "+993",
+      "code": "TM"
+      },
+      {
+      "name": "Turks and Caicos Islands",
+      "dial_code": "+1649",
+      "code": "TC"
+      },
+      {
+      "name": "Tuvalu",
+      "dial_code": "+688",
+      "code": "TV"
+      },
+      {
+      "name": "Uganda",
+      "dial_code": "+256",
+      "code": "UG"
+      },
+      {
+      "name": "Ukraine",
+      "dial_code": "+380",
+      "code": "UA"
+      },
+      {
+      "name": "United Arab Emirates",
+      "dial_code": "+971",
+      "code": "AE"
+      },
+      {
+      "name": "United Kingdom",
+      "dial_code": "+44",
+      "code": "GB"
+      },
+      {
+      "name": "United States",
+      "dial_code": "+1",
+      "code": "US"
+      },
+      {
+      "name": "Uruguay",
+      "dial_code": "+598",
+      "code": "UY"
+      },
+      {
+      "name": "Uzbekistan",
+      "dial_code": "+998",
+      "code": "UZ"
+      },
+      {
+      "name": "Vanuatu",
+      "dial_code": "+678",
+      "code": "VU"
+      },
+      {
+      "name": "Venezuela, Bolivarian Republic of Venezuela",
+      "dial_code": "+58",
+      "code": "VE"
+      },
+      {
+      "name": "Vietnam",
+      "dial_code": "+84",
+      "code": "VN"
+      },
+      {
+      "name": "Virgin Islands, British",
+      "dial_code": "+1284",
+      "code": "VG"
+      },
+      {
+      "name": "Virgin Islands, U.S.",
+      "dial_code": "+1340",
+      "code": "VI"
+      },
+      {
+      "name": "Wallis and Futuna",
+      "dial_code": "+681",
+      "code": "WF"
+      },
+      {
+      "name": "Yemen",
+      "dial_code": "+967",
+      "code": "YE"
+      },
+      {
+      "name": "Zambia",
+      "dial_code": "+260",
+      "code": "ZM"
+      },
+      {
+      "name": "Zimbabwe",
+      "dial_code": "+263",
+      "code": "ZW"
+      }
+      ],
+    message: '',
     rules: [
       v => !!v || 'This field is required',
     ],
     panel: [0, 1, 2],
+    pieMargin: 0,
     series: [80, 5, 5, 3, 2.5, 2.5, 2],
     chartOptions: {
       labels: ['Presale / project and liquidity', 'Dev', 'Community programs / bonuses', 'Gaming bonuses', 'Marketing', 'Future CEX listings', 'Team locked for 2 years'],
@@ -1678,7 +2981,8 @@ export default {
   },
   methods: {
     init () {
-
+      this.pieMargin = this.windowWidth <= 360 ? -40 : this.windowWidth <= 390 ? -30 : -20
+      console.log(this.pieMargin)
     },
     connectWalletClicked () {
       this.connectWalletDialog = true
@@ -1718,6 +3022,13 @@ export default {
         firstScrollTo('#newtocrypto', 500, { offset: -64 });
       }, 200);
     },
+    scrollToKYCLink () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#audit', 500, { offset: -64 });
+      }, 200);
+    },
     gotoLink(link) {
       window.open(link, "_blank");
     },
@@ -1746,9 +3057,14 @@ export default {
       this.instantiateContractAbi()
     },
     instantiateContractAbi() {
-      Promise.resolve(MemeMasterAPI.instantiateContractAbi('0x932C2E35793A0470d3F8bEb45E67A0A680096eD5', import.meta.env.VITE_APP_ENVIRONMENT))
+      let contractAddress = '0x932C2E35793A0470d3F8bEb45E67A0A680096eD5'
+      let web3 = new Web3(window.ethereum);
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi(contractAddress, import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
         console.log(result.data.result)
+        let abi = result.data.result
+        let contract = new web3.eth.Contract(abi, contractAddress)
+        contract.methods.greet().call()
       })
     },
     handleSuccess(e) {
@@ -1786,7 +3102,7 @@ export default {
       if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
         url = import.meta.env.VITE_APP_MM_API
       } else {
-        url = import.meta.env.VITE_APP_MM_TEST_API
+        url = import.meta.env.VITE_APP_MM_API_TEST
       }
       try {
         // await axios.get(import.meta.env.VITE_APP_MM_API_LOCAL+'/getlastpricecoinmarketcap')
@@ -1805,7 +3121,7 @@ export default {
     async sendContactForm() {
       const isValid = await this.$refs.newCryptoForm.validate()
       if (isValid.valid) {
-        const { firstName, lastName, phoneOrEmail, investmentBudgetSelected, bestTimeToContactSelected, countryCodeSelected } = this
+        const { firstName, lastName, phoneOrEmail, investmentBudgetSelected, bestTimeToContactSelected, countryCodeSelected, message } = this
         const payload = {
           firstName,
           lastName,
@@ -1813,6 +3129,7 @@ export default {
           investmentBudget: investmentBudgetSelected?.name,
           bestTimeToContact: bestTimeToContactSelected?.name,
           countryCode: countryCodeSelected?.name,
+          message
         }
 
         this.$store.dispatch('createMessage', payload).then(() => {
@@ -1831,7 +3148,7 @@ export default {
       this.$refs.newCryptoForm.reset()
       this.investmentBudgetSelected = { id: 0, name: '0$ - 5k$' }
       this.bestTimeToContactSelected = { id: 0, name: 'Morning' }
-      this.countryCodeSelected = { id: 0, name: '+1' }
+      this.countryCodeSelected = { id: 0, name: 'Select your country' }
     }
   }
 }

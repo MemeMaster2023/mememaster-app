@@ -109,7 +109,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-tooltip location="top" v-if="!isMobileDevice">
+      <!-- <v-tooltip location="top" v-if="!isMobileDevice">
         <template v-slot:activator="{ props }">
           <v-btn v-if="drawer && isMobileDevice"
             style="margin-right:5px;margin-top:-5px"
@@ -127,7 +127,7 @@
         <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
-      </v-tooltip>
+      </v-tooltip> --> 
       <v-btn v-if="drawer && isMobileDevice"
         style="margin-right:5px;margin-top:-5px"
         variant="outlined"
@@ -452,13 +452,13 @@
         color="white"
         theme="dark"
         size="small"
-        @click="gotoKYCLink()"
+        @click="$router.currentRoute.value.path !== '/presale' ? gotoKYCLink() : scrollToKYCLink()"
       >
         <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:10px"/> 
         KYC - AUDIT
       </v-btn>
 
-      <v-tooltip location="top">
+     <!--  <v-tooltip location="top">
         <template v-slot:activator="{ props }">
           <v-btn v-if="!drawer && !isMobileDevice"
             style="margin-right:10px;margin-top:-5px"
@@ -476,7 +476,7 @@
         <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
-      </v-tooltip>
+      </v-tooltip> -->
 
      <!-- language switcher -->
       <div class="text-center">
@@ -773,6 +773,12 @@
             <v-toolbar
               color="deep-purple-darken-4"
             >
+            <v-btn
+              icon
+              @click="learnMoreDialog = false"
+            >
+              <v-icon>mdi-arrow-left-bold</v-icon>
+            </v-btn>
             <v-toolbar-title>Learn More...</v-toolbar-title>
             <v-spacer></v-spacer>
               <v-btn
@@ -895,7 +901,7 @@ import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import Contact from '@/components/contact/ContactDialog'
 import MemeMasterAPI from '../../clients/MemeMasterAPI';
-// import { scroller } from 'vue-scrollto/src/scrollTo'
+import { scroller } from 'vue-scrollto/src/scrollTo'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
 import md5 from 'md5'
 import dateformat from "dateformat"
@@ -1139,6 +1145,13 @@ export default {
       },
       getHash (name) {
         return md5(name)
+      },
+      scrollToKYCLink () {
+        const firstScrollTo = scroller();
+        this.scrollClicked = true
+        setTimeout(() => {
+          firstScrollTo('#audit', 500, { offset: -64 });
+        }, 200);
       },
       handleScroll () {
         // console.log(window.scrollY)
