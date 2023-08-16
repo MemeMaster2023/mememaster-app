@@ -1575,7 +1575,7 @@ import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
-import Web3 from 'web3';
+// import Web3 from 'web3';
 // const web3 = new Web3(new Web3.providers.HttpProvider());
 export default {
   name: 'Presale',
