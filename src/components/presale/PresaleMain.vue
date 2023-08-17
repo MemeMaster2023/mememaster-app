@@ -151,7 +151,7 @@
           <!-- ########################## PRESALE FORM ############################ -->
           <!-- #################################################################### -->
 
-         
+
 
           <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-4' : ''">
 
@@ -161,7 +161,7 @@
               @click="scrollToKYCLink()"
               style="width:100%;color:#FFF;"
             >
-              <img src="/img/icons/coinsult_squ.png" style="max-width:22px;padding-right:5px"/> 
+              <img src="/img/icons/coinsult_squ.png" style="max-width:22px;padding-right:5px"/>
               KYC - AUDIT
             </v-btn>
 
@@ -1070,11 +1070,11 @@
                     tabindex="6"
                   ></v-select>
                 </v-col>
-    
+
               </v-row>
             </v-col>
 
-      
+
               <v-col :align="'center'" cols="12" md="12" style="margin: 0 auto;">
                 <v-textarea
                   v-model="message"
@@ -1538,7 +1538,7 @@
                   </v-col>
                 </v-row>
               </v-sheet>
-              
+
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -3070,21 +3070,33 @@ export default {
         console.log(this.presaleContract)
       })
     },
+
     async buyWithEthContract () {
       // get presale details
-      await this.presaleContract.methods.presale(2).call({from: this.getUser.accounts[0]}, function(error, result){
-        console.log(error)
-      });
+
+      try {
+
+        let presale = await this.presaleContract.methods.presale(`${2}`).call({from: this.getUser.accounts[0]});
+
+        //here is the presale data
+        console.log(presale);
+
+      } catch(err) {
+
+        console.log(err)
+
+      }
+
 
       // buyWithEthContract
-      console.log(this.amountEmasForEthDiagLog)
-      console.log(this.amountEth)
-      var eth = this.amountEth * 1e18 // 18 Decimals
-      console.log(eth)
-      var tokens = Math.round(this.amountEmasForEthDiagLog) 
-      this.presaleContract.methods.buyWithEth(2, tokens).send({from: this.getUser.accounts[0], value: eth}, function(error, transactionHash){
-          //
-      });
+      // console.log(this.amountEmasForEthDiagLog)
+      // console.log(this.amountEth)
+      // var eth = this.amountEth * 1e18 // 18 Decimals
+      // console.log(eth)
+      // var tokens = Math.round(this.amountEmasForEthDiagLog)
+      // this.presaleContract.methods.buyWithEth(2, tokens).send({from: this.getUser.accounts[0], value: eth}, function(error, transactionHash){
+      //     //
+      // });
     },
     handleSuccess(e) {
         console.log(e);
