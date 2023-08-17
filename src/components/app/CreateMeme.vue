@@ -660,6 +660,7 @@
                        variant="outlined"
                        size="small"
                        prepend-icon="mdi-trash-can-outline"
+                       @click="deleteMultipleDraftDialog = true"
                 >
                  Delete Selected
                 </v-btn>
@@ -1011,6 +1012,18 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="deleteMultipleDraftDialog" persistent min-width="290" max-width="390">
+      <v-card>
+        <v-card-title class="headline">Delete Selected Drafts</v-card-title>
+        <v-card-text class="subheading">Please, confirm.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="grey darken-1" text @click="deleteMultipleDraftDialog = false">Cancel</v-btn>
+          <v-btn color="red darken-1" text @click="deleteMultipleDraftConfirm">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <!-- ############################## SNACKBARS ####################################### -->
     <v-snackbar
         v-model="snackbar"
@@ -1061,6 +1074,7 @@ export default {
     generateLoading: false,
     promptGuideDialog: false,
     deleteDraftDialog: false,
+    deleteMultipleDraftDialog: false,
     storageRef: null,
     view: 'generate',
     panel: ['settings'],
@@ -1800,7 +1814,50 @@ export default {
         // Uh-oh, an error occurred!
       });
 
-    }
+    },
+    deleteMultipleDraft () {
+      this.deleteMultipleDraftDialog = true
+    },
+    deleteMultipleDraftConfirm () {
+      console.log(this.selectedForDelete)
+      for (var f in this.selectedForDelete) {
+        var file = this.selectedForDelete[f]
+        this.deleteMultipleDraftAction(file)
+      }
+    },
+    deleteMultipleDraftAction (file) {
+      // Create a reference to the file to delete
+      var filePath = file.metadata.ref.fullPath
+      var deleteFileRef = this.storageRef.child(filePath);
+
+      // Delete the file
+      deleteFileRef.delete().then(() => {
+        // File deleted successfully
+        // console.log(this.draftsArr)
+        // console.log(this.selectedItem)
+        let index
+        for (var i in this.draftsArr) {
+          console.log(this.draftsArr[i])
+          console.log(typeof this.draftsArr[i].files)
+          if (typeof this.draftsArr[i].files === 'object') {
+            console.log(this.draftsArr[i].files)
+            if (this.draftsArr[i].files.findIndex(item => item.url === file.url) > -1 ) {
+              index = this.draftsArr[i].files.findIndex(item => item.url === file.url)
+              this.draftsArr[i].files.splice(index, 1)
+              console.log('File found')
+              console.log(i)
+            }
+          } 
+        }
+        this.deleteMultipleDraftDialog = false
+        this.snackbar = true
+        this.snackbarText = 'Multiple Drafts deleted!'
+        this.selectedForDelete = []
+      }).catch((error) => {
+        // Uh-oh, an error occurred!
+      });
+
+    },
   }
 }
 </script>
