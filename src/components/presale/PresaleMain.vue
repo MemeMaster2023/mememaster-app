@@ -3073,21 +3073,14 @@ export default {
 
     async buyWithEthContract () {
       // get presale details
-
       try {
-
         let presale = await this.presaleContract.methods.presale(`${2}`).call({from: this.getUser.accounts[0]});
-
         //here is the presale data
         console.log(presale);
-
       } catch(err) {
-
         console.log(err)
-
       }
-
-
+      
       // buyWithEthContract
       // console.log(this.amountEmasForEthDiagLog)
       // console.log(this.amountEth)

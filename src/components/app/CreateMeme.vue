@@ -697,6 +697,7 @@
                         link
                         :value="file"
                         active-color="primary"
+                        @click="selectedDraftClicked(file)"
                       >
                       
                       <template v-slot:prepend="{ isActive }">
@@ -706,7 +707,7 @@
                           style="margin-top: 15px;margin-right: 10px"
                           :input-value="isActive"
                           color="primary"
-                          @click="fileSelected(file)"
+                          @click.stop="fileSelected(file)"
                         ></v-checkbox>
 
                         <v-avatar color="purple-lighten-1" style="border-radius: 2px;" size="65">
