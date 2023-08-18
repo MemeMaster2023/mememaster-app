@@ -9,14 +9,21 @@
 
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
-            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-2 text-white'">Meme Master Presale is starting soon!</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 pt-4 text-white font-weight-medium">The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET (10pm UTC). Get ready to join the revolution of creativity!<br><br>We're bringing you a one-of-a-kind AI powered platform where you can mint, trade, and collect Memes music and NFTs, interact with our games, find new projects on our new token listing platform and a host of the features that are in development, please check out the information below including our roadmap, video and tier offers for more information.</div>
+            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-2 text-white'">Meme Master Presale</div>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 pt-4 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC).<br><br>
+              <ul class="ml-4">
+                <li>Exchange EMAS tokens for EMAS points.</li>
+                <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
+                <li>Win EMAS points and convert into EMAS tokens.</li>
+                <li>Hold EMAS tiers to gain more access and discounted entry to early new token listing, new project releases, airdrops and much more.</li>
+              </ul>
+            </div>
 
             <v-tooltip location="bottom" v-if="!isMobileDevice">
               <template v-slot:activator="{ props }">
                 <div class="text-center">
                   <v-btn
-                        class="mt-4"
+                        class="mt-6 mb-2"
                         size="large"
                         color="#360a3f"
                         style="text-transform: none !important;color:#FFF"
@@ -175,23 +182,23 @@
               </v-toolbar>
 
 
-                <div class="pt-4 text-h5 ma-2 text-black">Aug 2023 - Sept 2023</div>
-                <div class="text-h6 ma-2 text-black">1 EMAS = $0.005</div>
+                <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
+                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ (parseInt(presale.price) / 1000000000000000000) }}</div>
                 <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0055</div>
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
-                    model-value="0"
+                    :model-value="stageProgress"
                     height="30"
                     color="#360a3f"
                     style="background-color: #a692aa;"
                   >
-                  <strong>{{ '0' }}%</strong>
+                  <strong>{{ stageProgress }}%</strong>
                   </v-progress-linear>
                 </v-layout>
 
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 0 / 350,000,000</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $0.00 / $1,750,000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold }} / {{ numberWithCommas(presale.tokensToSell) }}</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised }} / $1,750,000</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -466,12 +473,12 @@
 
             <v-card theme="light"
                     color="purple-darken-3"
-                    :min-height="isMobileDevice ? '500' : '420'"
+                    :min-height="isMobileDevice ? '100%' : '100%'"
                     max-height="100%"
                     max-width="450"
                     variant="outlined"
             >
-            <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
+            <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;margin-bottom: 15px;">
               Make sure you have enough ETH in your wallet for the gas fees as well as your purchase, you can then use the swap ETH to EMAS and follow the instructions in your wallet.<br><br>
               Type in the amount of ETH you wish to change for EMAS tokens and then click “Convert ETH”. Your wallet provider will ask you to confirm the transaction and will also show you the cost of gas fees.<br><br>
               You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.
@@ -513,12 +520,12 @@
 
             <v-card theme="light"
                     color="purple-darken-3"
-                    :min-height="isMobileDevice ? '470' : '420'"
+                    :min-height="isMobileDevice ? '100%' : '100%'"
                     max-height="100%"
                     max-width="450"
                     variant="outlined"
             >
-              <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;">
+              <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;margin-bottom: 15px;">
                 Make sure you have at least $30 USDT in your wallet. Enter the amount of USDT you wish to purchase EMAS tokens with then Click "Convert USDT".<br><br>
                 You will then be asked to approve the purchase twice by your wallet. Please make sure you go through two approval steps to complete the transaction.<br><br>
                 You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.
@@ -887,7 +894,7 @@
               variant="outlined"
             >
              <v-icon size="28px" color="purple-darken-4"  class="mr-4">mdi-ethereum</v-icon>
-             <div :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">ERC-20 ETH Token</div>
+             <div :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1rem;font-weight:bold'">ERC-20 ETH Token</div>
             </v-chip>
           </v-col>
 
@@ -901,7 +908,7 @@
               variant="outlined"
             >
              <v-icon size="28px" color="purple-darken-4" class="mr-4">mdi-circle-multiple-outline</v-icon>
-             <div v-if="!isMobileDevice" :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000</div>
+             <div v-if="!isMobileDevice" :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1rem;font-weight:bold'">Supply: 1,000,000,000</div>
              <div v-else :style="isMobileDevice ? 'font-weight:bold' : 'font-size: 1.3rem;font-weight:bold'">Supply: 1,000,000,000</div>
             </v-chip>
           </v-col>
@@ -918,7 +925,7 @@
             <v-icon color="green-lighten-2"><img
                         style="width: 32px;margin-left:5px;"
                         src="/img/logos/logo.png" alt="Icon" /></v-icon>
-              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1.3rem;font-weight:bold;margin-left:15px'">Symbol: EMAS</div>
+              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1rem;font-weight:bold;margin-left:15px'">Symbol: EMAS</div>
             </v-chip>
           </v-col>
 
@@ -932,7 +939,7 @@
               variant="outlined"
             >
               <v-icon size="28px" color="purple-darken-4" class="mr-4">mdi-lock-check</v-icon>
-              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1.3rem;font-weight:bold;margin-left:10px'">Team Tokens Locked</div>
+              <div :style="isMobileDevice ? 'font-weight:bold;margin-left:10px' : 'font-size: 1rem;font-weight:bold;margin-left:10px'">Team Tokens Locked</div>
             </v-chip>
           </v-col>
 
@@ -1576,6 +1583,7 @@ import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
+import dateformat from "dateformat"
 import Web3 from 'web3';
 // const web3 = new Web3(new Web3.providers.HttpProvider());
 export default {
@@ -1595,6 +1603,11 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
+    activePresale: 2, // array in contract
+    presale: [],
+    stageProgress: 0,
+    tokensSold: 0,
+    raised: 0,
     ethPrice: 0,
     usdtPrice: 0,
     amountEth: 0,
@@ -2975,6 +2988,7 @@ export default {
     this.priceInterval = setInterval(() => {
       this.getLastestPrice();
     }, 60000);
+    this.instantiateContractAbi()
   },
   beforeUnmount() {
     if (this.priceInterval) {
@@ -3057,9 +3071,8 @@ export default {
           this.connectWalletDialog = !isConnected;
         }, 500);
       }
-      this.instantiateContractAbi()
     },
-    instantiateContractAbi() {
+    instantiateContractAbi () {
       let contractAddress = '0x932C2E35793A0470d3F8bEb45E67A0A680096eD5'
       let web3 = new Web3(window.ethereum);
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(contractAddress, import.meta.env.VITE_APP_ENVIRONMENT))
@@ -3068,28 +3081,41 @@ export default {
         let abi = JSON.parse(result.data.result)
         this.presaleContract = new web3.eth.Contract(abi, contractAddress)
         console.log(this.presaleContract)
+        this.loadPresaleFromContract()
       })
     },
-
-    async buyWithEthContract () {
+    async loadPresaleFromContract () {
       // get presale details
       try {
-        let presale = await this.presaleContract.methods.presale(`${2}`).call({from: this.getUser.accounts[0]});
+        this.presale = await this.presaleContract.methods.presale(`${this.activePresale}`).call({from: this.getUser.accounts[0]});
         //here is the presale data
-        console.log(presale);
+        console.log(this.presale);
+        console.log(parseInt(this.presale.tokensToSell))
+        var tokensToSell = parseInt(this.presale.tokensToSell)
+        var inSale = parseInt(this.presale.inSale)
+        this.stageProgress = Math.round(inSale / tokensToSell)
+        this.tokensSold = tokensToSell - inSale
+        this.raised = ((parseInt(this.presale.price) / 1000000000000000000) * this.tokensSold).toFixed(2)
       } catch(err) {
         console.log(err)
       }
-      
+    },
+    async buyWithEthContract () {
+
       // buyWithEthContract
-      // console.log(this.amountEmasForEthDiagLog)
-      // console.log(this.amountEth)
-      // var eth = this.amountEth * 1e18 // 18 Decimals
-      // console.log(eth)
-      // var tokens = Math.round(this.amountEmasForEthDiagLog)
-      // this.presaleContract.methods.buyWithEth(2, tokens).send({from: this.getUser.accounts[0], value: eth}, function(error, transactionHash){
-      //     //
-      // });
+      console.log(this.amountEmasForEthDiagLog)
+      console.log(this.amountEth)
+      var eth = this.amountEth * 1e18 // 18 Decimals
+      console.log(eth)
+      var tokens = Math.round(this.amountEmasForEthDiagLog)
+
+      try {
+        this.presaleContract.methods.buyWithEth(`${2}`, `${tokens}`).send({from: this.getUser.accounts[0], value: `${eth}`}, function(error, transactionHash){
+          //
+        });
+      } catch(err) {
+        console.log(err)
+      }
     },
     handleSuccess(e) {
         console.log(e);
@@ -3175,6 +3201,24 @@ export default {
       this.investmentBudgetSelected = { id: 0, name: '0$ - 5k$' }
       this.bestTimeToContactSelected = { id: 0, name: 'Morning' }
       this.countryCodeSelected = { id: 0, name: 'Select your country' }
+    },
+    numberWithCommas (x) {
+        console.log()
+        x = parseInt(x)
+        x = x.toString()
+        var pattern = /(-?\d+)(\d{3})/;
+        while (pattern.test(x))
+            x = x.replace(pattern, "$1,$2");
+        return x;
+    },
+    makeDate (date) {
+      if (date === undefined ) return
+      date = parseInt(date) * 1000
+      console.log('startDate: ' + date)
+      return dateformat(new Date(date), 'mmm yyyy')
+    },
+    makeDateTime (date) {
+      return dateformat(new Date(date), 'dd mmm, yyyy HH:MM')
     }
   }
 }
