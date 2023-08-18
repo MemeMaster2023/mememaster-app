@@ -27,7 +27,7 @@
                   </v-btn>
                 </div>
               </template>
-              <span>Claiming will be available 14 days after the presale ends
+              <span>Claiming will be available 14 days after the presale ends. Token listing after 20 days.
               </span>
             </v-tooltip>
 
@@ -42,6 +42,7 @@
                 Claim Your Meme Master Tokens
               </v-btn>
               <div style="font-size: 0.8rem;color:#FFF">Claiming will be available 14 days after the presale ends</div>
+              <div style="font-size: 0.8rem;color:#FFF">Token listing after 20 days</div>
             </div>
 
             <v-row  class="mt-4" v-if="!isMobileDevice">
@@ -150,7 +151,7 @@
           <!-- ########################## PRESALE FORM ############################ -->
           <!-- #################################################################### -->
 
-         
+
 
           <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-4' : ''">
 
@@ -160,7 +161,7 @@
               @click="scrollToKYCLink()"
               style="width:100%;color:#FFF;"
             >
-              <img src="/img/icons/coinsult_squ.png" style="max-width:22px;padding-right:5px"/> 
+              <img src="/img/icons/coinsult_squ.png" style="max-width:22px;padding-right:5px"/>
               KYC - AUDIT
             </v-btn>
 
@@ -1069,11 +1070,11 @@
                     tabindex="6"
                   ></v-select>
                 </v-col>
-    
+
               </v-row>
             </v-col>
 
-      
+
               <v-col :align="'center'" cols="12" md="12" style="margin: 0 auto;">
                 <v-textarea
                   v-model="message"
@@ -1277,7 +1278,7 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn class="text-white" size="large" style="width:100%" color="#360a3f">
+                <v-btn class="text-white" size="large" style="width:100%" color="#360a3f" @click="buyWithEthContract()">
                   Convert ETH
                 </v-btn>
               </v-col>
@@ -1537,7 +1538,7 @@
                   </v-col>
                 </v-row>
               </v-sheet>
-              
+
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -1575,7 +1576,7 @@ import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
-// import Web3 from 'web3';
+import Web3 from 'web3';
 // const web3 = new Web3(new Web3.providers.HttpProvider());
 export default {
   name: 'Presale',
@@ -1590,6 +1591,7 @@ export default {
     loading: false,
     snackbar: false,
     snackbarText: '',
+    presaleContract: null,
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
@@ -2972,7 +2974,7 @@ export default {
     this.getLastestPrice()
     this.priceInterval = setInterval(() => {
       this.getLastestPrice();
-    }, 6000);
+    }, 60000);
   },
   beforeUnmount() {
     if (this.priceInterval) {
@@ -3063,10 +3065,31 @@ export default {
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(contractAddress, import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
         console.log(result.data.result)
-        let abi = result.data.result
-        let contract = new web3.eth.Contract(abi, contractAddress)
-        contract.methods.greet().call()
+        let abi = JSON.parse(result.data.result)
+        this.presaleContract = new web3.eth.Contract(abi, contractAddress)
+        console.log(this.presaleContract)
       })
+    },
+
+    async buyWithEthContract () {
+      // get presale details
+      try {
+        let presale = await this.presaleContract.methods.presale(`${2}`).call({from: this.getUser.accounts[0]});
+        //here is the presale data
+        console.log(presale);
+      } catch(err) {
+        console.log(err)
+      }
+      
+      // buyWithEthContract
+      // console.log(this.amountEmasForEthDiagLog)
+      // console.log(this.amountEth)
+      // var eth = this.amountEth * 1e18 // 18 Decimals
+      // console.log(eth)
+      // var tokens = Math.round(this.amountEmasForEthDiagLog)
+      // this.presaleContract.methods.buyWithEth(2, tokens).send({from: this.getUser.accounts[0], value: eth}, function(error, transactionHash){
+      //     //
+      // });
     },
     handleSuccess(e) {
         console.log(e);

@@ -12,7 +12,7 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue({ 
+    vue({
       template: { transformAssetUrls }
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
@@ -38,19 +38,18 @@ export default defineConfig({
             /* NodeModulesPolyfills(),
             GlobalsPolyfills({
               process: true,
-              buffer: true, 
+              buffer: true,
             }), */
         ]
     }
   },
-  define: { 
+  define: {
     'process.env': {}
   },
   // include: ['color', 'mersenne-twister'],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      web3: 'web3/dist/web3.min.js',
     },
     extensions: [
       '.js',
