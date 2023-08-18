@@ -15,6 +15,8 @@
     "@mdi/font": "7.0.96",
     "@metamask/onboarding": "^1.0.1",
     "@walletconnect/client": "^1.8.0",
+    "@walletconnect/ethereum-provider": "^2.9.2",
+    "@walletconnect/modal": "^2.6.1",
     "@walletconnect/qrcode-modal": "^1.8.0",
     "apexcharts": "^3.41.1",
     "axios": "^1.4.0",
