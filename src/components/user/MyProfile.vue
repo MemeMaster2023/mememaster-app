@@ -14,8 +14,9 @@
     </v-container>
     <v-container class="mt-12 pt-12" v-else>
       <v-row class="mx-md-12 mb-md-6 px-md-12 mx-auto px-auto mt-12">
-          <v-col cols="12" class="d-flex justify-center" >
-              <div>
+          <v-col cols="12" class="d-flex flex-column flex-md-row justify-center" >
+            <div class="d-flex justify-center">
+              <div >
               <v-avatar color="deep-purple-lighten-4" size="120" style="border-radius: 10px;">
                 <v-img v-if="getUser.avatar === ''" :src="'https://robohash.org/' + getUser.displayName" style="width: 120px;height:120px;">
                 </v-img>
@@ -30,7 +31,8 @@
               >
               </v-btn>
               </div>
-              <div class="ml-6 text-left d-flex flex-column">
+            </div>
+              <div class="ml-6 text-left d-flex flex-column align-center align-md-start mt-4 mt-md-0">
                   <span class="text-md-h3 text-h4 text-left">{{ getUser.displayName }}</span>
                   <span class="text-p font-weight-medium pl-1 mt-2">Member Since: {{ makeDate(getUser.memberSince) }}</span>
                   <span v-if="getUser.accLevel === 10" class="text-p font-weight-bold pl-1 mt-2">MM - Admin User</span>

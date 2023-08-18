@@ -340,7 +340,8 @@
                       <v-row style="margin-top: -20px;margin-left: 1px" v-if="showAdvanced" >
                         <v-col cols="12" md="12">
                           <v-layout>
-                            <p>Model</p>
+                            <p 
+                            >Model</p>
                             <v-tooltip location="top" text="The Model to user to generate the image. Default is latest stable version.">
                               <template v-slot:activator="{ props }">
                                 <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
@@ -355,6 +356,7 @@
                             item-value="id"
                             density="compact"
                             variant="outlined"
+                            class="whitelist-translation"
                           ></v-select>
                         </v-col>
                       </v-row>
