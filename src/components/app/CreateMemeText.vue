@@ -253,7 +253,7 @@
        
         <!-- ###################### THE SELECTED IMAGE WITH THE MEME TEXT ################# -->
         <v-col cols="12" md="5" >
-          <div ref="memeCanvas">
+          <div ref="memeCanvas" class="whitelist-translation">
             <v-img 
                 :src="'data:image/png;base64,' + selectedImage.base64" width="100%"
                 :class="verticalPlacement + ' ' + horizontalPlacement"
