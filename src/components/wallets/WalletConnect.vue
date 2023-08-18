@@ -274,7 +274,7 @@
         console.log('########### is this code happening ###########')
         var nw = parseInt(this.chainId).toString(16)
         store.commit('SetUserDetails', {
-          accounts: JSON.parse(JSON.stringify(this.accounts))[0],
+          accounts: JSON.parse(JSON.stringify(this.accounts)),
           walletProvider: 'WalletConnect',
           mmConnected: false,
           twConnected: false,
@@ -287,7 +287,7 @@
           networkChainID: '0x' + nw
         })
 
-        let userAddress = JSON.parse(JSON.stringify(this.accounts))[0].toLowerCase()
+        let userAddress = JSON.parse(JSON.stringify(this.accounts[0])).toLowerCase()
         // console.log('userAddress[0]')
         // console.log(userAddress[0])
         let usersRef = db.collection('users')
