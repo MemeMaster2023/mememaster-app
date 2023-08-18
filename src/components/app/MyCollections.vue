@@ -75,7 +75,7 @@
                       </v-img>
                     </template>
 
-                    <v-list-item-title style="color: #FFF;font-size: 18px;font-weight: bold;">
+                    <v-list-item-title style="color: #FFF;font-size: 18px;font-weight: bold;" class="whitelist-translation">
                       {{ item.name  }}
                     </v-list-item-title>
 
