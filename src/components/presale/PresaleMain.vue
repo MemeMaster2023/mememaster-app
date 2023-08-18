@@ -3104,15 +3104,19 @@ export default {
 
       // buyWithEthContract
       console.log(this.amountEmasForEthDiagLog)
-      console.log(this.amountEth)
-      var eth = this.amountEth * 1e18 // 18 Decimals
-      console.log(eth)
-      var tokens = Math.round(this.amountEmasForEthDiagLog)
+      // console.log(this.amountEth)
+      // var eth = this.amountEth * 1e18 // 18 Decimals
+      // console.log(eth)
+      let tokens = Math.round(this.amountEmasForEthDiagLog)
 
       try {
-        this.presaleContract.methods.buyWithEth(`${2}`, `${tokens}`).send({from: this.getUser.accounts[0], value: `${eth}`}, function(error, transactionHash){
-          //
+        let ethBuy = this.presaleContract.methods.buyWithEth(`${3}`, `${tokens}`).send({
+          from: this.getUser.accounts[0],
+          value: Web3.utils.toWei(this.amountEth, 'ether'),
         });
+
+        console.log(ethBuy);
+
       } catch(err) {
         console.log(err)
       }
