@@ -41,9 +41,11 @@
   import firebase from "firebase/app"
   import "firebase/auth"
   import { db } from '@/main'
-  import WalletConnect from "@walletconnect/client";
-  import QRCodeModal from "@walletconnect/qrcode-modal"
+  // import WalletConnect from "@walletconnect/client";
+  // import QRCodeModal from "@walletconnect/qrcode-modal"
   import { generate } from 'project-name-generator';
+  import {EthereumProvider} from '@walletconnect/ethereum-provider'
+
   export default {
     props: {
       dark: Boolean,
@@ -51,7 +53,6 @@
       windowHeight: Number,
       buttonType: String,
       isMobileDevice: Boolean
-      
     },
     components: {
     },
@@ -61,7 +62,8 @@
         displayName: '',
         userExists: false,
         accounts: [],
-        chainId: 0
+        chainId: 0,
+        provider: null
       }
     },
     computed: {
@@ -103,76 +105,78 @@
       } */
     },
     created() {
-      if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
-        console.log(this.getUser.walletconnect)
-        let walletconnect = JSON.parse(this.getUser.walletconnect)
-        this.accounts = walletconnect.accounts
-        this.chainId = walletconnect.chainId
-        this.walletConnectInit('init')
-      } else {
-        store.commit('SetConnectedUserFalse', {
-          welcome: false
-        })
-      }
+      // console.log('this.getUser', this.getAccounts)
+      // if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
+      //   console.log(this.getUser.walletconnect)
+      //   let walletconnect = JSON.parse(this.getUser.walletconnect)
+      //   this.accounts = walletconnect.accounts
+      //   this.chainId = walletconnect.chainId
+      //   this.walletConnectInit('init')
+      // } else {
+      //   store.commit('SetConnectedUserFalse', {
+      //     welcome: false
+      //   })
+      // }
     },
     methods:{
       async walletConnectInit (type) {
-        console.log(type)
+        const projectId = '7d0d0ae97692814f880ba8cfbaa9fa9e'
         if (type === 'button') {
-          this.connector = new WalletConnect({
-            bridge: "https://bridge.walletconnect.org", // Required
-            qrcodeModal: QRCodeModal,
-          })
+          try {
+            this.provider = await EthereumProvider.init({
+              projectId,
+              chains: [1],
+              showQrModal: true, // REQUIRED set to "true" to use @walletconnect/modal,
+              qrModalOptions:{
+                themeVariables:{
+                  "--wcm-z-index": "9999"
+                }
+              },
+            });
+            await this.provider.connect()
+            const accounts = await this.provider
+            this.accounts = JSON.parse(JSON.stringify(accounts.accounts))
+            this.chainId = JSON.parse(JSON.stringify(accounts.chainId))
+            console.log('Connect success data is',this.accounts, this.chainId)
+            this.enableWalletConnect()
+          } catch (error) {
+            console.log(error.code)
+          }
         } else {
           // TODO
-          let walletconnect = JSON.parse(this.getUser.walletconnect)
-          this.connector = new WalletConnect(walletconnect)
+
           this.enableWalletConnect()
+          console.log(this.provider, 'enableWallet enableWalletenableWalletenableWallet')
         }
 
-        // Check if connection is already established
-        if (!this.connector.connected) {
-          // create new session
-          this.connector.createSession()
-          // this.enableWalletConnect()
-        }
+        this.provider.on("connect", (payload) => {
+          console.log(payload)
+        });
+        // chain changed
+        this.provider.on("chainChanged",(payload) => {
+          console.log(payload)
+        });
+        // accounts changed
+        this.provider.on("accountsChanged",(payload) => {
+          this.accounts = payload
 
-        // Subscribe to connection events
-        this.connector.on('connect', (error, payload) => {
-          if (error) {
-            throw error;
-          }
+         })
+        // session established
+        this.provider.on("connect",(payload) => {
+          console.log(payload)
+        });
+        // session event - chainChanged/accountsChanged/custom events
+        this.provider.on("session_event",(payload) => {
           // Get provided accounts and chainId
-          // console.log(payload.params[0])
-          // const { accounts, chainId } = payload.params[0]
-          this.accounts = payload.params[0].accounts
-          this.chainId = payload.params[0].chainId
+          this.chainId =  payload.params.chainId
           // Do the rest of the store and firebase stuff
           this.enableWalletConnect()
-        })
-
-        this.connector.on('session_update', (error, payload) => {
-          if (error) {
-            throw error;
-          }
-
-          // Get updated accounts and chainId
-          // console.log(payload.params[0])
-          // const { accounts, chainId } = payload.params[0];
-          this.accounts = payload.params[0].accounts
-          this.chainId = payload.params[0].chainId
-          // Do the rest of the store and firebase stuff
-          this.enableWalletConnect()
-        })
-
-        this.connector.on('disconnect', (error, payload) => {
-          if (error) {
-            throw error;
-          }
-          // Delete connector
-          console.log(payload.params[0])
-          this.connector = null
-          // Do the store remove stuff
+        });
+        // session disconnect
+        this.provider.on("disconnect",(payload) => {
+          this.provider = null
+          // Log the disconnect
+          console.log(payload)
           store.commit('SetWalletConnectChanges', {
             accounts: [],
             walletConnected: false,
@@ -181,10 +185,80 @@
             isEmailConnected: false,
             uid: '',
           })
+          localStorage.clear();
           firebase.auth().signOut()
           store.commit("SetEmpty")
-        })
+        });
       },
+      // async walletConnectInit (type) {
+      //   console.log(type)
+      //   if (type === 'button') {
+      //     this.connector = new WalletConnect({
+      //       bridge: "https://bridge.walletconnect.org", // Required
+      //       qrcodeModal: QRCodeModal,
+      //     })
+      //   } else {
+      //     // TODO
+      //     let walletconnect = JSON.parse(this.getUser.walletconnect)
+      //     this.connector = new WalletConnect(walletconnect)
+      //     this.enableWalletConnect()
+      //   }
+
+      //   // Check if connection is already established
+      //   if (!this.connector.connected) {
+      //     // create new session
+      //     this.connector.createSession()
+      //     // this.enableWalletConnect()
+      //   }
+
+      //   // Subscribe to connection events
+      //   this.connector.on('connect', (error, payload) => {
+      //     if (error) {
+      //       throw error;
+      //     }
+      //     // Get provided accounts and chainId
+      //     // console.log(payload.params[0])
+      //     // const { accounts, chainId } = payload.params[0]
+      //     this.accounts = payload.params[0].accounts
+      //     this.chainId = payload.params[0].chainId
+      //     // Do the rest of the store and firebase stuff
+      //     this.enableWalletConnect()
+      //   })
+
+      //   this.connector.on('session_update', (error, payload) => {
+      //     if (error) {
+      //       throw error;
+      //     }
+
+      //     // Get updated accounts and chainId
+      //     // console.log(payload.params[0])
+      //     // const { accounts, chainId } = payload.params[0];
+      //     this.accounts = payload.params[0].accounts
+      //     this.chainId = payload.params[0].chainId
+      //     // Do the rest of the store and firebase stuff
+      //     this.enableWalletConnect()
+      //   })
+
+      //   this.connector.on('disconnect', (error, payload) => {
+      //     if (error) {
+      //       throw error;
+      //     }
+      //     // Delete connector
+      //     console.log(payload.params[0])
+      //     this.connector = null
+      //     // Do the store remove stuff
+      //     store.commit('SetWalletConnectChanges', {
+      //       accounts: [],
+      //       walletConnected: false,
+      //       walletProvider: '',
+      //       isLoggedIn: false,
+      //       isEmailConnected: false,
+      //       uid: '',
+      //     })
+      //     firebase.auth().signOut()
+      //     store.commit("SetEmpty")
+      //   })
+      // },
       disconnectWallet () {
         store.commit('SetWalletConnectChanges', {
           accounts: [],
@@ -198,10 +272,9 @@
       },
       enableWalletConnect () {
         console.log('########### is this code happening ###########')
-        console.log(this.accounts)
         var nw = parseInt(this.chainId).toString(16)
         store.commit('SetUserDetails', {
-          accounts: this.accounts,
+          accounts: JSON.parse(JSON.stringify(this.accounts)),
           walletProvider: 'WalletConnect',
           mmConnected: false,
           twConnected: false,
@@ -214,7 +287,7 @@
           networkChainID: '0x' + nw
         })
 
-        let userAddress = this.accounts[0].toLowerCase()
+        let userAddress = JSON.parse(JSON.stringify(this.accounts[0])).toLowerCase()
         // console.log('userAddress[0]')
         // console.log(userAddress[0])
         let usersRef = db.collection('users')
