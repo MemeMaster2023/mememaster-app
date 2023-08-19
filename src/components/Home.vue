@@ -16,15 +16,15 @@
         :key="i"
         :src="item.src" 
         cover
-        :style="isMobileDevice ? 'height:' + windowHeight + 'px' : ''"
+        :style="isMobileDevice ? 'height:' + windowHeight + 'vh' : ''"
         gradient="to bottom, rgba(0,0,0,.7), rgba(0,0,0,.4)"
       >
         <div :class="isMobileDevice ? 'ma-2' : ''">
           
-          <v-row style="margin-top:280px;" :align="'center'">
-            <v-col cols="12" md="3" class="pa-4">
+          <v-row style="margin-top:108px;" :align="'center'">
+            <v-col cols="12" md="2" xl="3"  class="pa-4">
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="8" xl="6">
               
               <template v-if="i === 0">
                 <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
@@ -60,7 +60,7 @@
               </v-layout> -->
             </v-col>
 
-            <v-col cols="12" md="3" class="pa-4">
+            <v-col cols="12" md="2" xl="3" class="pa-4">
             </v-col>
           </v-row>
 
@@ -194,165 +194,164 @@
     <!-- ###############################################################-->
     <!-- #################### Mobile Device ############################-->
     <!-- ###############################################################-->
-    
-    <v-row v-if="isMobileDevice">
-      <v-img src="/img/home/mememaster_home_mobile.webp" 
-            cover
-            gradient="to bottom, rgba(0,0,0,.8), rgba(0,0,0,.5)"
-      >
-      
-        <div class="ma-8">
-          <v-row :style="'margin-top:' + (windowHeight - 560) + 'px;'" :align="'center'">
-            <v-col cols="12" md="12" >
-              <div class="text-center pb-12">
-                <v-btn variant="outlined" 
-                       color="#FFF"
-                       size="large"
-                       prepend-icon="mdi-tag-outline"
-                       style="text-transform: none !important;"
-                       to="/presale"
-                >
-                  Meme Master Presale
-              </v-btn>
-              </div>
-              <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
-              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
-              <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
-              <!--<v-layout class="mt-8" >
-                <v-btn size="x-large"
-                      variant="outlined"
-                      color="white"
-                      theme="dark"
-                      style="width:100%"
-                >Coming Soon!
+    <v-container v-if="isMobileDevice">
+      <v-row>
+        <v-img src="/img/home/mememaster_home_mobile.webp" 
+              cover
+              gradient="to bottom, rgba(0,0,0,.8), rgba(0,0,0,.5)"
+        >
+        
+          <div class="ma-8">
+            <v-row :style="'margin-top:' + (windowHeight - 560) + 'px;'" :align="'center'">
+              <v-col cols="12" md="12" >
+                <div class="text-center pb-12">
+                  <v-btn variant="outlined" 
+                        color="#FFF"
+                        size="large"
+                        prepend-icon="mdi-tag-outline"
+                        style="text-transform: none !important;"
+                        to="/presale"
+                  >
+                    Meme Master Presale
                 </v-btn>
-              </v-layout> -->
+                </div>
+                <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
+                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
+                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
+                <!--<v-layout class="mt-8" >
+                  <v-btn size="x-large"
+                        variant="outlined"
+                        color="white"
+                        theme="dark"
+                        style="width:100%"
+                  >Coming Soon!
+                  </v-btn>
+                </v-layout> -->
+              </v-col>
+            </v-row>
+
+          </div>
+        </v-img>
+
+            <v-col cols="12" md="1" class="pa-4">
             </v-col>
-          </v-row>
 
-        </div>
-      </v-img>
-
-      <v-row :align="'center'" v-if="isMobileDevice" class="ma-4">
-          <v-col cols="12" md="1" class="pa-4">
-          </v-col>
-
-          <v-col cols="12" md="4" >
-            <v-card
-              class="mx-auto overflow-auto"
-              max-width="100%"
-              min-width="100%"
-              height="240"
-              max-height="300"
-              style="opacity:0.8"
-              color="deep-purple-lighten-4"
-            >
-              <v-card-title >
-                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  AI generated memes & NFTs
-                </div>
-              </v-card-title>
-                <v-card-text>
-                  <div id="newlist" class="text-body-1 ml-2">
-                    <ul>
-                      <li>Create your own memes</li>
-                      <li>Turn them into NFTs</li>
-                      <li>Import, trade, and store your memes and NFTs in our marketplace.</li>
-                    </ul>
+            <v-col cols="12" md="4" >
+              <v-card
+                class="mx-auto overflow-auto"
+                max-width="100%"
+                min-width="100%"
+                height="300"
+                max-height="450"
+                style="opacity:0.8"
+                color="deep-purple-lighten-4"
+              >
+                <div class="pa-4 font-weight-bold">
+                  <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'" style="word-break: break-word;">
+                    AI generated memes & NFTs
                   </div>
-                </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    variant="text"
-                    @click="learnMoreDialog = true"
-                  >
-                    Learn More
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="3" class="pa-4">
-            <v-card
-              class="mx-auto overflow-auto"
-              max-width="100%"
-              min-width="100%"
-              height="240"
-              max-height="300"
-              style="opacity:0.8"
-              color="deep-purple-lighten-4"
-            >
-              <v-card-title>
-                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  New tokens listing & airdrops
                 </div>
-              </v-card-title>
-                <v-card-text>
-                  <div id="newlist" class="text-body-1 ml-2">
-                    <ul>
-                      <li>Get first look access to exclusive new token listing platform</li>
-                      <li>Receive limited edition air-drops</li>
-                      <li>Enjoy exclusive benefits</li>
-                    </ul>
-                  </div>
-                </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    variant="text"
-                    @click="learnMoreDialog2 = true"
-                  >
-                    Learn More
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-            </v-card>
-          </v-col>
+                  <v-card-text>
+                    <div id="newlist" class="text-body-1 ml-2">
+                      <ul>
+                        <li>Create your own memes</li>
+                        <li>Turn them into NFTs</li>
+                        <li>Import, trade, and store your memes and NFTs in our marketplace.</li>
+                      </ul>
+                    </div>
+                  </v-card-text>
+                  <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      variant="text"
+                      @click="learnMoreDialog = true"
+                    >
+                      Learn More
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+              </v-card>
+            </v-col>
 
-          <v-col cols="12" md="3" class="pa-4">
-            <v-card
-              class="mx-auto overflow-auto"
-              max-width="100%"
-              min-width="100%"
-              height="240"
-              max-height="300"
-              style="opacity:0.8"
-              color="deep-purple-lighten-4"
-            >
-              <v-card-title>
-                <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
-                  Join in our AI gaming and music
+            <v-col cols="12" md="3" class="pa-4">
+              <v-card
+                class="mx-auto overflow-auto"
+                max-width="100%"
+                min-width="100%"
+                height="320"
+                max-height="450"
+                style="opacity:0.8"
+                color="deep-purple-lighten-4"
+              >
+                <div class="pa-4 font-weight-bold">
+                  <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
+                    New tokens listing & airdrops
+                  </div>
                 </div>
-              </v-card-title>
-              
-                <v-card-text>
-                  <div id="newlist" class="text-body-1 ml-2">
-                    <ul>
-                      <li>Add your AI generated memes and NFTs to our games</li>
-                      <li>Integrate music into memes and NFTs</li>
-                      <li>Experiment with our AI DJ</li>
-                    </ul>
-                  </div>
-                </v-card-text>
-                <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    variant="text"
-                    @click="learnMoreDialog3 = true"
-                  >
-                    Learn More
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-            </v-card>
-          </v-col>
+                  <v-card-text>
+                    <div id="newlist" class="text-body-1 ml-2">
+                      <ul>
+                        <li>Get first look access to exclusive new token listing platform</li>
+                        <li>Receive limited edition air-drops</li>
+                        <li>Enjoy exclusive benefits</li>
+                      </ul>
+                    </div>
+                  </v-card-text>
+                  <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      variant="text"
+                      @click="learnMoreDialog2 = true"
+                    >
+                      Learn More
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+              </v-card>
+            </v-col>
 
-          <v-col cols="12" md="1" class="pa-4">
-          </v-col>
-        </v-row>
-    </v-row>
+            <v-col cols="12" md="3" class="pa-4">
+              <v-card
+                class="mx-auto overflow-auto"
+                max-width="100%"
+                min-width="100%"
+                height="340"
+                max-height="450"
+                style="opacity:0.8"
+                color="deep-purple-lighten-4"
+              >
+                <div class="pa-4 font-weight-bold">
+                  <div :class="drawer ? 'cardTextTitleSmaller' : 'cardTextTitleSmall'">
+                    Join in our AI gaming and music
+                  </div>
+                </div>
+                
+                  <v-card-text>
+                    <div id="newlist" class="text-body-1 ml-2">
+                      <ul>
+                        <li>Add your AI generated memes and NFTs to our games</li>
+                        <li>Integrate music into memes and NFTs</li>
+                        <li>Experiment with our AI DJ</li>
+                      </ul>
+                    </div>
+                  </v-card-text>
+                  <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      variant="text"
+                      @click="learnMoreDialog3 = true"
+                    >
+                      Learn More
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+              </v-card>
+            </v-col>
+
+            <v-col cols="12" md="1" class="pa-4">
+            </v-col>
+      </v-row>
+    </v-container>
 
     <div id="gallery">
         <v-row :style="scrollClicked ? 'margin-top:32px' : ''">
