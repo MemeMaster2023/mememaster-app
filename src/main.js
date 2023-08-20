@@ -41,9 +41,6 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 // export const storageRef = firebase.storage().ref()
 
-window.process = {
-...window.process,
-};
 // Add Vue directive
 app.directive('scroll-to', VueScrollTo, {
     container: 'body',

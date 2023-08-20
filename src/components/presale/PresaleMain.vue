@@ -10,21 +10,22 @@
 
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
-            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-2 text-white'">Meme Master Presale</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 pt-4 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC).<br><br>
-              <ul class="ml-4">
+            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-4 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC).<br><br>
+              <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
                 <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
                 <li>Win EMAS points and convert into EMAS tokens.</li>
                 <li>Hold EMAS tiers to gain more access and discounted entry to early new token listing, new project releases, airdrops and much more.</li>
               </ul>
+              <div class="pt-2">No buy and sell tax - No min purchase - Please ensure you have enough ETH for gas fees.</div>
             </div>
 
             <v-tooltip location="bottom" v-if="!isMobileDevice">
               <template v-slot:activator="{ props }">
                 <div class="text-center">
                   <v-btn
-                        class="mt-6 mb-2"
+                        class="mt-2 mb-2"
                         size="large"
                         color="#360a3f"
                         style="text-transform: none !important;color:#FFF"
@@ -184,8 +185,8 @@
 
 
                 <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
-                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ (parseInt(presale.price) / 1000000000000000000) }}</div>
-                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0055</div>
+                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? stage1 :(parseInt(presale.price) / 1000000000000000000) }}</div>
+                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div>
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
@@ -198,8 +199,8 @@
                   </v-progress-linear>
                 </v-layout>
 
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold }} / {{ numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised }} / $1,750,000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : tokensSold }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $1,750,000</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -210,6 +211,7 @@
                   </v-col>
                 </v-row>
 
+                
                 <v-row v-if="!mmConnected && !walletConnected && !twConnected">
 
                   <v-col cols="12" md="12" class="pt-16 pl-8 pr-8">
@@ -1162,7 +1164,7 @@
             </v-btn>
           </div>
 
-          <v-row v-if="getChain === '0x1' && !isMobileDevice" style="margin-left:15%;margin-right:15%">
+          <v-row v-if="!isMobileDevice" style="margin-left:15%;margin-right:15%">
             <v-col cols="12" v-if="showConfirmation === false">
               <MetaMaskConnect
                   :isMobileDevice="isMobileDevice"
@@ -1604,7 +1606,7 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 2, // array in contract
+    activePresale: 1, // array in contract
     presale: [],
     stageProgress: 0,
     tokensSold: 0,
@@ -2947,7 +2949,7 @@ export default {
       return this.$store.state.user.mmConnected
     },
     walletConnected () {
-      return true
+      return this.$store.state.user.walletConnected
     },
     twConnected () {
       return this.$store.state.user.twConnected
@@ -3074,14 +3076,14 @@ export default {
       }
     },
     instantiateContractAbi () {
-      let contractAddress = '0x932C2E35793A0470d3F8bEb45E67A0A680096eD5'
+      // let contractAddress = '0x932C2E35793A0470d3F8bEb45E67A0A680096eD5'
       let web3 = new Web3(window.ethereum);
-      Promise.resolve(MemeMasterAPI.instantiateContractAbi(contractAddress, import.meta.env.VITE_APP_ENVIRONMENT))
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
         console.log(result.data.result)
         let abi = JSON.parse(result.data.result)
         window.abi = abi;
-        this.presaleContract = new web3.eth.Contract(abi, contractAddress)
+        this.presaleContract = new web3.eth.Contract(abi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContract)
         this.loadPresaleFromContract()
       })
@@ -3115,10 +3117,7 @@ export default {
         await connectUser();
 
         const provider = getProvider();
-
         const account = await provider.eth.getAccounts();
-
-
         const presale = new provider.eth.Contract(window.abi,`${presaleAddress.toLowerCase()}`);
 
         let ethBuy = presale.methods.buyWithEth(`${1}`, `${tokens}`).send({
