@@ -479,13 +479,12 @@
                     max-width="450"
                     variant="outlined"
             >
-            <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;margin-bottom: 15px;">
+            <v-card-text style="font-size: 1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;margin-bottom: 15px;">
               Make sure you have enough ETH in your wallet for the gas fees as well as your purchase, you can then use the swap ETH to EMAS and follow the instructions in your wallet.<br><br>
               Type in the amount of ETH you wish to change for EMAS tokens and then click “Convert ETH”. Your wallet provider will ask you to confirm the transaction and will also show you the cost of gas fees.<br><br>
               You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.
             </v-card-text>
-
-              <v-card-actions class="card-actions" style="width:100%;position: absolute;bottom: 0;">
+              <v-card-actions class="card-actions mt-4" style="width:100%;position: absolute;bottom: 0;">
                 <v-spacer></v-spacer>
                 <v-btn
                   style="color:#FFF;width:80%"
@@ -526,7 +525,7 @@
                     max-width="450"
                     variant="outlined"
             >
-              <v-card-text style="font-size: 1.1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;margin-bottom: 15px;">
+              <v-card-text style="font-size: 1rem;color:#000000;line-height: normal;text-align: justify;font-weight: 500;margin-bottom: 15px;">
                 Make sure you have at least $30 USDT in your wallet. Enter the amount of USDT you wish to purchase EMAS tokens with then Click "Convert USDT".<br><br>
                 You will then be asked to approve the purchase twice by your wallet. Please make sure you go through two approval steps to complete the transaction.<br><br>
                 You can use the 'Claim' button 14 days after the presale to collect your tokens in the same wallet address as you purchased them.

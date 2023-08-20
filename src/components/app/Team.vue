@@ -40,7 +40,7 @@
               <v-card
                 class="mx-auto"
                 max-width="300"
-                min-height="400"
+                :min-height="isMobileDevice ? '500' : '400'"
                 variant="outlined"
               >
 
@@ -121,7 +121,7 @@ export default {
       {
         name: 'David',
         title: 'Marketing & PR',
-        description: 'Holding a Major in marketing David lectures in Monarch and oversees all marketing and PR',
+        description: 'Holding a Major in marketing David lectures in Monash and oversees all marketing and PR',
         type: 'linkedin',
         link: 'https://www.linkedin.com/in/david-henderson-52a520106/',
       },

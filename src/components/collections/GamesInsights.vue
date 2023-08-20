@@ -22,13 +22,13 @@
         <v-row>
           <v-col cols="12" :align="center">
             <div style="text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;">
-              Take a sneak peek at our "Early AI Gaming Insights" you can use your qualified (they will need to fit that gaming criteria) generated memes and NFTs in the game zones and then sell swap them in our gaming market place or in the general market place and the NFT's even on third party platforms such as Rarible and OpenSea.<br><br>
+              Take a sneak peek at our "Early AI Gaming Insights" you can use your qualified (they will need to fit that gaming criteria) generated memes and NFTs in the game zones and then sell / swap them in our gaming market place or in the general market place and the NFT's even on third party platforms such as Rarible and OpenSea.<br><br>
 
               Players can use Meme Master’s EMAS points to gain ‘more’ EMAS points for various actions throughout the games and these can later be converted to real EMAS tokens, the higher your tier the more free points you get as bonuses when you first buy the starter EMAS points with EMAS tokens and the higher your rewards when you win.<br><br>
 
               Extra ammo can be purchased with points and players may play other users on the platform and enter tournaments for EMAS token prizes.<br><br>
 
-              This is just a snapshot of the games we are developing and we are in negotiations to include third party game access to our gaming eco system, so mush is going on don't forget to join all of our social media channels so you are kept in the loop...
+              This is just a snapshot of the games we are developing and we are in negotiations to include third party game access to our gaming eco system, so much is going on don't forget to join all of our social media channels so you are kept in the loop...
             </div>
           </v-col>
         </v-row>
@@ -63,7 +63,7 @@
                     variant="text"
                     @click.stop="openCollection(col, index)"
                   >
-                    OPEN
+                    Open
                   </v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
@@ -229,7 +229,7 @@ export default {
       } else if (name === 'Cyber pulse game') {
         obj = {
           subtitle: '',
-          description: "Players will take control of cyber crafts to engage in high-octane battles. Cyber crafts are powered by advanced weaponry and armor that can be customized and upgraded throughout the game. These advanced ships are capable of engaging in intense combat against enemy cyber crafts or defending friendly vessels. The goal of the game is to build up a strong fleet of cyber crafts to conquer territories and become the most powerful in the sector. Each cyber craft has its own unique strengths and weaknesses, so the player must choose the right strategies and equipment to emerge victorious. Through strategic planning and tactical maneuvering, the game offers a thrilling and action-packed experience that keeps players engaged until the end.",
+          description: "Players will take control of cyber crafts to engage in high-octane battles. Cyber crafts are powered by advanced weaponry and armor that can be customized and upgraded throughout the game. These advanced ships are capable of engaging in intense combat against enemy cyber crafts or defending friendly vessels. The goal of the game is to build up a strong fleet of cyber crafts to conquer territories and become the most powerful in the sector. Each cyber craft has its own unique strengths and weaknesses, so the player must choose the right strategies and equipment to emerge victorious. Through strategic planning and tactical manoeuvring, the game offers a thrilling and action-packed experience that keeps players engaged until the end.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FCyber%20pulse%20game%2FCyber%20pulse%20game%206.png?alt=media&token=7ac05d8d-7e89-464f-948e-83a0ddb328dc'
         }
         return obj
@@ -243,7 +243,7 @@ export default {
       } else if (name === 'Galactic game') {
         obj = {
           subtitle: '',
-          description: "In this galactic game, each player controls a fleet of starships with different abilities and strengths. Each player will use their fleet to challenge the other players in battles of strategy and tactics as they compete to win control of the galaxies. Players must build fleets of ships while managing resources and reaching objectives in order to win the game. The game progresses over multiple scenarios in which players attack and defend planets, battle enemy fleets, trade resources, and employ special strategies in order to gain an advantage over their opponents. Players can also enter into alliances with other players and build powerful fleets from those agreements. The ultimate goal is to become the ruler of the galaxy by taking control of its capital planet. Victory can only be achieved through careful planning, resource management, and the takeover of apposing star fleets.",
+          description: "In this galactic game, each player controls a fleet of starships with different abilities and strengths. Each player will use their fleet to challenge the other players in battles of strategy and tactics as they compete to win control of the galaxies. Players must build fleets of ships while managing resources and reaching objectives in order to win the game. The game progresses over multiple scenarios in which players attack and defend planets, battle enemy fleets, trade resources, and employ special strategies in order to gain an advantage over their opponents. Players can also enter into alliances with other players and build powerful fleets from those agreements. The ultimate goal is to become the ruler of the galaxy by taking control of its capital planet. Victory can only be achieved through careful planning, resource management, and the takeover of opposing star fleets.",
           img: 'https://firebasestorage.googleapis.com/v0/b/meme-master-app.appspot.com/o/GameInsights%2FGalactic%20game%2FGalactica%20game%206.png?alt=media&token=68e0deb0-fc68-4cc7-b474-9a74528027da'
         }
         return obj

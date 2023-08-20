@@ -24,7 +24,7 @@
             <div :style="isMobileDevice ? 'text-align: justify;margin-left: 5%;margin-right: 5%;font-size: 1rem;' : 'text-align: justify;margin-left: 15%;margin-right: 15%;font-size: 1rem;'">
               These "Exclusive NFT Collections" will be part of the limited airdrops made to holders of the required quantity our EMAS tokens in their wallets.<br><br>
 
-              These will act as VIP passes and allow holders a host of advantages such as early access to new features like as our music integration and our games 
+              These will act as VIP passes and allow holders a host of advantages such as early access to new features like our music integration and our games 
               but also gain early and higher points allocation to our points eco system, these points will be used in much of our platform and can be redeemed (swapped) 
               for further access, items, game access, loading points, music downloads after mixing with our groundbreaking in built DJ, and the NFTs can also be traded on third party platforms such as Rarible and OpenSea or swapped for our EMAS tokens.<br><br>
 
@@ -101,7 +101,7 @@
               
             <v-col>
               <v-toolbar-title :style="isMobileDevice ? 'font-size: 1rem' : 'font-size: 1.5rem;margin-left:16px'" class="text-wrap">{{ lookupName() }}</v-toolbar-title>
-              <v-toolbar-title v-if="!isMobileDevice" style="font-size: 1rem;margin-left:16px" class="text-wrap">{{ 'The NFTs below are samples from this collection. More will be added.' }}</v-toolbar-title>
+              <div v-if="!isMobileDevice" style="font-size: 1rem;margin-left:16px;word-break: break-all;" class="text-wrap">{{ 'The NFTs below are samples from this collection. More will be added.' }}</div>
             </v-col>
 
             <v-spacer></v-spacer>
