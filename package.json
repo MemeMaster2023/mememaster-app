@@ -12,12 +12,14 @@
     "@cloudgeek/playcore-hls": "^0.1.7",
     "@cloudgeek/vitar": "^0.1.11",
     "@cloudgeek/vue3-video-player": "^0.3.10",
+    "@coinbase/wallet-sdk": "^3.7.1",
     "@mdi/font": "7.0.96",
     "@metamask/onboarding": "^1.0.1",
     "@walletconnect/client": "^1.8.0",
     "@walletconnect/ethereum-provider": "^2.9.2",
     "@walletconnect/modal": "^2.6.1",
     "@walletconnect/qrcode-modal": "^1.8.0",
+    "@walletconnect/web3-provider": "^1.8.0",
     "apexcharts": "^3.41.1",
     "axios": "^1.4.0",
     "browser-fs-access": "^0.33.1",
@@ -48,6 +50,7 @@
     "vuex": "^4.0.2",
     "web3": "^4.1.0",
     "web3-eth": "^1.10.0",
+    "web3modal": "^1.9.12",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {

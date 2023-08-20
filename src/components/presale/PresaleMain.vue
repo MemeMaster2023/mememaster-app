@@ -1,3 +1,4 @@
+
 <template>
   <div id="presale">
     <v-responsive style="background-color: #000;" class="pt-16">
@@ -1585,7 +1586,8 @@ import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
 import dateformat from "dateformat"
 import Web3 from 'web3';
-// const web3 = new Web3(new Web3.providers.HttpProvider());
+import { connectUser, getProvider } from './presaleHelpers';
+import { presaleAddress } from './config';
 export default {
   name: 'Presale',
   props: {
@@ -2946,7 +2948,7 @@ export default {
       return this.$store.state.user.mmConnected
     },
     walletConnected () {
-      return this.$store.state.user.walletConnected
+      return true
     },
     twConnected () {
       return this.$store.state.user.twConnected
@@ -3079,6 +3081,7 @@ export default {
         .then(result => {
         console.log(result.data.result)
         let abi = JSON.parse(result.data.result)
+        window.abi = abi;
         this.presaleContract = new web3.eth.Contract(abi, contractAddress)
         console.log(this.presaleContract)
         this.loadPresaleFromContract()
@@ -3110,9 +3113,18 @@ export default {
       let tokens = Math.round(this.amountEmasForEthDiagLog)
 
       try {
-        let ethBuy = this.presaleContract.methods.buyWithEth(`${3}`, `${tokens}`).send({
-          from: this.getUser.accounts[0],
-          value: Web3.utils.toWei(this.amountEth, 'ether'),
+        await connectUser();
+
+        const provider = getProvider();
+
+        const account = await provider.eth.getAccounts();
+
+
+        const presale = new provider.eth.Contract(window.abi,`${presaleAddress.toLowerCase()}`);
+
+        let ethBuy = presale.methods.buyWithEth(`${1}`, `${tokens}`).send({
+          from: account[0],
+          value: provider.utils.toWei(this.amountEth, 'ether'),
         });
 
         console.log(ethBuy);
