@@ -1,13 +1,14 @@
 <template>
-  <v-card theme="dark" style="width: 100%;height: 100%">
-    <v-row :style="isMobileDevice ? 'margin-left:4px;margin-right:4px' : 'margin-top:50px;'">
+  <v-card theme="dark" style="width: 100%;height: auto">
+    <v-row :style="isMobileDevice ? 'margin-left:4px;margin-right:4px; margin-top:50px;' : 'margin-top:50px;'">
       <v-col cols="12" md="12" class="mt-8 mb-16" >
         <!-- <div v-if="model === '0'" style="font-size: 3rem;" class="text-center">Roadmap</div> -->
         
         <v-carousel 
               v-model="model" 
-              :height="(windowHeight - 100)"
+              :height="isMobileDevice ? 'auto' : (windowHeight - 100)"
               :show-arrows="isMobileDevice ? false : 'hover'"
+              :hide-delimiter-background="isMobileDevice"
           >
           <v-carousel-item
             value="0"
@@ -28,9 +29,9 @@
             >
 
             <v-row style="height:100%">
-              <v-col cols="12" md="4" class="pl-16 pt-16" v-if="isMobileDevice">
+              <v-col cols="12" md="4" class="pl-16 pt-0 pt-md-16" v-if="isMobileDevice">
               </v-col>
-              <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+              <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 my-16' : 'pl-16 pt-16'">
                 <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[0].date}} - {{ items[0].title}}</span>
 
@@ -72,7 +73,7 @@
                   <v-img v-if="!isMobileDevice" src="/img/roadmap/slide_03_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
                 </v-col>
 
-                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 my-16' : 'pl-16 pt-16'">
                 <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[1].date}} - {{ items[1].title }}</span>
 
@@ -107,7 +108,7 @@
             <v-row style="height:100%">
                 <v-col cols="12" md="4" class="pl-16" v-if="isMobileDevice">
                 </v-col>
-                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 my-16' : 'pl-16 pt-16'">
                 <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[2].date}} - {{ items[2].title }}</span>
 
@@ -146,10 +147,10 @@
                 <v-col cols="12" md="4" class="pl-16" align-self="center" v-if="!isMobileDevice">
                   <v-img src="/img/roadmap/slide_05_1.webp" style="border-radius: 15px;opacity: 0.7;"></v-img>
                 </v-col>
-                <v-col cols="12" md="4" class="pl-16 pt-16" v-if="isMobileDevice">
+                <v-col cols="12" md="4" class="pl-16 pt-0" v-if="isMobileDevice">
                 </v-col>
 
-                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+                <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 my-16' : 'pl-16 pt-16'">
                   <v-list density="default" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[3].date}} - {{ items[3].title }}</span>
 
@@ -184,7 +185,7 @@
             <v-row style="height:100%">
               <v-col cols="12" md="4" class="pl-16" v-if="isMobileDevice">
               </v-col>
-              <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 pt-16' : 'pl-16 pt-16'">
+              <v-col cols="12" md="8" :class="isMobileDevice ? 'pl-4 my-16' : 'pl-16 pt-16'">
                 <v-list density="compact" bg-color="transparent">
                     <span style="font-weight: bold;font-size: 1.2rem;">{{ items[4].date}} - {{ items[4].title }}</span>
 
@@ -251,7 +252,7 @@ export default {
             {text: 'Establish Galleries: Users can view and explore these curated collections.', completed: true}, 
             {text: 'Incorporate Social Media Links: Encourage sharing across platforms and foster community engagement.', completed: false}, 
             {text: 'Create a prompt library for far better meme and other creations.', completed: true}, 
-            {text: 'IDO Token launch, targeted for August 2023', completed: false},
+            {text: 'Presale Token launch, 30th August 2023', completed: false},
           ],
           date: 'Phase 2',
           color: '#463552',

@@ -605,7 +605,7 @@
             <v-btn variant="text" color="grey" @click="learnMoreDialog = true">Learn more</v-btn>
           </div>
 
-          <v-row v-if="getChain === '0x1' && !isMobileDevice" style="margin-left:15%;margin-right:15%">
+          <v-row v-if="(getChain === '0x1' || getChain === '0x5') && !isMobileDevice" style="margin-left:15%;margin-right:15%">
             <v-col cols="12" v-if="showConfirmation === false">
               <MetaMaskConnect 
                   :isMobileDevice="isMobileDevice" 
@@ -1063,6 +1063,11 @@ export default {
           this.routerGo('/authorise')
         }
       },
+      lang(newValue){
+        if(Weglot.getCurrentLang() !== newValue){
+          Weglot.switchTo(lang);
+        }
+      }
     /* binanceConnected () {
       if (this.binanceConnected) {
         setTimeout(() => {
@@ -1074,15 +1079,15 @@ export default {
     destroyed () {
       window.removeEventListener('scroll', this.handleScroll)
     },
-    created () {
-      console.log("Weglot", Weglot);
+    mounted(){
       this.languages = Weglot.options.languages
         .map(function(language) {
-          console.log("Weglog", language)
             return language.language_to;
         })
         .concat(Weglot.options.language_from);
       this.lang = Weglot.getCurrentLang();
+    },
+    created () {
       window.addEventListener('scroll', this.handleScroll)
       console.log(import.meta.env.VITE_APP_ENVIRONMENT)
       console.log(this.getUser)
@@ -1317,8 +1322,16 @@ export default {
         })
       },
       changeLanguage(lang){
-        Weglot.switchTo(lang);
-        this.lang = lang;
+        if(this.lang !== lang){
+          try{
+            console.log("Before: ", this.lang, " After", lang);
+            Weglot.switchTo(lang);
+            this.lang = lang;
+          }
+          catch(e){
+            console.log(e);
+          }
+        }
       },
       getFullWord(lang){
         const fullLanguage = Weglot.getLanguageName(lang);
@@ -1342,7 +1355,6 @@ export default {
         {
           countryCode = 'kr'
         }
-        console.log(`https://cdn.weglot.com/flags/circle/${countryCode}.svg`);
         return `https://cdn.weglot.com/flags/circle/${countryCode}.svg`
       }
     }

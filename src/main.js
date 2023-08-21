@@ -30,6 +30,7 @@ import '@cloudgeek/vue3-video-player/dist/vue3-video-player.css';
 import VueApexCharts from 'vue3-apexcharts'
 // import Jazzicon from 'vue3-jazzicon/src/components';
 // import Web3 from 'web3';
+// import { ethers } from 'ethers';
 
 const app = createApp(App)
 // app.component(Jazzicon.name, Jazzicon)
@@ -41,9 +42,6 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 // export const storageRef = firebase.storage().ref()
 
-window.process = {
-...window.process,
-};
 // Add Vue directive
 app.directive('scroll-to', VueScrollTo, {
     container: 'body',
@@ -67,7 +65,7 @@ app.use(Vue3VideoPlayer, {
     lang: 'en',
 })
 app.use(VueApexCharts)
-// app.use(Web3)
+// app.use(ethers)
 
 registerPlugins(app)
 

@@ -37,8 +37,12 @@
     window.open('https://mememaster.app/whitepaper/MemeMaster2023%20-%20Whitepaper.pdf', '_blank');
   }
   function mmMobileClicked() {
-    // console.log('mmMobileClicked Received')
-    window.open('https://metamask.app.link/dapp/mememaster.app/mmobile', '_blank');
+    console.log('mmMobileClicked Received')
+    if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+      window.open('https://metamask.app.link/dapp/mememaster.app/mmobile', '_blank');
+    } else{
+      window.open('https://metamask.app.link/dapp/testnet.mememaster.app/mmobile', '_blank');
+    }
   }
   function teamLinkClicked() {
     // console.log('teamLinkClicked Received')
