@@ -10,7 +10,7 @@
 
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
-            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-4 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
+            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
             <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC). EMAS tokens have zero sell and zero buy tax.<br><br>
               <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
@@ -1589,6 +1589,7 @@ import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
 import dateformat from "dateformat"
 import Web3 from 'web3';
+import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
 const presaleAddress = "0x542fd6f47DBB8a58EEde8402Ce9bF4fCfabEFD19"
@@ -1606,6 +1607,7 @@ export default {
     snackbar: false,
     snackbarText: '',
     presaleContract: null,
+    presaleContract2: null,
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
@@ -2996,7 +2998,7 @@ export default {
     this.getLastestPrice()
     this.priceInterval = setInterval(() => {
       this.getLastestPrice();
-    }, 60000);
+    }, 300000);
     this.instantiateContractAbi()
   },
   beforeUnmount() {
@@ -3119,6 +3121,35 @@ export default {
     },
     async buyWithEthContract () {
 
+      console.log(ethers)
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      // const provider = new ethers.providers.Web3Provider(window.ethereum);
+      console.log(provider);
+      const signer = provider.getSigner()
+      console.log(signer);
+      const network = await provider.getNetwork();
+      console.log(network);
+      const abi = window.abi;
+      console.log(abi)
+      // The Contract object
+      
+      const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, abi, provider);
+      const presaleContract2 = presaleConstructor.connect(signer);
+      this.presaleContract2 = presaleContract2;
+
+      console.log(this.presaleContract2)
+
+      var eth = this.amountEth // * 1e18 // 18 Decimals
+      let tokens = Math.round(this.amountEmasForEthDiagLog)
+      let ethBuy = this.presaleContract2.buyWithEth(`${1}`, `${tokens}`, {
+        value: `${ethers.utils.parseEther(`${eth}`)}`
+      });
+
+      console.log(ethBuy);
+
+    },
+    /* async buyWithEthContract () {
+
       // buyWithEthContract
       console.log(this.amountEmasForEthDiagLog)
       console.log(this.amountEth)
@@ -3144,7 +3175,7 @@ export default {
       } catch(err) {
         console.log(err)
       }
-    },
+    }, */
     handleSuccess(e) {
         console.log(e);
         this.snackbarText = 'Address copied to clipboard'
