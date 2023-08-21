@@ -1358,7 +1358,7 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f">
+                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f" @click="buyWithUSDTContract()">
                   Convert USDT
                 </v-btn>
               </v-col>
@@ -3146,6 +3146,9 @@ export default {
       });
 
       console.log(ethBuy);
+
+    },
+    async buyWithUSDTContract () {
 
     },
     /* async buyWithEthContract () {
