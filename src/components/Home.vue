@@ -16,7 +16,7 @@
         :key="i"
         :src="item.src" 
         cover
-        :style="isMobileDevice ? 'height:' + windowHeight + 'vh' : ''"
+        :style="isMobileDevice ? 'height:' + windowHeight + 'px' : ''"
         gradient="to bottom, rgba(0,0,0,.7), rgba(0,0,0,.4)"
       >
         <div :class="isMobileDevice ? 'ma-2' : ''">
