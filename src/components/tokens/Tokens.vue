@@ -95,7 +95,7 @@ export default {
       const firstScrollTo = scroller();
       this.scrollClicked = true
       setTimeout(() => {
-        firstScrollTo('#mynfts', 500, { offset: -64 });
+        firstScrollTo('#tokens', 500, { offset: -64 });
       }, 200);
     },
   }

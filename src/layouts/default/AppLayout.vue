@@ -605,7 +605,7 @@
             <v-btn variant="text" color="grey" @click="learnMoreDialog = true">Learn more</v-btn>
           </div>
 
-          <v-row v-if="getChain === '0x1' && !isMobileDevice" style="margin-left:15%;margin-right:15%">
+          <v-row v-if="(getChain === '0x1' || getChain === '0x5') && !isMobileDevice" style="margin-left:15%;margin-right:15%">
             <v-col cols="12" v-if="showConfirmation === false">
               <MetaMaskConnect 
                   :isMobileDevice="isMobileDevice" 
