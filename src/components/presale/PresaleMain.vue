@@ -184,24 +184,29 @@
               </v-toolbar>
 
 
-                <div class="pt-4 text-h5 ma-2 text-black">Aug 2023 - Sept 2023</div>
-                <div class="text-h6 ma-2 text-black">1 EMAS = $0.005</div>
-                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To $0.0055</div>
+                <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
+                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? stage1 :(parseInt(presale.price) / 1000000000000000000) }}</div>
+                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div>
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
-                    model-value="0"
+                    :model-value="stageProgress"
                     height="30"
                     color="#360a3f"
                     style="background-color: #a692aa;"
                   >
-                  <strong>{{ '0' }}%</strong>
+                  <strong>{{ stageProgress }}%</strong>
                   </v-progress-linear>
                 </v-layout>
 
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : tokensSold }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $1,750,000</div>
+
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
+                  <v-col cols="12" md="12" class="pl-8 pr-8">
+                    <v-chip variant="outlined" class="ma-2" color="#360a3f">
+                      <v-icon start icon="mdi-wallet" color="#360a3f"></v-icon>
+                      {{ (this.getUser.accounts[0]).substring(0, 14) + '...' + (this.getUser.accounts[0]).substring(28, 42) }}
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -215,7 +220,7 @@
 
                 </v-row>
 
-                <!--  presaleNotLive  -->
+                <!--  handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
