@@ -63,7 +63,7 @@
         userExists: false,
         accounts: [],
         chainId: 0,
-        provider: null
+        provider: null,
       }
     },
     computed: {
@@ -105,18 +105,13 @@
       } */
     },
     created() {
-      // console.log('Created component walletconnect', this.$store.state.user.accounts)
-      // if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
-      //   console.log(this.getUser.walletconnect)
-      //   let walletconnect = JSON.parse(this.getUser.walletconnect)
-      //   this.accounts = walletconnect.accounts
-      //   this.chainId = walletconnect.chainId
-      //   this.walletConnectInit('init')
-      // } else {
-      //   store.commit('SetConnectedUserFalse', {
-      //     welcome: false
-      //   })
-      // }
+      if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
+        this.walletConnectInit('init')
+      } else {
+        store.commit('SetConnectedUserFalse', {
+          welcome: false
+        })
+      }
     },
     methods:{
       async walletConnectInit (type) {
@@ -131,71 +126,71 @@
               }
             },
           });
-
-          // if (JSON.parse(JSON.stringify(this.provider.accounts)).length > 0) {
-          //   console.log('Accounts founded: ' + JSON.stringify(this.provider.accounts));
-          //   this.accounts = this.provider.accounts;
-          //   this.chainId = this.provider.chainId;
-          // }
-
-          // session established
-          this.provider.on("connect", (chainId) => {
-            console.log('Wallet is connect', chainId)
-          });
-
-          //  Attach event listeners before connecting
-          this.provider.on("accountsChanged", (accounts) => {
-            console.log("Accounts changed:", accounts);
-            // Update your application with the new accounts
-            this.accounts = accounts
-          });
-
-          // chain changed
-          this.provider.on("chainChanged", (chainId) => {
-            console.log("Chain changed:", chainId);
-            // Update your application with the new chain
-
-          });
-
-          // connection uri
-          this.provider.on("display_uri", (payload)=>{
-            console.log("display_uri:", payload)
-          });
-
-          // session event - chainChanged/accountsChanged/custom events
-          this.provider.on("session_event",(payload) => {
-            console.log('Wallet is session_event',payload)
-            // Get provided accounts and chainId
-            this.chainId =  payload.params.chainId
-            // Do the rest of the store and firebase stuff
-          });
-
-          // session disconnect
-          this.provider.on("disconnect",(payload) => {
-            console.log('Wallet is disconnect', payload)
-            this.provider = null
-            store.commit('SetWalletConnectChanges', {
-              accounts: [],
-              walletConnected: false,
-              walletProvider: '',
-              isLoggedIn: false,
-              isEmailConnected: false,
-              uid: '',
-            })
-            localStorage.clear();
-            firebase.auth().signOut()
-            store.commit("SetEmpty")
-          });
-
           await this.provider.connect();
-          this.enableWalletConnect();
-        }
-        // Type initialization
-        else {
-          // TODO
-          console.log('Type initialization')
+        } else {
+          // let walletconnect = JSON.parse(this.getUser.walletconnect)
+          this.provider = await EthereumProvider.init({
+            projectId: '449b72ce02f29154e8feb69c2e161cbb',
+            chains: [5],
+          })
+          await this.provider.enable();
+          this.accounts = this.provider.accounts;
+          this.chainId = this.provider.chainId;
           this.enableWalletConnect()
         }
+
+        // session established
+        this.provider.on("connect", (chainId, aaa) => {
+          console.log('Wallet is connect', chainId)s
+          this.enableWalletConnect()
+        });
+
+        //  Attach event listeners before connecting
+        this.provider.on("accountsChanged", (accounts) => {
+          console.log("Accounts changed:", accounts);
+          // Update your application with the new accounts
+          this.accounts = accounts
+        });
+
+        // chain changed
+        this.provider.on("chainChanged", (chainId) => {
+          console.log("Chain changed:", chainId);
+          // Update your application with the new chain
+
+        });
+
+        // connection uri
+        this.provider.on("display_uri", (payload)=>{
+          console.log("display_uri:", payload)
+        });
+
+        // session event - chainChanged/accountsChanged/custom events
+        this.provider.on("session_event",(payload) => {
+          console.log('Wallet is session_event', payload)
+          // Get provided accounts and chainId
+          // this.chainId =  payload.params.chainId
+          this.accounts = this.provider.accounts;
+          this.chainId = this.provider.chainId;
+          this.enableWalletConnect()
+          // Do the rest of the store and firebase stuff
+        });
+
+        // session disconnect
+        this.provider.on("disconnect",(payload) => {
+          console.log('Wallet is disconnect', payload)
+          this.provider = null
+          store.commit('SetWalletConnectChanges', {
+            accounts: [],
+            walletConnected: false,
+            walletProvider: '',
+            isLoggedIn: false,
+            isEmailConnected: false,
+            uid: '',
+          })
+          localStorage.clear();
+          firebase.auth().signOut()
+          store.commit("SetEmpty")
+        });
       },
       // async walletConnectInit (type) {
       //   console.log(type)
@@ -279,7 +274,7 @@
       },
       enableWalletConnect () {
         console.log('########### is this code happening ###########')
-        console.log('This is enableWalletConnect:',JSON.parse(JSON.stringify(this.accounts))[0], this.chainId)
+        console.log('This is enableWalletConnect:', JSON.parse(JSON.stringify(this.accounts))[0], this.chainId)
         var nw = parseInt(this.chainId).toString(16)
         store.commit('SetUserDetails', {
           accounts: JSON.parse(JSON.stringify(this.accounts)),
