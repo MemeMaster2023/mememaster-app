@@ -1592,7 +1592,7 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
-const presaleAddress = "0x542fd6f47DBB8a58EEde8402Ce9bF4fCfabEFD19"
+const presaleAddress = "0x4D5939b0D552d4C4d6A02B0166B324a042640469"
 export default {
   name: 'Presale',
   props: {
@@ -3091,7 +3091,7 @@ export default {
       }
     },
     instantiateContractAbi () {
-      // let contractAddress = '0x932C2E35793A0470d3F8bEb45E67A0A680096eD5'
+   
       let web3 = new Web3(window.ethereum);
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
