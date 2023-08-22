@@ -115,9 +115,16 @@
     },
     methods:{
       async walletConnectInit (type) {
+        let projectId
+        if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+          projectId = import.meta.env.VITE_APP_PROJECT_ID
+        } else {
+          projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
+        }
+
         if (type === 'button') {
           this.provider = await EthereumProvider.init({
-            projectId: '449b72ce02f29154e8feb69c2e161cbb',
+            projectId,
             chains: [1],
             showQrModal: true, // REQUIRED set to "true" to use @walletconnect/modal,
             qrModalOptions:{
@@ -128,10 +135,12 @@
           });
           await this.provider.connect();
         } else {
+          const savedChainId = localStorage.getItem('chainId');
+          // console.log("Reconnecting with saved chainId:", savedChainId);
           // let walletconnect = JSON.parse(this.getUser.walletconnect)
           this.provider = await EthereumProvider.init({
-            projectId: '449b72ce02f29154e8feb69c2e161cbb',
-            chains: [5],
+            projectId,
+            chains: [savedChainId],
           })
           await this.provider.enable();
           this.accounts = this.provider.accounts;
@@ -140,7 +149,7 @@
         }
 
         // session established
-        this.provider.on("connect", (chainId, aaa) => {
+        this.provider.on("connect", (chainId) => {
           console.log('Wallet is connect', chainId)
           this.enableWalletConnect()
         });
@@ -171,6 +180,7 @@
           // this.chainId =  payload.params.chainId
           this.accounts = this.provider.accounts;
           this.chainId = this.provider.chainId;
+          localStorage.setItem('chainId', payload.params.chainId);
           this.enableWalletConnect()
           // Do the rest of the store and firebase stuff
         });
@@ -275,6 +285,7 @@
       enableWalletConnect () {
         console.log('########### is this code happening ###########')
         console.log('This is enableWalletConnect:', JSON.parse(JSON.stringify(this.accounts))[0], this.chainId)
+        localStorage.setItem('chainId', this.chainId);
         var nw = parseInt(this.chainId).toString(16)
         store.commit('SetUserDetails', {
           accounts: JSON.parse(JSON.stringify(this.accounts)),
