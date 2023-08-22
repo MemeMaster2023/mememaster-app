@@ -21,7 +21,7 @@
       >
         <div :class="isMobileDevice ? 'ma-2' : ''">
           
-          <v-row style="margin-top:108px;" :align="'center'">
+          <v-row style="margin-top:280px;" :align="'center'">
             <v-col cols="12" md="2" xl="3"  class="pa-4">
             </v-col>
             <v-col cols="12" md="8" xl="6">

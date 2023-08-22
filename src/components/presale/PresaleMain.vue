@@ -10,8 +10,8 @@
 
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
-            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-4 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC).<br><br>
+            <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC). EMAS tokens have zero sell and zero buy tax.<br><br>
               <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
                 <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
@@ -206,7 +206,7 @@
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-chip variant="outlined" class="ma-2" color="#360a3f">
                       <v-icon start icon="mdi-wallet" color="#360a3f"></v-icon>
-                      {{ this.getUser.accounts[0] }}
+                      {{ (this.getUser.accounts[0]).substring(0, 14) + '...' + (this.getUser.accounts[0]).substring(28, 42) }}
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -385,7 +385,7 @@
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
               <div class="text-h4 ma-2 text-purple-lighten-3">HOW TO BUY</div>
-              <div class="text-h5 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale?</div>
+              <div class="text-h5 ma-2 text-white">How to buy Meme Master 2023 (EMAS) in the Presale</div>
           </v-col>
         </v-row>
 
@@ -459,7 +459,7 @@
           </v-col>
         </v-row>
 
-        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-16 mr-16 mb-16'" >
+        <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-16' : 'ml-16 mr-16 mb-16'" >
           <v-col cols="12" md="6" :align="'center'">
 
             <v-card theme="dark"
@@ -505,13 +505,13 @@
 
           </v-col>
 
-          <v-col cols="12" md="6" :align="'center'">
-
+          <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'mb-16' : ''">
 
             <v-card theme="dark"
                     color="transparent"
                     max-width="450"
                     flat
+                    :class="isMobileDevice ? 'mt-12' : ''"
             >
               <v-layout class="mb-2">
                 <!-- <v-icon size="40" color="purple-darken-3">mdi-currency-usd</v-icon> -->
@@ -1164,7 +1164,7 @@
             </v-btn>
           </div>
 
-          <v-row v-if="!isMobileDevice" style="margin-left:15%;margin-right:15%">
+          <v-row v-if="(getChain === '0x1' || getChain === '0x5') && !isMobileDevice" style="margin-left:15%;margin-right:15%">
             <v-col cols="12" v-if="showConfirmation === false">
               <MetaMaskConnect
                   :isMobileDevice="isMobileDevice"
@@ -1246,6 +1246,7 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
+          
           <v-card-text class="mb-8">
             <v-row>
               <v-col cols="12">
@@ -1293,6 +1294,7 @@
               </v-col>
             </v-row>
           </v-card-text>
+
         </v-card>
       </v-dialog>
 
@@ -1356,7 +1358,7 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f">
+                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f" @click="buyWithUSDTContract()">
                   Convert USDT
                 </v-btn>
               </v-col>
@@ -1587,8 +1589,10 @@ import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
 import dateformat from "dateformat"
 import Web3 from 'web3';
-import { connectUser, getProvider } from './presaleHelpers';
-import { presaleAddress } from './config';
+import { ethers } from 'ethers';
+// import { connectUser, getProvider } from './presaleHelpers';
+// import { presaleAddress } from './config';
+const presaleAddress = "0x4D5939b0D552d4C4d6A02B0166B324a042640469"
 export default {
   name: 'Presale',
   props: {
@@ -1603,6 +1607,7 @@ export default {
     snackbar: false,
     snackbarText: '',
     presaleContract: null,
+    presaleContract2: null,
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
@@ -2943,6 +2948,8 @@ export default {
   },
   computed: {
     getChain () {
+      console.log('this.$store.state.user.networkChainID')
+      console.log(this.$store.state.user.networkChainID)
       return this.$store.state.user.networkChainID
     },
     mmConnected () {
@@ -2987,10 +2994,11 @@ export default {
   created() {
     // this.currentUser = firebase.auth().currentUser;
     this.init()
+    this.scrollToTop()
     this.getLastestPrice()
     this.priceInterval = setInterval(() => {
       this.getLastestPrice();
-    }, 60000);
+    }, 300000);
     this.instantiateContractAbi()
   },
   beforeUnmount() {
@@ -3003,6 +3011,13 @@ export default {
     init () {
       this.pieMargin = this.windowWidth <= 360 ? -40 : this.windowWidth <= 390 ? -30 : -20
       console.log(this.pieMargin)
+    },
+    scrollToTop () {
+      const firstScrollTo = scroller();
+      this.scrollClicked = true
+      setTimeout(() => {
+        firstScrollTo('#presale', 500, { offset: -64 });
+      }, 200);
     },
     connectWalletClicked () {
       this.connectWalletDialog = true
@@ -3076,7 +3091,7 @@ export default {
       }
     },
     instantiateContractAbi () {
-      // let contractAddress = '0x932C2E35793A0470d3F8bEb45E67A0A680096eD5'
+   
       let web3 = new Web3(window.ethereum);
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
@@ -3106,31 +3121,64 @@ export default {
     },
     async buyWithEthContract () {
 
+      console.log(ethers)
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      // const provider = new ethers.providers.Web3Provider(window.ethereum);
+      console.log(provider);
+      const signer = provider.getSigner()
+      console.log(signer);
+      const network = await provider.getNetwork();
+      console.log(network);
+      const abi = window.abi;
+      console.log(abi)
+      // The Contract object
+      
+      const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, abi, provider);
+      const presaleContract2 = presaleConstructor.connect(signer);
+      this.presaleContract2 = presaleContract2;
+
+      console.log(this.presaleContract2)
+
+      var eth = this.amountEth // * 1e18 // 18 Decimals
+      let tokens = Math.round(this.amountEmasForEthDiagLog)
+      let ethBuy = this.presaleContract2.buyWithEth(`${1}`, `${tokens}`, {
+        value: `${ethers.utils.parseEther(`${eth}`)}`
+      });
+
+      console.log(ethBuy);
+
+    },
+    async buyWithUSDTContract () {
+
+    },
+    /* async buyWithEthContract () {
+
       // buyWithEthContract
       console.log(this.amountEmasForEthDiagLog)
-      // console.log(this.amountEth)
-      // var eth = this.amountEth * 1e18 // 18 Decimals
-      // console.log(eth)
+      console.log(this.amountEth)
+      var eth = this.amountEth * 1e18 // 18 Decimals
+      console.log(eth)
       let tokens = Math.round(this.amountEmasForEthDiagLog)
 
       try {
-        await connectUser();
+        // await connectUser();
 
-        const provider = getProvider();
-        const account = await provider.eth.getAccounts();
-        const presale = new provider.eth.Contract(window.abi,`${presaleAddress.toLowerCase()}`);
+        // const provider = getProvider();
+        // const account = await provider.eth.getAccounts();
+        // const presale = new provider.eth.Contract(window.abi,`${presaleAddress.toLowerCase()}`);
+        // console.log(account[0])
 
-        let ethBuy = presale.methods.buyWithEth(`${1}`, `${tokens}`).send({
-          from: account[0],
-          value: provider.utils.toWei(this.amountEth, 'ether'),
-        });
+        let ethBuy = this.presaleContract.methods.buyWithEth(`${1}`, `${tokens}`).send({
+          from: this.getUser.accounts[0],
+          value: eth // provider.utils.toWei(this.amountEth, 'ether'),
+        })
 
         console.log(ethBuy);
 
       } catch(err) {
         console.log(err)
       }
-    },
+    }, */
     handleSuccess(e) {
         console.log(e);
         this.snackbarText = 'Address copied to clipboard'

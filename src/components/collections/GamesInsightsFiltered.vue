@@ -28,7 +28,7 @@
 
               Extra ammo can be purchased with points and players may play other users on the platform and enter tournaments for EMAS token prizes.<br><br>
 
-              This is just a snapshot of the games we are developing and we are in negotiations to include third party game access to our gaming eco system, so mush is going on don't forget to join all of our social media channels so you are kept in the loop...
+              This is just a snapshot of the games we are developing and we are in negotiations to include third party game access to our gaming eco system, so much is going on don't forget to join all of our social media channels so you are kept in the loop...
             </div>
           </v-col>
         </v-row>

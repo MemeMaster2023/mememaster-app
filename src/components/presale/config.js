@@ -1,4 +1,4 @@
-export const presaleAddress = "0x542fd6f47DBB8a58EEde8402Ce9bF4fCfabEFD19";
+export const presaleAddress = "0x4D5939b0D552d4C4d6A02B0166B324a042640469";
 
 export const ethRpc =
   parseInt(import.meta.env.VITE_NETWORK_ID) === 5

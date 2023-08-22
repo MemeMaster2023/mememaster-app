@@ -252,7 +252,7 @@ export default {
             {text: 'Establish Galleries: Users can view and explore these curated collections.', completed: true}, 
             {text: 'Incorporate Social Media Links: Encourage sharing across platforms and foster community engagement.', completed: false}, 
             {text: 'Create a prompt library for far better meme and other creations.', completed: true}, 
-            {text: 'IDO Token launch, targeted for August 2023', completed: false},
+            {text: 'Presale Token launch, 30th August 2023', completed: false},
           ],
           date: 'Phase 2',
           color: '#463552',
