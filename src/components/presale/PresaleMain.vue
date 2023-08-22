@@ -1327,10 +1327,10 @@
                 <v-text-field
                   placeholder="0"
                   class="mt-2"
-                  v-model="amountUsdt"
-                  v-on:keyup="convertAmount('usdtToEmas', amountUsdt)"
-                  @focus="clearOnFocus('amountUsdt')"
-                  @input="ensureNonNegative('amountUsdt')"
+                  v-model="amountUSDT"
+                  v-on:keyup="convertAmount('usdtToEmas', amountUSDT)"
+                  @focus="clearOnFocus('amountUSDT')"
+                  @input="ensureNonNegative('amountUSDT')"
                   type="number"
                   min="0"
                 >
@@ -1349,10 +1349,10 @@
                 <v-text-field
                   placeholder="0"
                   class="mt-2"
-                  v-model="amountEmasForUsdtDiagLog"
-                  v-on:keyup="convertAmount('emasToUsdt', amountEmasForUsdtDiagLog)"
-                  @focus="clearOnFocus('amountEmasForUsdtDiagLog')"
-                  @input="ensureNonNegative('amountEmasForUsdtDiagLog')"
+                  v-model="amountEmasForUSDTDiagLog"
+                  v-on:keyup="convertAmount('emasToUsdt', amountEmasForUSDTDiagLog)"
+                  @focus="clearOnFocus('amountEmasForUSDTDiagLog')"
+                  @input="ensureNonNegative('amountEmasForUSDTDiagLog')"
                   type="number"
                   min="0"
                 >
@@ -1601,7 +1601,8 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
-const presaleAddress = "0x4D5939b0D552d4C4d6A02B0166B324a042640469"
+const presaleAddress = "0xC49eF4DF5E6f861b51C3739b2b113836Ec94889b"
+const usdtAddress = "0xb0f7554a44cC178e935Ea10c79e7c042D1840044"
 export default {
   name: 'Presale',
   props: {
@@ -1620,7 +1621,7 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 2, // array in contract
+    activePresale: 1, // array in contract
     presale: [],
     stageProgress: 0,
     tokensSold: 0,
@@ -1628,10 +1629,10 @@ export default {
     ethPrice: 0,
     usdtPrice: 0,
     amountEth: 0,
-    amountUsdt: 0,
+    amountUSDT: 0,
     presaleNotLive: false,
     learnMoreDialog: false,
-    amountEmasForUsdtDiagLog: 0,
+    amountEmasForUSDTDiagLog: 0,
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
     buyWithEthDialog: false,
@@ -3149,7 +3150,7 @@ export default {
 
       console.log(this.presaleContract2)
 
-      var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // * 1e18 // 18 Decimals
+      var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
       let tokens = Math.round(this.amountEmasForEthDiagLog)
       console.log('********* tokens ***********')
       console.log(tokens)
@@ -3162,6 +3163,31 @@ export default {
     },
     async buyWithUSDTContract () {
 
+      try {
+
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+          const signer = provider.getSigner();
+          const memeABI = await MemeMasterAPI.instantiateContractAbi(`${usdtAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT);
+          let abi = JSON.parse(memeABI.data.result);
+
+          let usdtConstructor = new ethers.Contract(`${usdtAddress.toLowerCase()}`, abi, provider)
+          const usdtContract = usdtConstructor.connect(signer)
+          let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+          console.log('*********** usdt ************')
+          console.log(usdt)
+          console.log(this.amountEmasForUSDTDiagLog)
+          let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
+          console.log('*********** tokens ************')
+          console.log(tokens)
+          await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
+          const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider)
+          const presaleContract = presaleConstructor.connect(signer)
+          presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`)
+
+        } catch(error) {
+          console.log(error)
+        }
     },
     /* async buyWithEthContract () {
 
@@ -3202,13 +3228,13 @@ export default {
     convertAmount(type,value) {
       switch (type) {
         case 'ethToEmas':
-          return this.amountEmasForEthDiagLog = value * ( this.ethPrice / this.stage1 )
+          return this.amountEmasForEthDiagLog = value * ( this.ethPrice / this.stage2 )
         case 'emasToEth':
-          return this.amountEth = value * ( this.stage1 / this.ethPrice )
+          return this.amountEth = value * ( this.stage2 / this.ethPrice )
         case 'usdtToEmas':
-          return this.amountEmasForUsdtDiagLog = value * ( this.usdtPrice / this.stage1 )
+          return this.amountEmasForUSDTDiagLog = value * ( this.usdtPrice / this.stage2 )
         case 'emasToUsdt':
-          return this.amountUsdt = value * ( this.stage1 / this.usdtPrice )
+          return this.amountUSDT = value * ( this.stage2 / this.usdtPrice )
         default:
           return 0;
       }
