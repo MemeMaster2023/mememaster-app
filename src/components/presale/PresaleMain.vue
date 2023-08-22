@@ -57,7 +57,7 @@
             <v-row  class="mt-4" v-if="!isMobileDevice">
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-stairs-up"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        @click="scrollStages()"
                 >
@@ -67,7 +67,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-chart-pie"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        @click="scrollTokenomics()"
                 >
@@ -90,7 +90,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-transit-connection-variant"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/roadmap"
                 >
@@ -100,7 +100,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-shape-plus"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/games"
                 >
@@ -110,7 +110,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-music"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/music"
                 >
@@ -123,7 +123,7 @@
             <v-row v-if="!isMobileDevice">
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-view-dashboard"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/nfts"
                 >
@@ -133,7 +133,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-image-multiple-outline"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/memes"
                 >
@@ -144,7 +144,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-circle-multiple-outline"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/tokens"
                 >
@@ -310,7 +310,7 @@
           </v-col>
         </v-row>
 
-        <v-row class="ml-2 mr-2" v-if="isMobileDevice">
+        <v-row class="ml-2 mr-2 mb-8" v-if="isMobileDevice">
           <v-col cols="6" :align="'center'">
             <v-btn prepend-icon="mdi-view-dashboard" stacked
                     style="font-size: 0.8rem;width:100%;font-weight: bold;"
@@ -342,6 +342,14 @@
             </v-btn>
           </v-col> -->
         </v-row>
+
+
+      <!-- ######################################################################################## -->
+      <!-- ###############################       AIRDROP          ################################# -->
+      <!-- ######################################################################################## -->
+
+      <Airdrop>
+      </Airdrop>
 
       <!-- ######################################################################################## -->
       <!-- ###############################       WELCOME          ################################# -->
@@ -1583,6 +1591,7 @@
 // @ is an alias to /src
 import store from '@/store/index'
 import axios from 'axios'
+import Airdrop from '@/views/Airdrop'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
@@ -1611,7 +1620,7 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 1, // array in contract
+    activePresale: 2, // array in contract
     presale: [],
     stageProgress: 0,
     tokensSold: 0,
@@ -2944,7 +2953,8 @@ export default {
   }),
   components: {
     MetaMaskConnect,
-    WalletConnect
+    WalletConnect,
+    Airdrop
   },
   computed: {
     getChain () {
@@ -3139,9 +3149,11 @@ export default {
 
       console.log(this.presaleContract2)
 
-      var eth = this.amountEth // * 1e18 // 18 Decimals
+      var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // * 1e18 // 18 Decimals
       let tokens = Math.round(this.amountEmasForEthDiagLog)
-      let ethBuy = this.presaleContract2.buyWithEth(`${1}`, `${tokens}`, {
+      console.log('********* tokens ***********')
+      console.log(tokens)
+      let ethBuy = this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
         value: `${ethers.utils.parseEther(`${eth}`)}`
       });
 
