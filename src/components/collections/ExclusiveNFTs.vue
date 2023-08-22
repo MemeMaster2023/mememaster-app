@@ -68,7 +68,7 @@
                     variant="text"
                     @click.stop="openCollection(col, index)"
                   >
-                    OPEN
+                    Open
                   </v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>

@@ -141,7 +141,7 @@
 
         // session established
         this.provider.on("connect", (chainId, aaa) => {
-          console.log('Wallet is connect', chainId)s
+          console.log('Wallet is connect', chainId)
           this.enableWalletConnect()
         });
 
