@@ -10,6 +10,7 @@
       <v-btn style="width:100%;" size="large" color="blue lighten-5" @click="walletConnectInit('button')" v-if="!walletConnected">
         <img src="/img/icons/walletconnect_light.png" style="max-width:32px;padding-right:10px"/>Wallet Connect
       </v-btn>
+      <!-- <w3m-core-button></w3m-core-button> -->
 
       <!-- <v-btn style="width:100%;" large :color="dark ? '#388E3C' : 'green lighten-5'" @click="startOnboarding" v-if="!mmInstalled">
         <img src="/img/icons/metamask.png" style="max-width:22px%;max-height:22px;padding-right:10px"/>Install Metamask
@@ -44,7 +45,16 @@
   // import WalletConnect from "@walletconnect/client";
   // import QRCodeModal from "@walletconnect/qrcode-modal"
   import { generate } from 'project-name-generator';
-  import {EthereumProvider} from '@walletconnect/ethereum-provider'
+  // import {EthereumProvider} from '@walletconnect/ethereum-provider'
+  import {
+    EthereumClient,
+    w3mConnectors,
+    w3mProvider,
+    WagmiCore,
+    WagmiCoreChains
+  } from "https://unpkg.com/@web3modal/ethereum@2.6.2";
+
+  import { Web3Modal } from "https://unpkg.com/@web3modal/html@2.6.2";
 
   export default {
     props: {
@@ -115,93 +125,134 @@
     },
     methods:{
       async walletConnectInit (type) {
+        // // 0. Import wagmi dependencies
+        const { mainnet } = WagmiCoreChains;
+        const { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } = WagmiCore;
+
+        // // 1. Define chains
+        const chains = [mainnet];
         let projectId
+
         if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
           projectId = import.meta.env.VITE_APP_PROJECT_ID
         } else {
           projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
         }
 
-        if (type === 'button') {
-          this.provider = await EthereumProvider.init({
-            projectId,
-            chains: [1],
-            showQrModal: true, // REQUIRED set to "true" to use @walletconnect/modal,
-            qrModalOptions:{
-              themeVariables:{
-                "--wcm-z-index": "9999"
-              }
-            },
-          });
-          await this.provider.connect();
+        const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+        // Set up wagmi config
+        const wagmiConfig = createConfig({
+          autoConnect: true,
+          connectors: [
+            ...w3mConnectors({ chains, version: 2, projectId }),
+          ],
+          publicClient,
+
+        });
+
+        // 3. Create ethereum and modal clients
+        const ethereumClient = new EthereumClient(wagmiConfig, chains);
+        const web3Modal = new Web3Modal({
+          projectId,
+          themeVariables: {
+            '--w3m-font-family': 'Roboto, sans-serif',
+            '--w3m-accent-color': '#F5841F',
+            '--w3m-z-index': '9999'
+          }
+        },
+          ethereumClient
+        );
+
+        if(type === 'button') {
+          console.log(web3Modal)
+          web3Modal.openModal()
         } else {
-          const savedChainId = localStorage.getItem('chainId');
-          // console.log("Reconnecting with saved chainId:", savedChainId);
-          // let walletconnect = JSON.parse(this.getUser.walletconnect)
-          this.provider = await EthereumProvider.init({
-            projectId,
-            chains: [savedChainId],
-          })
-          await this.provider.enable();
-          this.accounts = this.provider.accounts;
-          this.chainId = this.provider.chainId;
-          this.enableWalletConnect()
+          console.log('init')
         }
 
-        // session established
-        this.provider.on("connect", (chainId) => {
-          console.log('Wallet is connect', chainId)
-          this.enableWalletConnect()
-        });
 
-        //  Attach event listeners before connecting
-        this.provider.on("accountsChanged", (accounts) => {
-          console.log("Accounts changed:", accounts);
-          // Update your application with the new accounts
-          this.accounts = accounts
-        });
 
-        // chain changed
-        this.provider.on("chainChanged", (chainId) => {
-          console.log("Chain changed:", chainId);
-          // Update your application with the new chain
 
-        });
+      //   if (type === 'button') {
+      //     this.provider = await EthereumProvider.init({
+      //       projectId,
+      //       chains: [1],
+      //       showQrModal: true, // REQUIRED set to "true" to use @walletconnect/modal,
+      //       qrModalOptions:{
+      //         themeVariables:{
+      //           "--wcm-z-index": "9999"
+      //         }
+      //       },
+      //     });
+      //     await this.provider.connect();
+      //   } else {
+      //     const savedChainId = localStorage.getItem('chainId');
+      //     // console.log("Reconnecting with saved chainId:", savedChainId);
+      //     // let walletconnect = JSON.parse(this.getUser.walletconnect)
+      //     this.provider = await EthereumProvider.init({
+      //       projectId,
+      //       chains: [savedChainId],
+      //     })
+      //     await this.provider.enable();
+      //     this.accounts = this.provider.accounts;
+      //     this.chainId = this.provider.chainId;
+      //     this.enableWalletConnect()
+      //   }
 
-        // connection uri
-        this.provider.on("display_uri", (payload)=>{
-          console.log("display_uri:", payload)
-        });
+      //   // session established
+      //   this.provider.on("connect", (chainId) => {
+      //     console.log('Wallet is connect', chainId)
+      //     this.enableWalletConnect()
+      //   });
 
-        // session event - chainChanged/accountsChanged/custom events
-        this.provider.on("session_event",(payload) => {
-          console.log('Wallet is session_event', payload)
-          // Get provided accounts and chainId
-          // this.chainId =  payload.params.chainId
-          this.accounts = this.provider.accounts;
-          this.chainId = this.provider.chainId;
-          localStorage.setItem('chainId', payload.params.chainId);
-          this.enableWalletConnect()
-          // Do the rest of the store and firebase stuff
-        });
+      //   //  Attach event listeners before connecting
+      //   this.provider.on("accountsChanged", (accounts) => {
+      //     console.log("Accounts changed:", accounts);
+      //     // Update your application with the new accounts
+      //     this.accounts = accounts
+      //   });
 
-        // session disconnect
-        this.provider.on("disconnect",(payload) => {
-          console.log('Wallet is disconnect', payload)
-          this.provider = null
-          store.commit('SetWalletConnectChanges', {
-            accounts: [],
-            walletConnected: false,
-            walletProvider: '',
-            isLoggedIn: false,
-            isEmailConnected: false,
-            uid: '',
-          })
-          localStorage.clear();
-          firebase.auth().signOut()
-          store.commit("SetEmpty")
-        });
-      },
+      //   // chain changed
+      //   this.provider.on("chainChanged", (chainId) => {
+      //     console.log("Chain changed:", chainId);
+      //     // Update your application with the new chain
+
+      //   });
+
+      //   // connection uri
+      //   this.provider.on("display_uri", (payload)=>{
+      //     console.log("display_uri:", payload)
+      //   });
+
+      //   // session event - chainChanged/accountsChanged/custom events
+      //   this.provider.on("session_event",(payload) => {
+      //     console.log('Wallet is session_event', payload)
+      //     // Get provided accounts and chainId
+      //     // this.chainId =  payload.params.chainId
+      //     this.accounts = this.provider.accounts;
+      //     this.chainId = this.provider.chainId;
+      //     localStorage.setItem('chainId', payload.params.chainId);
+      //     this.enableWalletConnect()
+      //     // Do the rest of the store and firebase stuff
+      //   });
+
+      //   // session disconnect
+      //   this.provider.on("disconnect",(payload) => {
+      //     console.log('Wallet is disconnect', payload)
+      //     this.provider = null
+      //     store.commit('SetWalletConnectChanges', {
+      //       accounts: [],
+      //       walletConnected: false,
+      //       walletProvider: '',
+      //       isLoggedIn: false,
+      //       isEmailConnected: false,
+      //       uid: '',
+      //     })
+      //     localStorage.clear();
+      //     firebase.auth().signOut()
+      //     store.commit("SetEmpty")
+      //   });
+      // },
       // async walletConnectInit (type) {
       //   console.log(type)
       //   if (type === 'button') {
@@ -270,7 +321,7 @@
       //     firebase.auth().signOut()
       //     store.commit("SetEmpty")
       //   })
-      // },
+      },
       disconnectWallet () {
         store.commit('SetWalletConnectChanges', {
           accounts: [],
