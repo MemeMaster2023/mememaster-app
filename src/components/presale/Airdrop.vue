@@ -12,11 +12,11 @@
         </v-row> -->
         <v-row style="width:100%;margin: 0px" :class="isMobileDevice ? 'mt-12' : 'mt-4'">
             <v-col cols="12" class="pl-4 pr-4">
-                <iframe src="https://gleam.io/203UF/free-token-airdrop" 
+                <iframe :src="gleamUrl" 
                         frameBorder="0" 
                         allowfullscreen 
                         scrolling="no"
-                        :style="isMobileDevice ? 'width:100%;height:1200px;overflow: hidden;' : 'width:100%;height:840px;overflow: hidden;'"
+                        :style="isMobileDevice ? 'width:100%;height:1280px;overflow: hidden;' : 'width:100%;height:950px;overflow: hidden;'"
                 >
                 </iframe>
             </v-col>            
@@ -37,6 +37,7 @@ export default {
     drawer: Boolean
   },
   data: () => ({
+    gleamUrl: '',
   }),
   components: {
   },
@@ -47,6 +48,11 @@ export default {
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
+    if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+      this.gleamUrl = 'https://gleam.io/xQ6Mu/social-media-emas-tokens-lucky-draw'
+    } else{
+     this.gleamUrl = 'https://gleam.io/203UF/free-token-airdrop'
+    }
   },
   methods: {
  

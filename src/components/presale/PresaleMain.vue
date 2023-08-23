@@ -178,7 +178,7 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 2</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>$0.005</v-toolbar-title>
               </v-toolbar>
@@ -1601,7 +1601,7 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
-const presaleAddress = "0xaA38D47151fE603F9CA3b433E4a8Ee360119276e"
+const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
 
 export default {
@@ -1622,7 +1622,7 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 1, // array in contract
+    activePresale: 2, // array in contract
     presale: [],
     stageProgress: 0,
     tokensSold: 0,
@@ -3135,33 +3135,43 @@ export default {
     },
     async buyWithEthContract () {
 
-      console.log(ethers)
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      // const provider = new ethers.providers.Web3Provider(window.ethereum);
-      console.log(provider);
-      const signer = provider.getSigner()
-      console.log(signer);
-      const network = await provider.getNetwork();
-      console.log(network);
-      const abi = window.abi;
-      console.log(abi)
-      // The Contract object
-      
-      const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, abi, provider);
-      const presaleContract2 = presaleConstructor.connect(signer);
-      this.presaleContract2 = presaleContract2;
+      // next view on form
 
-      console.log(this.presaleContract2)
+      try {
+        console.log(ethers)
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        console.log(provider);
+        const signer = provider.getSigner()
+        console.log(signer);
+        const network = await provider.getNetwork();
+        console.log(network);
+        const abi = window.abi;
+        console.log(abi)
+        // The Contract object
+        
+        const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, abi, provider);
+        const presaleContract2 = presaleConstructor.connect(signer);
+        this.presaleContract2 = presaleContract2;
 
-      var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
-      let tokens = Math.round(this.amountEmasForEthDiagLog)
-      console.log('********* tokens ***********')
-      console.log(tokens)
-      let ethBuy = this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
-        value: `${ethers.utils.parseEther(`${eth}`)}`
-      });
+        console.log(this.presaleContract2)
 
-      console.log(ethBuy);
+        var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
+        let tokens = Math.round(this.amountEmasForEthDiagLog)
+        console.log('********* tokens ***********')
+        console.log(tokens)
+        let ethBuy = this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
+          value: `${ethers.utils.parseEther(`${eth}`)}`
+        });
+
+        console.log(ethBuy);
+
+       } catch(error) {
+          console.log(error)
+          // if user rejects
+          // this.buyWithEthDialog = false
+          
+        }
 
     },
     async buyWithUSDTContract () {
@@ -3176,6 +3186,8 @@ export default {
 
           let usdtConstructor = new ethers.Contract(`${usdtAddress.toLowerCase()}`, abi, provider)
           const usdtContract = usdtConstructor.connect(signer)
+          
+          
           let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
           console.log('*********** usdt ************')
           console.log(usdt)
@@ -3183,13 +3195,24 @@ export default {
           let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
           console.log('*********** tokens ************')
           console.log(tokens)
-          await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
-          const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider)
-          const presaleContract = presaleConstructor.connect(signer)
-          presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`)
+
+          // USDT approval
+          const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`)
+          console.log('Approve result: ', approve)
+          if(!approve) {
+            // Do whatever...
+          } else {
+            // USDT buy
+            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider)
+            const presaleContract = presaleConstructor.connect(signer)
+            await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`)
+          }
 
         } catch(error) {
           console.log(error)
+          // if user rejects
+          // this.buyWithUsdtDialog = false
+          
         }
     },
     /* async buyWithEthContract () {
@@ -3231,13 +3254,13 @@ export default {
     convertAmount(type,value) {
       switch (type) {
         case 'ethToEmas':
-          return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.stage1 ))
+          return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.stage2 ))
         case 'emasToEth':
-          return this.amountEth = value * ( this.stage1/ this.ethPrice )
+          return this.amountEth = value * ( this.stage2/ this.ethPrice )
         case 'usdtToEmas':
-          return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.stage1 ))
+          return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.stage2 ))
         case 'emasToUsdt':
-          return this.amountUSDT = value * ( this.stage1 / this.usdtPrice )
+          return this.amountUSDT = value * ( this.stage2 / this.usdtPrice )
         default:
           return 0;
       }
