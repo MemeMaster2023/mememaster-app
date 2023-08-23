@@ -46,15 +46,11 @@
   // import QRCodeModal from "@walletconnect/qrcode-modal"
   import { generate } from 'project-name-generator';
   // import {EthereumProvider} from '@walletconnect/ethereum-provider'
-  import {
-    EthereumClient,
-    w3mConnectors,
-    w3mProvider,
-    WagmiCore,
-    WagmiCoreChains
-  } from "https://unpkg.com/@web3modal/ethereum@2.6.2";
-
-  import { Web3Modal } from "https://unpkg.com/@web3modal/html@2.6.2";
+  import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+  import { Web3Modal } from '@web3modal/html'
+  import { configureChains, createConfig, connect ,disconnect,watchAccount } from '@wagmi/core'
+  import { arbitrum, mainnet, polygon } from '@wagmi/core/chains'
+  import { InjectedConnector } from '@wagmi/core/connectors/injected'
 
   export default {
     props: {
@@ -115,7 +111,10 @@
       } */
     },
     created() {
+      console.log('created', this.getUser)
       if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
+        this.accounts = this.getUser.accounts
+        this.chainId = localStorage.getItem('chainId')
         this.walletConnectInit('init')
       } else {
         store.commit('SetConnectedUserFalse', {
@@ -125,29 +124,23 @@
     },
     methods:{
       async walletConnectInit (type) {
-        // // 0. Import wagmi dependencies
-        const { mainnet } = WagmiCoreChains;
-        const { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } = WagmiCore;
-
-        // // 1. Define chains
-        const chains = [mainnet];
+        // 1. Define chains
+        const chains = [mainnet]
         let projectId
-
         if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
           projectId = import.meta.env.VITE_APP_PROJECT_ID
         } else {
           projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
         }
-
         const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-        // Set up wagmi config
+
+        // 2. Set up wagmi config
         const wagmiConfig = createConfig({
           autoConnect: true,
           connectors: [
             ...w3mConnectors({ chains, version: 2, projectId }),
           ],
           publicClient,
-
         });
 
         // 3. Create ethereum and modal clients
@@ -155,23 +148,35 @@
         const web3Modal = new Web3Modal({
           projectId,
           themeVariables: {
-            '--w3m-font-family': 'Roboto, sans-serif',
-            '--w3m-accent-color': '#F5841F',
             '--w3m-z-index': '9999'
-          }
+          },
         },
           ethereumClient
         );
 
-        if(type === 'button') {
-          console.log(web3Modal)
+        if (type === 'button') {
           web3Modal.openModal()
+          this.provider = await connect({
+            connector: new InjectedConnector(),
+          })
+
+          watchAccount(({ address, isConnected }) => {
+            if (isConnected) {
+              this.accounts = [address];
+              console.log(this.accounts)
+              this.chainId = this.provider.chain.id
+              localStorage.setItem('chainId', this.provider.chain.id);
+              this.enableWalletConnect()
+            } else {
+              (async () => {
+                  await disconnect();
+              })();
+            }
+          })
         } else {
           console.log('init')
+          this.enableWalletConnect()
         }
-
-
-
 
       //   if (type === 'button') {
       //     this.provider = await EthereumProvider.init({
@@ -335,11 +340,11 @@
       },
       enableWalletConnect () {
         console.log('########### is this code happening ###########')
-        console.log('This is enableWalletConnect:', JSON.parse(JSON.stringify(this.accounts))[0], this.chainId)
+        console.log('This is enableWalletConnect:', this.accounts, this.chainId)
         localStorage.setItem('chainId', this.chainId);
         var nw = parseInt(this.chainId).toString(16)
         store.commit('SetUserDetails', {
-          accounts: JSON.parse(JSON.stringify(this.accounts)),
+          accounts: this.accounts,
           walletProvider: 'WalletConnect',
           mmConnected: false,
           twConnected: false,
@@ -352,9 +357,8 @@
           networkChainID: '0x' + nw
         })
 
-        let userAddress = JSON.parse(JSON.stringify(this.accounts))[0].toLowerCase()
-        console.log('userAddress[0]')
-        console.log(userAddress)
+        let userAddress = this.accounts[0].toLowerCase()
+        console.log('userAddress[0]',userAddress)
         let usersRef = db.collection('users')
         usersRef.where('accounts', 'array-contains', userAddress).orderBy('created', 'asc').limit(1).get()
           .then(snapshot => {
