@@ -178,15 +178,16 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 2</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 3</div>
               <v-spacer></v-spacer>
-               <v-toolbar-title>$0.005</v-toolbar-title>
+               <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
 
 
                 <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
-                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? stage1 :(parseInt(presale.price) / 1000000000000000000) }}</div>
-                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div>
+                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
+                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
+                <!-- <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div> -->
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
@@ -199,8 +200,8 @@
                   </v-progress-linear>
                 </v-layout>
 
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : tokensSold }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $1,750,000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $$1,220.000</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -1255,7 +1256,7 @@
             </v-btn>
           </v-toolbar>
           
-          <v-card-text class="mb-8">
+          <v-card-text class="mb-8" v-if="buyEthView === 1">
             <v-row>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
@@ -1303,6 +1304,33 @@
             </v-row>
           </v-card-text>
 
+          <v-card-text class="mb-8" v-if="buyEthView === 2">
+
+            <v-row class="pt-8 mb-16">
+              <v-col cols="12"  :align="'center'">
+                <v-progress-circular
+                    indeterminate
+                    color="#360a3f"
+                  ></v-progress-circular>
+                  <div class="text-h6 mt-2">Processing your transaction...</div>
+              </v-col>
+            </v-row>
+    
+          </v-card-text>
+
+          <v-card-text class="mb-8" v-if="buyEthView === 3">
+
+            <v-row class="pt-8 mb-16">
+              <v-col cols="12"  :align="'center'">
+                 <v-icon size="60" color="green">mdi-check-circle-outline</v-icon>
+
+                 <div class="text-h5 mt-2">Transaction Successful!</div>
+                 <div class="text-h6 mt-2">You bought {{ Math.round(this.amountEmasForEthDiagLog) }} EMAS Tokens</div>
+              </v-col>
+            </v-row>
+
+          </v-card-text>
+
         </v-card>
       </v-dialog>
 
@@ -1314,7 +1342,7 @@
             <v-btn v-if="isMobileDevice" icon color="white" @click="closeBuyWithUsdtDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <span class="text-white ml-4" style="font-size: 1.2rem">Buy with USDT</span>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Buy EMAS with USDT</span>
             <v-spacer></v-spacer>
             <v-btn v-if="!isMobileDevice" icon color="white" @click="closeBuyWithUsdtDialog()">
               <v-icon>mdi-close</v-icon>
@@ -1622,7 +1650,8 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 2, // array in contract
+    activePresale: 3, // array in contract
+    activeStagePrice: 0,
     presale: [],
     stageProgress: 0,
     tokensSold: 0,
@@ -1637,6 +1666,8 @@ export default {
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
     buyWithEthDialog: false,
+    buyEthView: 1,
+    buyUSDTView: 1,
     buyWithUsdtDialog: false,
     donateEthDialog: false,
     donateUsdtDialog: false,
@@ -3008,6 +3039,7 @@ export default {
     this.init()
     this.scrollToTop()
     this.instantiateContractAbi()
+    this.activeStagePrice = this.stage3
   },
   beforeUnmount() {
     if (this.priceInterval) {
@@ -3136,6 +3168,7 @@ export default {
     async buyWithEthContract () {
 
       // next view on form
+      // this.buyEthView = 2
 
       try {
         console.log(ethers)
@@ -3160,16 +3193,21 @@ export default {
         let tokens = Math.round(this.amountEmasForEthDiagLog)
         console.log('********* tokens ***********')
         console.log(tokens)
+        console.log(this.activeStagePrice)
         let ethBuy = this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
           value: `${ethers.utils.parseEther(`${eth}`)}`
         });
 
         console.log(ethBuy);
 
-       } catch(error) {
+        // When Eth Buy completed
+        // this.buyEthView = 3
+
+        } catch(error) {
           console.log(error)
           // if user rejects
           // this.buyWithEthDialog = false
+          // this.buyEthView = 4 >> Error View
           
         }
 
@@ -3254,13 +3292,13 @@ export default {
     convertAmount(type,value) {
       switch (type) {
         case 'ethToEmas':
-          return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.stage2 ))
+          return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.activeStagePrice ))
         case 'emasToEth':
-          return this.amountEth = value * ( this.stage2/ this.ethPrice )
+          return this.amountEth = value * ( this.activeStagePrice / this.ethPrice )
         case 'usdtToEmas':
-          return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.stage2 ))
+          return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.activeStagePrice ))
         case 'emasToUsdt':
-          return this.amountUSDT = value * ( this.stage2 / this.usdtPrice )
+          return this.amountUSDT = value * ( this.activeStagePrice / this.usdtPrice )
         default:
           return 0;
       }

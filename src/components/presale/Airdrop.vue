@@ -10,8 +10,8 @@
                 </div>
             </v-col>            
         </v-row> -->
-        <v-row style="width:100%;margin: 0px" :class="isMobileDevice ? 'mt-12' : 'mt-4'">
-            <v-col cols="12" class="pl-4 pr-4">
+        <v-row style="width:100%;margin: 0px" >
+            <v-col cols="12" class="pl-4 pr-4 mt-8">
                 <iframe :src="gleamUrl" 
                         frameBorder="0" 
                         allowfullscreen 
