@@ -326,6 +326,7 @@ import { provide } from 'vue'
       //   })
       },
       disconnectWallet () {
+        disconnect();
         store.commit('SetWalletConnectChanges', {
           accounts: [],
           walletConnected: false,
