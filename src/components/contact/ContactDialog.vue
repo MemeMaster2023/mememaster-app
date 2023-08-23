@@ -158,9 +158,9 @@
   </v-snackbar>
 </template>
 <script>
-import store from '@/store/index'
-import { db } from '@/main'
-
+import {db} from '@/main';
+import store from '@/store';
+import MemeMasterAPI from '@/clients/MemeMasterAPI';
 export default {
   name: 'AppBar',
   props: {
@@ -205,6 +205,9 @@ export default {
     },
     sendMessage(){
       this.isLoading = true;
+      console.log(JSON.stringify(this.message));
+      let message = this.message.replaceAll('\n', '<br/>');
+      console.log(message);
       let postkey = db.collection('messages').doc()
       let obj = {
         id: postkey.id,
@@ -212,7 +215,7 @@ export default {
         name: this.name,
         email: this.email,
         subject: this.subject,
-        message: this.message,
+        message: message,
         isSendEmail: 0,
         created: new Date().getTime(), 
         type: 'contact'
@@ -220,11 +223,21 @@ export default {
       db.collection('messages')
         .doc(postkey.id)
         .set(obj)
-        .then(() => {
+        .then(async () => {
+          const payload = {
+            subject: `Contact: ${this.name} - ${this.email} | ${this.subject}`,
+            message: message,
+            email: this.email
+          }
+          await MemeMasterAPI.sendMessage(payload);
           this.snackbarText = "Success sending message";
           this.snackbar = true;
           this.isLoading = false;
           this.isForm = false;
+          this.name = '';
+          this.email = '';
+          this.subject = '';
+          this.message = '';
         })
         .catch((error) => {
           this.snackbarText = "Failed sending message: " + error ;
