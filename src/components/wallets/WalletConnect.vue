@@ -112,10 +112,7 @@ import { provide } from 'vue'
       } */
     },
     created() {
-      console.log('created', this.getUser)
       if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
-        // this.accounts = this.getUser.accounts
-        // this.chainId = localStorage.getItem('chainId')
         this.walletConnectInit('init')
       } else {
         store.commit('SetConnectedUserFalse', {
