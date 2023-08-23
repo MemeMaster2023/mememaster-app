@@ -1245,12 +1245,12 @@
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
           <v-toolbar color="#241d43">
-            <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="closeBuyWithEthDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
             <span class="text-white ml-4" style="font-size: 1.2rem">Buy EMAS with ETH</span>
             <v-spacer></v-spacer>
-            <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="closeBuyWithEthDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
@@ -1297,7 +1297,7 @@
               </v-col>
               <v-col cols="12">
                 <v-btn class="text-white" size="large" style="width:100%" color="#360a3f" @click="buyWithEthContract()">
-                  Convert ETH
+                  Swap ETH for EMAS
                 </v-btn>
               </v-col>
             </v-row>
@@ -1311,12 +1311,12 @@
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
           <v-toolbar color="#241d43">
-            <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="closeBuyWithUsdtDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
             <span class="text-white ml-4" style="font-size: 1.2rem">Buy with USDT</span>
             <v-spacer></v-spacer>
-            <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="closeBuyWithUsdtDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
@@ -1367,7 +1367,7 @@
               </v-col>
               <v-col cols="12">
                 <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f" @click="buyWithUSDTContract()">
-                  Convert USDT
+                  Swap USDT for EMAS
                 </v-btn>
               </v-col>
             </v-row>
@@ -1601,8 +1601,9 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
-const presaleAddress = "0xC49eF4DF5E6f861b51C3739b2b113836Ec94889b"
-const usdtAddress = "0xb0f7554a44cC178e935Ea10c79e7c042D1840044"
+const presaleAddress = "0xaA38D47151fE603F9CA3b433E4a8Ee360119276e"
+const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
+
 export default {
   name: 'Presale',
   props: {
@@ -3006,10 +3007,6 @@ export default {
     // this.currentUser = firebase.auth().currentUser;
     this.init()
     this.scrollToTop()
-    this.getLastestPrice()
-    this.priceInterval = setInterval(() => {
-      this.getLastestPrice();
-    }, 300000);
     this.instantiateContractAbi()
   },
   beforeUnmount() {
@@ -3086,6 +3083,12 @@ export default {
     },
     handleShowDialog(isTop, dialogType) {
       const isConnected = this.mmConnected || this.walletConnected || this.twConnected;
+      console.log(dialogType)
+      if (dialogType === 'buyWithEthDialog') {
+        this.getLastestPrice('ethereum')
+      } else if (dialogType === 'buyWithUsdtDialog') {
+        this.getLastestPrice('tether')
+      }
 
       if (isTop) {
         this[dialogType] = isConnected;
@@ -3228,16 +3231,26 @@ export default {
     convertAmount(type,value) {
       switch (type) {
         case 'ethToEmas':
-          return this.amountEmasForEthDiagLog = value * ( this.ethPrice / this.stage2 )
+          return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.stage1 ))
         case 'emasToEth':
-          return this.amountEth = value * ( this.stage2 / this.ethPrice )
+          return this.amountEth = value * ( this.stage1/ this.ethPrice )
         case 'usdtToEmas':
-          return this.amountEmasForUSDTDiagLog = value * ( this.usdtPrice / this.stage2 )
+          return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.stage1 ))
         case 'emasToUsdt':
-          return this.amountUSDT = value * ( this.stage2 / this.usdtPrice )
+          return this.amountUSDT = value * ( this.stage1 / this.usdtPrice )
         default:
           return 0;
       }
+    },
+    closeBuyWithEthDialog() {
+      this.buyWithEthDialog = false
+      this.amountEmasForEthDiagLog = 0
+      this.amountEth = 0
+    },
+    closeBuyWithUsdtDialog() {
+      this.buyWithUsdtDialog = false
+      this.amountEmasForUSDTDiagLog = 0
+      this.amountUSDT = 0
     },
     ensureNonNegative(inputField) {
       if (this[inputField] < 0) {
@@ -3247,7 +3260,36 @@ export default {
     clearOnFocus(e) {
       if (this[e] == 0) this[e]= ''
     },
-    async getLastestPrice() {
+    async getLastestPrice(symbol) {
+      var url
+      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+        url = import.meta.env.VITE_APP_MM_API
+      } else  if (import.meta.env.VITE_APP_ENVIRONMENT === 'testnet') {
+        url = import.meta.env.VITE_APP_MM_API_TEST
+      } else {
+        url = import.meta.env.VITE_APP_MM_API_LOCAL
+      }
+      try {
+        const response = await axios.get(url + "getlastpricecoingecko", {
+          params: {
+            "symbols": symbol
+          }
+        });
+        // console.log(response)
+        // const { ETH: ethData, USDT: usdtData } = response.data.data;
+        if (symbol === 'ethereum') {
+          this.ethPrice = response.data.data.market_data.current_price.usd
+        } else {
+          this.usdtPrice = response.data.data.market_data.current_price.usd
+        }
+        console.log(this.ethPrice)
+        console.log(this.usdtPrice)
+
+      } catch (error) {
+        console.log('Get new price error', error);
+      }
+    },
+    /* async getLastestPrice() {
       var url
       if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
         url = import.meta.env.VITE_APP_MM_API
@@ -3267,7 +3309,7 @@ export default {
       } catch (error) {
         console.log('Get new price error', error);
       }
-    },
+    }, */
     async sendContactForm() {
       const isValid = await this.$refs.newCryptoForm.validate()
       this.type = 'newtocrypto'
