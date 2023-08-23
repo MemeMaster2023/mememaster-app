@@ -48,9 +48,10 @@
   // import {EthereumProvider} from '@walletconnect/ethereum-provider'
   import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
   import { Web3Modal } from '@web3modal/html'
-  import { configureChains, createConfig, connect ,disconnect,watchAccount } from '@wagmi/core'
+  import { configureChains, createConfig, connect, disconnect, watchAccount } from '@wagmi/core'
   import { arbitrum, mainnet, polygon } from '@wagmi/core/chains'
   import { InjectedConnector } from '@wagmi/core/connectors/injected'
+import { provide } from 'vue'
 
   export default {
     props: {
@@ -113,8 +114,8 @@
     created() {
       console.log('created', this.getUser)
       if (!this.walletConnected && this.getUser.walletProvider === 'WalletConnect') {
-        this.accounts = this.getUser.accounts
-        this.chainId = localStorage.getItem('chainId')
+        // this.accounts = this.getUser.accounts
+        // this.chainId = localStorage.getItem('chainId')
         this.walletConnectInit('init')
       } else {
         store.commit('SetConnectedUserFalse', {
@@ -156,25 +157,25 @@
 
         if (type === 'button') {
           web3Modal.openModal()
-          this.provider = await connect({
-            connector: new InjectedConnector(),
-          })
 
-          watchAccount(({ address, isConnected }) => {
+          watchAccount(async ({ address, connector, isConnected }) => {
             if (isConnected) {
-              this.accounts = [address];
-              console.log(this.accounts)
-              this.chainId = this.provider.chain.id
-              localStorage.setItem('chainId', this.provider.chain.id);
+              this.provider = await connector.getProvider();
+              this.accounts = [this.provider.selectedAddress];
+              this.chainId = this.provider.networkVersion
               this.enableWalletConnect()
             } else {
-              (async () => {
-                  await disconnect();
-              })();
+              disconnect();
             }
           })
         } else {
           console.log('init')
+          const { connector } = await connect({
+            connector: new InjectedConnector(),
+          })
+          this.provider = await connector.getProvider();
+          this.accounts = [this.provider.selectedAddress];
+          this.chainId = this.provider.networkVersion;
           this.enableWalletConnect()
         }
 
@@ -343,6 +344,7 @@
         console.log('This is enableWalletConnect:', this.accounts, this.chainId)
         localStorage.setItem('chainId', this.chainId);
         var nw = parseInt(this.chainId).toString(16)
+
         store.commit('SetUserDetails', {
           accounts: this.accounts,
           walletProvider: 'WalletConnect',
@@ -358,7 +360,7 @@
         })
 
         let userAddress = this.accounts[0].toLowerCase()
-        console.log('userAddress[0]',userAddress)
+
         let usersRef = db.collection('users')
         usersRef.where('accounts', 'array-contains', userAddress).orderBy('created', 'asc').limit(1).get()
           .then(snapshot => {
