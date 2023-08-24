@@ -330,11 +330,13 @@ import { provide } from 'vue'
       //     store.commit("SetEmpty")
       //   })
       },
-      async disconnectWallet () {
-        await disconnect();
-        console.log('localStorage.clear')
+      disconnectWallet () {
+        disconnect();
+        console.log('===== localStorage.clear ======')
+        console.log('===== localStorage.clear ======')
+        console.log('===== localStorage.clear ======')
         localStorage.clear();
-        console.log(localStorage)
+        console.log(JSON.stringify(localStorage))
         store.commit('SetWalletConnectChanges', {
           accounts: [],
           walletConnected: false,
