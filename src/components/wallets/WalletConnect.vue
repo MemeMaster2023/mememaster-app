@@ -194,15 +194,12 @@ import { provide } from 'vue'
 
         console.log("opening the modal")
 
-        await web3Modal.openModal()
-        console.log("opened the modal")
-        await connect({connector: new InjectedConnector()})
 
-        console.log("aaa", aaa)
-        console.log("aaa", aaa)
-        console.log("aaa", aaa)
 
         if (type === 'button') {
+          await web3Modal.openModal()
+          console.log("opened the modal")
+          await connect({connector: new InjectedConnector()})
 
           // watchAccount(async ({ address, connector, isConnected }) => {
           //   if (isConnected) {
@@ -216,6 +213,7 @@ import { provide } from 'vue'
           // })
         } else {
           console.log('init')
+          await connect({connector: new InjectedConnector()})
 
           // const { connector } = await connect({
           //   connector: new InjectedConnector(),
