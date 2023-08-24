@@ -16,7 +16,7 @@
                         frameBorder="0" 
                         allowfullscreen 
                         scrolling="no"
-                        :style="isMobileDevice ? 'width:100%;height:1280px;overflow: hidden;' : 'width:100%;height:950px;overflow: hidden;'"
+                        :style="isMobileDevice ? 'width:100%;height:1300px;overflow: hidden;' : 'width:100%;height:970px;overflow: hidden;'"
                 >
                 </iframe>
             </v-col>            

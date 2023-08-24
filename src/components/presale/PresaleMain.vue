@@ -1418,7 +1418,7 @@
             </v-btn>
           </v-toolbar>
           <v-card-text class="text-h6 ma-8">
-             The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET (10pm UTC).
+             The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET.
           </v-card-text>
         </v-card>
       </v-dialog>
