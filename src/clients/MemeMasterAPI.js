@@ -266,6 +266,33 @@ class MemeMasterAPI {
         console.log(e)
       })
   }
+
+  // ###################################################################################
+  // ############################# NODEMAILER  #########################################
+  // ###################################################################################
+
+  async sendMessage(payload) {
+    var body = {
+      subject: payload.subject,
+      message: payload.message,
+      email: payload.email
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    console.log(MEME_MASTER_API)
+    return await axios.post(MEME_MASTER_API + 'send-message', body, config)
+      .then(response => {
+        console.log(response)
+        return response
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
   
 }
 export default new MemeMasterAPI()
