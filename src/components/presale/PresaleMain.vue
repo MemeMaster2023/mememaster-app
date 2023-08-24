@@ -1629,7 +1629,8 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
-const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
+// const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
+const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
 
 export default {
