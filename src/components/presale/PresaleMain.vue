@@ -11,7 +11,7 @@
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
             <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC). EMAS tokens have zero sell and zero buy tax.<br><br>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET. EMAS tokens have zero sell and zero buy tax.<br><br>
               <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
                 <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
@@ -969,17 +969,17 @@
                 variant="outlined"
               >
                <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
-                    v-clipboard:copy.stop="0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72"
+                    v-clipboard:copy.stop="'0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72'"
                     v-clipboard:success="handleSuccess"
                     v-clipboard:error="handleError"
                 >EMAS Contract Address: 0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72</div>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
-                    v-clipboard:copy.stop="0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859"
+                    v-clipboard:copy.stop="'0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859'"
                     v-clipboard:success="handleSuccess"
                     v-clipboard:error="handleError"
                 >EMAS Team Token Lockup Address: 0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859</div>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
-                    v-clipboard:copy.stop="0x000000000000000000000000000000000000dEaD"
+                    v-clipboard:copy.stop="'0x000000000000000000000000000000000000dEaD'"
                     v-clipboard:success="handleSuccess"
                     v-clipboard:error="handleError">EMAS Burn Address: 0x0000000000000......0000000000000dEaD</div><br>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336;font-size: 1rem;' : 'font-size: 1rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
@@ -3215,72 +3215,43 @@ export default {
     async buyWithUSDTContract () {
 
       try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const memeABI = await MemeMasterAPI.instantiateContractAbi(`${usdtAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT);
 
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
+        let abi = JSON.parse(memeABI.data.result);
+        let usdtConstructor = new ethers.Contract(`${usdtAddress.toLowerCase()}`, abi, provider)
+        const usdtContract = usdtConstructor.connect(signer)
 
-          const signer = provider.getSigner();
-          const memeABI = await MemeMasterAPI.instantiateContractAbi(`${usdtAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT);
-          let abi = JSON.parse(memeABI.data.result);
 
-          let usdtConstructor = new ethers.Contract(`${usdtAddress.toLowerCase()}`, abi, provider)
-          const usdtContract = usdtConstructor.connect(signer)
-          
-          
-          let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
-          console.log('*********** usdt ************')
-          console.log(usdt)
-          console.log(this.amountEmasForUSDTDiagLog)
-          let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
-          console.log('*********** tokens ************')
-          console.log(tokens)
+        let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+        console.log('**** usdt *****')
+        console.log(usdt)
+        console.log(this.amountEmasForUSDTDiagLog)
+        let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
+        console.log('**** tokens *****')
+        console.log(tokens)
 
-          // USDT approval
-          const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`)
+        // USDT approval
+        const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
+        approve.wait().then(async () => {
+
+          // USDT buy
           console.log('Approve result: ', approve)
-          if(!approve) {
-            // Do whatever...
-          } else {
-            // USDT buy
-            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider)
-            const presaleContract = presaleConstructor.connect(signer)
-            await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`)
-          }
 
-        } catch(error) {
+            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
+            const presaleContract = presaleConstructor.connect(signer);
+            await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+
+        }).catch(error => {
           console.log(error)
-          // if user rejects
-          // this.buyWithUsdtDialog = false
-          
-        }
-    },
-    /* async buyWithEthContract () {
-
-      // buyWithEthContract
-      console.log(this.amountEmasForEthDiagLog)
-      console.log(this.amountEth)
-      var eth = this.amountEth * 1e18 // 18 Decimals
-      console.log(eth)
-      let tokens = Math.round(this.amountEmasForEthDiagLog)
-
-      try {
-        // await connectUser();
-
-        // const provider = getProvider();
-        // const account = await provider.eth.getAccounts();
-        // const presale = new provider.eth.Contract(window.abi,`${presaleAddress.toLowerCase()}`);
-        // console.log(account[0])
-
-        let ethBuy = this.presaleContract.methods.buyWithEth(`${1}`, `${tokens}`).send({
-          from: this.getUser.accounts[0],
-          value: eth // provider.utils.toWei(this.amountEth, 'ether'),
         })
-
-        console.log(ethBuy);
-
-      } catch(err) {
-        console.log(err)
+      } catch(error) {
+        console.log(error)
+        // if user rejects
+        // this.buyWithUsdtDialog = false
       }
-    }, */
+    },
     handleSuccess(e) {
         console.log(e);
         this.snackbarText = 'Address copied to clipboard'
