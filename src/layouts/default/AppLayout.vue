@@ -36,7 +36,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!mmConnected && !twConnected && !emailConnected"
+      <v-btn v-if="!mmConnected && !twConnected && !emailConnected && !walletConnected"
         variant="outlined"
         color="white"
         theme="dark"
