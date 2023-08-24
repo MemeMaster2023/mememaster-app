@@ -178,7 +178,7 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 3</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
