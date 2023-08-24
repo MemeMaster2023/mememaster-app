@@ -46,11 +46,22 @@
   // import QRCodeModal from "@walletconnect/qrcode-modal"
   import { generate } from 'project-name-generator';
   // import {EthereumProvider} from '@walletconnect/ethereum-provider'
+
+
+  // import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+  // import { Web3Modal } from '@web3modal/html'
+  // import { configureChains, createConfig, connect, disconnect, watchAccount } from '@wagmi/core'
+  // import { arbitrum, mainnet, polygon } from '@wagmi/core/chains'
+  // import { InjectedConnector } from '@wagmi/core/connectors/injected'
+
+
   import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
   import { Web3Modal } from '@web3modal/html'
-  import { configureChains, createConfig, connect, disconnect, watchAccount } from '@wagmi/core'
-  import { arbitrum, mainnet, polygon } from '@wagmi/core/chains'
+  import { configureChains, createConfig, watchAccount, getAccount, connect, disconnect } from '@wagmi/core'
+  import { arbitrum, mainnet, polygon, goerli } from '@wagmi/core/chains'
   import { InjectedConnector } from '@wagmi/core/connectors/injected'
+
+
 import { provide } from 'vue'
 
   export default {
@@ -123,58 +134,52 @@ import { provide } from 'vue'
     methods:{
       async walletConnectInit (type) {
         // 1. Define chains
-        const chains = [mainnet]
-        let projectId
+        // chain testing
+
+        // chain production
+        // const chains = [mainnet]
+
+        let projectId;
+        let chains;
         if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-          projectId = import.meta.env.VITE_APP_PROJECT_ID
+          chains = [mainnet];
+          projectId = import.meta.env.VITE_APP_PROJECT_ID;
+
         } else {
-          projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
+          chains = [goerli];
+          projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST;
         }
         const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 
         // 2. Set up wagmi config
         const wagmiConfig = createConfig({
           autoConnect: true,
-          connectors: [
-            ...w3mConnectors({ chains, version: 2, projectId }),
-          ],
-          publicClient,
+          connectors: w3mConnectors({ projectId, chains }),
+          publicClient
         });
 
         // 3. Create ethereum and modal clients
         const ethereumClient = new EthereumClient(wagmiConfig, chains);
-        const web3Modal = new Web3Modal({
-          projectId,
-          themeVariables: {
-            '--w3m-z-index': '9999'
-          },
-        },
-          ethereumClient
-        );
+        const web3Modal = new Web3Modal({ projectId , themeVariables: {'--w3m-z-index': '9999'} },ethereumClient);
 
         if (type === 'button') {
+          console.log('button clicked');
           web3Modal.openModal()
-
-          watchAccount(async ({ address, connector, isConnected }) => {
-            if (isConnected) {
-              this.provider = await connector.getProvider();
-              this.accounts = [this.provider.selectedAddress];
-              this.chainId = this.provider.networkVersion
-              this.enableWalletConnect()
-            } else {
-              disconnect();
-            }
-          })
         } else {
           console.log('init')
-          const { connector } = await connect({
-            connector: new InjectedConnector(),
-          })
-          this.provider = await connector.getProvider();
-          this.accounts = [this.provider.selectedAddress];
-          this.chainId = this.provider.networkVersion;
-          this.enableWalletConnect()
         }
+
+        watchAccount(async ({ address, connector, isConnected }) => {
+          console.log('hello watchAccount',isConnected, address, connector)
+          if (isConnected) {
+            this.accounts = [address];
+            this.chainId = connector.chains[0].id
+            this.enableWalletConnect()
+          } else {
+            this.disconnectWallet()
+          }
+        })
+
 
       //   if (type === 'button') {
       //     this.provider = await EthereumProvider.init({
@@ -327,6 +332,11 @@ import { provide } from 'vue'
       },
       disconnectWallet () {
         disconnect();
+        console.log('===== localStorage.clear ======')
+        console.log('===== localStorage.clear ======')
+        console.log('===== localStorage.clear ======')
+        localStorage.clear();
+        console.log(JSON.stringify(localStorage))
         store.commit('SetWalletConnectChanges', {
           accounts: [],
           walletConnected: false,
@@ -340,7 +350,7 @@ import { provide } from 'vue'
       enableWalletConnect () {
         console.log('########### is this code happening ###########')
         console.log('This is enableWalletConnect:', this.accounts, this.chainId)
-        localStorage.setItem('chainId', this.chainId);
+
         var nw = parseInt(this.chainId).toString(16)
 
         store.commit('SetUserDetails', {
