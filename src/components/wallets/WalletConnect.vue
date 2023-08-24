@@ -375,6 +375,7 @@ import { provide } from 'vue'
       },
       async disconnectWallet () {
         await disconnect();
+        localStorage.clear();
         store.commit('SetWalletConnectChanges', {
           accounts: [],
           walletConnected: false,
