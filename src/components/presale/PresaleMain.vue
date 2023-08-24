@@ -186,8 +186,8 @@
 
                 <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
                 <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
-                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
-                <!-- <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div> -->
+                <!-- <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div> -->
+                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div>
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
@@ -1418,7 +1418,7 @@
             </v-btn>
           </v-toolbar>
           <v-card-text class="text-h6 ma-8">
-             The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET (10pm UTC).
+             The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET.
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -1650,7 +1650,7 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 3, // array in contract
+    activePresale: 1, // array in contract
     activeStagePrice: 0,
     presale: [],
     stageProgress: 0,
@@ -3039,7 +3039,7 @@ export default {
     this.init()
     this.scrollToTop()
     this.instantiateContractAbi()
-    this.activeStagePrice = this.stage3
+    this.activeStagePrice = this.stage1
   },
   beforeUnmount() {
     if (this.priceInterval) {
