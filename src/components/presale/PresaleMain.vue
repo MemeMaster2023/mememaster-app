@@ -3166,10 +3166,19 @@ export default {
         console.log(err)
       }
     },
-    async buyWithEthContract () {
+    buyWithEthContract () {
+
+      if(this.isMobileDevice) {
+        this.buyWithEthContractMobile()
+      } else {
+        this.buyWithEthContractWeb()
+      }
+
+    },
+    async buyWithEthContractWeb () {
 
       // next view on form
-      // this.buyEthView = 2
+      this.buyEthView = 2
 
       try {
         console.log(ethers)
@@ -3195,25 +3204,35 @@ export default {
         console.log('********* tokens ***********')
         console.log(tokens)
         console.log(this.activeStagePrice)
-        let ethBuy = this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
+        let buyETH = await this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
           value: `${ethers.utils.parseEther(`${eth}`)}`
         });
 
-        console.log(ethBuy);
-
+        console.log(buyETH);
         // When Eth Buy completed
-        // this.buyEthView = 3
+        buyETH.wait().then(async () => {
+
+           this.buyEthView = 3
+
+        }).catch(error => {
+          console.log(error)
+        })
 
         } catch(error) {
           console.log(error)
           // if user rejects
-          // this.buyWithEthDialog = false
+          this.buyWithEthDialog = false
+          this.buyEthView = 1
           // this.buyEthView = 4 >> Error View
-          
         }
 
     },
+    async buyWithEthContractMobile () {
+        // TODO Peter & Minh
+    },
     async buyWithUSDTContract () {
+
+      //this.buyUSDTView = 2
 
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -3237,12 +3256,22 @@ export default {
         const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
         approve.wait().then(async () => {
 
+          // this.buyUSDTView = 3
+
           // USDT buy
           console.log('Approve result: ', approve)
 
             const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
             const presaleContract = presaleConstructor.connect(signer);
-            await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+            const buyUSDT = await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+
+            buyUSDT.wait().then(async () => {
+
+            // this.buyUSDTView = 4
+
+            }).catch(error => {
+               console.log(error)
+            })
 
         }).catch(error => {
           console.log(error)
