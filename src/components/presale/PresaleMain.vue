@@ -178,7 +178,7 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 3</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
@@ -201,7 +201,7 @@
                 </v-layout>
 
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $$1,220.000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $1,750,000</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -221,13 +221,13 @@
 
                 </v-row>
 
-                <!--  presaleNotLive  -->
+                <!--  handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -3358,7 +3358,52 @@ export default {
           type
         }
 
-        this.$store.dispatch('createMessage', payload).then(() => {
+        this.$store.dispatch('createMessage', payload).then(async () => {
+          let message = payload.message.replaceAll('\n', '<br/>');
+          const formatedMessage = `
+            <table>
+              <tr>
+                <td>First Name:</td>
+                <td>${payload.firstName}</td>
+              </tr>
+              <tr>
+                <td>Last Name:</td>
+                <td>${payload.lastName}</td>
+              </tr>
+              <tr>
+                <td>Phone or Email:</td>
+                <td>${payload.phoneOrEmail}</td>
+              </tr>
+              <tr>
+                <td>First Name:</td>
+                <td>${payload.investmentBudget}</td>
+              </tr>
+              <tr>
+                <td>Last Name:</td>
+                <td>${payload.bestTimeToContact}</td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td>${payload.countryCode}</td>
+              </tr>
+              <tr>
+                <td>Type:</td>
+                <td><strong>New To Crypto</strong></td>
+              </tr>
+              <tr>
+                <td>Message:</td>
+              </tr>
+              <tr>
+                <div>${message}</div>
+              </tr>
+            </table>
+          `
+          const messagePayload = {
+            subject: `New To Crypto: ${this.firstName} - ${this.phoneOrEmail}`,
+            message: formatedMessage,
+            email: this.phoneOrEmail
+          }
+          await MemeMasterAPI.sendMessage(messagePayload);
           this.snackbarText = 'Send message success'
           this.snackbar = true
           this.clearForm()
