@@ -3358,7 +3358,52 @@ export default {
           type
         }
 
-        this.$store.dispatch('createMessage', payload).then(() => {
+        this.$store.dispatch('createMessage', payload).then(async () => {
+          let message = payload.message.replaceAll('\n', '<br/>');
+          const formatedMessage = `
+            <table>
+              <tr>
+                <td>First Name:</td>
+                <td>${payload.firstName}</td>
+              </tr>
+              <tr>
+                <td>Last Name:</td>
+                <td>${payload.lastName}</td>
+              </tr>
+              <tr>
+                <td>Phone or Email:</td>
+                <td>${payload.phoneOrEmail}</td>
+              </tr>
+              <tr>
+                <td>First Name:</td>
+                <td>${payload.investmentBudget}</td>
+              </tr>
+              <tr>
+                <td>Last Name:</td>
+                <td>${payload.bestTimeToContact}</td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td>${payload.countryCode}</td>
+              </tr>
+              <tr>
+                <td>Type:</td>
+                <td><strong>New To Crypto</strong></td>
+              </tr>
+              <tr>
+                <td>Message:</td>
+              </tr>
+              <tr>
+                <div>${message}</div>
+              </tr>
+            </table>
+          `
+          const messagePayload = {
+            subject: `New To Crypto: ${this.firstName} - ${this.phoneOrEmail}`,
+            message: formatedMessage,
+            email: this.phoneOrEmail
+          }
+          await MemeMasterAPI.sendMessage(messagePayload);
           this.snackbarText = 'Send message success'
           this.snackbar = true
           this.clearForm()

@@ -220,13 +220,39 @@ export default {
         created: new Date().getTime(), 
         type: 'contact'
       }
+
+      const formatedMessage = `
+        <table>
+          <tr>
+            <td>Name:</td>
+            <td>${obj.name}</td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td>${obj.email}</td>
+          </tr>
+          <tr>
+            <td>Type:</td>
+            <td><strong>Contact Us</strong></td>
+          </tr>
+          <tr>
+            <td>Subject:</td>
+            <td>${obj.subject}</td>
+          </tr>
+          <tr>
+            <td>Message:</td>
+          </tr>
+        </table>
+        <div>${message}</div>
+      `
+
       db.collection('messages')
         .doc(postkey.id)
         .set(obj)
         .then(async () => {
           const payload = {
-            subject: `Contact: ${this.name} - ${this.email} | ${this.subject}`,
-            message: message,
+            subject: `Contact Us: ${this.name} - ${this.email} | ${this.subject}`,
+            message: formatedMessage,
             email: this.email
           }
           await MemeMasterAPI.sendMessage(payload);
