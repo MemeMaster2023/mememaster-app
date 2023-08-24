@@ -201,7 +201,7 @@
                 </v-layout>
 
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $$1,220.000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $1,750,000</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -1650,7 +1650,7 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 3, // array in contract
+    activePresale: 1, // array in contract
     activeStagePrice: 0,
     presale: [],
     stageProgress: 0,
@@ -3039,7 +3039,7 @@ export default {
     this.init()
     this.scrollToTop()
     this.instantiateContractAbi()
-    this.activeStagePrice = this.stage3
+    this.activeStagePrice = this.stage1
   },
   beforeUnmount() {
     if (this.priceInterval) {
