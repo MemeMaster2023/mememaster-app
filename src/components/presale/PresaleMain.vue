@@ -11,7 +11,7 @@
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
             <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET (10pm UTC). EMAS tokens have zero sell and zero buy tax.<br><br>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET. EMAS tokens have zero sell and zero buy tax.<br><br>
               <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
                 <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
@@ -57,7 +57,7 @@
             <v-row  class="mt-4" v-if="!isMobileDevice">
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-stairs-up"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        @click="scrollStages()"
                 >
@@ -67,7 +67,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-chart-pie"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        @click="scrollTokenomics()"
                 >
@@ -90,7 +90,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-transit-connection-variant"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/roadmap"
                 >
@@ -100,7 +100,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-shape-plus"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/games"
                 >
@@ -110,7 +110,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-music"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/music"
                 >
@@ -123,7 +123,7 @@
             <v-row v-if="!isMobileDevice">
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-view-dashboard"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/nfts"
                 >
@@ -133,7 +133,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-image-multiple-outline"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/memes"
                 >
@@ -144,7 +144,7 @@
 
               <v-col cols="12" md="4" :align="'center'">
                 <v-btn prepend-icon="mdi-circle-multiple-outline"
-                       style="font-size: 0.8rem;width: 100%;font-weight: bold;"
+                       :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
                        to="/tokens"
                 >
@@ -178,15 +178,16 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 3</div>
               <v-spacer></v-spacer>
-               <v-toolbar-title>$0.005</v-toolbar-title>
+               <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
 
 
                 <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
-                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? stage1 :(parseInt(presale.price) / 1000000000000000000) }}</div>
-                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div>
+                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
+                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
+                <!-- <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div> -->
 
                 <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
                   <v-progress-linear
@@ -199,8 +200,8 @@
                   </v-progress-linear>
                 </v-layout>
 
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : tokensSold }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $1,750,000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $$1,220.000</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -310,7 +311,7 @@
           </v-col>
         </v-row>
 
-        <v-row class="ml-2 mr-2" v-if="isMobileDevice">
+        <v-row class="ml-2 mr-2 mb-8" v-if="isMobileDevice">
           <v-col cols="6" :align="'center'">
             <v-btn prepend-icon="mdi-view-dashboard" stacked
                     style="font-size: 0.8rem;width:100%;font-weight: bold;"
@@ -342,6 +343,14 @@
             </v-btn>
           </v-col> -->
         </v-row>
+
+
+      <!-- ######################################################################################## -->
+      <!-- ###############################       AIRDROP          ################################# -->
+      <!-- ######################################################################################## -->
+
+      <Airdrop :isMobileDevice="isMobileDevice">
+      </Airdrop>
 
       <!-- ######################################################################################## -->
       <!-- ###############################       WELCOME          ################################# -->
@@ -960,17 +969,17 @@
                 variant="outlined"
               >
                <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
-                    v-clipboard:copy.stop="0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72"
+                    v-clipboard:copy.stop="'0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72'"
                     v-clipboard:success="handleSuccess"
                     v-clipboard:error="handleError"
                 >EMAS Contract Address: 0xfe82c0Ff9967c1D2BD18865F817103F00e4F1e72</div>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
-                    v-clipboard:copy.stop="0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859"
+                    v-clipboard:copy.stop="'0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859'"
                     v-clipboard:success="handleSuccess"
                     v-clipboard:error="handleError"
                 >EMAS Team Token Lockup Address: 0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859</div>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
-                    v-clipboard:copy.stop="0x000000000000000000000000000000000000dEaD"
+                    v-clipboard:copy.stop="'0x000000000000000000000000000000000000dEaD'"
                     v-clipboard:success="handleSuccess"
                     v-clipboard:error="handleError">EMAS Burn Address: 0x0000000000000......0000000000000dEaD</div><br>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336;font-size: 1rem;' : 'font-size: 1rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
@@ -1237,17 +1246,17 @@
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
           <v-toolbar color="#241d43">
-            <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="closeBuyWithEthDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
             <span class="text-white ml-4" style="font-size: 1.2rem">Buy EMAS with ETH</span>
             <v-spacer></v-spacer>
-            <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithEthDialog = false">
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="closeBuyWithEthDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
           
-          <v-card-text class="mb-8">
+          <v-card-text class="mb-8" v-if="buyEthView === 1">
             <v-row>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
@@ -1289,10 +1298,37 @@
               </v-col>
               <v-col cols="12">
                 <v-btn class="text-white" size="large" style="width:100%" color="#360a3f" @click="buyWithEthContract()">
-                  Convert ETH
+                  Swap ETH for EMAS
                 </v-btn>
               </v-col>
             </v-row>
+          </v-card-text>
+
+          <v-card-text class="mb-8" v-if="buyEthView === 2">
+
+            <v-row class="pt-8 mb-16">
+              <v-col cols="12"  :align="'center'">
+                <v-progress-circular
+                    indeterminate
+                    color="#360a3f"
+                  ></v-progress-circular>
+                  <div class="text-h6 mt-2">Processing your transaction...</div>
+              </v-col>
+            </v-row>
+    
+          </v-card-text>
+
+          <v-card-text class="mb-8" v-if="buyEthView === 3">
+
+            <v-row class="pt-8 mb-16">
+              <v-col cols="12"  :align="'center'">
+                 <v-icon size="60" color="green">mdi-check-circle-outline</v-icon>
+
+                 <div class="text-h5 mt-2">Transaction Successful!</div>
+                 <div class="text-h6 mt-2">You bought {{ Math.round(this.amountEmasForEthDiagLog) }} EMAS Tokens</div>
+              </v-col>
+            </v-row>
+
           </v-card-text>
 
         </v-card>
@@ -1303,12 +1339,12 @@
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
           <v-toolbar color="#241d43">
-            <v-btn v-if="isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="closeBuyWithUsdtDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <span class="text-white ml-4" style="font-size: 1.2rem">Buy with USDT</span>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Buy EMAS with USDT</span>
             <v-spacer></v-spacer>
-            <v-btn v-if="!isMobileDevice" icon color="white" @click="buyWithUsdtDialog = false">
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="closeBuyWithUsdtDialog()">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
@@ -1319,10 +1355,10 @@
                 <v-text-field
                   placeholder="0"
                   class="mt-2"
-                  v-model="amountUsdt"
-                  v-on:keyup="convertAmount('usdtToEmas', amountUsdt)"
-                  @focus="clearOnFocus('amountUsdt')"
-                  @input="ensureNonNegative('amountUsdt')"
+                  v-model="amountUSDT"
+                  v-on:keyup="convertAmount('usdtToEmas', amountUSDT)"
+                  @focus="clearOnFocus('amountUSDT')"
+                  @input="ensureNonNegative('amountUSDT')"
                   type="number"
                   min="0"
                 >
@@ -1341,10 +1377,10 @@
                 <v-text-field
                   placeholder="0"
                   class="mt-2"
-                  v-model="amountEmasForUsdtDiagLog"
-                  v-on:keyup="convertAmount('emasToUsdt', amountEmasForUsdtDiagLog)"
-                  @focus="clearOnFocus('amountEmasForUsdtDiagLog')"
-                  @input="ensureNonNegative('amountEmasForUsdtDiagLog')"
+                  v-model="amountEmasForUSDTDiagLog"
+                  v-on:keyup="convertAmount('emasToUsdt', amountEmasForUSDTDiagLog)"
+                  @focus="clearOnFocus('amountEmasForUSDTDiagLog')"
+                  @input="ensureNonNegative('amountEmasForUSDTDiagLog')"
                   type="number"
                   min="0"
                 >
@@ -1359,7 +1395,7 @@
               </v-col>
               <v-col cols="12">
                 <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f" @click="buyWithUSDTContract()">
-                  Convert USDT
+                  Swap USDT for EMAS
                 </v-btn>
               </v-col>
             </v-row>
@@ -1583,6 +1619,7 @@
 // @ is an alias to /src
 import store from '@/store/index'
 import axios from 'axios'
+import Airdrop from '@/views/Airdrop'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
@@ -1592,7 +1629,9 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
-const presaleAddress = "0x4D5939b0D552d4C4d6A02B0166B324a042640469"
+const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
+const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
+
 export default {
   name: 'Presale',
   props: {
@@ -1611,7 +1650,8 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 1, // array in contract
+    activePresale: 3, // array in contract
+    activeStagePrice: 0,
     presale: [],
     stageProgress: 0,
     tokensSold: 0,
@@ -1619,13 +1659,15 @@ export default {
     ethPrice: 0,
     usdtPrice: 0,
     amountEth: 0,
-    amountUsdt: 0,
+    amountUSDT: 0,
     presaleNotLive: false,
     learnMoreDialog: false,
-    amountEmasForUsdtDiagLog: 0,
+    amountEmasForUSDTDiagLog: 0,
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
     buyWithEthDialog: false,
+    buyEthView: 1,
+    buyUSDTView: 1,
     buyWithUsdtDialog: false,
     donateEthDialog: false,
     donateUsdtDialog: false,
@@ -2944,7 +2986,8 @@ export default {
   }),
   components: {
     MetaMaskConnect,
-    WalletConnect
+    WalletConnect,
+    Airdrop
   },
   computed: {
     getChain () {
@@ -2995,11 +3038,8 @@ export default {
     // this.currentUser = firebase.auth().currentUser;
     this.init()
     this.scrollToTop()
-    this.getLastestPrice()
-    this.priceInterval = setInterval(() => {
-      this.getLastestPrice();
-    }, 300000);
     this.instantiateContractAbi()
+    this.activeStagePrice = this.stage3
   },
   beforeUnmount() {
     if (this.priceInterval) {
@@ -3075,6 +3115,12 @@ export default {
     },
     handleShowDialog(isTop, dialogType) {
       const isConnected = this.mmConnected || this.walletConnected || this.twConnected;
+      console.log(dialogType)
+      if (dialogType === 'buyWithEthDialog') {
+        this.getLastestPrice('ethereum')
+      } else if (dialogType === 'buyWithUsdtDialog') {
+        this.getLastestPrice('tether')
+      }
 
       if (isTop) {
         this[dialogType] = isConnected;
@@ -3121,64 +3167,91 @@ export default {
     },
     async buyWithEthContract () {
 
-      console.log(ethers)
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      // const provider = new ethers.providers.Web3Provider(window.ethereum);
-      console.log(provider);
-      const signer = provider.getSigner()
-      console.log(signer);
-      const network = await provider.getNetwork();
-      console.log(network);
-      const abi = window.abi;
-      console.log(abi)
-      // The Contract object
-      
-      const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, abi, provider);
-      const presaleContract2 = presaleConstructor.connect(signer);
-      this.presaleContract2 = presaleContract2;
+      // next view on form
+      // this.buyEthView = 2
 
-      console.log(this.presaleContract2)
+      try {
+        console.log(ethers)
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        console.log(provider);
+        const signer = provider.getSigner()
+        console.log(signer);
+        const network = await provider.getNetwork();
+        console.log(network);
+        const abi = window.abi;
+        console.log(abi)
+        // The Contract object
+        
+        const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, abi, provider);
+        const presaleContract2 = presaleConstructor.connect(signer);
+        this.presaleContract2 = presaleContract2;
 
-      var eth = this.amountEth // * 1e18 // 18 Decimals
-      let tokens = Math.round(this.amountEmasForEthDiagLog)
-      let ethBuy = this.presaleContract2.buyWithEth(`${1}`, `${tokens}`, {
-        value: `${ethers.utils.parseEther(`${eth}`)}`
-      });
+        console.log(this.presaleContract2)
 
-      console.log(ethBuy);
+        var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
+        let tokens = Math.round(this.amountEmasForEthDiagLog)
+        console.log('********* tokens ***********')
+        console.log(tokens)
+        console.log(this.activeStagePrice)
+        let ethBuy = this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
+          value: `${ethers.utils.parseEther(`${eth}`)}`
+        });
+
+        console.log(ethBuy);
+
+        // When Eth Buy completed
+        // this.buyEthView = 3
+
+        } catch(error) {
+          console.log(error)
+          // if user rejects
+          // this.buyWithEthDialog = false
+          // this.buyEthView = 4 >> Error View
+          
+        }
 
     },
     async buyWithUSDTContract () {
 
-    },
-    /* async buyWithEthContract () {
-
-      // buyWithEthContract
-      console.log(this.amountEmasForEthDiagLog)
-      console.log(this.amountEth)
-      var eth = this.amountEth * 1e18 // 18 Decimals
-      console.log(eth)
-      let tokens = Math.round(this.amountEmasForEthDiagLog)
-
       try {
-        // await connectUser();
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const memeABI = await MemeMasterAPI.instantiateContractAbi(`${usdtAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT);
 
-        // const provider = getProvider();
-        // const account = await provider.eth.getAccounts();
-        // const presale = new provider.eth.Contract(window.abi,`${presaleAddress.toLowerCase()}`);
-        // console.log(account[0])
+        let abi = JSON.parse(memeABI.data.result);
+        let usdtConstructor = new ethers.Contract(`${usdtAddress.toLowerCase()}`, abi, provider)
+        const usdtContract = usdtConstructor.connect(signer)
 
-        let ethBuy = this.presaleContract.methods.buyWithEth(`${1}`, `${tokens}`).send({
-          from: this.getUser.accounts[0],
-          value: eth // provider.utils.toWei(this.amountEth, 'ether'),
+
+        let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+        console.log('**** usdt *****')
+        console.log(usdt)
+        console.log(this.amountEmasForUSDTDiagLog)
+        let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
+        console.log('**** tokens *****')
+        console.log(tokens)
+
+        // USDT approval
+        const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
+        approve.wait().then(async () => {
+
+          // USDT buy
+          console.log('Approve result: ', approve)
+
+            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
+            const presaleContract = presaleConstructor.connect(signer);
+            await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+
+        }).catch(error => {
+          console.log(error)
         })
-
-        console.log(ethBuy);
-
-      } catch(err) {
-        console.log(err)
+      } catch(error) {
+        console.log(error)
+        // if user rejects
+        // this.buyWithUsdtDialog = false
       }
-    }, */
+    },
     handleSuccess(e) {
         console.log(e);
         this.snackbarText = 'Address copied to clipboard'
@@ -3190,16 +3263,26 @@ export default {
     convertAmount(type,value) {
       switch (type) {
         case 'ethToEmas':
-          return this.amountEmasForEthDiagLog = value * ( this.ethPrice / this.stage1 )
+          return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.activeStagePrice ))
         case 'emasToEth':
-          return this.amountEth = value * ( this.stage1 / this.ethPrice )
+          return this.amountEth = value * ( this.activeStagePrice / this.ethPrice )
         case 'usdtToEmas':
-          return this.amountEmasForUsdtDiagLog = value * ( this.usdtPrice / this.stage1 )
+          return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.activeStagePrice ))
         case 'emasToUsdt':
-          return this.amountUsdt = value * ( this.stage1 / this.usdtPrice )
+          return this.amountUSDT = value * ( this.activeStagePrice / this.usdtPrice )
         default:
           return 0;
       }
+    },
+    closeBuyWithEthDialog() {
+      this.buyWithEthDialog = false
+      this.amountEmasForEthDiagLog = 0
+      this.amountEth = 0
+    },
+    closeBuyWithUsdtDialog() {
+      this.buyWithUsdtDialog = false
+      this.amountEmasForUSDTDiagLog = 0
+      this.amountUSDT = 0
     },
     ensureNonNegative(inputField) {
       if (this[inputField] < 0) {
@@ -3209,7 +3292,36 @@ export default {
     clearOnFocus(e) {
       if (this[e] == 0) this[e]= ''
     },
-    async getLastestPrice() {
+    async getLastestPrice(symbol) {
+      var url
+      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+        url = import.meta.env.VITE_APP_MM_API
+      } else  if (import.meta.env.VITE_APP_ENVIRONMENT === 'testnet') {
+        url = import.meta.env.VITE_APP_MM_API_TEST
+      } else {
+        url = import.meta.env.VITE_APP_MM_API_LOCAL
+      }
+      try {
+        const response = await axios.get(url + "getlastpricecoingecko", {
+          params: {
+            "symbols": symbol
+          }
+        });
+        // console.log(response)
+        // const { ETH: ethData, USDT: usdtData } = response.data.data;
+        if (symbol === 'ethereum') {
+          this.ethPrice = response.data.data.market_data.current_price.usd
+        } else {
+          this.usdtPrice = response.data.data.market_data.current_price.usd
+        }
+        console.log(this.ethPrice)
+        console.log(this.usdtPrice)
+
+      } catch (error) {
+        console.log('Get new price error', error);
+      }
+    },
+    /* async getLastestPrice() {
       var url
       if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
         url = import.meta.env.VITE_APP_MM_API
@@ -3229,7 +3341,7 @@ export default {
       } catch (error) {
         console.log('Get new price error', error);
       }
-    },
+    }, */
     async sendContactForm() {
       const isValid = await this.$refs.newCryptoForm.validate()
       this.type = 'newtocrypto'
