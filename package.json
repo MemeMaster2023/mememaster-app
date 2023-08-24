@@ -50,6 +50,7 @@
     "vue-scrollto": "^2.20.0",
     "vue3-apexcharts": "^1.4.4",
     "vue3-clipboard": "^1.0.0",
+    "vue3-flip-countdown": "^0.1.6",
     "vue3-jazzicon": "^0.1.4",
     "vuetify": "^3.0.0",
     "vuex": "^4.0.2",

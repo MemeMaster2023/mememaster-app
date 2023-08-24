@@ -260,6 +260,7 @@ export default {
           this.snackbar = true;
           this.isLoading = false;
           this.isForm = false;
+          this.contactDialog = false;
           this.name = '';
           this.email = '';
           this.subject = '';
