@@ -46,11 +46,22 @@
   // import QRCodeModal from "@walletconnect/qrcode-modal"
   import { generate } from 'project-name-generator';
   // import {EthereumProvider} from '@walletconnect/ethereum-provider'
+
+
+  // import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+  // import { Web3Modal } from '@web3modal/html'
+  // import { configureChains, createConfig, connect, disconnect, watchAccount } from '@wagmi/core'
+  // import { arbitrum, mainnet, polygon } from '@wagmi/core/chains'
+  // import { InjectedConnector } from '@wagmi/core/connectors/injected'
+
+
   import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
   import { Web3Modal } from '@web3modal/html'
-  import { configureChains, createConfig, connect, disconnect, watchAccount } from '@wagmi/core'
+  import { configureChains, createConfig, watchAccount, getAccount, connect, disconnect } from '@wagmi/core'
   import { arbitrum, mainnet, polygon } from '@wagmi/core/chains'
   import { InjectedConnector } from '@wagmi/core/connectors/injected'
+
+
 import { provide } from 'vue'
 
   export default {
@@ -133,13 +144,19 @@ import { provide } from 'vue'
         const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 
         // 2. Set up wagmi config
+        // const wagmiConfig = createConfig({
+        //   autoConnect: true,
+        //   connectors: [
+        //     ...w3mConnectors({ chains, version: 2, projectId }),
+        //   ],
+        //   publicClient,
+        // });
+
         const wagmiConfig = createConfig({
           autoConnect: true,
-          connectors: [
-            ...w3mConnectors({ chains, version: 2, projectId }),
-          ],
-          publicClient,
-        });
+          connectors: w3mConnectors({ projectId, chains }),
+          publicClient
+        })
 
         // 3. Create ethereum and modal clients
         const ethereumClient = new EthereumClient(wagmiConfig, chains);
@@ -152,28 +169,61 @@ import { provide } from 'vue'
           ethereumClient
         );
 
-        if (type === 'button') {
-          web3Modal.openModal()
+        // alert("getAccount getAccount getAccount", getAccount())
+        console.log("getAccount getAccount getAccount", getAccount())
+        watchAccount(async ({ address, connector, isConnected }) => {
+          console.log("watchAccount watchAccount watchAccount", isConnected)
+          console.log("connector connector connector", connector)
+          console.log("address address address", address)
+          console.log("connector", connector)
+          if (isConnected) {
+            this.provider = await connector.getProvider();
+            console.log("===== this.provider =====", this.provider)
+            console.log("===== this.provider =====", this.provider)
+            // this.accounts = [this.provider.selectedAddress];
+            this.accounts = [address];
+            this.chainId = "5"
 
-          watchAccount(async ({ address, connector, isConnected }) => {
-            if (isConnected) {
-              this.provider = await connector.getProvider();
-              this.accounts = [this.provider.selectedAddress];
-              this.chainId = this.provider.networkVersion
-              this.enableWalletConnect()
-            } else {
-              disconnect();
-            }
-          })
+            console.log("=== this.chainId ===", this.chainId)
+            console.log("=== this.accounts ===", this.accounts)
+            this.enableWalletConnect()
+          } else {
+            // disconnect();
+          }
+        })
+
+        console.log("opening the modal")
+
+        await web3Modal.openModal()
+        console.log("opened the modal")
+        await connect({connector: new InjectedConnector()})
+
+        console.log("aaa", aaa)
+        console.log("aaa", aaa)
+        console.log("aaa", aaa)
+
+        if (type === 'button') {
+
+          // watchAccount(async ({ address, connector, isConnected }) => {
+          //   if (isConnected) {
+          //     this.provider = await connector.getProvider();
+          //     this.accounts = [this.provider.selectedAddress];
+          //     this.chainId = this.provider.networkVersion
+          //     this.enableWalletConnect()
+          //   } else {
+          //     disconnect();
+          //   }
+          // })
         } else {
           console.log('init')
-          const { connector } = await connect({
-            connector: new InjectedConnector(),
-          })
-          this.provider = await connector.getProvider();
-          this.accounts = [this.provider.selectedAddress];
-          this.chainId = this.provider.networkVersion;
-          this.enableWalletConnect()
+
+          // const { connector } = await connect({
+          //   connector: new InjectedConnector(),
+          // })
+          // this.provider = await connector.getProvider();
+          // this.accounts = [this.provider.selectedAddress];
+          // this.chainId = this.provider.networkVersion;
+          // this.enableWalletConnect()
         }
 
       //   if (type === 'button') {
@@ -325,8 +375,8 @@ import { provide } from 'vue'
       //     store.commit("SetEmpty")
       //   })
       },
-      disconnectWallet () {
-        disconnect();
+      async disconnectWallet () {
+        await disconnect();
         store.commit('SetWalletConnectChanges', {
           accounts: [],
           walletConnected: false,
