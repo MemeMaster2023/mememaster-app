@@ -706,7 +706,7 @@
 
             <div class="text-body-1 text-white">Each stage will end when either the tokens are sold out or the stage date has expired</div>
             <div class="text-body-1 text-white">In the case of the tokens selling out before the stage date ends then the next stage will start immediately</div>
-            <div class="text-body-1 text-white">If the tokens are not sold out in any of the stages then all of the unsold tokens will be burnt after the presale has completed and before the listing</div>
+            <div class="text-body-1 text-white">If the tokens are not sold out in any of the 3 stages then all of the unsold tokens (after liquidity) will be burnt when the presale has completed and before the token DEX listing</div>
 
 
           </v-col>
@@ -1733,6 +1733,13 @@ import { ethers } from 'ethers';
 const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
 
+// Mobile Imports and const
+import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
+// const chainRPC = "https://eth.llamarpc.com";
+// const chainRPC = "https://rpc.ankr.com/eth_goerli"
+const chainRPC = "https://ethereum-goerli.publicnode.com"
+const _web3 = new Web3(chainRPC);
+
 export default {
   name: 'Presale',
   props: {
@@ -1748,6 +1755,8 @@ export default {
     snackbarText: '',
     presaleContract: null,
     presaleContract2: null,
+    presaleContractMobile: null,
+    presaleContractAbi: [],
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
@@ -1759,6 +1768,7 @@ export default {
     activePresale: 4, // array in contract
     activeStagePrice: 0,
     presale: [],
+    presaleMobile: [],
     stageProgress: 0,
     tokensSold: 0,
     raised: 0,
@@ -3146,6 +3156,7 @@ export default {
     this.init()
     this.scrollToTop()
     this.instantiateContractAbi()
+    this.instantiateContractAbiMobile()
 
     if (this.activePresale === 1) {
       this.activeStagePrice = this.stage1
@@ -3280,11 +3291,34 @@ export default {
         if (pctSold < 100 && this.stageProgress === 0) {
           this.stageProgress = 1
         }
-
         console.log('#############  this.stageProgress ##############')
         console.log(this.stageProgress)
         this.tokensSold = tokensToSell - inSale
         this.raised = ((parseInt(this.presale.price) / 1000000000000000000) * this.tokensSold).toFixed(2)
+      } catch(err) {
+        console.log(err)
+      }
+    },
+    instantiateContractAbiMobile () {
+
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
+        .then(result => {
+        console.log(result.data.result)
+        let abi = JSON.parse(result.data.result)
+        this.presaleContractAbi = abi
+        this.presaleContractMobile = new _web3.eth.Contract(this.presaleContractAbi, `${presaleAddress.toLowerCase()}`)
+        let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
+        console.log(usdtContract)
+        console.log(this.presaleContractMobile)
+        this.loadPresaleFromContractMobile()
+      })
+    },
+    async loadPresaleFromContractMobile() {
+      
+      try {
+        this.presaleMobile = await this.presaleContractMobile.methods.presale(`${this.activePresale}`).call();
+        //here is the presale data
+        console.log(this.presaleMobile);
       } catch(err) {
         console.log(err)
       }
@@ -3372,6 +3406,7 @@ export default {
     },
     async buyWithEthContractMobile () {
         // TODO Peter & Minh
+
     },
     async buyWithUSDTContract () {
 
@@ -3539,7 +3574,7 @@ export default {
         }
 
         this.$store.dispatch('createMessage', payload).then(async () => {
-          let message = payload.message.replaceAll('\n', '<br/>');
+          let message = payload.message.replaceAll('\n', '<br>');
           const formatedMessage = `
             <table>
               <tr>
