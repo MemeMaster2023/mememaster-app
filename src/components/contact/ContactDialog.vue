@@ -241,9 +241,9 @@ export default {
           </tr>
           <tr>
             <td>Message:</td>
+            <td>${message}</td>
           </tr>
         </table>
-        <div>${message}</div>
       `
 
       db.collection('messages')

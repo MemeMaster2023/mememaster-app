@@ -176,7 +176,7 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale - 1 }}</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale }}</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
@@ -1730,11 +1730,14 @@ import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
 // const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
+const ETH_ADDRESS = '0x0000000000000000000000000000000000000000'
 const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
 
 // Mobile Imports and const
 import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
+import { arbitrum, mainnet, goerli } from '@wagmi/core/chains'
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 // const chainRPC = "https://eth.llamarpc.com";
 // const chainRPC = "https://rpc.ankr.com/eth_goerli"
 const chainRPC = "https://ethereum-goerli.publicnode.com"
@@ -3155,8 +3158,12 @@ export default {
     // this.currentUser = firebase.auth().currentUser;
     this.init()
     this.scrollToTop()
-    this.instantiateContractAbi()
-    this.instantiateContractAbiMobile()
+
+    if(this.isMobileDevice) {
+      this.instantiateContractAbi()
+    } else {
+      this.instantiateContractAbiMobile()
+    }
 
     if (this.activePresale === 1) {
       this.activeStagePrice = this.stage1
@@ -3316,20 +3323,20 @@ export default {
     async loadPresaleFromContractMobile() {
 
       try {
-        this.presaleMobile = await this.presaleContractMobile.methods.presale(`${this.activePresale}`).call();
+        this.presale = await this.presaleContractMobile.methods.presale(`${this.activePresale}`).call();
         //here is the presale data
-
-        var tokensToSell = parseInt(this.presaleMobile.tokensToSell)
-        var inSale = parseInt(this.presaleMobile.inSale)
+        console.log(this.presale)
+        var tokensToSell = parseInt(this.presale.tokensToSell)
+        var inSale = parseInt(this.presale.inSale)
         this.stageProgress = 100 - Math.ceil((inSale / tokensToSell) * 100) // inSale / tokensToSell
         var pctSold = (inSale / tokensToSell) * 100
         if (pctSold < 100 && this.stageProgress === 0) {
-          this.stageProgress = 1
+          this.stageProgress = 1  
         }
         console.log('#############  this.stageProgress ##############')
         console.log(this.stageProgress)
         this.tokensSold = tokensToSell - inSale
-        this.raised = ((parseInt(this.presaleMobile.price) / 1000000000000000000) * this.tokensSold).toFixed(2)
+        this.raised = ((parseInt(this.presale.price) / 1000000000000000000) * this.tokensSold).toFixed(2)
         console.log("this.raised", this.raised);
       } catch(err) {
         console.log(err)
@@ -3340,7 +3347,7 @@ export default {
       if(this.isMobileDevice) {
         this.buyWithEthContractMobile()
       } else {
-        this.buyWithEthContractWeb()
+        this.buyWithEthContractMobile()
       }
 
     },
@@ -3417,7 +3424,71 @@ export default {
        this.buyUSDTView = 1
     },
     async buyWithEthContractMobile () {
-        // TODO Peter & Minh
+
+
+      let projectId;
+      let chains;
+      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+        chains = [mainnet];
+        projectId = import.meta.env.VITE_APP_PROJECT_ID;
+
+      } else {
+        chains = [goerli];
+        projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST;
+      }
+      const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+
+      // 2. Set up wagmi config
+      const wagmiConfig = createConfig({
+        autoConnect: true,
+        connectors: w3mConnectors({ projectId, chains }),
+        publicClient
+      });
+
+      // 3. Create ethereum and modal clients
+      const ethereumClient = new EthereumClient(wagmiConfig, chains);
+
+      // TODO Peter & Minh
+      var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
+      eth = _web3.utils.toWei(eth, 'ether');
+      console.log(eth)
+      let tokens = Math.round(this.amountEmasForEthDiagLog)
+      console.log("eth", eth)
+      // const value = _web3.utils.toWei(eth);
+
+      const data = this.presaleContractMobile.methods.buyWithEth(ETH_ADDRESS, tokens).encodeABI();
+      console.log(data)
+      
+      // prepareSendTransaction
+      const config = await prepareSendTransaction({
+        // chainId: 1,
+        // chain: mainet,
+        chain: goerli, // TODO: Change to main net later
+        chainId: 5,
+        to: `${presaleAddress.toLowerCase()}`,
+        value: _web3.utils.toHex(eth),
+        data: data,
+      });
+      console.log(config)
+      sendTransaction(config)
+        .then(({ hash }) => {
+          console.log("txHash", hash);
+
+          const interval = setInterval(function() {
+            _web3.eth.getTransactionReceipt(hash, function(err, rec) {
+              if (rec) {
+                clearInterval(interval);
+                onBuySuccess();
+                showTxHashView(hash);
+              }
+            });
+          }, 4000);
+        })
+        .catch((error) => {
+          console.error("felix buy error", error);
+          showError(ethError, "Insufficient ETH balance, please check your account balance");
+          hideProcessing();
+        });
 
     },
     async buyWithUSDTContract () {
@@ -3619,9 +3690,7 @@ export default {
               </tr>
               <tr>
                 <td>Message:</td>
-              </tr>
-              <tr>
-                <div>${message}</div>
+                <td>${message}</td>
               </tr>
             </table>
           `
