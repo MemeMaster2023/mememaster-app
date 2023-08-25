@@ -579,9 +579,15 @@ export default {
               email: this.userEmail
             }
             await this.$store.dispatch('updateProfile', payload)
+            this.snackbarColor = 'green';
+            this.snackbarText = 'Verify Email Success';
+            this.snackbar = true
           }
           catch(err){
             console.log(err)
+            this.snackbarColor = 'red';
+            this.snackbarText = 'Failed Verify Email: ' + err ;
+            this.snackbar = true
           }
         } else {
           emailInUse = true

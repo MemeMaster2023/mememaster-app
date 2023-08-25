@@ -250,6 +250,12 @@ export default createStore({
          },
         SetPhoto(state, payload){
             state.user.photo = payload.photo
+        },
+        setUserState(state, payload){
+            var keys = Object.keys(payload);
+            keys.forEach((key) => {
+                state.user[key] = payload[key];
+            });
         }
     },
     modules: {
