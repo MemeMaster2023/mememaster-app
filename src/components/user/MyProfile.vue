@@ -586,7 +586,7 @@ export default {
           catch(err){
             console.log(err)
             this.snackbarColor = 'red';
-            this.snackbarText = 'Failed Verify Email: ' + err ;
+            this.snackbarText = 'Failed Verify Email: ' + err;
             this.snackbar = true
           }
         } else {
