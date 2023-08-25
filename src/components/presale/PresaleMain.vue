@@ -183,7 +183,7 @@
 
                 <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
                 <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
-                
+
                 <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage1 : stage2 }}</div>
                 <div v-else style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
 
@@ -210,7 +210,7 @@
                   </v-col>
                 </v-row>
 
-                
+
                 <v-row v-if="!mmConnected && !walletConnected && !twConnected">
 
                   <v-col cols="12" md="12" class="pt-16 pl-8 pr-8">
@@ -1238,7 +1238,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      
+
       <!-- ############################################################################################# -->
       <!-- #############################  DIALOG buyWithEthDialog  ######################################-->
       <!-- ############################################################################################# -->
@@ -1256,7 +1256,7 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
-          
+
           <v-card-text class="mb-8" v-if="buyEthView === 1">
             <v-row>
               <v-col cols="12">
@@ -1317,7 +1317,7 @@
                   <div class="text-h6 mt-2">Processing your transaction...</div>
               </v-col>
             </v-row>
-    
+
           </v-card-text>
 
           <v-card-text class="mb-4" v-if="buyEthView === 3">
@@ -1451,7 +1451,7 @@
             </v-row>
 
           </v-card-text>
-          
+
 
           <v-card-text class="mb-8" v-if="buyUSDTView === 4">
 
@@ -3265,7 +3265,7 @@ export default {
       }
     },
     instantiateContractAbi () {
-   
+
       let web3 = new Web3(window.ethereum);
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
         .then(result => {
@@ -3314,11 +3314,23 @@ export default {
       })
     },
     async loadPresaleFromContractMobile() {
-      
+
       try {
         this.presaleMobile = await this.presaleContractMobile.methods.presale(`${this.activePresale}`).call();
         //here is the presale data
-        console.log(this.presaleMobile);
+
+        var tokensToSell = parseInt(this.presaleMobile.tokensToSell)
+        var inSale = parseInt(this.presaleMobile.inSale)
+        this.stageProgress = 100 - Math.ceil((inSale / tokensToSell) * 100) // inSale / tokensToSell
+        var pctSold = (inSale / tokensToSell) * 100
+        if (pctSold < 100 && this.stageProgress === 0) {
+          this.stageProgress = 1
+        }
+        console.log('#############  this.stageProgress ##############')
+        console.log(this.stageProgress)
+        this.tokensSold = tokensToSell - inSale
+        this.raised = ((parseInt(this.presaleMobile.price) / 1000000000000000000) * this.tokensSold).toFixed(2)
+        console.log("this.raised", this.raised);
       } catch(err) {
         console.log(err)
       }
@@ -3349,7 +3361,7 @@ export default {
         const abi = window.abi;
         console.log(abi)
         // The Contract object
-        
+
         const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, abi, provider);
         const presaleContract2 = presaleConstructor.connect(signer);
         this.presaleContract2 = presaleContract2;
@@ -3446,7 +3458,7 @@ export default {
             this.buyUSDTView = 4
 
             buyUSDT.wait().then(async () => {
-               
+
                console.log(buyUSDT)
                this.buyUSDTView = 5
                this.buyTx = buyUSDT.hash
