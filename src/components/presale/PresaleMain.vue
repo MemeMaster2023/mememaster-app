@@ -3614,9 +3614,7 @@ export default {
               </tr>
               <tr>
                 <td>Message:</td>
-              </tr>
-              <tr>
-                <div>${message}</div>
+                <td>${message}</td>
               </tr>
             </table>
           `
