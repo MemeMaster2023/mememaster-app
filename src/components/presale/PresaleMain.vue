@@ -1730,7 +1730,6 @@ import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
 // const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
-const ETH_ADDRESS = '0x0000000000000000000000000000000000000000'
 const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
 
@@ -1742,6 +1741,27 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 // const chainRPC = "https://rpc.ankr.com/eth_goerli"
 const chainRPC = "https://ethereum-goerli.publicnode.com"
 const _web3 = new Web3(chainRPC);
+let projectId;
+let chains;
+if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+  chains = [mainnet];
+  projectId = import.meta.env.VITE_APP_PROJECT_ID;
+
+} else {
+  chains = [goerli];
+  projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST;
+}
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+
+// 2. Set up wagmi config
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient
+});
+
+// 3. Create ethereum and modal clients
+const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
 export default {
   name: 'Presale',
@@ -3160,9 +3180,9 @@ export default {
     this.scrollToTop()
 
     if(this.isMobileDevice) {
-      this.instantiateContractAbi()
-    } else {
       this.instantiateContractAbiMobile()
+    } else {
+      this.instantiateContractAbi()
     }
 
     if (this.activePresale === 1) {
@@ -3347,7 +3367,7 @@ export default {
       if(this.isMobileDevice) {
         this.buyWithEthContractMobile()
       } else {
-        this.buyWithEthContractMobile()
+        this.buyWithEthContractWeb()
       }
 
     },
@@ -3424,30 +3444,6 @@ export default {
        this.buyUSDTView = 1
     },
     async buyWithEthContractMobile () {
-
-
-      let projectId;
-      let chains;
-      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-        chains = [mainnet];
-        projectId = import.meta.env.VITE_APP_PROJECT_ID;
-
-      } else {
-        chains = [goerli];
-        projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST;
-      }
-      const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-
-      // 2. Set up wagmi config
-      const wagmiConfig = createConfig({
-        autoConnect: true,
-        connectors: w3mConnectors({ projectId, chains }),
-        publicClient
-      });
-
-      // 3. Create ethereum and modal clients
-      const ethereumClient = new EthereumClient(wagmiConfig, chains);
-
       // TODO Peter & Minh
       var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
       eth = _web3.utils.toWei(eth, 'ether');
@@ -3456,7 +3452,7 @@ export default {
       console.log("eth", eth)
       // const value = _web3.utils.toWei(eth);
 
-      const data = this.presaleContractMobile.methods.buyWithEth(ETH_ADDRESS, tokens).encodeABI();
+      const data = this.presaleContractMobile.methods.buyWithEth(this.activePresale, tokens).encodeABI();
       console.log(data)
       
       // prepareSendTransaction
@@ -3466,7 +3462,7 @@ export default {
         chain: goerli, // TODO: Change to main net later
         chainId: 5,
         to: `${presaleAddress.toLowerCase()}`,
-        value: _web3.utils.toHex(eth),
+        value: eth,
         data: data,
       });
       console.log(config)
@@ -3485,9 +3481,9 @@ export default {
           }, 4000);
         })
         .catch((error) => {
-          console.error("felix buy error", error);
-          showError(ethError, "Insufficient ETH balance, please check your account balance");
-          hideProcessing();
+          console.error("buy error", error);
+          // console.log(ethError, "Insufficient ETH balance, please check your account balance");
+          // hideProcessing();
         });
 
     },
