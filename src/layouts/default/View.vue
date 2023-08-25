@@ -21,9 +21,9 @@
       
         <div style="text-align: center;">
 
-          <v-tooltip text="Telegram" location="top">
+          <v-tooltip text="Telegram Official" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn variant="text" class="mx-2">
+              <v-btn variant="text" class="mx-1">
                 <v-img 
                   src="/img/icons/telegram.png" 
                   style="width:24px;height:24px;padding-top:4px" 
@@ -34,10 +34,23 @@
             </template>
           </v-tooltip>
 
+          <v-tooltip text="Telegram Chat" location="top">
+            <template v-slot:activator="{ props }">
+              <v-btn variant="text" class="mx-1">
+                <v-img 
+                  src="/img/icons/telegram.png" 
+                  style="width:24px;height:24px;padding-top:4px" 
+                  @click="gotoLink('https://t.me/mememaster2023_chat')"
+                  v-bind="props"
+                />
+              </v-btn>
+            </template>
+          </v-tooltip>
+
 
           <v-tooltip text="X (Twitter)" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn variant="text" class="mx-2">
+              <v-btn variant="text" class="mx-1">
                 <v-img 
                   src="/img/icons/x_logo.png" 
                   style="width:22px;height:22px;padding-top:4px"

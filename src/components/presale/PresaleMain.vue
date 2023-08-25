@@ -203,7 +203,6 @@
                 <Countdown v-else-if="!presaleStarted">
                 </Countdown>
 
-
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
 
@@ -225,7 +224,7 @@
 
                 </v-row>
 
-                <!--  handleShowDialog(true, 'buyWithEthDialog')   handleShowDialog(true, 'buyWithUsdtDialog')-->
+                <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
@@ -712,7 +711,7 @@
 
             <div class="text-body-1 text-white">Each stage will end when either the tokens are sold out or the stage date has expired</div>
             <div class="text-body-1 text-white">In the case of the tokens selling out before the stage date ends then the next stage will start immediately</div>
-            <div class="text-body-1 text-white">If the tokens are not sold out in any of the stages then all of the unsold tokens will be burnt after the presale has completed and before the listing</div>
+            <div class="text-body-1 text-white">If the tokens are not sold out in any of the 3 stages then all of the unsold tokens (after liquidity) will be burnt when the presale has completed and before the token DEX listing</div>
 
 
           </v-col>
@@ -1243,10 +1242,13 @@
 
           </v-card-actions>
         </v-card>
-    </v-dialog>
+      </v-dialog>
+      
+      <!-- ############################################################################################# -->
+      <!-- #############################  DIALOG buyWithEthDialog  ######################################-->
+      <!-- ############################################################################################# -->
 
-      <!-- DIALOG buyWithEthDialog -->
-      <v-dialog v-model="buyWithEthDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
+      <v-dialog v-model="buyWithEthDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice" persistent
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
           <v-toolbar color="#241d43">
@@ -1314,7 +1316,8 @@
               <v-col cols="12"  :align="'center'">
                 <v-progress-circular
                     indeterminate
-                    color="#360a3f"
+                    color="#purple-darken-3"
+                    :size="40"
                   ></v-progress-circular>
                   <div class="text-h6 mt-2">Processing your transaction...</div>
               </v-col>
@@ -1357,8 +1360,11 @@
         </v-card>
       </v-dialog>
 
-      <!-- DIALOG buyWithUsdtDialog -->
-      <v-dialog v-model="buyWithUsdtDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice"
+      <!-- ############################################################################################# -->
+      <!-- #############################  DIALOG buyWithUsdtDialog  #####################################-->
+      <!-- ############################################################################################# -->
+
+      <v-dialog v-model="buyWithUsdtDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice" persistent
         :min-width="isMobileDevice ? 300 : 500" max-width="600">
         <v-card height="100%" color="#F3E5F5">
           <v-toolbar color="#241d43">
@@ -1424,6 +1430,81 @@
               </v-col>
             </v-row>
           </v-card-text>
+
+          <v-card-text class="mb-8" v-if="buyUSDTView === 2">
+            <v-row class="pt-8 mb-16">
+              <v-col cols="12"  :align="'center'">
+                <v-progress-circular
+                    indeterminate
+                    color="purple-darken-3"
+                    :size="40"
+                  ></v-progress-circular>
+                  <div class="text-h6 mt-2">Approve USDT spending cap...</div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-text class="mb-8" v-if="buyUSDTView === 3">
+
+            <v-row class="pt-8 mb-4">
+              <v-col cols="12"  :align="'center'">
+                <v-icon size="60" color="green">mdi-check-circle-outline</v-icon>
+
+                <div class="text-h5 mt-2">USDT spending cap Approved!</div>
+                <div class="text-h6 mt-2">Continuing to buy EMAS Tokens...</div>
+              </v-col>
+            </v-row>
+
+          </v-card-text>
+          
+
+          <v-card-text class="mb-8" v-if="buyUSDTView === 4">
+
+          <v-row class="pt-8 mb-16">
+            <v-col cols="12"  :align="'center'">
+              <v-progress-circular
+                  indeterminate
+                  color="#360a3f"
+                  :size="40"
+                ></v-progress-circular>
+                <div class="text-h6 mt-2">Processing your transaction...</div>
+            </v-col>
+          </v-row>
+
+          </v-card-text>
+
+          <v-card-text class="mb-4" v-if="buyUSDTView === 5">
+
+          <v-row class="pt-8 mb-4">
+            <v-col cols="12"  :align="'center'">
+              <v-icon size="60" color="green">mdi-check-circle-outline</v-icon>
+
+              <div class="text-h5 mt-2">Transaction Successful!</div>
+              <div class="text-h6 mt-2">You bought {{ Math.round(this.amountEmasForUSDTDiagLog) }} EMAS Tokens</div>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6" :align="'right'" >
+              <v-btn style="width:100%"
+                      variant="outlined"
+                      @click="closeUSDTBuyDialog"
+              >
+                Close
+              </v-btn>
+            </v-col>
+            <v-col cols="6"  >
+              <v-btn style="width:100%;color:#FFF"
+                    color="#360a3f"
+                      @click="openTxExplorer()"
+              >
+                View TX on Explorer
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          </v-card-text>
+
         </v-card>
       </v-dialog>
 
@@ -1644,9 +1725,9 @@
 import store from '@/store/index'
 import axios from 'axios'
 import Airdrop from '@/views/Airdrop'
+import Countdown from '@/views/Countdown'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
-import Countdown from '@/views/Countdown'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
 import dateformat from "dateformat"
@@ -1657,6 +1738,13 @@ import { ethers } from 'ethers';
 // const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
 const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
+
+// Mobile Imports and const
+import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
+// const chainRPC = "https://eth.llamarpc.com";
+// const chainRPC = "https://rpc.ankr.com/eth_goerli"
+const chainRPC = "https://ethereum-goerli.publicnode.com"
+const _web3 = new Web3(chainRPC);
 
 export default {
   name: 'Presale',
@@ -1673,16 +1761,20 @@ export default {
     snackbarText: '',
     presaleContract: null,
     presaleContract2: null,
-    activePresale: 1, // array in contract
-    presaleStarted: false,
+    presaleContractMobile: null,
+    presaleContractAbi: [],
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
+    stage4: 0.0061,
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
+    stage4Target: '$1,220.000',
+    activePresale: 1, // array in contract
     activeStagePrice: 0,
     presale: [],
+    presaleMobile: [],
     stageProgress: 0,
     tokensSold: 0,
     raised: 0,
@@ -3071,6 +3163,7 @@ export default {
     this.init()
     this.scrollToTop()
     this.instantiateContractAbi()
+    this.instantiateContractAbiMobile()
 
     if (this.activePresale === 1) {
       this.activeStagePrice = this.stage1
@@ -3078,6 +3171,8 @@ export default {
       this.activeStagePrice = this.stage2
     } else if (this.activePresale === 3) {
       this.activeStagePrice = this.stage3
+    } else if (this.activePresale === 4) {
+      this.activeStagePrice = this.stage4
     }
 
   },
@@ -3198,9 +3293,39 @@ export default {
         console.log(parseInt(this.presale.tokensToSell))
         var tokensToSell = parseInt(this.presale.tokensToSell)
         var inSale = parseInt(this.presale.inSale)
-        this.stageProgress = Math.round(inSale / tokensToSell)
+        this.stageProgress = 100 - Math.ceil((inSale / tokensToSell) * 100) // inSale / tokensToSell
+        var pctSold = (inSale / tokensToSell) * 100
+        if (pctSold < 100 && this.stageProgress === 0) {
+          this.stageProgress = 1
+        }
+        console.log('#############  this.stageProgress ##############')
+        console.log(this.stageProgress)
         this.tokensSold = tokensToSell - inSale
         this.raised = ((parseInt(this.presale.price) / 1000000000000000000) * this.tokensSold).toFixed(2)
+      } catch(err) {
+        console.log(err)
+      }
+    },
+    instantiateContractAbiMobile () {
+
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
+        .then(result => {
+        console.log(result.data.result)
+        let abi = JSON.parse(result.data.result)
+        this.presaleContractAbi = abi
+        this.presaleContractMobile = new _web3.eth.Contract(this.presaleContractAbi, `${presaleAddress.toLowerCase()}`)
+        let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
+        console.log(usdtContract)
+        console.log(this.presaleContractMobile)
+        this.loadPresaleFromContractMobile()
+      })
+    },
+    async loadPresaleFromContractMobile() {
+      
+      try {
+        this.presaleMobile = await this.presaleContractMobile.methods.presale(`${this.activePresale}`).call();
+        //here is the presale data
+        console.log(this.presaleMobile);
       } catch(err) {
         console.log(err)
       }
@@ -3275,14 +3400,24 @@ export default {
     closeEthBuyDialog  () {
        if (this.buyEthView === 2) return
        this.buyWithEthDialog = false
+       this.amountEth = 0
+       this.amountEmasForEthDiagLog = 0
        this.buyEthView = 1
+    },
+    closeUSDTBuyDialog  () {
+       if (this.buyUSDTView === 2 || this.buyUSDTView === 3 || this.buyUSDTView === 4) return
+       this.buyWithUsdtDialog = false
+       this.amountUSDT = 0
+       this.amountEmasForUSDTDiagLog = 0
+       this.buyUSDTView = 1
     },
     async buyWithEthContractMobile () {
         // TODO Peter & Minh
+
     },
     async buyWithUSDTContract () {
 
-      //this.buyUSDTView = 2
+      this.buyUSDTView = 2
 
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -3306,18 +3441,22 @@ export default {
         const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
         approve.wait().then(async () => {
 
-          // this.buyUSDTView = 3
+            this.buyUSDTView = 3
 
-          // USDT buy
-          console.log('Approve result: ', approve)
-
+            // USDT buy
+            console.log('Approve result: ', approve)
             const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
             const presaleContract = presaleConstructor.connect(signer);
             const buyUSDT = await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
 
-            buyUSDT.wait().then(async () => {
+            console.log(buyUSDT)
+            this.buyUSDTView = 4
 
-            // this.buyUSDTView = 4
+            buyUSDT.wait().then(async () => {
+               
+               console.log(buyUSDT)
+               this.buyUSDTView = 5
+               this.buyTx = buyUSDT.hash
 
             }).catch(error => {
                console.log(error)
@@ -3329,7 +3468,8 @@ export default {
       } catch(error) {
         console.log(error)
         // if user rejects
-        // this.buyWithUsdtDialog = false
+        this.buyWithUsdtDialog = false
+        this.buyUSDTView = 1
       }
     },
     handleSuccess(e) {
@@ -3355,11 +3495,13 @@ export default {
       }
     },
     closeBuyWithEthDialog() {
+      if (this.buyEthView === 2) return
       this.buyWithEthDialog = false
       this.amountEmasForEthDiagLog = 0
       this.amountEth = 0
     },
     closeBuyWithUsdtDialog() {
+      if (this.buyUSDTView === 2 || this.buyUSDTView === 3 || this.buyUSDTView === 4) return
       this.buyWithUsdtDialog = false
       this.amountEmasForUSDTDiagLog = 0
       this.amountUSDT = 0
@@ -3439,7 +3581,7 @@ export default {
         }
 
         this.$store.dispatch('createMessage', payload).then(async () => {
-          let message = payload.message.replaceAll('\n', '<br/>');
+          let message = payload.message.replaceAll('\n', '<br>');
           const formatedMessage = `
             <table>
               <tr>
