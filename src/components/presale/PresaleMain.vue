@@ -1298,7 +1298,13 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn class="text-white" size="large" style="width:100%" color="#360a3f" @click="buyWithEthContract()">
+                <v-btn class="text-white" 
+                      size="large" 
+                      style="width:100%" 
+                      color="#360a3f" 
+                      @click="buyWithEthContract()"
+                      :loading="butLoading"
+                  >
                   Swap ETH for EMAS
                 </v-btn>
               </v-col>
@@ -1345,7 +1351,7 @@
                         color="#360a3f"
                         @click="openTxExplorer()"
                  >
-                  View TX on Explorer
+                 {{ isMobileDevice ? 'View TX' : 'View TX on Explorer' }}
                  </v-btn>
               </v-col>
             </v-row>
@@ -1419,7 +1425,13 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn class="text-white" size="large" style="width:100%;" color="#360a3f" @click="buyWithUSDTContract()">
+                <v-btn class="text-white" 
+                       size="large" 
+                       style="width:100%;" 
+                       color="#360a3f" 
+                       @click="buyWithUSDTContract()" 
+                       :loading="butLoading"
+                  >
                   Swap USDT for EMAS
                 </v-btn>
               </v-col>
@@ -1774,6 +1786,7 @@ export default {
   },
   data: () => ({
     loading: false,
+    butLoading: false,
     snackbar: false,
     snackbarText: '',
     presaleContract: null,
@@ -3363,17 +3376,16 @@ export default {
       }
     },
     buyWithEthContract () {
-
       if(this.isMobileDevice) {
         this.buyWithEthContractMobile()
       } else {
         this.buyWithEthContractWeb()
       }
-
     },
     async buyWithEthContractWeb () {
 
       // next view on form
+      this.butLoading = true
       this.buyEthView = 2
 
       try {
@@ -3408,6 +3420,7 @@ export default {
            console.log(buyETH);
            this.buyEthView = 3
            this.buyTx = buyETH.hash
+           this.butLoading = false
 
         }).catch(error => {
           console.log(error)
@@ -3418,6 +3431,7 @@ export default {
           // if user rejects
           this.buyWithEthDialog = false
           this.buyEthView = 1
+          this.butLoading = false
           // this.buyEthView = 4 >> Error View
         }
 
@@ -3444,7 +3458,10 @@ export default {
        this.buyUSDTView = 1
     },
     async buyWithEthContractMobile () {
-      // TODO Peter & Minh
+      
+      this.butLoading = true
+      this.buyEthView = 2
+
       var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
       eth = _web3.utils.toWei(eth, 'ether');
       console.log(eth)
@@ -3466,29 +3483,50 @@ export default {
         data: data,
       });
       console.log(config)
-      sendTransaction(config)
-        .then(({ hash }) => {
-          console.log("txHash", hash);
 
-          const interval = setInterval(function() {
-            _web3.eth.getTransactionReceipt(hash, function(err, rec) {
-              if (rec) {
-                clearInterval(interval);
-                onBuySuccess();
-                showTxHashView(hash);
-              }
-            });
-          }, 4000);
+      sendTransaction(config)
+        .then(async ({ hash }) => {
+          console.log("txHash", hash)
+          this.buyTx = hash
+          const data = await waitForTransaction({
+            hash: hash,
+            chain: 5,
+            confirmations: 1
+          })
+          console.log(data)
+          this.buyEthView = 3
+          this.butLoading = false
         })
         .catch((error) => {
           console.error("buy error", error);
+          this.buyWithEthDialog = false
+          this.amountEth = 0
+          this.amountEmasForEthDiagLog = 0
+          this.buyEthView = 1
+          this.butLoading = false
           // console.log(ethError, "Insufficient ETH balance, please check your account balance");
           // hideProcessing();
         });
-
     },
-    async buyWithUSDTContract () {
+    showTxHashView (hash) {
+      this.buyTx = hash
+      console.log('this.buyTx = hash')
+      console.log(hash)
+    },
+    onBuySuccess () {
+      this.buyEthView = 3
+      this.butLoading = false
+    },
+    buyWithUSDTContract () {
+      if(this.isMobileDevice) {
+        this.buyWithUSDTContractMobile()
+      } else {
+        this.buyWithUSDTContractWeb()
+      }
+    },
+    async buyWithUSDTContractWeb () {
 
+      this.butLoading = true
       this.buyUSDTView = 2
 
       try {
@@ -3529,6 +3567,7 @@ export default {
                console.log(buyUSDT)
                this.buyUSDTView = 5
                this.buyTx = buyUSDT.hash
+               this.butLoading = false
 
             }).catch(error => {
                console.log(error)
@@ -3536,13 +3575,21 @@ export default {
 
         }).catch(error => {
           console.log(error)
+          this.buyWithUsdtDialog = false
+          this.buyUSDTView = 1
+          this.butLoading = false
         })
       } catch(error) {
         console.log(error)
         // if user rejects
         this.buyWithUsdtDialog = false
         this.buyUSDTView = 1
+        this.butLoading = false
       }
+    },
+    buyWithUSDTContractMobile () {
+
+      // TODO
     },
     handleSuccess(e) {
         console.log(e);
