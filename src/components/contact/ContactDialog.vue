@@ -206,7 +206,7 @@ export default {
     sendMessage(){
       this.isLoading = true;
       console.log(JSON.stringify(this.message));
-      let message = this.message.replaceAll('\n', '<br/>');
+      let message = this.message.replaceAll('\n', '<br>');
       console.log(message);
       let postkey = db.collection('messages').doc()
       let obj = {

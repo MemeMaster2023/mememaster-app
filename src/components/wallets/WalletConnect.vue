@@ -47,13 +47,11 @@
   import { generate } from 'project-name-generator';
   // import {EthereumProvider} from '@walletconnect/ethereum-provider'
 
-
   // import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
   // import { Web3Modal } from '@web3modal/html'
   // import { configureChains, createConfig, connect, disconnect, watchAccount } from '@wagmi/core'
   // import { arbitrum, mainnet, polygon } from '@wagmi/core/chains'
   // import { InjectedConnector } from '@wagmi/core/connectors/injected'
-
 
   import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
   import { Web3Modal } from '@web3modal/html'
