@@ -336,6 +336,8 @@ import { db } from '@/main'
 import dateformat from "dateformat"
 import imageCompression from 'browser-image-compression'
 import { copyText } from 'vue3-clipboard'
+import firebase from "firebase/app"
+import "firebase/auth"
 export default {
   name: 'My Profile',
   props: {
@@ -546,19 +548,47 @@ export default {
       console.log(e);
     },
     verifyEmail () {
-      console.log(this.userEmail )
+      console.log(this.userEmail)
       if (this.userEmail === '') {
         this.showEmailAlert = true
         return
       }
       let emailInUse = false
       db.collection('users').where('email' , '==', this.userEmail).limit(1).get()
-      .then(snapshot => {
+      .then(async snapshot => {
         // console.log(snapshot)
         if (snapshot.empty) {
           emailInUse = false
           // Validate Email Process
-
+          console.log(
+            this.getUser.email, 
+            this.getUser.accounts[0]
+          )
+          const user = firebase.auth().currentUser;
+          const credential = firebase.auth.EmailAuthProvider.credential(
+            this.getUser.email, 
+            this.getUser.accounts[0]
+          );
+          // Now you can use that to reauthenticate
+          try{
+            await user.reauthenticateWithCredential(credential);
+            await user.updateEmail(this.userEmail);
+            const payload = {
+              docId: this.getUser.docId,
+              isVerified: true,
+              email: this.userEmail
+            }
+            await this.$store.dispatch('updateProfile', payload)
+            this.snackbarColor = 'green';
+            this.snackbarText = 'Verify Email Success';
+            this.snackbar = true
+          }
+          catch(err){
+            console.log(err)
+            this.snackbarColor = 'red';
+            this.snackbarText = 'Failed Verify Email: ' + err;
+            this.snackbar = true
+          }
         } else {
           emailInUse = true
           this.showEmailAlertDialog = true

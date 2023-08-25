@@ -4,11 +4,11 @@
       
       <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 1">
 
-       <v-row class="mt-12" :align="center">
+       <v-row class="mt-12 mx-auto" :align="center">
         <v-col cols="12" md="3" :align="center" v-if="!isMobileDevice">
         </v-col>
 
-        <v-col :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" md="6" :align="center">
+        <v-col :class="isMobileDevice ? 'mt-12' : 'mt-12'" md="6" cols="12" :align="center">
           <div class="text-h4 text-center ma-2">NFT Marketplace</div>
           <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
             Meme Master's NFT Marketplace, the premier destination for buying, selling, and trading unique digital assets on the blockchain. Step into a world where creativity meets technology, and explore an incredible collection of non-fungible tokens (NFTs) created by talented artists and creators from around the globe.<br><br>
