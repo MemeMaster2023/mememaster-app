@@ -161,6 +161,14 @@ const routes = [
         component: () => import(/* webpackChunkName: "home" */ '@/views/PresaleMain.vue'),
       },
       {
+        path: '/countdown',
+        name: 'Countdown',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/Countdown.vue'),
+      },
+      {
         path: '/latest_ai',
         name: 'AI Releases',
         // route level code-splitting

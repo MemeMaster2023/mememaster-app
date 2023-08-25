@@ -160,8 +160,6 @@
           <!-- ########################## PRESALE FORM ############################ -->
           <!-- #################################################################### -->
 
-
-
           <v-col cols="12" md="6" :align="'center'" :class="isMobileDevice ? 'pt-4' : ''">
 
             <v-btn v-if="isMobileDevice" class="mb-2"
@@ -178,18 +176,20 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale }}</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
 
+                <v-template v-if="presaleStarted">
+                  <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
+                  <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
+                  
+                  <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage1 : stage2 }}</div>
+                  <div v-else style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
+                </v-template>
 
-                <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
-                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
-                <!-- <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div> -->
-                <div style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage 2 Price Increases To {{ stage2 }}</div>
-
-                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
+                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'" v-if="presaleStarted">
                   <v-progress-linear
                     :model-value="stageProgress"
                     height="30"
@@ -200,8 +200,12 @@
                   </v-progress-linear>
                 </v-layout>
 
+                <Countdown v-else-if="!presaleStarted">
+                </Countdown>
+
+
                 <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / $1,750,000</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -221,13 +225,13 @@
 
                 </v-row>
 
-                <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog') handleShowDialog(true, 'buyWithUsdtDialog')-->
+                <!--  handleShowDialog(true, 'buyWithEthDialog')   handleShowDialog(true, 'buyWithUsdtDialog')-->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="presaleNotLive =  true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="presaleNotLive =  true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -1318,14 +1322,33 @@
     
           </v-card-text>
 
-          <v-card-text class="mb-8" v-if="buyEthView === 3">
+          <v-card-text class="mb-4" v-if="buyEthView === 3">
 
-            <v-row class="pt-8 mb-16">
+            <v-row class="pt-8 mb-4">
               <v-col cols="12"  :align="'center'">
                  <v-icon size="60" color="green">mdi-check-circle-outline</v-icon>
 
                  <div class="text-h5 mt-2">Transaction Successful!</div>
                  <div class="text-h6 mt-2">You bought {{ Math.round(this.amountEmasForEthDiagLog) }} EMAS Tokens</div>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="6" :align="'right'" >
+                 <v-btn style="width:100%"
+                        variant="outlined"
+                        @click="closeEthBuyDialog"
+                 >
+                  Close
+                 </v-btn>
+              </v-col>
+              <v-col cols="6"  >
+                 <v-btn style="width:100%;color:#FFF"
+                        color="#360a3f"
+                        @click="openTxExplorer()"
+                 >
+                  View TX on Explorer
+                 </v-btn>
               </v-col>
             </v-row>
 
@@ -1348,7 +1371,8 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-card-text class="mb-8">
+
+          <v-card-text class="mb-8" v-if="buyUSDTView === 1">
             <v-row>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
@@ -1622,6 +1646,7 @@ import axios from 'axios'
 import Airdrop from '@/views/Airdrop'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
+import Countdown from '@/views/Countdown'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import MemeMasterAPI from '../../clients/MemeMasterAPI'
 import dateformat from "dateformat"
@@ -1629,7 +1654,8 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
-const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
+// const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
+const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
 
 export default {
@@ -1647,10 +1673,14 @@ export default {
     snackbarText: '',
     presaleContract: null,
     presaleContract2: null,
+    activePresale: 1, // array in contract
+    presaleStarted: false,
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    activePresale: 1, // array in contract
+    stage1Target: '$1,750,000',
+    stage2Target: '$1.375,000',
+    stage3Target: '$1,220.000',
     activeStagePrice: 0,
     presale: [],
     stageProgress: 0,
@@ -1660,6 +1690,7 @@ export default {
     usdtPrice: 0,
     amountEth: 0,
     amountUSDT: 0,
+    buyTx: '',
     presaleNotLive: false,
     learnMoreDialog: false,
     amountEmasForUSDTDiagLog: 0,
@@ -2987,7 +3018,8 @@ export default {
   components: {
     MetaMaskConnect,
     WalletConnect,
-    Airdrop
+    Airdrop,
+    Countdown
   },
   computed: {
     getChain () {
@@ -3039,7 +3071,15 @@ export default {
     this.init()
     this.scrollToTop()
     this.instantiateContractAbi()
-    this.activeStagePrice = this.stage1
+
+    if (this.activePresale === 1) {
+      this.activeStagePrice = this.stage1
+    } else if (this.activePresale === 2) {
+      this.activeStagePrice = this.stage2
+    } else if (this.activePresale === 3) {
+      this.activeStagePrice = this.stage3
+    }
+
   },
   beforeUnmount() {
     if (this.priceInterval) {
@@ -3165,10 +3205,19 @@ export default {
         console.log(err)
       }
     },
-    async buyWithEthContract () {
+    buyWithEthContract () {
+
+      if(this.isMobileDevice) {
+        this.buyWithEthContractMobile()
+      } else {
+        this.buyWithEthContractWeb()
+      }
+
+    },
+    async buyWithEthContractWeb () {
 
       // next view on form
-      // this.buyEthView = 2
+      this.buyEthView = 2
 
       try {
         console.log(ethers)
@@ -3193,26 +3242,47 @@ export default {
         let tokens = Math.round(this.amountEmasForEthDiagLog)
         console.log('********* tokens ***********')
         console.log(tokens)
-        console.log(this.activeStagePrice)
-        let ethBuy = this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
+        let buyETH = await this.presaleContract2.buyWithEth(`${this.activePresale}`, `${tokens}`, {
           value: `${ethers.utils.parseEther(`${eth}`)}`
         });
 
-        console.log(ethBuy);
-
         // When Eth Buy completed
-        // this.buyEthView = 3
+        buyETH.wait().then(async () => {
+           console.log(buyETH);
+           this.buyEthView = 3
+           this.buyTx = buyETH.hash
+
+        }).catch(error => {
+          console.log(error)
+        })
 
         } catch(error) {
           console.log(error)
           // if user rejects
-          // this.buyWithEthDialog = false
+          this.buyWithEthDialog = false
+          this.buyEthView = 1
           // this.buyEthView = 4 >> Error View
-          
         }
 
     },
+    openTxExplorer () {
+      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+        window.open('https://etherscan.io/tx/' + this.buyTx, '_blank');
+      } else{
+        window.open('https://goerli.etherscan.io/tx/' + this.buyTx, '_blank');
+      }
+    },
+    closeEthBuyDialog  () {
+       if (this.buyEthView === 2) return
+       this.buyWithEthDialog = false
+       this.buyEthView = 1
+    },
+    async buyWithEthContractMobile () {
+        // TODO Peter & Minh
+    },
     async buyWithUSDTContract () {
+
+      //this.buyUSDTView = 2
 
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -3236,12 +3306,22 @@ export default {
         const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
         approve.wait().then(async () => {
 
+          // this.buyUSDTView = 3
+
           // USDT buy
           console.log('Approve result: ', approve)
 
             const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
             const presaleContract = presaleConstructor.connect(signer);
-            await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+            const buyUSDT = await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+
+            buyUSDT.wait().then(async () => {
+
+            // this.buyUSDTView = 4
+
+            }).catch(error => {
+               console.log(error)
+            })
 
         }).catch(error => {
           console.log(error)

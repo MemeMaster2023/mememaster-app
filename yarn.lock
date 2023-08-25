@@ -8381,6 +8381,13 @@ vue3-clipboard@^1.0.0:
   dependencies:
     clipboard "^2.0.6"
 
+vue3-flip-countdown@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/vue3-flip-countdown/-/vue3-flip-countdown-0.1.6.tgz#995255932223a2cf6d58ae6ee1c1c78364157684"
+  integrity sha512-RRz+iZ7Zvr1U9mrZRya7I5815jboDyRJz9vzgILq8ZCc2fQ6SxZPYwOr3pD5oWCDBprAEsPF9x4fsTtEitSmXw==
+  dependencies:
+    vue "^3.0.0"
+
 vue3-jazzicon@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/vue3-jazzicon/-/vue3-jazzicon-0.1.4.tgz#520bc08b116cf5bc1ca196277b5bb5ff4da6ce99"

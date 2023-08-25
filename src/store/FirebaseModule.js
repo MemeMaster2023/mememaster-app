@@ -559,13 +559,13 @@ const FirebaseModule = {
         var tokenBalance = balance / (10**18)
         var level = 1
         if (tokenBalance >= 75000) {
-          // level is 3 -OGRE
+          // level is 3
           level = 3
         } else if (tokenBalance >= 40000) {
-          // level is 2 - GOBLIN
+          // level is 2
           level = 2
         } else {
-          // level is 1- FREE
+          // level is 1
           level = 1
         }
         commit('setUserTierLevel', level)
