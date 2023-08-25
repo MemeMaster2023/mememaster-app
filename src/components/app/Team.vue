@@ -40,7 +40,7 @@
               <v-card
                 class="mx-auto"
                 max-width="300"
-                :min-height="isMobileDevice ? '500' : '400'"
+                :min-height="isMobileDevice ? '500' : '500'"
                 variant="outlined"
               >
 
