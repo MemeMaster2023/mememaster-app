@@ -1505,7 +1505,7 @@
                     color="#360a3f"
                       @click="openTxExplorer()"
               >
-                View TX on Explorer
+              {{ isMobileDevice ? 'View TX' : 'View TX on Explorer' }}
               </v-btn>
             </v-col>
           </v-row>
@@ -1746,7 +1746,7 @@ const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
 const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
 
 // Mobile Imports and const
-import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
+import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, waitForTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
 import { arbitrum, mainnet, goerli } from '@wagmi/core/chains'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 // const chainRPC = "https://eth.llamarpc.com";
@@ -3347,8 +3347,6 @@ export default {
         let abi = JSON.parse(result.data.result)
         this.presaleContractAbi = abi
         this.presaleContractMobile = new _web3.eth.Contract(this.presaleContractAbi, `${presaleAddress.toLowerCase()}`)
-        let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
-        console.log(usdtContract)
         console.log(this.presaleContractMobile)
         this.loadPresaleFromContractMobile()
       })
@@ -3449,6 +3447,7 @@ export default {
        this.amountEth = 0
        this.amountEmasForEthDiagLog = 0
        this.buyEthView = 1
+       this.butLoading = false
     },
     closeUSDTBuyDialog  () {
        if (this.buyUSDTView === 2 || this.buyUSDTView === 3 || this.buyUSDTView === 4) return
@@ -3456,6 +3455,7 @@ export default {
        this.amountUSDT = 0
        this.amountEmasForUSDTDiagLog = 0
        this.buyUSDTView = 1
+       this.butLoading = false
     },
     async buyWithEthContractMobile () {
       
@@ -3505,17 +3505,7 @@ export default {
           this.buyEthView = 1
           this.butLoading = false
           // console.log(ethError, "Insufficient ETH balance, please check your account balance");
-          // hideProcessing();
         });
-    },
-    showTxHashView (hash) {
-      this.buyTx = hash
-      console.log('this.buyTx = hash')
-      console.log(hash)
-    },
-    onBuySuccess () {
-      this.buyEthView = 3
-      this.butLoading = false
     },
     buyWithUSDTContract () {
       if(this.isMobileDevice) {
@@ -3530,6 +3520,10 @@ export default {
       this.buyUSDTView = 2
 
       try {
+
+        // Check the user ETH balance
+        // TODO
+
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const memeABI = await MemeMasterAPI.instantiateContractAbi(`${usdtAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT);
@@ -3587,9 +3581,103 @@ export default {
         this.butLoading = false
       }
     },
-    buyWithUSDTContractMobile () {
-
+    async buyWithUSDTContractMobile () {
       // TODO
+      this.butLoading = true
+      this.buyUSDTView = 2
+
+      // try {
+        
+        // Check the user ETH balance
+        /* let usdtBalance = await usdtContract.methods.balanceOf(selectedAccount).call();
+        if (bnValue.gt(new BN(usdtBalance))) {
+          showError(usdtError, "Insufficient USDT balance, please check your account balance");
+          hideProcessing();
+          return;
+        } */
+
+        let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+        console.log('**** usdt *****')
+        console.log(usdt)
+        console.log(this.amountEmasForUSDTDiagLog)
+        let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
+        console.log('**** tokens *****')
+        console.log(tokens)
+
+        // USDT approval
+        let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
+        console.log(usdtContract)
+
+        let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`).encodeABI();
+
+        const config = await prepareSendTransaction({
+          // chain: mainnet,
+          // chainId: 1,
+          chain: goerli,
+          chainId: 5,
+          to: `${usdtAddress.toLowerCase()}`,
+          data: data,
+        });     
+
+        sendTransaction(config)
+          .then(async ({ hash }) => {
+            console.log("Approve txHash", hash);
+            // const interval = setInterval(function() {
+            const dataWait = await waitForTransaction({
+              hash: hash,
+              chain: 5,
+              confirmations: 1
+            })
+            console.log(dataWait)
+            this.buyUSDTView = 3
+
+            let data2 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
+            const config2 = await prepareSendTransaction({
+              // chain: mainnet,
+              // chainId: 1,
+              chain: goerli,
+              chainId: 5,
+              to: `${presaleAddress.toLowerCase()}`,
+              data: data2,
+            });
+
+            sendTransaction(config2)
+              .then(async ({ hash }) => {
+                console.log("txHash", hash);
+                this.buyTx = hash
+                this.buyUSDTView = 4
+                const dataWait2 = await waitForTransaction({
+                  hash: hash,
+                  chain: 5,
+                  confirmations: 1
+                })
+                console.log(dataWait2)
+                this.buyUSDTView = 5
+                this.butLoading = false
+              })
+              .catch((error) => {
+                console.error("buy error", error);
+              });
+          })
+          .catch((error) => {
+            console.log(error)
+            console.error("buy error", error);
+            this.buyWithUsdtDialog = false
+            this.amountUSDT = 0
+            this.amountEmasForUSDTDiagLog = 0
+            this.buyUSDTView = 1
+            this.butLoading = false
+            // console.log(ethError, "Insufficient ETH balance, please check your account balance");
+            // hideProcessing();
+          });
+
+      /* } catch(error) {
+        console.log(error)
+        // if user rejects
+        this.buyWithUsdtDialog = false
+        this.buyUSDTView = 1
+        this.butLoading = false
+      } */
     },
     handleSuccess(e) {
         console.log(e);
@@ -3618,12 +3706,14 @@ export default {
       this.buyWithEthDialog = false
       this.amountEmasForEthDiagLog = 0
       this.amountEth = 0
+      this.butLoading = false
     },
     closeBuyWithUsdtDialog() {
       if (this.buyUSDTView === 2 || this.buyUSDTView === 3 || this.buyUSDTView === 4) return
       this.buyWithUsdtDialog = false
       this.amountEmasForUSDTDiagLog = 0
       this.amountUSDT = 0
+      this.butLoading = false
     },
     ensureNonNegative(inputField) {
       if (this[inputField] < 0) {
@@ -3662,27 +3752,6 @@ export default {
         console.log('Get new price error', error);
       }
     },
-    /* async getLastestPrice() {
-      var url
-      if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-        url = import.meta.env.VITE_APP_MM_API
-      } else {
-        url = import.meta.env.VITE_APP_MM_API_TEST
-      }
-      try {
-        // await axios.get(import.meta.env.VITE_APP_MM_API_LOCAL+'/getlastpricecoinmarketcap')
-        const response = await axios.get(url + "getlastpricecoinmarketcap", {
-          params: {
-            "symbols": 'ETH,USDT'
-          }
-        });
-        const { ETH: ethData, USDT: usdtData } = response.data.data;
-        this.ethPrice = ethData.quote.USD.price;
-        this.usdtPrice = usdtData.quote.USD.price;
-      } catch (error) {
-        console.log('Get new price error', error);
-      }
-    }, */
     async sendContactForm() {
       const isValid = await this.$refs.newCryptoForm.validate()
       this.type = 'newtocrypto'
