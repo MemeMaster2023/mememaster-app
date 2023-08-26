@@ -138,13 +138,11 @@ import { provide } from 'vue'
         // const chains = [mainnet]
 
         let projectId;
-        let chains;
+        let chains = [mainnet, goerli];
         if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-          chains = [mainnet];
           projectId = import.meta.env.VITE_APP_PROJECT_ID;
 
         } else {
-          chains = [goerli];
           projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST;
         }
         const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
