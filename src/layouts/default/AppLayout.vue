@@ -11,7 +11,7 @@
     <v-layout style="margin-left: 90px;">
       <v-spacer></v-spacer>
       <v-btn icon="mdi-window-close"
-            variant="plain" 
+            variant="plain"
             @click.stop="drawer = !drawer" style="margin: 10px">
       </v-btn>
     </v-layout>
@@ -31,7 +31,7 @@
       ></v-img>
     </v-layout>
 
-    
+
     <v-layout class="pr-4 pl-4 pt-4 pb-2" v-if="env">
 
       <v-spacer></v-spacer>
@@ -82,10 +82,10 @@
         theme="dark"
         :style="isMobileDevice ? 'width:55%' : 'width:100%'"
       >
-       <v-icon class="mr-2">mdi-email</v-icon> 
+       <v-icon class="mr-2">mdi-email</v-icon>
         Connected
       </v-btn>
-    
+
       <v-spacer></v-spacer>
 
       <v-btn v-if="isMobileDevice"
@@ -120,14 +120,14 @@
             v-bind="props"
             :style="isMobileDevice ? 'width:55%' : 'width:100%'"
           >
-            <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:5px"/> 
+            <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:5px"/>
             Token Security
           </v-btn>
         </template>
         <span>Avoid scams - check the real Mememaster (EMAS) token contract address here,<br>
               DO NOT SEND FUNDS TO THIS CONTRACT ADDRESS SEE THE PRESALE and our SOCIAL MEDIA FOR CONTRIBUTION ADDRESS.
         </span>
-      </v-tooltip> --> 
+      </v-tooltip> -->
       <v-btn v-if="drawer && isMobileDevice"
         style="margin-right:5px;margin-top:-5px"
         variant="outlined"
@@ -136,7 +136,7 @@
         @click="gotoTokenLink('')"
         :style="isMobileDevice ? 'width:55%' : 'width:100%'"
       >
-        <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:5px"/> 
+        <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:5px"/>
         Token Security
       </v-btn>
 
@@ -150,7 +150,7 @@
         @click="gotoKYCLink('')"
         :style="isMobileDevice ? 'width:45%' : 'width:100%'"
       >
-        <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:5px"/> 
+        <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:5px"/>
         KYC - AUDIT
       </v-btn>
 
@@ -163,9 +163,9 @@
              color="white"
              @click="disconnectClicked"
              style="width:100%"
-      > 
-        <template v-slot:prepend>        
-          <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>  
+      >
+        <template v-slot:prepend>
+          <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>
         </template>
         Disconnect
       </v-btn>
@@ -240,7 +240,7 @@
 
 
       </v-list-group>
-        
+
       <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes')"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="NFT Marketplace" value="nftmarket" @click="routerGo('/nfts')"></v-list-item>
       <v-list-item prepend-icon="mdi-circle-multiple-outline" title="New Token Listings" value="tokens" @click="routerGo('/tokens')"></v-list-item>
@@ -254,11 +254,11 @@
     </v-list>
   </v-navigation-drawer>
 
-  <v-app-bar 
-      flat 
-      app 
+  <v-app-bar
+      flat
+      app
       style="opacity:0.9"
-      :color="!scrolled && ($route.name === 'Home' || $route.name === 'Collections') ? 'transparent' : '#000'" 
+      :color="!scrolled && ($route.name === 'Home' || $route.name === 'Collections') ? 'transparent' : '#000'"
       class="pa-2"
   >
 
@@ -283,7 +283,7 @@
         @click="connectWalletDialog = true"
         size="small"
       >
-        Connect 
+        Connect
       </v-btn>
 
       <v-menu v-if="!drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)" >
@@ -297,16 +297,16 @@
             offset="-20"
             size="small"
           >
-            <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/> 
-            <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px" v-else-if="twConnected"/> 
-            <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px" v-else-if="walletConnected && !mmConnected && !twConnected"/> 
+            <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px" v-if="mmConnected"/>
+            <img src="/img/icons/trustwallet.png" style="max-width:32px;padding-right:10px" v-else-if="twConnected"/>
+            <img src="/img/icons/walletconnect.png" style="max-width:32px;padding-right:10px" v-else-if="walletConnected && !mmConnected && !twConnected"/>
             <v-icon v-else-if="emailConnected && !mmConnected && !walletConnected" class="mr-2">mdi-email</v-icon>
               Connected
           </v-btn>
         </template>
-        <v-card 
-            min-width="300" 
-            max-width="300" 
+        <v-card
+            min-width="300"
+            max-width="300"
             max-height="500"
             class="mt-2 mb-2"
          >
@@ -339,8 +339,8 @@
             <v-col :align="'center'" class="mt-2" style="width:280px">
               <div class="row" style="width:280px" v-if="mmConnected || twConnected || walletConnected">
                 <span class="font-weight-bold">{{ mmConnected || twConnected || walletConnected ? (this.getUser.accounts[0]).substring(0, 8) + '...' + (this.getUser.accounts[0]).substring(34, 42) : '' }}</span>
-                <v-icon 
-                  size="x-small" 
+                <v-icon
+                  size="x-small"
                   class="ml-2"
                   v-clipboard:copy.stop="getUser.accounts[0]"
                   v-clipboard:success="handleSuccess"
@@ -365,7 +365,7 @@
             </v-col>
           </v-row>
           <div class="text-center  mb-4">
-            <v-btn style="width:280px;text-transform: none !important;" 
+            <v-btn style="width:280px;text-transform: none !important;"
                   class="ma-2"
                   variant="outlined"
                   color="deep-purple-darken-4"
@@ -376,12 +376,12 @@
             </v-btn>
 
             <v-btn v-if="!drawer && env && (mmConnected || twConnected || emailConnected || walletConnected)"
-                  style="width:280px;" 
+                  style="width:280px;"
                   variant="outlined"
                   @click="disconnectClicked"
-            > 
-              <template v-slot:prepend>        
-                <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>  
+            >
+              <template v-slot:prepend>
+                <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>
               </template>
               Disconnect
             </v-btn>
@@ -395,9 +395,9 @@
              color="white"
              to="/account"
              size="small"
-      > 
-        <template v-slot:prepend>        
-          <v-icon size="large">mdi-account-box-outline</v-icon>  
+      >
+        <template v-slot:prepend>
+          <v-icon size="large">mdi-account-box-outline</v-icon>
         </template>
         My Account
       </v-btn>
@@ -408,9 +408,9 @@
              color="white"
              @click="disconnectClicked"
              size="small"
-      > 
-        <template v-slot:prepend>        
-          <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>  
+      >
+        <template v-slot:prepend>
+          <v-icon color="red-lighten-1" size="large">mdi-close-circle-outline</v-icon>
         </template>
         Disconnect
       </v-btn>
@@ -421,7 +421,7 @@
         color="white"
         theme="dark"
         @click="routerGo('/generate/default')"
-        prepend-icon="mdi-view-grid-plus" 
+        prepend-icon="mdi-view-grid-plus"
         size="small"
       >
         Generate
@@ -454,7 +454,7 @@
         size="small"
         @click="$router.currentRoute.value.path !== '/presale' ? gotoKYCLink() : scrollToKYCLink()"
       >
-        <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:10px"/> 
+        <img src="/img/icons/coinsult_squ.png" style="max-width:28px;padding-right:10px"/>
         KYC - AUDIT
       </v-btn>
 
@@ -469,7 +469,7 @@
             v-bind="props"
             size="small"
           >
-            <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:10px"/> 
+            <img src="/img/icons/token_security.png" style="max-width:30px;padding-right:10px"/>
             Token Security
           </v-btn>
         </template>
@@ -524,7 +524,7 @@
         color="white"
         theme="dark"
         @click="routerGo('/tokens')"
-        prepend-icon="mdi-circle-multiple-outline" 
+        prepend-icon="mdi-circle-multiple-outline"
         size="small"
       >
         New Token Listings
@@ -558,7 +558,7 @@
       >
        Please use the menu on the top right to access the main features of the platform
       </div>
-      
+
   </v-app-bar>
 
 
@@ -607,25 +607,25 @@
 
           <v-row v-if="(getChain === '0x1' || getChain === '0x5') && !isMobileDevice" style="margin-left:15%;margin-right:15%">
             <v-col cols="12" v-if="showConfirmation === false">
-              <MetaMaskConnect 
-                  :isMobileDevice="isMobileDevice" 
-                  style="width:100%;" 
-                  ref="mmConnect" 
-                  buttonType="large" 
-                  :windowWidth="windowWidth" 
-                  :windowHeight="windowHeight" 
+              <MetaMaskConnect
+                  :isMobileDevice="isMobileDevice"
+                  style="width:100%;"
+                  ref="mmConnect"
+                  buttonType="large"
+                  :windowWidth="windowWidth"
+                  :windowHeight="windowHeight"
                   :dark="dark"
               >
               </MetaMaskConnect>
-              
-              <WalletConnect 
-                  :isMobileDevice="isMobileDevice" 
+
+              <WalletConnect
+                  :isMobileDevice="isMobileDevice"
                   class="pt-6"
-                  style="width:100%;" 
-                  ref="walletConnectref" 
-                  buttonType="large" 
-                  :windowWidth="windowWidth" 
-                  :windowHeight="windowHeight" 
+                  style="width:100%;"
+                  ref="walletConnectref"
+                  buttonType="large"
+                  :windowWidth="windowWidth"
+                  :windowHeight="windowHeight"
                   :dark="dark"
               >
               </WalletConnect>
@@ -696,14 +696,14 @@
               <MetaMaskConnect v-if="$route.name === 'MMobile'" :isMobileDevice="isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
               </MetaMaskConnect> -->
 
-              <WalletConnect 
-                  :isMobileDevice="isMobileDevice" 
+              <WalletConnect
+                  :isMobileDevice="isMobileDevice"
                   class="pt-2"
-                  style="width:100%;" 
-                  ref="walletConnectref" 
-                  buttonType="large" 
-                  :windowWidth="windowWidth" 
-                  :windowHeight="windowHeight" 
+                  style="width:100%;"
+                  ref="walletConnectref"
+                  buttonType="large"
+                  :windowWidth="windowWidth"
+                  :windowHeight="windowHeight"
                   :dark="dark"
               >
               </WalletConnect>
@@ -836,7 +836,7 @@
                   </v-col>
                 </v-row>
               </v-sheet>
-              
+
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -845,9 +845,9 @@
     <ChatGPT
     v-if="(mmConnected || walletConnected || twConnected || emailConnected)"
         v-model="chatActive"
-        :isMobileDevice="isMobileDevice" 
-        :windowWidth="windowWidth" 
-        :windowHeight="windowHeight" 
+        :isMobileDevice="isMobileDevice"
+        :windowWidth="windowWidth"
+        :windowHeight="windowHeight"
         :dark="dark"
         v-on:closeChatClicked="closeChat"
     >
@@ -905,6 +905,8 @@ import { scroller } from 'vue-scrollto/src/scrollTo'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
 import md5 from 'md5'
 import dateformat from "dateformat"
+import Web3 from 'web3';
+
 export default {
     name: 'AppBar',
     props: {
@@ -955,7 +957,7 @@ export default {
     },
     computed: {
       getUser () {
-        return store.state.user 
+        return store.state.user
       },
       gravatar () {
         return this.$store.state.user.gravatar
@@ -1206,7 +1208,7 @@ export default {
         }
         /* else if (this.binanceConnected) {
           this.$refs.mmConnect.disconnectBinance()
-        } */ 
+        } */
         if (this.emailConnected) {
           this.$store.dispatch('logout').then(() => {
             // const firstScrollTo = scroller();
@@ -1238,7 +1240,7 @@ export default {
           }
         }, 1000);
       },
-      getWalletBalance () {
+      async getWalletBalance () {
 
         console.log('############## this.getUser.accounts[0] #################')
         console.log(this.getUser.accounts[0])
@@ -1251,7 +1253,23 @@ export default {
           this.connectedNw = 'MATIC'
         }
 
-        if (this.getUser.walletProvider === 'MetaMask' || this.getUser.walletProvider === 'WalletConnect') {
+        // Get User Balance
+
+        const chainRPC = "https://ethereum-goerli.publicnode.com"
+
+        const _web3 = new Web3(chainRPC);
+
+        let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
+
+        this.balance =  Math.round(parseInt(accountBalance, 16) / 100000000000000000 * 10000) / 100000
+
+        this.$store.commit('setBalance', {
+          balance: this.balance
+        })
+
+        console.log(accountBalance, 'aadr')
+
+        if (this.getUser.walletProvider === 'MetaMask' || this.getUser.walletProvider === 'WalletConnect' || !this.balance) {
           window.ethereum.request({
             method: 'eth_getBalance',
             params:[
@@ -1268,7 +1286,7 @@ export default {
             })
           })
           .catch((error) => console.log(error))
-        } else if (this.getUser.walletProvider === 'BinanceChainWallet') {
+        } else if (this.getUser.walletProvider === 'BinanceChainWallet'|| !this.balance) {
           window.BinanceChain.request({
             method: 'eth_getBalance',
             params:[
@@ -1289,7 +1307,7 @@ export default {
       },
       getTokenBalance () {
         // https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0xe9e7cea3dedca5984780bafc599bd69add087d56&address=0x89e73303049ee32919903c09e8de5629b84f59eb&tag=latest&apikey=YourApiKeyToken
-        
+
         let tokenAddress = ''
         let network = 'ETH'
         if (this.getUser.networkChainID === '0x1') {
@@ -1372,6 +1390,6 @@ export default {
   }
   .v-tooltip .v-overlay__content {
     background: rgba(var(--v-theme-surface-variant), 1) !important;
-  } 
+  }
 
 </style>
