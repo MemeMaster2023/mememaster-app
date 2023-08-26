@@ -1307,6 +1307,8 @@
                   >
                   Swap ETH for EMAS
                 </v-btn>
+
+                <div v-if="insufficientBalance" style="color:firebrick;font-weight:bold" class="pt-4 text-center">!! Insufficient Balance !!</div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -1357,6 +1359,33 @@
             </v-row>
 
           </v-card-text>
+
+          <v-card-text class="mb-8" v-if="buyETHView === 6">
+
+            <v-row class="pt-8 mb-4">
+              <v-col cols="12"  :align="'center'">
+                <v-icon size="60" color="red">mdi-close-circle-outline</v-icon>
+
+                <div class="text-h5 mt-2">Something went wrong while processing your transaction.</div>
+                <div class="text-h6 mt-2">Please check that no funds were lost and try again.</div>
+                
+              </v-col>
+            </v-row>
+
+            <v-row>
+            <v-col cols="6" :align="'right'" v-if="!isMobileDevice">
+              
+            </v-col>
+            <v-col :cols="isMobileDevice ? 12 : 6">
+              <v-btn style="width:100%"
+                      @click="closeETHBuyDialog"
+              >
+                Close
+              </v-btn>
+            </v-col>
+            </v-row>
+
+            </v-card-text>
 
         </v-card>
       </v-dialog>
@@ -1506,6 +1535,33 @@
                       @click="openTxExplorer()"
               >
               {{ isMobileDevice ? 'View TX' : 'View TX on Explorer' }}
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          </v-card-text>
+
+          <v-card-text class="mb-8" v-if="buyUSDTView === 6">
+
+            <v-row class="pt-8 mb-4">
+              <v-col cols="12"  :align="'center'">
+                <v-icon size="60" color="red">mdi-close-circle-outline</v-icon>
+
+                <div class="text-h5 mt-2">Something went wrong while processing your transaction.</div>
+                <div class="text-h6 mt-2">Please check that no funds were lost and try again.</div>
+                
+              </v-col>
+            </v-row>
+
+            <v-row>
+            <v-col cols="6" :align="'right'" v-if="!isMobileDevice">
+              
+            </v-col>
+            <v-col :cols="isMobileDevice ? 12 : 6">
+              <v-btn style="width:100%"
+                      @click="closeUSDTBuyDialog"
+              >
+                Close
               </v-btn>
             </v-col>
           </v-row>
@@ -1751,18 +1807,22 @@ import { arbitrum, mainnet, goerli } from '@wagmi/core/chains'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 // const chainRPC = "https://eth.llamarpc.com";
 // const chainRPC = "https://rpc.ankr.com/eth_goerli"
-const chainRPC = "https://ethereum-goerli.publicnode.com"
-const _web3 = new Web3(chainRPC);
+let chainRPC
 let projectId;
 let chains;
+let chainId;
 if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-  chains = [mainnet];
-  projectId = import.meta.env.VITE_APP_PROJECT_ID;
-
+  chainRPC = "https://eth.llamarpc.com";
+  chains = [mainnet]
+  projectId = import.meta.env.VITE_APP_PROJECT_ID
+  chainId = 1
 } else {
-  chains = [goerli];
-  projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST;
+  chainRPC = "https://ethereum-goerli.publicnode.com"
+  chains = [goerli]
+  projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
+  chainId = 5
 }
+const _web3 = new Web3(chainRPC);
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 
 // 2. Set up wagmi config
@@ -1812,6 +1872,7 @@ export default {
     usdtPrice: 0,
     amountEth: 0,
     amountUSDT: 0,
+    insufficientBalance: false,
     buyTx: '',
     presaleNotLive: false,
     learnMoreDialog: false,
@@ -3383,13 +3444,27 @@ export default {
     async buyWithEthContractWeb () {
 
       // next view on form
+      this.insufficientBalance = false
       this.butLoading = true
-      this.buyEthView = 2
 
       try {
         console.log(ethers)
+
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+        // Get User Balance
+        let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
+        console.log(accountBalance)
+
+        if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
+          this.insufficientBalance = true
+          this.butLoading = false
+          return
+        } 
+
+        this.buyEthView = 2
+
         console.log(provider);
         const signer = provider.getSigner()
         console.log(signer);
@@ -3422,16 +3497,30 @@ export default {
 
         }).catch(error => {
           console.log(error)
+          if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+            this.buyWithEthDialog = false
+            this.amountETH = 0
+            this.amountEmasForUSDTDiagLog = 0
+            this.buyETHView = 1
+            this.butLoading = false
+          } else {
+            this.buyETHView = 6
+          }
         })
 
-        } catch(error) {
-          console.log(error)
-          // if user rejects
+      } catch(error) {
+        console.log(error)
+        // if user rejects
+        if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
           this.buyWithEthDialog = false
-          this.buyEthView = 1
+          this.amountETH = 0
+          this.amountEmasForUSDTDiagLog = 0
+          this.buyETHView = 1
           this.butLoading = false
-          // this.buyEthView = 4 >> Error View
+        } else {
+          this.buyETHView = 6
         }
+      }
 
     },
     openTxExplorer () {
@@ -3459,8 +3548,9 @@ export default {
     },
     async buyWithEthContractMobile () {
       
+      // Next View
+      this.insufficientBalance = false
       this.butLoading = true
-      this.buyEthView = 2
 
       var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
       eth = _web3.utils.toWei(eth, 'ether');
@@ -3469,15 +3559,23 @@ export default {
       console.log("eth", eth)
       // const value = _web3.utils.toWei(eth);
 
-      const data = this.presaleContractMobile.methods.buyWithEth(this.activePresale, tokens).encodeABI();
+      // Get User Balance
+      let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
+
+      if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
+        this.insufficientBalance = true
+        this.butLoading = false
+        return
+      } 
+
+      this.buyEthView = 2
+      const data = this.presaleContractMobile.methods.buyWithEth(`${this.activePresale}`, `${tokens}`).encodeABI();
       console.log(data)
       
       // prepareSendTransaction
       const config = await prepareSendTransaction({
-        // chainId: 1,
-        // chain: mainet,
-        chain: goerli, // TODO: Change to main net later
-        chainId: 5,
+        chain: chains,
+        chainId: chainId,
         to: `${presaleAddress.toLowerCase()}`,
         value: eth,
         data: data,
@@ -3498,13 +3596,15 @@ export default {
           this.butLoading = false
         })
         .catch((error) => {
-          console.error("buy error", error);
-          this.buyWithEthDialog = false
-          this.amountEth = 0
-          this.amountEmasForEthDiagLog = 0
-          this.buyEthView = 1
-          this.butLoading = false
-          // console.log(ethError, "Insufficient ETH balance, please check your account balance");
+          if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+            this.buyWithEthDialog = false
+            this.amountETH = 0
+            this.amountEmasForUSDTDiagLog = 0
+            this.buyETHView = 1
+            this.butLoading = false
+          } else {
+            this.buyETHView = 6
+          }
         });
     },
     buyWithUSDTContract () {
@@ -3568,18 +3668,27 @@ export default {
             })
 
         }).catch(error => {
-          console.log(error)
-          this.buyWithUsdtDialog = false
-          this.buyUSDTView = 1
-          this.butLoading = false
+          if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+            this.buyWithUsdtDialog = false
+            this.amountUSDT = 0
+            this.amountEmasForUSDTDiagLog = 0
+            this.buyUSDTView = 1
+            this.butLoading = false
+          } else {
+            this.buyUSDTView = 6
+          }
         })
       } catch(error) {
-        console.log(error)
-        // if user rejects
-        this.buyWithUsdtDialog = false
-        this.buyUSDTView = 1
-        this.butLoading = false
-      }
+        if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+          this.buyWithUsdtDialog = false
+          this.amountUSDT = 0
+          this.amountEmasForUSDTDiagLog = 0
+          this.buyUSDTView = 1
+          this.butLoading = false
+        } else {
+          this.buyUSDTView = 6
+        }
+    }
     },
     async buyWithUSDTContractMobile () {
       // TODO
@@ -3597,6 +3706,7 @@ export default {
         } */
 
         let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+        let usdtSpending = usdt * 1.01
         console.log('**** usdt *****')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
@@ -3608,13 +3718,11 @@ export default {
         let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
         console.log(usdtContract)
 
-        let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`).encodeABI();
+        let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
 
         const config = await prepareSendTransaction({
-          // chain: mainnet,
-          // chainId: 1,
-          chain: goerli,
-          chainId: 5,
+          chain: chains,
+          chainId: chainId,
           to: `${usdtAddress.toLowerCase()}`,
           data: data,
         });     
@@ -3625,7 +3733,7 @@ export default {
             // const interval = setInterval(function() {
             const dataWait = await waitForTransaction({
               hash: hash,
-              chain: 5,
+              chain: chainId,
               confirmations: 1
             })
             console.log(dataWait)
@@ -3633,10 +3741,8 @@ export default {
 
             let data2 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
             const config2 = await prepareSendTransaction({
-              // chain: mainnet,
-              // chainId: 1,
-              chain: goerli,
-              chainId: 5,
+              chain: chains,
+              chainId: chainId,
               to: `${presaleAddress.toLowerCase()}`,
               data: data2,
             });
@@ -3648,7 +3754,7 @@ export default {
                 this.buyUSDTView = 4
                 const dataWait2 = await waitForTransaction({
                   hash: hash,
-                  chain: 5,
+                  chain: chainId,
                   confirmations: 1
                 })
                 console.log(dataWait2)
@@ -3657,16 +3763,22 @@ export default {
               })
               .catch((error) => {
                 console.error("buy error", error);
+                this.buyUSDTView = 6
               });
           })
           .catch((error) => {
-            console.log(error)
-            console.error("buy error", error);
-            this.buyWithUsdtDialog = false
-            this.amountUSDT = 0
-            this.amountEmasForUSDTDiagLog = 0
-            this.buyUSDTView = 1
-            this.butLoading = false
+            console.log(error.message)
+
+            if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+              this.buyWithUsdtDialog = false
+              this.amountUSDT = 0
+              this.amountEmasForUSDTDiagLog = 0
+              this.buyUSDTView = 1
+              this.butLoading = false
+            } else {
+              this.buyUSDTView = 6
+            }
+            
             // console.log(ethError, "Insufficient ETH balance, please check your account balance");
             // hideProcessing();
           });
@@ -3707,6 +3819,7 @@ export default {
       this.amountEmasForEthDiagLog = 0
       this.amountEth = 0
       this.butLoading = false
+      this.buyETHView = 1
     },
     closeBuyWithUsdtDialog() {
       if (this.buyUSDTView === 2 || this.buyUSDTView === 3 || this.buyUSDTView === 4) return
@@ -3714,6 +3827,7 @@ export default {
       this.amountEmasForUSDTDiagLog = 0
       this.amountUSDT = 0
       this.butLoading = false
+      this.buyUSDTView = 1
     },
     ensureNonNegative(inputField) {
       if (this[inputField] < 0) {
