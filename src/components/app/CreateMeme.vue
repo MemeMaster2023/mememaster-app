@@ -100,7 +100,7 @@
                       v-model="imageStrength"
                       color="blue"
                       :step="0.01"
-                      :max="1"
+                      :max="0.99"
                       :min="0"
                     ></v-slider>
                   </v-col>
