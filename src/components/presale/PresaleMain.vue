@@ -1308,7 +1308,7 @@
                   Swap ETH for EMAS
                 </v-btn>
 
-                <div v-if="insufficientBalance" style="color:firebrick;font-weight:bold" class="pt-4 text-center">!! Insufficient Balance !!</div>
+                <div v-if="insufficientETHBalance" style="color:firebrick;font-weight:bold" class="pt-4 text-center">!! Insufficient ETH Balance !!</div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -1360,9 +1360,9 @@
 
           </v-card-text>
 
-          <v-card-text class="mb-8" v-if="buyETHView === 6">
+          <v-card-text class="mb-2" v-if="buyETHView === 6">
 
-            <v-row class="pt-8 mb-4">
+            <v-row class="pt-8 mb-2">
               <v-col cols="12"  :align="'center'">
                 <v-icon size="60" color="red">mdi-close-circle-outline</v-icon>
 
@@ -1378,7 +1378,7 @@
             </v-col>
             <v-col :cols="isMobileDevice ? 12 : 6">
               <v-btn style="width:100%"
-                      @click="closeETHBuyDialog"
+                      @click="closeEthBuyDialog"
               >
                 Close
               </v-btn>
@@ -1463,6 +1463,9 @@
                   >
                   Swap USDT for EMAS
                 </v-btn>
+
+                <div v-if="insufficientUSDTBalance" style="color:firebrick;font-weight:bold" class="pt-4 text-center">!! Insufficient USDT Balance !!</div>
+
               </v-col>
             </v-row>
           </v-card-text>
@@ -1541,9 +1544,9 @@
 
           </v-card-text>
 
-          <v-card-text class="mb-8" v-if="buyUSDTView === 6">
+          <v-card-text class="mb-2" v-if="buyUSDTView === 6">
 
-            <v-row class="pt-8 mb-4">
+            <v-row class="pt-8 mb-2">
               <v-col cols="12"  :align="'center'">
                 <v-icon size="60" color="red">mdi-close-circle-outline</v-icon>
 
@@ -1822,8 +1825,9 @@ if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
   projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
   chainId = 5
 }
-const _web3 = new Web3(chainRPC);
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+const _web3 = new Web3(chainRPC)
+// const powerTwelve = _web3.utils.toBN(10).pow(_web3.utils.toBN(12))
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 
 // 2. Set up wagmi config
 const wagmiConfig = createConfig({
@@ -1872,7 +1876,8 @@ export default {
     usdtPrice: 0,
     amountEth: 0,
     amountUSDT: 0,
-    insufficientBalance: false,
+    insufficientETHBalance: false,
+    insufficientUSDTBalance: false,
     buyTx: '',
     presaleNotLive: false,
     learnMoreDialog: false,
@@ -3136,7 +3141,7 @@ export default {
       "dial_code": "+263",
       "code": "ZW"
       }
-      ],
+    ],
     message: '',
     type: '',
     rules: [
@@ -3444,7 +3449,7 @@ export default {
     async buyWithEthContractWeb () {
 
       // next view on form
-      this.insufficientBalance = false
+      this.insufficientETHBalance = false
       this.butLoading = true
 
       try {
@@ -3458,7 +3463,7 @@ export default {
         console.log(accountBalance)
 
         if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
-          this.insufficientBalance = true
+          this.insufficientETHBalance = true
           this.butLoading = false
           return
         } 
@@ -3497,7 +3502,7 @@ export default {
 
         }).catch(error => {
           console.log(error)
-          if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
             this.buyWithEthDialog = false
             this.amountETH = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3511,7 +3516,7 @@ export default {
       } catch(error) {
         console.log(error)
         // if user rejects
-        if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
           this.buyWithEthDialog = false
           this.amountETH = 0
           this.amountEmasForUSDTDiagLog = 0
@@ -3549,7 +3554,7 @@ export default {
     async buyWithEthContractMobile () {
       
       // Next View
-      this.insufficientBalance = false
+      this.insufficientETHBalance = false
       this.butLoading = true
 
       var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
@@ -3563,7 +3568,7 @@ export default {
       let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
 
       if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
-        this.insufficientBalance = true
+        this.insufficientETHBalance = true
         this.butLoading = false
         return
       } 
@@ -3596,7 +3601,7 @@ export default {
           this.butLoading = false
         })
         .catch((error) => {
-          if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
             this.buyWithEthDialog = false
             this.amountETH = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3616,8 +3621,8 @@ export default {
     },
     async buyWithUSDTContractWeb () {
 
+      this.insufficientUSDTBalance = false
       this.butLoading = true
-      this.buyUSDTView = 2
 
       try {
 
@@ -3631,9 +3636,10 @@ export default {
         let abi = JSON.parse(memeABI.data.result);
         let usdtConstructor = new ethers.Contract(`${usdtAddress.toLowerCase()}`, abi, provider)
         const usdtContract = usdtConstructor.connect(signer)
-
+        console.log(usdtContract)
 
         let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+        let usdtSpending = usdt * 1.01
         console.log('**** usdt *****')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
@@ -3641,8 +3647,17 @@ export default {
         console.log('**** tokens *****')
         console.log(tokens)
 
+        // CHECK USER USDT BALANACE
+        let usdtBalance = await usdtContract.balanceOf(this.getUser.accounts[0]);
+        if (usdtBalance < usdtSpending) {
+          this.insufficientUSDTBalance = true
+          this.butLoading = false
+          return
+        }
+        this.buyUSDTView = 2
+
         // USDT approval
-        const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdt}`);
+        const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
         approve.wait().then(async () => {
 
             this.buyUSDTView = 3
@@ -3668,7 +3683,7 @@ export default {
             })
 
         }).catch(error => {
-          if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
             this.buyWithUsdtDialog = false
             this.amountUSDT = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3679,7 +3694,8 @@ export default {
           }
         })
       } catch(error) {
-        if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+        console.log(error)
+        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
           this.buyWithUsdtDialog = false
           this.amountUSDT = 0
           this.amountEmasForUSDTDiagLog = 0
@@ -3691,20 +3707,12 @@ export default {
     }
     },
     async buyWithUSDTContractMobile () {
-      // TODO
+
+      this.insufficientUSDTBalance = false
       this.butLoading = true
-      this.buyUSDTView = 2
 
       // try {
         
-        // Check the user ETH balance
-        /* let usdtBalance = await usdtContract.methods.balanceOf(selectedAccount).call();
-        if (bnValue.gt(new BN(usdtBalance))) {
-          showError(usdtError, "Insufficient USDT balance, please check your account balance");
-          hideProcessing();
-          return;
-        } */
-
         let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
         let usdtSpending = usdt * 1.01
         console.log('**** usdt *****')
@@ -3717,6 +3725,16 @@ export default {
         // USDT approval
         let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
         console.log(usdtContract)
+
+        // CHECK USER USDT BALANACE
+        let usdtBalance = await usdtContract.methods.balanceOf(this.getUser.accounts[0]).call();
+        console.log(usdtBalance)
+        if (usdtBalance < usdtSpending) {
+          this.insufficientUSDTBalance = true
+          this.butLoading = false
+          return
+        }
+        this.buyUSDTView = 2
 
         let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
 
@@ -3763,13 +3781,21 @@ export default {
               })
               .catch((error) => {
                 console.error("buy error", error);
-                this.buyUSDTView = 6
+                if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+                  this.buyWithUsdtDialog = false
+                  this.amountUSDT = 0
+                  this.amountEmasForUSDTDiagLog = 0
+                  this.buyUSDTView = 1
+                  this.butLoading = false
+                } else {
+                  this.buyUSDTView = 6
+                }
               });
           })
           .catch((error) => {
-            console.log(error.message)
-
-            if (error.message.includes('User rejected the request.')) { // condition when user rejects the tx
+            console.log(error)
+            // Failed transaction reporting back to user
+            if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
               this.buyWithUsdtDialog = false
               this.amountUSDT = 0
               this.amountEmasForUSDTDiagLog = 0
