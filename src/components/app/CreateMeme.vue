@@ -100,7 +100,7 @@
                       v-model="imageStrength"
                       color="blue"
                       :step="0.01"
-                      :max="1"
+                      :max="0.99"
                       :min="0"
                     ></v-slider>
                   </v-col>
@@ -1137,7 +1137,7 @@ export default {
     uploadImageUrl: '',
     newWidth: 0,
     newHeight: 0,
-    imageStrength: 0.35,
+    imageStrength: 0.45,
     showRowAlert: false,
     showRowAlertText: '',
   }),
