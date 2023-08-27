@@ -138,13 +138,11 @@ import { provide } from 'vue'
         // const chains = [mainnet]
 
         let projectId;
-        let chains;
+        let chains = [mainnet, goerli];
         if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-          chains = [mainnet];
           projectId = import.meta.env.VITE_APP_PROJECT_ID;
 
         } else {
-          chains = [goerli];
           projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST;
         }
         const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
@@ -461,7 +459,7 @@ import { provide } from 'vue'
                       gravatar: this.userData.gravatar,
                       avatar: this.userData.avatar,
                       isLoggedIn: true,
-                      isVerified: this.currentUser.emailVerified,
+                      isVerified: this.currentUser.emailVerified ? this.currentUser.emailVerified : this.userData.isVerified,
                       idVerified: this.userData.id_verified,
                       phoneVerified: this.userData.phone_verified,
                       accLevel: this.userData.acc_level,
@@ -517,7 +515,7 @@ import { provide } from 'vue'
                   gravatar: this.userData.gravatar,
                   avatar: this.userData.avatar,
                   isLoggedIn: true,
-                  isVerified: this.currentUser.emailVerified,
+                  isVerified: this.currentUser.emailVerified ? this.currentUser.emailVerified : this.userData.isVerified,
                   idVerified: this.userData.id_verified,
                   phoneVerified: this.userData.phone_verified,
                   accLevel: this.userData.acc_level,

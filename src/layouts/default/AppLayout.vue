@@ -905,6 +905,15 @@ import { scroller } from 'vue-scrollto/src/scrollTo'
 import ChatGPT from '@/components/chat/ChatGPT.vue'
 import md5 from 'md5'
 import dateformat from "dateformat"
+import Web3 from 'web3';
+let chainRPC
+if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+  chainRPC = "https://eth.llamarpc.com";
+} else {
+  chainRPC = "https://ethereum-goerli.publicnode.com"
+}
+const _web3 = new Web3(chainRPC);
+
 export default {
     name: 'AppBar',
     props: {
@@ -1238,7 +1247,7 @@ export default {
           }
         }, 1000);
       },
-      getWalletBalance () {
+      async getWalletBalance () {
 
         console.log('############## this.getUser.accounts[0] #################')
         console.log(this.getUser.accounts[0])
@@ -1250,41 +1259,56 @@ export default {
         } else if (this.getUser.networkChainID === '0x89') {
           this.connectedNw = 'MATIC'
         }
+         
+         if (this.isMobileDevice) {
 
-        if (this.getUser.walletProvider === 'MetaMask' || this.getUser.walletProvider === 'WalletConnect') {
-          window.ethereum.request({
-            method: 'eth_getBalance',
-            params:[
-               this.getUser.accounts[0],
-              'latest'
-            ],
-              id: 1
-            })
-          .then((balance) => {
-            console.log(balance)
-            this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
-            this.$store.commit('setBalance', {
-              balance: this.balance
-            })
+          // Get User Balance
+          let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
+          console.log(accountBalance)
+
+          let balanceWei = _web3.utils.fromWei(accountBalance, "ether")
+          this.balance = parseFloat(balanceWei).toFixed(4)
+          this.$store.commit('setBalance', {
+            balance: this.balance
           })
-          .catch((error) => console.log(error))
-        } else if (this.getUser.walletProvider === 'BinanceChainWallet') {
-          window.BinanceChain.request({
-            method: 'eth_getBalance',
-            params:[
-              this.getUser.accounts[0],
-              'latest'
-            ],
-              id: 1
+        
+
+         } else {
+          if (this.getUser.walletProvider === 'MetaMask' || this.getUser.walletProvider === 'WalletConnect') {
+            window.ethereum.request({
+              method: 'eth_getBalance',
+              params:[
+                this.getUser.accounts[0],
+                'latest'
+              ],
+                id: 1
+              })
+            .then((balance) => {
+              console.log(balance)
+              this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
+              this.$store.commit('setBalance', {
+                balance: this.balance
+              })
             })
-          .then((balance) => {
-            // console.log(balance)
-            this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
-            this.$store.commit('setBalance', {
-              balance: this.balance
+            .catch((error) => console.log(error))
+          } else if (this.getUser.walletProvider === 'BinanceChainWallet') {
+            window.BinanceChain.request({
+              method: 'eth_getBalance',
+              params:[
+                this.getUser.accounts[0],
+                'latest'
+              ],
+                id: 1
+              })
+            .then((balance) => {
+              // console.log(balance)
+              this.balance =  Math.round(parseInt(balance, 16) / 100000000000000000 * 10000) / 100000
+              this.$store.commit('setBalance', {
+                balance: this.balance
+              })
             })
-          })
-          .catch((error) => console.log(error))
+            .catch((error) => console.log(error))
+          }
         }
       },
       getTokenBalance () {
