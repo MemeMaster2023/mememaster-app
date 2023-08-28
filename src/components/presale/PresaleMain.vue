@@ -3688,7 +3688,7 @@ export default {
         console.log(usdtContract)
 
         let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
-        let usdtSpending = usdt * 1.01
+        let usdtSpending = usdt // * 1.01
         console.log('** usdt ***')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
@@ -3837,7 +3837,7 @@ export default {
       // try {
         
         let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
-        let usdtSpending = usdt * 1.01
+        let usdtSpending = usdt // * 1.01
         console.log('**** usdt *****')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
