@@ -181,15 +181,15 @@
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
 
-                <v-template v-if="presaleStarted">
-                  <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
+                <v-template v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
+                  <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }} - {{ makeDate(presale.endTime) }}</div>
                   <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
                   
                   <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage1 : stage2 }}</div>
                   <div v-else style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
                 </v-template>
 
-                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'" v-if="presaleStarted">
+                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'" v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
                   <v-progress-linear
                     :model-value="stageProgress"
                     height="30"
@@ -227,10 +227,10 @@
                 <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="mainnetTestBuyWithETH()" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="mainnetTestBuyWithUSDT()" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -598,7 +598,7 @@
                     color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
-                    max-width="350"
+                  max-width="350"
                     variant="outlined"
             >
               <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
@@ -1807,8 +1807,8 @@ import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
 // const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
-const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
-const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
+const presaleAddress = "0x13871995d62fEdfFAf2C5D26fca5739941e37572"
+const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
 
 // Mobile Imports and const
 import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, waitForTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
@@ -1855,6 +1855,14 @@ export default {
     drawer: Boolean
   },
   data: () => ({
+    tempWalletArr: [
+      '0x770e725359cd9a3cf34feeb832a16969a8d21660',
+      '0x63e8c8c7986b6a35fdb510389f339587dce4f23b',
+      '0x600dd87387875403d068a577cbcf79aafa0032c9',
+      '0xdd9c3cffd75b2709ea23d049f0ea632eb87a3c80',
+      '0x159e84dc084938de6e99ef466364645eccde0ece',
+      '0x5ac123e22a70b77354b6872c0f7073876995d333'
+    ],
     loading: false,
     butLoading: false,
     snackbar: false,
@@ -1870,7 +1878,6 @@ export default {
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
-    stage4Target: '$1,220.000',
     presaleStarted: false,
     activePresale: 1, // array in contract
     activeStagePrice: 0,
@@ -3233,7 +3240,7 @@ export default {
     },
     getUser () {
       return store.state.user
-    },
+    }
   },
   watch: {
     mmConnected () {
@@ -3290,6 +3297,24 @@ export default {
     }
   },
   methods: {
+    mainnetTestBuyWithETH () {
+
+      if (this.tempWalletArr.includes(this.getUser.accounts[0])) {
+        this.handleShowDialog(true, 'buyWithEthDialog')
+      } else {
+        this.presaleNotLive = true
+      }
+
+      // handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog')
+    },
+    mainnetTestBuyWithUSDT () {
+     
+      if (this.tempWalletArr.includes(this.getUser.accounts[0])) {
+        this.handleShowDialog(true, 'buyWithUsdtDialog')
+      } else {
+        this.presaleNotLive = true
+      }
+    },
     init () {
       this.pieMargin = this.windowWidth <= 360 ? -40 : this.windowWidth <= 390 ? -30 : -20
       console.log(this.pieMargin)

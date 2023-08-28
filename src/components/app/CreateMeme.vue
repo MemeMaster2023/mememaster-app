@@ -91,7 +91,7 @@
                         <template v-slot:activator="{ props }">
                           <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
                         </template>
-                        <span>How much influence the source image has on the diffusion process.<br>Values close to 100% will yield images very similar to the source image,<br>while values close to 0% will yield images wildly different than the source image.</span>
+                        <span>How much influence the source image has on the diffusion process.<br>Values at 99% will yield images very similar to the source image,<br>while values close to 0% will yield images wildly different than the source image.</span>
                       </v-tooltip>
                       <v-spacer></v-spacer>
                       <p>{{ Math.round(imageStrength * 100) }}%</p>
