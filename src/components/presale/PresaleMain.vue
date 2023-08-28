@@ -1878,7 +1878,9 @@ export default {
       '0x63E8c8C7986B6a35fdB510389f339587DCE4f23B',
       '0x600dD87387875403d068a577cbcf79aafA0032C9',
       '0x770e725359cd9A3Cf34FEeb832A16969a8D21660',
-      '0x5eB93f1b0b3E1Fd0f99118e39684f087a84d40Ec'
+      '0x5eB93f1b0b3E1Fd0f99118e39684f087a84d40Ec',
+      '0x9967a5a58bb500f575782fe62e92cb318fb39b1a',
+      '0x9967a5a58Bb500f575782fe62E92Cb318FB39B1a'
     ],
     loading: false,
     butLoading: false,
@@ -1895,7 +1897,7 @@ export default {
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
     presaleStarted: false,
-    activePresale: 2, // array in contract
+    activePresale: 3, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
@@ -3549,7 +3551,7 @@ export default {
 
         }).catch(error => {
           console.log(error)
-          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
             this.buyWithEthDialog = false
             this.amountETH = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3563,7 +3565,7 @@ export default {
       } catch(error) {
         console.log(error)
         // if user rejects
-        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
           this.buyWithEthDialog = false
           this.amountETH = 0
           this.amountEmasForUSDTDiagLog = 0
@@ -3648,7 +3650,7 @@ export default {
           this.butLoading = false
         })
         .catch((error) => {
-          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
             this.buyWithEthDialog = false
             this.amountETH = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3687,15 +3689,19 @@ export default {
 
         let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
         let usdtSpending = usdt * 1.01
-        console.log('**** usdt *****')
+        console.log('** usdt ***')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
         let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
-        console.log('**** tokens *****')
+        console.log('** tokens ***')
         console.log(tokens)
 
         // CHECK USER USDT BALANACE
         let usdtBalance = await usdtContract.balanceOf(this.getUser.accounts[0]);
+        console.log('############# usdtBalance ##################')
+        console.log(usdtBalance)
+        console.log('############# usdtSpending ##################')
+        console.log(usdtSpending)
         if (usdtBalance < usdtSpending) {
           this.insufficientUSDTBalance = true
           this.butLoading = false
@@ -3704,9 +3710,20 @@ export default {
         this.buyUSDTView = 2
 
         // USDT approval
-        const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
-        approve.wait().then(async () => {
+        let userAllowance = await usdtContract.allowance(this.getUser.accounts[0], `${presaleAddress.toLowerCase()}`);
+        console.log(Number(userAllowance._hex))
+        userAllowance = Number(userAllowance._hex)
 
+        if (userAllowance > 0 && userAllowance < usdtSpending) {
+          console.log('are we getting here?')
+          const resetApprove = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${0}`);
+
+          resetApprove.wait().then(async () => {
+
+            const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
+
+            approve.wait().then(async () => {
+    
             this.buyUSDTView = 3
 
             // USDT buy
@@ -3720,29 +3737,88 @@ export default {
 
             buyUSDT.wait().then(async () => {
 
-               console.log(buyUSDT)
-               this.buyUSDTView = 5
-               this.buyTx = buyUSDT.hash
-               this.butLoading = false
+              console.log(buyUSDT)
+              this.buyUSDTView = 5
+              this.buyTx = buyUSDT.hash
+              this.butLoading = false
+              // set allowance to 0
 
             }).catch(error => {
-               console.log(error)
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            })
+            }).catch(error => {
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            })  
+          })
+        }
+
+        if (userAllowance === 0) {
+          const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
+
+          approve.wait().then(async () => {
+    
+            this.buyUSDTView = 3
+
+            // USDT buy
+            console.log('Approve result: ', approve)
+            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
+            const presaleContract = presaleConstructor.connect(signer);
+            const buyUSDT = await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+
+            console.log(buyUSDT)
+            this.buyUSDTView = 4
+
+            buyUSDT.wait().then(async () => {
+
+              console.log(buyUSDT)
+              this.buyUSDTView = 5
+              this.buyTx = buyUSDT.hash
+              this.butLoading = false
+              // set allowance to 0
+
+            }).catch(error => {
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
             })
 
-        }).catch(error => {
-          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
-            this.buyWithUsdtDialog = false
-            this.amountUSDT = 0
-            this.amountEmasForUSDTDiagLog = 0
-            this.buyUSDTView = 1
-            this.butLoading = false
-          } else {
-            this.buyUSDTView = 6
-          }
-        })
+          }).catch(error => {
+            if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+              this.buyWithUsdtDialog = false
+              this.amountUSDT = 0
+              this.amountEmasForUSDTDiagLog = 0
+              this.buyUSDTView = 1
+              this.butLoading = false
+            } else {
+              this.buyUSDTView = 6
+            }
+          })      
+        }   
       } catch(error) {
         console.log(error)
-        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
           this.buyWithUsdtDialog = false
           this.amountUSDT = 0
           this.amountEmasForUSDTDiagLog = 0
@@ -3751,7 +3827,7 @@ export default {
         } else {
           this.buyUSDTView = 6
         }
-    }
+      }
     },
     async buyWithUSDTContractMobile () {
 
@@ -3769,6 +3845,8 @@ export default {
         console.log('**** tokens *****')
         console.log(tokens)
 
+        // Check Allowance {
+
         // USDT approval
         let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
         console.log(usdtContract)
@@ -3783,86 +3861,188 @@ export default {
         }
         this.buyUSDTView = 2
 
-        let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
+        // USDT approval
+        let userAllowance = await usdtContract.methods.allowance(this.getUser.accounts[0], `${presaleAddress.toLowerCase()}`).call();
+        console.log('########### userAllowance._hex ##########')
+        console.log(userAllowance)
 
-        const config = await prepareSendTransaction({
-          chain: chains,
-          chainId: chainId,
-          to: `${usdtAddress.toLowerCase()}`,
-          data: data,
-        });     
+        if (userAllowance > 0 && userAllowance < usdtSpending) {
+          console.log('are we getting here?')
 
-        sendTransaction(config)
-          .then(async ({ hash }) => {
-            console.log("Approve txHash", hash);
-            // const interval = setInterval(function() {
-            const dataWait = await waitForTransaction({
-              hash: hash,
-              chain: chainId,
-              confirmations: 1
-            })
-            console.log(dataWait)
-            this.buyUSDTView = 3
+          let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${0}`).encodeABI();
+          const config = await prepareSendTransaction({
+            chain: chains,
+            chainId: chainId,
+            to: `${usdtAddress.toLowerCase()}`,
+            data: data,
+          });     
 
-            let data2 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
-            const config2 = await prepareSendTransaction({
-              chain: chains,
-              chainId: chainId,
-              to: `${presaleAddress.toLowerCase()}`,
-              data: data2,
-            });
-
-            sendTransaction(config2)
-              .then(async ({ hash }) => {
-                console.log("txHash", hash);
-                this.buyTx = hash
-                this.buyUSDTView = 4
-                const dataWait2 = await waitForTransaction({
-                  hash: hash,
-                  chain: chainId,
-                  confirmations: 1
-                })
-                console.log(dataWait2)
-                this.buyUSDTView = 5
-                this.butLoading = false
+          sendTransaction(config)
+            .then(async ({ hash }) => {
+              console.log("Reset Approve to 0", hash);
+              // const interval = setInterval(function() {
+              const dataWait = await waitForTransaction({
+                hash: hash,
+                chain: chainId,
+                confirmations: 1
               })
-              .catch((error) => {
-                console.error("buy error", error);
-                if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
-                  this.buyWithUsdtDialog = false
-                  this.amountUSDT = 0
-                  this.amountEmasForUSDTDiagLog = 0
-                  this.buyUSDTView = 1
-                  this.butLoading = false
-                } else {
-                  this.buyUSDTView = 6
-                }
-              });
-          })
-          .catch((error) => {
-            console.log(error)
-            // Failed transaction reporting back to user
-            if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
-              this.buyWithUsdtDialog = false
-              this.amountUSDT = 0
-              this.amountEmasForUSDTDiagLog = 0
-              this.buyUSDTView = 1
-              this.butLoading = false
-            } else {
-              this.buyUSDTView = 6
-            }
-            
-            // console.log(ethError, "Insufficient ETH balance, please check your account balance");
-            // hideProcessing();
-          });
+              console.log(dataWait)
+              
+              let data2 = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
+              const config = await prepareSendTransaction({
+                chain: chains,
+                chainId: chainId,
+                to: `${usdtAddress.toLowerCase()}`,
+                data: data2,
+              });     
 
-      /* } catch(error) {
-        console.log(error)
-        // if user rejects
-        this.buyWithUsdtDialog = false
-        this.buyUSDTView = 1
-        this.butLoading = false
-      } */
+              sendTransaction(config)
+                .then(async ({ hash }) => {
+                  console.log("Approve txHash", hash);
+                  // const interval = setInterval(function() {
+                  const dataWait = await waitForTransaction({
+                    hash: hash,
+                    chain: chainId,
+                    confirmations: 1
+                  })
+                  console.log(dataWait)
+                  this.buyUSDTView = 3
+
+                  let data3 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
+                  const config2 = await prepareSendTransaction({
+                    chain: chains,
+                    chainId: chainId,
+                    to: `${presaleAddress.toLowerCase()}`,
+                    data: data3,
+                  });
+
+                  sendTransaction(config2)
+                    .then(async ({ hash }) => {
+                      console.log("txHash", hash);
+                      this.buyTx = hash
+                      this.buyUSDTView = 4
+                      const dataWait2 = await waitForTransaction({
+                        hash: hash,
+                        chain: chainId,
+                        confirmations: 1
+                      })
+                      console.log(dataWait2)
+                      this.buyUSDTView = 5
+                      this.butLoading = false
+                    })
+                    .catch((error) => {
+                      console.error("buy error", error);
+                      if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                        this.buyWithUsdtDialog = false
+                        this.amountUSDT = 0
+                        this.amountEmasForUSDTDiagLog = 0
+                        this.buyUSDTView = 1
+                        this.butLoading = false
+                      } else {
+                        this.buyUSDTView = 6
+                      }
+                    });
+                })
+                .catch((error) => {
+                  console.log(error)
+                  // Failed transaction reporting back to user
+                  if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                    this.buyWithUsdtDialog = false
+                    this.amountUSDT = 0
+                    this.amountEmasForUSDTDiagLog = 0
+                    this.buyUSDTView = 1
+                    this.butLoading = false
+                  } else {
+                    this.buyUSDTView = 6
+                  }
+                });
+            })
+            .catch((error) => {
+              console.log(error)
+              // Failed transaction reporting back to user
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            });
+        }
+
+        if (userAllowance == 0) {
+
+          let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
+          const config = await prepareSendTransaction({
+            chain: chains,
+            chainId: chainId,
+            to: `${usdtAddress.toLowerCase()}`,
+            data: data,
+          });     
+
+          sendTransaction(config)
+            .then(async ({ hash }) => {
+              console.log("Approve txHash", hash);
+              // const interval = setInterval(function() {
+              const dataWait = await waitForTransaction({
+                hash: hash,
+                chain: chainId,
+                confirmations: 1
+              })
+              console.log(dataWait)
+              this.buyUSDTView = 3
+
+              let data2 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
+              const config2 = await prepareSendTransaction({
+                chain: chains,
+                chainId: chainId,
+                to: `${presaleAddress.toLowerCase()}`,
+                data: data2,
+              });
+
+              sendTransaction(config2)
+                .then(async ({ hash }) => {
+                  console.log("txHash", hash);
+                  this.buyTx = hash
+                  this.buyUSDTView = 4
+                  const dataWait2 = await waitForTransaction({
+                    hash: hash,
+                    chain: chainId,
+                    confirmations: 1
+                  })
+                  console.log(dataWait2)
+                  this.buyUSDTView = 5
+                  this.butLoading = false
+                })
+                .catch((error) => {
+                  console.error("buy error", error);
+                  if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                    this.buyWithUsdtDialog = false
+                    this.amountUSDT = 0
+                    this.amountEmasForUSDTDiagLog = 0
+                    this.buyUSDTView = 1
+                    this.butLoading = false
+                  } else {
+                    this.buyUSDTView = 6
+                  }
+                });
+            })
+            .catch((error) => {
+              console.log(error)
+              // Failed transaction reporting back to user
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            });
+        }
     },
     handleSuccess(e) {
         console.log(e);
