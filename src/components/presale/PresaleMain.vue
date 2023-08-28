@@ -1867,7 +1867,6 @@ export default {
       '0x5ac123e22a70B77354b6872c0f7073876995D333',
       '0x63E8c8C7986B6a35fdB510389f339587DCE4f23B',
       '0x600dD87387875403d068a577cbcf79aafA0032C9'
-
     ],
     loading: false,
     butLoading: false,
@@ -1880,12 +1879,11 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    stage4: 0.0061,
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
     presaleStarted: false,
-    activePresale: 1, // array in contract
+    activePresale: 2, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
@@ -3291,8 +3289,6 @@ export default {
       this.activeStagePrice = this.stage2
     } else if (this.activePresale === 3) {
       this.activeStagePrice = this.stage3
-    } else if (this.activePresale === 4) {
-      this.activeStagePrice = this.stage4
     }
 
   },
