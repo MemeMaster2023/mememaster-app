@@ -1821,7 +1821,8 @@ let projectId;
 let chains;
 let chainId;
 if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-  chainRPC = "https://eth.llamarpc.com";
+  // chainRPC = "https://eth.llamarpc.com";
+  chainRPC = 'https://ethereum.publicnode.com'
   chains = [mainnet]
   projectId = import.meta.env.VITE_APP_PROJECT_ID
   chainId = 1
