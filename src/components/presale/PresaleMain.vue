@@ -203,8 +203,11 @@
                 <Countdown v-else-if="!presaleStarted">
                 </Countdown>
 
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
+                <!-- <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div> -->
+
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 0 / 0</div>
+                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $0 / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
@@ -1823,6 +1826,7 @@ let chainId;
 if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
   // chainRPC = "https://eth.llamarpc.com";
   chainRPC = 'https://ethereum.publicnode.com'
+  // chainRPC = 'https://singapore.rpc.blxrbdn.com'
   chains = [mainnet]
   projectId = import.meta.env.VITE_APP_PROJECT_ID
   chainId = 1
@@ -1867,7 +1871,8 @@ export default {
       '0x159E84dC084938de6E99Ef466364645ECCDE0ecE',
       '0x5ac123e22a70B77354b6872c0f7073876995D333',
       '0x63E8c8C7986B6a35fdB510389f339587DCE4f23B',
-      '0x600dD87387875403d068a577cbcf79aafA0032C9'
+      '0x600dD87387875403d068a577cbcf79aafA0032C9',
+      '0x770e725359cd9A3Cf34FEeb832A16969a8D21660'
     ],
     loading: false,
     butLoading: false,
