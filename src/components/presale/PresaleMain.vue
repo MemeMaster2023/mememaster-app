@@ -1821,6 +1821,7 @@ const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
 import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, waitForTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
 import { arbitrum, mainnet, goerli } from '@wagmi/core/chains'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { parseGwei } from 'viem'
 // const chainRPC = "https://eth.llamarpc.com";
 // const chainRPC = "https://rpc.ankr.com/eth_goerli"
 let chainRPC
@@ -1876,7 +1877,8 @@ export default {
       '0x5ac123e22a70B77354b6872c0f7073876995D333',
       '0x63E8c8C7986B6a35fdB510389f339587DCE4f23B',
       '0x600dD87387875403d068a577cbcf79aafA0032C9',
-      '0x770e725359cd9A3Cf34FEeb832A16969a8D21660'
+      '0x770e725359cd9A3Cf34FEeb832A16969a8D21660',
+      '0x5eB93f1b0b3E1Fd0f99118e39684f087a84d40Ec'
     ],
     loading: false,
     butLoading: false,
