@@ -176,7 +176,7 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale }}</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale - 1 }}</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
@@ -1288,6 +1288,7 @@
                     <span style="font-weight: 400; margin-left: 10px;">ETH</span>
                   </template>
                 </v-text-field>
+                <div v-if="minSpendAlert" style="color:firebrick;" class="text-center">The minumum spend amount is 10 USD</div>
               </v-col>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Buying</label>
@@ -1443,6 +1444,7 @@
                     <span style="font-weight: 400; margin-left: 10px;">USDT</span>
                   </template>
                 </v-text-field>
+                <div v-if="minSpendAlert" style="color:firebrick;" class="text-center">The minumum spend amount is 10 USD</div>
               </v-col>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Buying</label>
@@ -1880,7 +1882,9 @@ export default {
       '0x770e725359cd9A3Cf34FEeb832A16969a8D21660',
       '0x5eB93f1b0b3E1Fd0f99118e39684f087a84d40Ec',
       '0x9967a5a58bb500f575782fe62e92cb318fb39b1a',
-      '0x9967a5a58Bb500f575782fe62E92Cb318FB39B1a'
+      '0x9967a5a58Bb500f575782fe62E92Cb318FB39B1a',
+      '0x44Beb9Db583f3417c265Cb3616B67324e5382411',
+      '0xf3080174242667f944350587Db9Bf6e008b52cd5'
     ],
     loading: false,
     butLoading: false,
@@ -1893,11 +1897,12 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
+    stage4: 0.0061,
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
     presaleStarted: false,
-    activePresale: 3, // array in contract
+    activePresale: 4, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
@@ -1906,6 +1911,7 @@ export default {
     raised: 0,
     ethPrice: 0,
     usdtPrice: 0,
+    minSpendAlert: false,
     amountEth: 0,
     amountUSDT: 0,
     insufficientETHBalance: false,
@@ -3303,6 +3309,8 @@ export default {
       this.activeStagePrice = this.stage2
     } else if (this.activePresale === 3) {
       this.activeStagePrice = this.stage3
+    } else if (this.activePresale === 4) {
+      this.activeStagePrice = this.stage4
     }
 
   },
@@ -3711,10 +3719,11 @@ export default {
 
         // USDT approval
         let userAllowance = await usdtContract.allowance(this.getUser.accounts[0], `${presaleAddress.toLowerCase()}`);
+        console.log('########### userAllowance._hex #########')
         console.log(Number(userAllowance._hex))
         userAllowance = Number(userAllowance._hex)
 
-        if (userAllowance > 0 && userAllowance < usdtSpending) {
+        if (userAllowance > 0 && userAllowance <= usdtSpending) {
           console.log('are we getting here?')
           const resetApprove = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${0}`);
 
@@ -3866,7 +3875,7 @@ export default {
         console.log('########### userAllowance._hex ##########')
         console.log(userAllowance)
 
-        if (userAllowance > 0 && userAllowance < usdtSpending) {
+        if (userAllowance > 0 && userAllowance <= usdtSpending) {
           console.log('are we getting here?')
 
           let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${0}`).encodeABI();
@@ -4052,18 +4061,42 @@ export default {
       handleError(e) {
         console.log(e);
       },
-    convertAmount(type,value) {
+    convertAmount(type, value) {
+      // console.log()
       switch (type) {
         case 'ethToEmas':
+          this.checkMinSpend(type)
           return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.activeStagePrice ))
         case 'emasToEth':
+          this.checkMinSpend(type)
           return this.amountEth = value * ( this.activeStagePrice / this.ethPrice )
         case 'usdtToEmas':
+          this.checkMinSpend(type)
           return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.activeStagePrice ))
         case 'emasToUsdt':
+          this.checkMinSpend(type) 
           return this.amountUSDT = value * ( this.activeStagePrice / this.usdtPrice )
         default:
           return 0;
+      }
+    },
+    checkMinSpend (type) {
+      if ((type === 'ethToEmas' || type === 'emasToEth') && Math.round(this.amountEth * this.ethPrice) < 10 ) {
+        console.log(Math.round(this.amountEth * this.ethPrice))
+        console.log('ETH - Minumum 10 USD')
+        this.minSpendAlert = true
+        return
+      } else {
+        this.minSpendAlert = false
+      }
+
+      if ((type === 'usdtToEmas' || type === 'emasToUsdt') && parseInt(this.amountUSDT) < 10 ) {
+        console.log(this.amountUSDT)
+        console.log('USDT - Minumum 10 USD')
+        this.minSpendAlert = true
+        return
+      } else {
+        this.minSpendAlert = false
       }
     },
     closeBuyWithEthDialog() {
