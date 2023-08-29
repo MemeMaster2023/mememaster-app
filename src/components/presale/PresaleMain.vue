@@ -1274,7 +1274,6 @@
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
                 <v-text-field
-                  placeholder="0"
                   class="mt-2"
                   v-on:keyup="convertAmount('ethToEmas', amountEth)"
                   v-model="amountEth"
@@ -1294,7 +1293,6 @@
                 <label for="" style="font-weight: bold;">Buying</label>
                 <v-text-field
                   class="mt-2"
-                  placeholder="0"
                   v-model="amountEmasForEthDiagLog"
                   v-on:keyup="convertAmount('emasToEth', amountEmasForEthDiagLog)"
                   @focus="clearOnFocus('amountEmasForEthDiagLog')"
@@ -1317,6 +1315,7 @@
                       color="#360a3f" 
                       @click="buyWithEthContract()"
                       :loading="butLoading"
+                      :disabled="minSpendAlert || amountEth === 0 || amountEmasForEthDiagLog === 0"
                   >
                   Swap ETH for EMAS
                 </v-btn>
@@ -1426,10 +1425,10 @@
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
                 <v-text-field
-                  placeholder="0"
                   class="mt-2"
                   v-model="amountUSDT"
                   v-on:keyup="convertAmount('usdtToEmas', amountUSDT)"
+                  v-on:change="convertAmount('usdtToEmas', amountUSDT)"
                   @focus="clearOnFocus('amountUSDT')"
                   @input="ensureNonNegative('amountUSDT')"
                   type="number"
@@ -1449,10 +1448,10 @@
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Buying</label>
                 <v-text-field
-                  placeholder="0"
                   class="mt-2"
                   v-model="amountEmasForUSDTDiagLog"
                   v-on:keyup="convertAmount('emasToUsdt', amountEmasForUSDTDiagLog)"
+                  v-on:change="convertAmount('emasToUsdt', amountEmasForUSDTDiagLog)"
                   @focus="clearOnFocus('amountEmasForUSDTDiagLog')"
                   @input="ensureNonNegative('amountEmasForUSDTDiagLog')"
                   type="number"
@@ -1474,6 +1473,7 @@
                        color="#360a3f" 
                        @click="buyWithUSDTContract()" 
                        :loading="butLoading"
+                       :disabled="minSpendAlert"
                   >
                   Swap USDT for EMAS
                 </v-btn>
@@ -4081,7 +4081,8 @@ export default {
       }
     },
     checkMinSpend (type) {
-      if ((type === 'ethToEmas' || type === 'emasToEth') && Math.round(this.amountEth * this.ethPrice) < 10 ) {
+      setTimeout(() => {
+        if ((type === 'ethToEmas' || type === 'emasToEth') && Math.round(this.amountEth * this.ethPrice) < 10 ) {
         console.log(Math.round(this.amountEth * this.ethPrice))
         console.log('ETH - Minumum 10 USD')
         this.minSpendAlert = true
@@ -4090,7 +4091,7 @@ export default {
         this.minSpendAlert = false
       }
 
-      if ((type === 'usdtToEmas' || type === 'emasToUsdt') && parseInt(this.amountUSDT) < 10 ) {
+      if ((type === 'usdtToEmas' || type === 'emasToUsdt') && this.amountUSDT < 10 ) {
         console.log(this.amountUSDT)
         console.log('USDT - Minumum 10 USD')
         this.minSpendAlert = true
@@ -4098,6 +4099,7 @@ export default {
       } else {
         this.minSpendAlert = false
       }
+      }, 500);
     },
     closeBuyWithEthDialog() {
       if (this.buyEthView === 2) return
