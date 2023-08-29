@@ -176,7 +176,7 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale - 1 }}</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
               <v-spacer></v-spacer>
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
@@ -1904,11 +1904,12 @@ export default {
     stage2: 0.0055,
     stage3: 0.0061,
     stage4: 0.0061,
+    stage5: 0.0061,
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
     presaleStarted: false,
-    activePresale: 4, // array in contract
+    activePresale: 5, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
@@ -3317,6 +3318,8 @@ export default {
       this.activeStagePrice = this.stage3
     } else if (this.activePresale === 4) {
       this.activeStagePrice = this.stage4
+    } else if (this.activePresale === 5) {
+      this.activeStagePrice = this.stage5
     }
 
   },
