@@ -1,4 +1,3 @@
-
 <template>
   <div id="presale">
     <v-responsive style="background-color: #000;" class="pt-16">
@@ -176,20 +175,22 @@
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale }}</div>
               <v-spacer></v-spacer>
-               <v-toolbar-title>{{ stage1 }}</v-toolbar-title>
+               <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
 
-                <v-template v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
+                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                <v-template v-if="presaleStarted">
                   <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }} - {{ makeDate(presale.endTime) }}</div>
                   <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
                   
-                  <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage1 : stage2 }}</div>
+                  <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage2 : stage3 }}</div>
                   <div v-else style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
                 </v-template>
 
-                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'" v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
+                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-4'" v-if="presaleStarted">
                   <v-progress-linear
                     :model-value="stageProgress"
                     height="30"
@@ -203,7 +204,7 @@
                 <Countdown v-else-if="!presaleStarted">
                 </Countdown>
 
-                <div v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
+                <div v-if="presaleStarted">
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
                 </div>
@@ -217,7 +218,18 @@
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-chip variant="outlined" class="ma-2" color="#360a3f">
                       <v-icon start icon="mdi-wallet" color="#360a3f"></v-icon>
-                      {{ (this.getUser.accounts[0]).substring(0, 14) + '...' + (this.getUser.accounts[0]).substring(28, 42) }}
+                      {{ (this.getUser.accounts[0]).substring(0, 15) + '...' + (this.getUser.accounts[0]).substring(28, 42) }}
+                    </v-chip>
+                  </v-col>
+                </v-row>
+
+                <v-row v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0" style="margin-top:-30px">
+                  <v-col cols="12" md="12" class="pl-8 pr-8">
+                    <v-chip variant="outlined" class="ma-2" color="#360a3f">
+                      <v-icon color="green-lighten-2"><img
+                        style="width: 22px;margin-right:10px; background-color: rgb(159, 155, 155); border-radius: 50%"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
+                      {{ 'You have bought ' + numberWithCommas(tokensBought) + ' EMAS'  }}
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -234,10 +246,10 @@
                 <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="mainnetTestBuyWithETH()" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="mainnetTestBuyWithUSDT()" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -1473,7 +1485,7 @@
                        color="#360a3f" 
                        @click="buyWithUSDTContract()" 
                        :loading="butLoading"
-                       :disabled="minSpendAlert"
+                       :disabled="minSpendAlert || amountUSDT === 0 || amountEmasForUSDTDiagLog === 0"
                   >
                   Swap USDT for EMAS
                 </v-btn>
@@ -1816,8 +1828,8 @@ import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
 // const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
-const presaleAddress = "0x13871995d62fEdfFAf2C5D26fca5739941e37572"
-const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+const presaleAddress = "0x448Fe2708d8A8044F40D6E9456e40CF6a1Fd7A72" /// !! OLD 0x13871995d62fEdfFAf2C5D26fca5739941e37572
+const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"    /// !!
 
 // Mobile Imports and const
 import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, waitForTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
@@ -1867,37 +1879,7 @@ export default {
     drawer: Boolean
   },
   data: () => ({
-    tempWalletArr: [
-      '0x770e725359cd9a3cf34feeb832a16969a8d21660',
-      '0x63e8c8c7986b6a35fdb510389f339587dce4f23b',
-      '0x600dd87387875403d068a577cbcf79aafa0032c9',
-      '0xdd9c3cffd75b2709ea23d049f0ea632eb87a3c80',
-      '0x159e84dc084938de6e99ef466364645eccde0ece',
-      '0x5ac123e22a70b77354b6872c0f7073876995d333',
-      '0xDd9C3CfFd75B2709EA23D049f0EA632eb87a3C80',
-      '0x159E84dC084938de6E99Ef466364645ECCDE0ecE',
-      '0x5ac123e22a70B77354b6872c0f7073876995D333',
-      '0x63E8c8C7986B6a35fdB510389f339587DCE4f23B',
-      '0x600dD87387875403d068a577cbcf79aafA0032C9',
-      '0x770e725359cd9A3Cf34FEeb832A16969a8D21660',
-      '0x5eB93f1b0b3E1Fd0f99118e39684f087a84d40Ec',
-      '0x9967a5a58bb500f575782fe62e92cb318fb39b1a',
-      '0x9967a5a58Bb500f575782fe62E92Cb318FB39B1a',
-      '0x44Beb9Db583f3417c265Cb3616B67324e5382411',
-      '0xf3080174242667f944350587Db9Bf6e008b52cd5',
-      '0x44beb9db583f3417c265cb3616b67324e5382411',
-      '0xf3080174242667f944350587db9bf6e008b52cd5',
-      '0xb363463dd9D8dAED8A0E074495E4aDA67ea1176b',
-      '0xb363463dd9d8daed8a0e074495e4ada67ea1176b',
-      '0xb4DE7DaeC140EF39AB3E006ABA485E906F80DdcB',
-      '0xb4de7daec140ef39ab3e006aba485e906f80ddcb',
-      '0xF7480c07Ea1e7aa9340e49339300029667348ecA',
-      '0xf7480c07ea1e7aa9340e49339300029667348eca',
-      '0x7D6112094092e02762379D8201E7e136AaA2F6E9',
-      '0x7d6112094092e02762379d8201e7e136aaa2f6e9',
-      '0x5ac123e22a70B77354b6872c0f7073876995D333',
-      '0x5ac123e22a70b77354b6872c0f7073876995d333'
-    ],
+    tempWalletArr: [],
     loading: false,
     butLoading: false,
     snackbar: false,
@@ -1909,13 +1891,11 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    stage4: 0.0061,
-    stage5: 0.0061,
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
-    presaleStarted: false,
-    activePresale: 5, // array in contract
+    presaleStarted: true,
+    activePresale: 1, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
@@ -1930,6 +1910,7 @@ export default {
     insufficientETHBalance: false,
     insufficientUSDTBalance: false,
     buyTx: '',
+    tokensBought: 0,
     presaleNotLive: false,
     learnMoreDialog: false,
     amountEmasForUSDTDiagLog: 0,
@@ -3322,10 +3303,6 @@ export default {
       this.activeStagePrice = this.stage2
     } else if (this.activePresale === 3) {
       this.activeStagePrice = this.stage3
-    } else if (this.activePresale === 4) {
-      this.activeStagePrice = this.stage4
-    } else if (this.activePresale === 5) {
-      this.activeStagePrice = this.stage5
     }
 
   },
@@ -3336,7 +3313,7 @@ export default {
     }
   },
   methods: {
-    mainnetTestBuyWithETH () {
+    /* mainnetTestBuyWithETH () {
 
       if (this.tempWalletArr.includes(this.getUser.accounts[0])) {
         this.handleShowDialog(true, 'buyWithEthDialog')
@@ -3353,7 +3330,7 @@ export default {
       } else {
         this.presaleNotLive = true
       }
-    },
+    }, */
     init () {
       this.pieMargin = this.windowWidth <= 360 ? -40 : this.windowWidth <= 390 ? -30 : -20
       console.log(this.pieMargin)
@@ -3453,6 +3430,7 @@ export default {
         this.presaleContract = new web3.eth.Contract(abi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContract)
         this.loadPresaleFromContract()
+        this.loadUserClaimableTokens()
       })
     },
     async loadPresaleFromContract () {
@@ -3477,6 +3455,19 @@ export default {
         console.log(err)
       }
     },
+    async loadUserClaimableTokens () {
+
+      if (this.mmConnected || this.walletConnected || this.twConnected) {
+        console.log('############### loadUserClaimableTokens ##################')
+        try {
+          const tokenRewards = await this.presaleContract.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${this.activePresale}`).call()
+          console.log(tokenRewards)
+          this.tokensBought = tokenRewards
+        } catch(err) {
+          console.log(err)
+        }
+      }
+    },
     instantiateContractAbiMobile () {
 
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
@@ -3487,6 +3478,7 @@ export default {
         this.presaleContractMobile = new _web3.eth.Contract(this.presaleContractAbi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContractMobile)
         this.loadPresaleFromContractMobile()
+        this.loadUserClaimableTokensMobile()
       })
     },
     async loadPresaleFromContractMobile() {
@@ -3509,6 +3501,19 @@ export default {
         console.log("this.raised", this.raised);
       } catch(err) {
         console.log(err)
+      }
+    },
+    async loadUserClaimableTokensMobile () {
+
+      if (this.mmConnected || this.walletConnected || this.twConnected) {
+        console.log('############### loadUserClaimableTokens ##################')
+        try {
+          const tokenRewards = await this.presaleContractMobile.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${this.activePresale}`).call()
+          console.log(tokenRewards)
+          this.tokensBought = tokenRewards
+        } catch(err) {
+          console.log(err)
+        }
       }
     },
     buyWithEthContract () {
@@ -3722,7 +3727,7 @@ export default {
         const usdtContract = usdtConstructor.connect(signer)
         console.log(usdtContract)
 
-        let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+        let usdt = parseFloat(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
         let usdtSpending = usdt // * 1.01
         console.log('** usdt ***')
         console.log(usdt)
@@ -3872,7 +3877,7 @@ export default {
 
       // try {
         
-        let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
+        let usdt = parseFloat(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
         let usdtSpending = usdt // * 1.01
         console.log('**** usdt *****')
         console.log(usdt)
@@ -4271,7 +4276,7 @@ export default {
       if (date === undefined ) return
       date = parseInt(date) * 1000
       console.log('startDate: ' + date)
-      return dateformat(new Date(date), 'mmm yyyy')
+      return dateformat(new Date(date), 'dd mmm yyyy')
     },
     makeDateTime (date) {
       return dateformat(new Date(date), 'dd mmm, yyyy HH:MM')

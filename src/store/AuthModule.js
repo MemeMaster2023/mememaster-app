@@ -272,7 +272,7 @@ const AuthModule = {
         objFromDb["accStatus"] = objFromDb["status"];
         objFromDb["version"] = objFromDb["version"];
         objFromDb["credits"] = objFromDb["credits"];
-        objFromDb["isVerified"] = user.emailVerified
+        objFromDb["isVerified"] = objFromDb["isVerified"]
         console.log("getUser", objFromDb);
         commit("SetConnectedUserDetails", objFromDb);
         commit("SetEmailConnected", {
