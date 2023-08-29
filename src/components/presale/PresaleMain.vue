@@ -1269,7 +1269,7 @@
             </v-btn>
           </v-toolbar>
 
-          <v-card-text class="mb-8" v-if="buyEthView === 1">
+          <v-card-text class="mb-8" v-if="buyETHView === 1">
             <v-row>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
@@ -1325,7 +1325,7 @@
             </v-row>
           </v-card-text>
 
-          <v-card-text class="mb-8" v-if="buyEthView === 2">
+          <v-card-text class="mb-8" v-if="buyETHView === 2">
 
             <v-row class="pt-8 mb-16">
               <v-col cols="12"  :align="'center'">
@@ -1340,7 +1340,7 @@
 
           </v-card-text>
 
-          <v-card-text class="mb-4" v-if="buyEthView === 3">
+          <v-card-text class="mb-4" v-if="buyETHView === 3">
 
             <v-row class="pt-8 mb-4">
               <v-col cols="12"  :align="'center'">
@@ -1929,7 +1929,7 @@ export default {
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
     buyWithEthDialog: false,
-    buyEthView: 1,
+    buyETHView: 1,
     buyUSDTView: 1,
     buyWithUsdtDialog: false,
     donateEthDialog: false,
@@ -3531,7 +3531,7 @@ export default {
           return
         } 
 
-        this.buyEthView = 2
+        this.buyETHView = 2
 
         console.log(provider);
         const signer = provider.getSigner()
@@ -3548,7 +3548,12 @@ export default {
 
         console.log(this.presaleContract2)
 
-        var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
+        this.amountETH = this.amountEth * 1.05 // Add 0.5% ETH to the total
+        var eth = parseFloat(this.amountEth) 
+
+        console.log('********* eth ***********')
+        console.log(eth)
+        
         let tokens = Math.round(this.amountEmasForEthDiagLog)
         console.log('********* tokens ***********')
         console.log(tokens)
@@ -3559,13 +3564,16 @@ export default {
         // When Eth Buy completed
         buyETH.wait().then(async () => {
            console.log(buyETH);
-           this.buyEthView = 3
+           this.buyETHView = 3
            this.buyTx = buyETH.hash
            this.butLoading = false
 
         }).catch(error => {
           console.log(error)
           if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+            
+            console.log('reject 01')
+
             this.buyWithEthDialog = false
             this.amountETH = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3580,6 +3588,9 @@ export default {
         console.log(error)
         // if user rejects
         if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+          
+          console.log('reject 01')
+          
           this.buyWithEthDialog = false
           this.amountETH = 0
           this.amountEmasForUSDTDiagLog = 0
@@ -3599,11 +3610,11 @@ export default {
       }
     },
     closeEthBuyDialog  () {
-       if (this.buyEthView === 2) return
+       if (this.buyETHView === 2) return
        this.buyWithEthDialog = false
        this.amountEth = 0
        this.amountEmasForEthDiagLog = 0
-       this.buyEthView = 1
+       this.buyETHView = 1
        this.butLoading = false
     },
     closeUSDTBuyDialog  () {
@@ -3620,7 +3631,8 @@ export default {
       this.insufficientETHBalance = false
       this.butLoading = true
 
-      var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
+      this.amountEth = this.amountEth * 1.05 // Add 0.5% ETH to the total
+      var eth = parseFloat(this.amountEth)
       eth = _web3.utils.toWei(eth, 'ether');
       console.log(eth)
       let tokens = Math.round(this.amountEmasForEthDiagLog)
@@ -3636,7 +3648,7 @@ export default {
         return
       } 
 
-      this.buyEthView = 2
+      this.buyETHView = 2
       const data = this.presaleContractMobile.methods.buyWithEth(`${this.activePresale}`, `${tokens}`).encodeABI();
       console.log(data)
       
@@ -3660,7 +3672,7 @@ export default {
             confirmations: 1
           })
           console.log(data)
-          this.buyEthView = 3
+          this.buyETHView = 3
           this.butLoading = false
         })
         .catch((error) => {
@@ -4108,7 +4120,7 @@ export default {
       }, 500);
     },
     closeBuyWithEthDialog() {
-      if (this.buyEthView === 2) return
+      if (this.buyETHView === 2) return
       this.buyWithEthDialog = false
       this.amountEmasForEthDiagLog = 0
       this.amountEth = 0
