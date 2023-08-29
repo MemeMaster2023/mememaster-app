@@ -1886,7 +1886,11 @@ export default {
       '0x44Beb9Db583f3417c265Cb3616B67324e5382411',
       '0xf3080174242667f944350587Db9Bf6e008b52cd5',
       '0x44beb9db583f3417c265cb3616b67324e5382411',
-      '0xf3080174242667f944350587db9bf6e008b52cd5'
+      '0xf3080174242667f944350587db9bf6e008b52cd5',
+      '0xb363463dd9D8dAED8A0E074495E4aDA67ea1176b',
+      '0xb363463dd9d8daed8a0e074495e4ada67ea1176b',
+      '0xb4DE7DaeC140EF39AB3E006ABA485E906F80DdcB',
+      '0xb4de7daec140ef39ab3e006aba485e906f80ddcb'
     ],
     loading: false,
     butLoading: false,
