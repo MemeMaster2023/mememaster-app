@@ -47,7 +47,7 @@
               </template>
 
               <template v-if="i === 5">
-                 <p style="margin-right: -30px;margin-right: -30px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for August 2023, get in early.</p>
+                 <p style="margin-right: -30px;margin-right: -30px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for September 2023, get in early.</p>
               </template>
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"

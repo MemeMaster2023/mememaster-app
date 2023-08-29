@@ -10,7 +10,7 @@
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
             <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET. EMAS tokens have zero sell and zero buy tax.<br><br>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on September 10th, 2023 at 12:00 CET. EMAS tokens have zero sell and zero buy tax.<br><br>
               <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
                 <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
@@ -246,10 +246,10 @@
                 <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="presaleNotLive = true" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -1615,7 +1615,7 @@
             </v-btn>
           </v-toolbar>
           <v-card-text class="text-h6 ma-8">
-             The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET.
+             The Meme Master 2023 Presale is going live on September 10th, 2023 at 12:00 CET.
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -1894,7 +1894,7 @@ export default {
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
-    presaleStarted: true,
+    presaleStarted: false,
     activePresale: 1, // array in contract
     activeStagePrice: 0,
     presale: [],
