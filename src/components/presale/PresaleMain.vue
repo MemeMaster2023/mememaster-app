@@ -178,7 +178,7 @@
               >
               <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage 1</div>
               <v-spacer></v-spacer>
-               <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
+               <v-toolbar-title>{{ stage1 }}</v-toolbar-title>
               </v-toolbar>
 
                 <v-template v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
