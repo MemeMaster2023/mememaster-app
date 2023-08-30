@@ -1894,7 +1894,7 @@ export default {
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
-    presaleStarted: false,
+    presaleStarted: true,
     activePresale: 1, // array in contract
     activeStagePrice: 0,
     presale: [],
@@ -3646,6 +3646,7 @@ export default {
       this.butLoading = true
 
       this.amountEth = this.amountEth * 1.05 // Add 0.5% ETH to the total
+      console.log(this.amountEth)
       var eth = parseFloat(this.amountEth)
       eth = _web3.utils.toWei(eth, 'ether');
       console.log(eth)

@@ -202,7 +202,7 @@
         >
         
           <div class="ma-8">
-            <v-row :style="'margin-top:' + (windowHeight - 560) + 'px;'" :align="'center'">
+            <v-row :style="'margin-top:' + (windowHeight - 600) + 'px;'" :align="'center'">
               <v-col cols="12" md="12" >
                 <div class="text-center pb-12">
                   <v-btn variant="outlined" 
@@ -217,7 +217,7 @@
                 </div>
                 <p :class="isMobileDevice ? 'font-weight-bold homeText' : 'font-weight-bold homeText'">Welcome to Meme Master's AI, NFT, Memes, Music and Gaming platform.</p>
                 <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">Hold our EMAS tokens in your wallet to be eligible for airdrops and more.</p>
-                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our presale on August 30th 2023 at 00:00 CET.<br>Get in early!</p>
+                <p :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeTextSmall'">We're excited to announce our presale on September 10th 2023 at 12:00 CET.<br>Get in early!</p>
                 <!--<v-layout class="mt-8" >
                   <v-btn size="x-large"
                         variant="outlined"
