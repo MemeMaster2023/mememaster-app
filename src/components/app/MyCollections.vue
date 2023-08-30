@@ -261,7 +261,7 @@
               
             </v-col>
 
-            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'left'">
+            <v-col cols="12" md="6" :align="isMobileDevice ? 'center' : 'left'" :style="isMobileDevice ? 'margin-top:-10px' : ''">
               <v-card
               :dark="dark"
               flat
@@ -288,7 +288,7 @@
                   <v-btn
                     icon
                     size="large"
-                    @click="updateCollectionSettings" 
+                    @click="updateCollectionSettings('updateName')" 
                     v-if="collectionNameEdit"
                   >
                     <v-icon color="green">mdi-content-save-outline</v-icon>
@@ -303,7 +303,9 @@
                   </v-btn>
                 </v-layout>
 
-                <div class="text-h7 mb-3 font-weight-bold">Created: {{ makeDate(selectedCollection.created) }}</div>
+                <v-layout v-if="!collectionNameEdit">
+                  <div class="text-h7 mb-3 font-weight-bold">Created: {{ makeDate(selectedCollection.created) }}</div>
+                </v-layout>
 
                 <v-layout style="padding-top: 5px">
                   <div class="text-h7 mb-3 font-weight-bold">Public: {{ selectedCollection.public ? 'Yes' : 'No' }}</div>
@@ -312,7 +314,7 @@
                     v-model="selectedCollection.public"
                     hide-details
                     inset
-                    @change="updateCollectionSettings"
+                    @change="updateCollectionSettings('updatePublic')"
                   >
                   </v-switch>
                   
@@ -330,7 +332,7 @@
             </v-col>
           </v-row>
 
-          <v-row :class="isMobileDevice ? 'ml-2 mr-2' : 'ml-8 mr-8 mb-8'" :align="start">
+          <v-row :class="isMobileDevice ? 'ml-2 mr-2 mb-4' : 'ml-8 mr-8 mb-8'" :align="start" :style="isMobileDevice ? 'margin-top:140px' : ''">
             <v-col v-if="loadingData" :align="'center'">
               <v-progress-circular
                   indeterminate
@@ -722,7 +724,7 @@ export default {
           this.loadingData = false
         })
     },
-    updateCollectionSettings () {
+    updateCollectionSettings (type) {
       console.log(this.selectedCollection.public)
       let dispatchObj = {
         id: this.selectedCollection.id,
@@ -737,9 +739,31 @@ export default {
           console.log('Collection updated!')
           this.snackbarText = 'Collection updated!' // this.lang[this.getLanguage].RECORD_DELETED
           this.snackbar = true
+          var oldPublic = this.getCollections[this.selectedCollection.index].public
+          console.log(oldPublic)
+          if (type === 'updatePublic') {
+            console.log('We need to update all the memes in this collection')
+            this.updateMemesInCollection()
+          }
           this.getCollections[this.selectedCollection.index].name = this.selectedCollection.name
           this.getCollections[this.selectedCollection.index].public = this.selectedCollection.public
           this.collectionNameEdit = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
+    },
+    updateMemesInCollection() {
+
+      let dispatchObj = {
+        cid: this.selectedCollection.id,
+        public: this.selectedCollection.public
+      }
+      this.$store.dispatch('updateMemesInCollection', dispatchObj)
+        .then(() => {
+          console.log('Memes in Collection updated!')
+          
         })
         .catch(error => {
           console.log(error)

@@ -273,7 +273,7 @@
           <v-img :src="output" style="display: none"></v-img>
         </v-col>
 
-        <v-col cols="12" md="2" class="pa-2">
+        <v-col cols="12" md="2" class="pa-2 mb-4">
           <v-btn prepend-icon="mdi-check-outline" 
                  :style="memeText === '' ? 'width:90%;text-transform: none !important' : 'width:90%;text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(237, 229, 249)'" 
                  color="deep-purple-lighten-1"
@@ -286,7 +286,7 @@
                  prepend-icon="mdi-view-grid-plus" style="width:90%;text-transform: none !important" 
                  variant="outlined" 
                  color="indigo-lighten-1"
-                 @click="toMyCollections()"
+                 to="/mycollections"
                  :disabled="!memeCompleted"
           >
             My Collections
@@ -835,9 +835,6 @@ export default {
     },
     generateMore () {
       this.$emit("generateMoreClicked")
-    },
-    toMyCollections () {
-
     },
     scrollToTop () {
       const firstScrollTo = scroller();

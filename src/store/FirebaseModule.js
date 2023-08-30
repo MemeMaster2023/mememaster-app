@@ -107,6 +107,37 @@ const FirebaseModule = {
           console.log(error);
         });
     },
+    updateMemesInCollection ({ commit }, payload) {
+      commit('setLoading', true);
+      let query = db.collection('memes').where('cid', '==', payload.cid)
+
+      query.get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching memes.')
+          return
+        }
+        snapshot.forEach(doc => {
+          // console.log(doc.id, '=>', doc.data())
+          var obj = doc.data()
+          obj.id = doc.id
+          console.log('meme doc id: ' + obj.id)
+          db.collection('memes')
+            .doc(obj.id)
+            .update({public: payload.public})
+            .then(() => {
+            console.log('Meme Public/Private updated');
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        })
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      })
+
+    },
     addMemeToCollection ({ commit }, payload) {
       // console.log(payload)
       commit('setLoading', true);
