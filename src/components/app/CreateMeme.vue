@@ -1358,7 +1358,7 @@ export default {
     uploadImageUrl: '',
     newWidth: 0,
     newHeight: 0,
-    imageStrength: 0.35,
+    imageStrength: 0.45,
     showRowAlert: false,
     showRowAlertText: '',
     newCollection: false,
@@ -1541,6 +1541,7 @@ export default {
               id: postkey.id,
               url: downloadURL,
               uid: this.getUser.uid,
+              username: this.getUser.name,
               name: this.memeName,
               created: new Date().getTime(),
               thumbnail: thumbnail, // To be Done
