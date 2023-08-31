@@ -5,6 +5,7 @@
       <!-- ######################################################################################## -->
       <!-- ############################ Generate Text to Image #################################### -->
       <!-- ######################################################################################## -->
+
       <v-row class="pt-12 pl-4 pr-4 pb-12" v-if="view === 'generate'" >
         <v-col cols="12" md="4" :align="center" >
 
@@ -407,7 +408,10 @@
 
         </v-col>
 
-        <!-- ################ Generated Photo Box ##########################-->
+        <!-- #################################################################################-->
+        <!-- ########################## Generated Photo Box ##################################-->
+         <!-- #################################################################################-->
+
         <v-col cols="12" :md="getDrawer ? 5 : 6" :align="center">
           <v-card theme="dark" 
                   height="100%"
@@ -1542,13 +1546,15 @@ export default {
               url: downloadURL,
               uid: this.getUser.uid,
               username: this.getUser.displayName,
+              gender: this.getUser.gender,
               name: this.memeName,
               created: new Date().getTime(),
               thumbnail: thumbnail, // To be Done
               status: 1,
               public: this.selectedCollection.public,
               views: 0,
-              likes: 0
+              likes: 0,
+              is_nft: false
             }
             console.log(dispatchObj)
             this.$store.dispatch("addMemeToCollection", dispatchObj)

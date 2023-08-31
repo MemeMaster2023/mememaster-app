@@ -735,13 +735,15 @@ export default {
                 url: downloadURL,
                 uid: this.getUser.uid,
                 username: this.getUser.displayName,
+                gender: this.getUser.gender,
                 name: this.memeName,
                 created: new Date().getTime(),
                 thumbnail: thumbnail, // To be Done
                 status: 1,
                 public: this.selectedCollection.public,
                 views: 0,
-                likes: 0
+                likes: 0,
+                is_nft: false
               }
               console.log(dispatchObj)
               this.$store.dispatch("addMemeToCollection", dispatchObj)

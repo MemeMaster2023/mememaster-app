@@ -385,7 +385,7 @@
                 :width="isMobileDevice ? '100%' : '370'"
                 style="text-transform: none !important;box-shadow: 0px 0px 5px 5px rgb(96, 88, 172);" 
             >
-             Latest AI Releases Coming Soon
+             Latest AI Releases
             </v-btn>
           </v-col>
         </v-row>

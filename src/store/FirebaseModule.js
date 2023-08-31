@@ -82,6 +82,7 @@ const FirebaseModule = {
           // console.log(doc.id, '=>', doc.data())
           var obj = doc.data()
           obj.id = doc.id
+          obj.show = false
           obj.checkTime = Math.round(today / 1000 + 1800) // 1 Hour to prevent to much Firebase loading/reading
           collectionList.push(obj)
         })

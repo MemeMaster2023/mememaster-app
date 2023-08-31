@@ -370,8 +370,8 @@
                     {{ item.views }} View{{ item.views === 1 ? '' : 's' }}
                   </v-layout>
                   <v-layout>
-                    <v-icon class="mr-1">mdi-thumb-up-outline</v-icon>
-                    {{ item.views }}
+                    <v-icon class="mr-1">mdi-heart-outline</v-icon>
+                    {{ item.likes }}
                   </v-layout>
                   <v-layout>
                     <v-icon class="mr-1">mdi-share-variant</v-icon>
