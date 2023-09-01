@@ -923,7 +923,6 @@ export default {
       windowHeight: Number,
     },
     data: () => ({
-      dark: true,
       env: false,
       drawer: false,
       scrolled: false,

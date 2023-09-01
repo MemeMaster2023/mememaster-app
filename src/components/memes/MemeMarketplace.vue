@@ -43,7 +43,7 @@
 
             <div class="column">
               <template v-for="(meme, index) in getPublicMemes">
-                <v-img v-if="index <= memeCount-1" class="mb-4"
+                <v-img v-if="index < memeCount-1" class="mb-4"
                        style="width:100%;border-radius: 10px;"
                        :src="meme.url" 
                        :lazy-src="meme.url"
@@ -89,7 +89,7 @@
 
             <div class="column">
               <template v-for="(meme, index) in getPublicMemes">
-                <v-img v-if="index >= memeCount && index < memeCount*2" class="mb-4"
+                <v-img v-if="index >= memeCount-1 && index < (memeCount*2)-1" class="mb-4"
                        style="width:100%;border-radius: 10px;"
                        :src="meme.url" 
                        :lazy-src="meme.url"
@@ -135,7 +135,7 @@
 
             <div class="column">
                <template v-for="(meme, index) in getPublicMemes">
-                <v-img v-if="index >= memeCount*2" class="mb-4"
+                <v-img v-if="index >= (memeCount*2)-1" class="mb-4"
                        style="width:100%;border-radius: 10px;"
                        :src="meme.url" 
                        :lazy-src="meme.url"

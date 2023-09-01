@@ -3269,6 +3269,11 @@ export default {
       if (this.mmConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
+          if (this.isMobileDevice) {
+            this.loadUserClaimableTokensMobile()
+          } else {
+            this.loadUserClaimableTokens()
+          }
           // this.drawer = false
         }, 2000)
       }
@@ -3277,6 +3282,11 @@ export default {
       if (this.twConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
+          if (this.isMobileDevice) {
+            this.loadUserClaimableTokensMobile()
+          } else {
+            this.loadUserClaimableTokens()
+          }
           // this.drawer = false
         }, 2000)
       }
@@ -3285,6 +3295,11 @@ export default {
       if (this.walletConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
+          if (this.isMobileDevice) {
+            this.loadUserClaimableTokensMobile()
+          } else {
+            this.loadUserClaimableTokens()
+          }
           // this.drawer = false
         }, 2000)
       }
@@ -3465,6 +3480,7 @@ export default {
     },
     async loadUserClaimableTokens () {
 
+      console.log('############### loadUserClaimableTokens ##################')
       if (this.mmConnected || this.walletConnected || this.twConnected) {
         console.log('############### loadUserClaimableTokens ##################')
         try {
@@ -3513,6 +3529,7 @@ export default {
     },
     async loadUserClaimableTokensMobile () {
 
+      console.log('############### loadUserClaimableTokens ##################')
       if (this.mmConnected || this.walletConnected || this.twConnected) {
         console.log('############### loadUserClaimableTokens ##################')
         try {
