@@ -5,9 +5,9 @@
                 <v-card class="pa-2 ma-2" theme="light">
                     <div class="text-center font-weight-bold">EMAS PRESALE OPENS IN</div>
                     <!-- mainColor="#f3e5f5" secondFlipColor="#360a3f" -->
-                    <vue3-flip-countdown class="my-2" :deadlineISO="'2023-08-29 22:00:00Z'" mainColor="#f3e5f5" secondFlipColor="#fbf5fc"  
+                    <vue3-flip-countdown class="my-2" :deadlineISO="'2023-09-10 10:00:00Z'" mainColor="#f3e5f5" secondFlipColor="#fbf5fc"  
                         mainFlipBackgroundColor="#360a3f" secondFlipBackgroundColor="#862999" countdownSize="2.2rem" labelSize="1rem" />
-                    <div class="text-center font-weight-bold">30 AUGUST 2023 - 00:00 CET</div>
+                    <div class="text-center font-weight-bold">10 SEPTEMBER 2023 - 12:00 CET</div>
                 </v-card>
             </v-col>
         </v-row>

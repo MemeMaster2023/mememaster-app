@@ -1,4 +1,3 @@
-
 <template>
   <div id="presale">
     <v-responsive style="background-color: #000;" class="pt-16">
@@ -11,7 +10,7 @@
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
             <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on August 30th, 2023 at 00:00 CET. EMAS tokens have zero sell and zero buy tax.<br><br>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on September 10th, 2023 at 12:00 CET. EMAS tokens have zero sell and zero buy tax.<br><br>
               <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
                 <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
@@ -181,13 +180,17 @@
                <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
               </v-toolbar>
 
-                <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }}- {{ makeDate(presale.endTime) }}</div>
-                <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
+                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                <v-template v-if="presaleStarted">
+                  <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }} - {{ makeDate(presale.endTime) }}</div>
+                  <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
+                  
+                  <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage2 : stage3 }}</div>
+                  <div v-else style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
+                </v-template>
 
-                <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage1 : stage2 }}</div>
-                <div v-else style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
-
-                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-12'">
+                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-4'" v-if="presaleStarted">
                   <v-progress-linear
                     :model-value="stageProgress"
                     height="30"
@@ -198,14 +201,35 @@
                   </v-progress-linear>
                 </v-layout>
 
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
+                <Countdown v-else-if="!presaleStarted">
+                </Countdown>
+
+                <div v-if="presaleStarted">
+                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
+                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
+                </div>
+
+                <div v-else>
+                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 0 / 0</div>
+                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $0 / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
+                </div>
 
                 <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-chip variant="outlined" class="ma-2" color="#360a3f">
                       <v-icon start icon="mdi-wallet" color="#360a3f"></v-icon>
-                      {{ (this.getUser.accounts[0]).substring(0, 14) + '...' + (this.getUser.accounts[0]).substring(28, 42) }}
+                      {{ (this.getUser.accounts[0]).substring(0, 15) + '...' + (this.getUser.accounts[0]).substring(28, 42) }}
+                    </v-chip>
+                  </v-col>
+                </v-row>
+
+                <v-row v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0" style="margin-top:-30px">
+                  <v-col cols="12" md="12" class="pl-8 pr-8">
+                    <v-chip variant="outlined" class="ma-2" color="#360a3f">
+                      <v-icon color="green-lighten-2"><img
+                        style="width: 22px;margin-right:10px; background-color: rgb(159, 155, 155); border-radius: 50%"
+                        src="/img/logos/logo.png" alt="Icon" /></v-icon>
+                      {{ 'You have bought ' + numberWithCommas(tokensBought) + ' EMAS'  }}
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -219,7 +243,7 @@
 
                 </v-row>
 
-                <!--  presaleNotLive -->
+                <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
@@ -593,7 +617,7 @@
                     color="purple-lighten-3"
                     min-height="220"
                     max-height="100%"
-                    max-width="350"
+                  max-width="350"
                     variant="outlined"
             >
               <v-card-text style="font-size: 1.2rem;color:#FFF;text-align: justify;">
@@ -1257,17 +1281,16 @@
             </v-btn>
           </v-toolbar>
 
-          <v-card-text class="mb-8" v-if="buyEthView === 1">
+          <v-card-text class="mb-8" v-if="buyETHView === 1">
             <v-row>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
                 <v-text-field
-                  placeholder="0"
                   class="mt-2"
-                  v-on:keyup="convertAmount('ethToEmas', amountEth)"
-                  v-model="amountEth"
-                  @focus="clearOnFocus('amountEth')"
-                  @input="ensureNonNegative('amountEth')"
+                  v-on:keyup="convertAmount('ethToEmas', amountETH)"
+                  v-model="amountETH"
+                  @focus="clearOnFocus('amountETH')"
+                  @input="ensureNonNegative('amountETH')"
                   type="number"
                   min="0"
                 >
@@ -1276,12 +1299,12 @@
                     <span style="font-weight: 400; margin-left: 10px;">ETH</span>
                   </template>
                 </v-text-field>
+                <div v-if="minSpendAlert" style="color:firebrick;" class="text-center">The minumum spend amount is 10 USD</div>
               </v-col>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Buying</label>
                 <v-text-field
                   class="mt-2"
-                  placeholder="0"
                   v-model="amountEmasForEthDiagLog"
                   v-on:keyup="convertAmount('emasToEth', amountEmasForEthDiagLog)"
                   @focus="clearOnFocus('amountEmasForEthDiagLog')"
@@ -1304,6 +1327,7 @@
                       color="#360a3f" 
                       @click="buyWithEthContract()"
                       :loading="butLoading"
+                      :disabled="minSpendAlert || amountETH === 0 || amountEmasForEthDiagLog === 0"
                   >
                   Swap ETH for EMAS
                 </v-btn>
@@ -1313,7 +1337,7 @@
             </v-row>
           </v-card-text>
 
-          <v-card-text class="mb-8" v-if="buyEthView === 2">
+          <v-card-text class="mb-8" v-if="buyETHView === 2">
 
             <v-row class="pt-8 mb-16">
               <v-col cols="12"  :align="'center'">
@@ -1328,7 +1352,7 @@
 
           </v-card-text>
 
-          <v-card-text class="mb-4" v-if="buyEthView === 3">
+          <v-card-text class="mb-4" v-if="buyETHView === 3">
 
             <v-row class="pt-8 mb-4">
               <v-col cols="12"  :align="'center'">
@@ -1413,10 +1437,10 @@
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Selling</label>
                 <v-text-field
-                  placeholder="0"
                   class="mt-2"
                   v-model="amountUSDT"
                   v-on:keyup="convertAmount('usdtToEmas', amountUSDT)"
+                  v-on:change="convertAmount('usdtToEmas', amountUSDT)"
                   @focus="clearOnFocus('amountUSDT')"
                   @input="ensureNonNegative('amountUSDT')"
                   type="number"
@@ -1431,14 +1455,15 @@
                     <span style="font-weight: 400; margin-left: 10px;">USDT</span>
                   </template>
                 </v-text-field>
+                <div v-if="minSpendAlert" style="color:firebrick;" class="text-center">The minumum spend amount is 10 USD</div>
               </v-col>
               <v-col cols="12">
                 <label for="" style="font-weight: bold;">Buying</label>
                 <v-text-field
-                  placeholder="0"
                   class="mt-2"
                   v-model="amountEmasForUSDTDiagLog"
                   v-on:keyup="convertAmount('emasToUsdt', amountEmasForUSDTDiagLog)"
+                  v-on:change="convertAmount('emasToUsdt', amountEmasForUSDTDiagLog)"
                   @focus="clearOnFocus('amountEmasForUSDTDiagLog')"
                   @input="ensureNonNegative('amountEmasForUSDTDiagLog')"
                   type="number"
@@ -1460,6 +1485,7 @@
                        color="#360a3f" 
                        @click="buyWithUSDTContract()" 
                        :loading="butLoading"
+                       :disabled="minSpendAlert || amountUSDT === 0 || amountEmasForUSDTDiagLog === 0"
                   >
                   Swap USDT for EMAS
                 </v-btn>
@@ -1589,7 +1615,7 @@
             </v-btn>
           </v-toolbar>
           <v-card-text class="text-h6 ma-8">
-             The Meme Master 2023 Presale is going live on August 30th, 2023 at 00:00 CET.
+             The Meme Master 2023 Presale is going live on September 10th, 2023 at 12:00 CET.
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -1791,6 +1817,7 @@
 import store from '@/store/index'
 import axios from 'axios'
 import Airdrop from '@/views/Airdrop'
+import Countdown from '@/views/Countdown'
 import MetaMaskConnect from '@/components/wallets/MetaMaskConnect'
 import WalletConnect from '@/components/wallets/WalletConnect'
 import { scroller } from 'vue-scrollto/src/scrollTo'
@@ -1801,13 +1828,14 @@ import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
 // const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
-const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55"
-const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"
+const presaleAddress = "0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55" /// !! NEW MAINNET 0x448Fe2708d8A8044F40D6E9456e40CF6a1Fd7A72 
+const usdtAddress = "0x96c694b644E215BDD025E050EDf9cE9b018bCcDB"    /// !! MAINNET 0xdAC17F958D2ee523a2206206994597C13D831ec7
 
 // Mobile Imports and const
 import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, waitForTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
 import { arbitrum, mainnet, goerli } from '@wagmi/core/chains'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { parseGwei } from 'viem'
 // const chainRPC = "https://eth.llamarpc.com";
 // const chainRPC = "https://rpc.ankr.com/eth_goerli"
 let chainRPC
@@ -1815,12 +1843,14 @@ let projectId;
 let chains;
 let chainId;
 if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
-  chainRPC = "https://eth.llamarpc.com";
+  // chainRPC = "https://eth.llamarpc.com";
+  // chainRPC = 'https://ethereum.publicnode.com'
+  chainRPC = 'https://eth-mainnet.g.alchemy.com/v2/4TIWmrx70iRoMJ4CyXPRiOv77-9kYLqn'
   chains = [mainnet]
   projectId = import.meta.env.VITE_APP_PROJECT_ID
   chainId = 1
 } else {
-  chainRPC = "https://ethereum-goerli.publicnode.com"
+  chainRPC = "https://eth-goerli.g.alchemy.com/v2/nu4cpI0eeI7-sNl9TTT-ukP6bFlmGnC8"
   chains = [goerli]
   projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
   chainId = 5
@@ -1849,6 +1879,7 @@ export default {
     drawer: Boolean
   },
   data: () => ({
+    tempWalletArr: [],
     loading: false,
     butLoading: false,
     snackbar: false,
@@ -1861,11 +1892,14 @@ export default {
     stage2: 0.0055,
     stage3: 0.0061,
     stage4: 0.0061,
+    stage5: 0.005,
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
-    stage4Target: '$1,220.000',
-    activePresale: 4, // array in contract
+    stage4Target: '$1,750,000', // Temp
+    stage5Target: '$1,750,000', // Temp
+    presaleStarted: true,
+    activePresale: 5, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
@@ -1874,18 +1908,20 @@ export default {
     raised: 0,
     ethPrice: 0,
     usdtPrice: 0,
-    amountEth: 0,
+    minSpendAlert: false,
+    amountETH: 0,
     amountUSDT: 0,
     insufficientETHBalance: false,
     insufficientUSDTBalance: false,
     buyTx: '',
+    tokensBought: 0,
     presaleNotLive: false,
     learnMoreDialog: false,
     amountEmasForUSDTDiagLog: 0,
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
     buyWithEthDialog: false,
-    buyEthView: 1,
+    buyETHView: 1,
     buyUSDTView: 1,
     buyWithUsdtDialog: false,
     donateEthDialog: false,
@@ -3206,7 +3242,8 @@ export default {
   components: {
     MetaMaskConnect,
     WalletConnect,
-    Airdrop
+    Airdrop,
+    Countdown
   },
   computed: {
     getChain () {
@@ -3225,7 +3262,7 @@ export default {
     },
     getUser () {
       return store.state.user
-    },
+    }
   },
   watch: {
     mmConnected () {
@@ -3270,8 +3307,10 @@ export default {
       this.activeStagePrice = this.stage2
     } else if (this.activePresale === 3) {
       this.activeStagePrice = this.stage3
-    } else if (this.activePresale === 4) {
+    } else if (this.activePresale === 4) { // Temp
       this.activeStagePrice = this.stage4
+    } else if (this.activePresale === 5) { // Temp
+      this.activeStagePrice = this.stage5
     }
 
   },
@@ -3282,6 +3321,24 @@ export default {
     }
   },
   methods: {
+    /* mainnetTestBuyWithETH () {
+
+      if (this.tempWalletArr.includes(this.getUser.accounts[0])) {
+        this.handleShowDialog(true, 'buyWithEthDialog')
+      } else {
+        this.presaleNotLive = true
+      }
+
+      // handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog')
+    },
+    mainnetTestBuyWithUSDT () {
+     
+      if (this.tempWalletArr.includes(this.getUser.accounts[0])) {
+        this.handleShowDialog(true, 'buyWithUsdtDialog')
+      } else {
+        this.presaleNotLive = true
+      }
+    }, */
     init () {
       this.pieMargin = this.windowWidth <= 360 ? -40 : this.windowWidth <= 390 ? -30 : -20
       console.log(this.pieMargin)
@@ -3381,6 +3438,7 @@ export default {
         this.presaleContract = new web3.eth.Contract(abi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContract)
         this.loadPresaleFromContract()
+        this.loadUserClaimableTokens()
       })
     },
     async loadPresaleFromContract () {
@@ -3405,6 +3463,19 @@ export default {
         console.log(err)
       }
     },
+    async loadUserClaimableTokens () {
+
+      if (this.mmConnected || this.walletConnected || this.twConnected) {
+        console.log('############### loadUserClaimableTokens ##################')
+        try {
+          const tokenRewards = await this.presaleContract.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${this.activePresale}`).call()
+          console.log(tokenRewards)
+          this.tokensBought = tokenRewards
+        } catch(err) {
+          console.log(err)
+        }
+      }
+    },
     instantiateContractAbiMobile () {
 
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
@@ -3415,6 +3486,7 @@ export default {
         this.presaleContractMobile = new _web3.eth.Contract(this.presaleContractAbi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContractMobile)
         this.loadPresaleFromContractMobile()
+        this.loadUserClaimableTokensMobile()
       })
     },
     async loadPresaleFromContractMobile() {
@@ -3437,6 +3509,19 @@ export default {
         console.log("this.raised", this.raised);
       } catch(err) {
         console.log(err)
+      }
+    },
+    async loadUserClaimableTokensMobile () {
+
+      if (this.mmConnected || this.walletConnected || this.twConnected) {
+        console.log('############### loadUserClaimableTokens ##################')
+        try {
+          const tokenRewards = await this.presaleContractMobile.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${this.activePresale}`).call()
+          console.log(tokenRewards)
+          this.tokensBought = tokenRewards
+        } catch(err) {
+          console.log(err)
+        }
       }
     },
     buyWithEthContract () {
@@ -3462,13 +3547,13 @@ export default {
         let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
         console.log(accountBalance)
 
-        if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
+        if (_web3.utils.fromWei(accountBalance, "ether") < this.amountETH) {
           this.insufficientETHBalance = true
           this.butLoading = false
           return
         } 
 
-        this.buyEthView = 2
+        this.buyETHView = 2
 
         console.log(provider);
         const signer = provider.getSigner()
@@ -3485,7 +3570,12 @@ export default {
 
         console.log(this.presaleContract2)
 
-        var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
+        this.amountETH = this.amountETH * 1.05 // Add 0.5% ETH to the total
+        var eth = parseFloat(this.amountETH) 
+
+        console.log('********* eth ***********')
+        console.log(eth)
+        
         let tokens = Math.round(this.amountEmasForEthDiagLog)
         console.log('********* tokens ***********')
         console.log(tokens)
@@ -3496,13 +3586,16 @@ export default {
         // When Eth Buy completed
         buyETH.wait().then(async () => {
            console.log(buyETH);
-           this.buyEthView = 3
+           this.buyETHView = 3
            this.buyTx = buyETH.hash
            this.butLoading = false
 
         }).catch(error => {
           console.log(error)
-          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+            
+            console.log('reject 01')
+
             this.buyWithEthDialog = false
             this.amountETH = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3516,7 +3609,10 @@ export default {
       } catch(error) {
         console.log(error)
         // if user rejects
-        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+          
+          console.log('reject 01')
+          
           this.buyWithEthDialog = false
           this.amountETH = 0
           this.amountEmasForUSDTDiagLog = 0
@@ -3536,11 +3632,11 @@ export default {
       }
     },
     closeEthBuyDialog  () {
-       if (this.buyEthView === 2) return
+       if (this.buyETHView === 2) return
        this.buyWithEthDialog = false
-       this.amountEth = 0
+       this.amountETH = 0
        this.amountEmasForEthDiagLog = 0
-       this.buyEthView = 1
+       this.buyETHView = 1
        this.butLoading = false
     },
     closeUSDTBuyDialog  () {
@@ -3557,7 +3653,9 @@ export default {
       this.insufficientETHBalance = false
       this.butLoading = true
 
-      var eth = parseFloat(this.amountEth) + ((parseFloat(this.amountEth) / 100 ) * 0.5) // Add 0.5% ETH to the total
+      this.amountETH = this.amountETH * 1.05 // Add 0.5% ETH to the total
+      console.log(this.amountETH)
+      var eth = parseFloat(this.amountETH)
       eth = _web3.utils.toWei(eth, 'ether');
       console.log(eth)
       let tokens = Math.round(this.amountEmasForEthDiagLog)
@@ -3567,13 +3665,13 @@ export default {
       // Get User Balance
       let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
 
-      if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
+      if (_web3.utils.fromWei(accountBalance, "ether") < this.amountETH) {
         this.insufficientETHBalance = true
         this.butLoading = false
         return
       } 
 
-      this.buyEthView = 2
+      this.buyETHView = 2
       const data = this.presaleContractMobile.methods.buyWithEth(`${this.activePresale}`, `${tokens}`).encodeABI();
       console.log(data)
       
@@ -3597,11 +3695,11 @@ export default {
             confirmations: 1
           })
           console.log(data)
-          this.buyEthView = 3
+          this.buyETHView = 3
           this.butLoading = false
         })
         .catch((error) => {
-          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
             this.buyWithEthDialog = false
             this.amountETH = 0
             this.amountEmasForUSDTDiagLog = 0
@@ -3638,17 +3736,21 @@ export default {
         const usdtContract = usdtConstructor.connect(signer)
         console.log(usdtContract)
 
-        let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
-        let usdtSpending = usdt * 1.01
-        console.log('**** usdt *****')
+        let usdt = parseFloat(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
+        let usdtSpending = usdt // * 1.01
+        console.log('** usdt ***')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
         let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
-        console.log('**** tokens *****')
+        console.log('** tokens ***')
         console.log(tokens)
 
         // CHECK USER USDT BALANACE
         let usdtBalance = await usdtContract.balanceOf(this.getUser.accounts[0]);
+        console.log('############# usdtBalance ##################')
+        console.log(usdtBalance)
+        console.log('############# usdtSpending ##################')
+        console.log(usdtSpending)
         if (usdtBalance < usdtSpending) {
           this.insufficientUSDTBalance = true
           this.butLoading = false
@@ -3657,9 +3759,21 @@ export default {
         this.buyUSDTView = 2
 
         // USDT approval
-        const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
-        approve.wait().then(async () => {
+        let userAllowance = await usdtContract.allowance(this.getUser.accounts[0], `${presaleAddress.toLowerCase()}`);
+        console.log('########### userAllowance._hex #########')
+        console.log(Number(userAllowance._hex))
+        userAllowance = Number(userAllowance._hex)
 
+        if (userAllowance > 0 && userAllowance <= usdtSpending) {
+          console.log('are we getting here?')
+          const resetApprove = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${0}`);
+
+          resetApprove.wait().then(async () => {
+
+            const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
+
+            approve.wait().then(async () => {
+    
             this.buyUSDTView = 3
 
             // USDT buy
@@ -3673,29 +3787,88 @@ export default {
 
             buyUSDT.wait().then(async () => {
 
-               console.log(buyUSDT)
-               this.buyUSDTView = 5
-               this.buyTx = buyUSDT.hash
-               this.butLoading = false
+              console.log(buyUSDT)
+              this.buyUSDTView = 5
+              this.buyTx = buyUSDT.hash
+              this.butLoading = false
+              // set allowance to 0
 
             }).catch(error => {
-               console.log(error)
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            })
+            }).catch(error => {
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            })  
+          })
+        }
+
+        if (userAllowance === 0) {
+          const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
+
+          approve.wait().then(async () => {
+    
+            this.buyUSDTView = 3
+
+            // USDT buy
+            console.log('Approve result: ', approve)
+            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
+            const presaleContract = presaleConstructor.connect(signer);
+            const buyUSDT = await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
+
+            console.log(buyUSDT)
+            this.buyUSDTView = 4
+
+            buyUSDT.wait().then(async () => {
+
+              console.log(buyUSDT)
+              this.buyUSDTView = 5
+              this.buyTx = buyUSDT.hash
+              this.butLoading = false
+              // set allowance to 0
+
+            }).catch(error => {
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
             })
 
-        }).catch(error => {
-          if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
-            this.buyWithUsdtDialog = false
-            this.amountUSDT = 0
-            this.amountEmasForUSDTDiagLog = 0
-            this.buyUSDTView = 1
-            this.butLoading = false
-          } else {
-            this.buyUSDTView = 6
-          }
-        })
+          }).catch(error => {
+            if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+              this.buyWithUsdtDialog = false
+              this.amountUSDT = 0
+              this.amountEmasForUSDTDiagLog = 0
+              this.buyUSDTView = 1
+              this.butLoading = false
+            } else {
+              this.buyUSDTView = 6
+            }
+          })      
+        }   
       } catch(error) {
         console.log(error)
-        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
+        if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
           this.buyWithUsdtDialog = false
           this.amountUSDT = 0
           this.amountEmasForUSDTDiagLog = 0
@@ -3704,7 +3877,7 @@ export default {
         } else {
           this.buyUSDTView = 6
         }
-    }
+      }
     },
     async buyWithUSDTContractMobile () {
 
@@ -3713,14 +3886,16 @@ export default {
 
       // try {
         
-        let usdt = (Math.round(parseFloat(this.amountUSDT)) * 1e6) // + ((parseFloat(this.amountUSDT) / 100 ) * 0.5)
-        let usdtSpending = usdt * 1.01
+        let usdt = parseFloat(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
+        let usdtSpending = usdt // * 1.01
         console.log('**** usdt *****')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
         let tokens = Math.round(parseFloat(this.amountEmasForUSDTDiagLog))
         console.log('**** tokens *****')
         console.log(tokens)
+
+        // Check Allowance {
 
         // USDT approval
         let usdtContract = new _web3.eth.Contract(erc20ABI,  `${usdtAddress.toLowerCase()}`);
@@ -3736,86 +3911,188 @@ export default {
         }
         this.buyUSDTView = 2
 
-        let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
+        // USDT approval
+        let userAllowance = await usdtContract.methods.allowance(this.getUser.accounts[0], `${presaleAddress.toLowerCase()}`).call();
+        console.log('########### userAllowance._hex ##########')
+        console.log(userAllowance)
 
-        const config = await prepareSendTransaction({
-          chain: chains,
-          chainId: chainId,
-          to: `${usdtAddress.toLowerCase()}`,
-          data: data,
-        });     
+        if (userAllowance > 0 && userAllowance <= usdtSpending) {
+          console.log('are we getting here?')
 
-        sendTransaction(config)
-          .then(async ({ hash }) => {
-            console.log("Approve txHash", hash);
-            // const interval = setInterval(function() {
-            const dataWait = await waitForTransaction({
-              hash: hash,
-              chain: chainId,
-              confirmations: 1
-            })
-            console.log(dataWait)
-            this.buyUSDTView = 3
+          let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${0}`).encodeABI();
+          const config = await prepareSendTransaction({
+            chain: chains,
+            chainId: chainId,
+            to: `${usdtAddress.toLowerCase()}`,
+            data: data,
+          });     
 
-            let data2 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
-            const config2 = await prepareSendTransaction({
-              chain: chains,
-              chainId: chainId,
-              to: `${presaleAddress.toLowerCase()}`,
-              data: data2,
-            });
-
-            sendTransaction(config2)
-              .then(async ({ hash }) => {
-                console.log("txHash", hash);
-                this.buyTx = hash
-                this.buyUSDTView = 4
-                const dataWait2 = await waitForTransaction({
-                  hash: hash,
-                  chain: chainId,
-                  confirmations: 1
-                })
-                console.log(dataWait2)
-                this.buyUSDTView = 5
-                this.butLoading = false
+          sendTransaction(config)
+            .then(async ({ hash }) => {
+              console.log("Reset Approve to 0", hash);
+              // const interval = setInterval(function() {
+              const dataWait = await waitForTransaction({
+                hash: hash,
+                chain: chainId,
+                confirmations: 1
               })
-              .catch((error) => {
-                console.error("buy error", error);
-                if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
-                  this.buyWithUsdtDialog = false
-                  this.amountUSDT = 0
-                  this.amountEmasForUSDTDiagLog = 0
-                  this.buyUSDTView = 1
-                  this.butLoading = false
-                } else {
-                  this.buyUSDTView = 6
-                }
-              });
-          })
-          .catch((error) => {
-            console.log(error)
-            // Failed transaction reporting back to user
-            if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction')) { // condition when user rejects the tx
-              this.buyWithUsdtDialog = false
-              this.amountUSDT = 0
-              this.amountEmasForUSDTDiagLog = 0
-              this.buyUSDTView = 1
-              this.butLoading = false
-            } else {
-              this.buyUSDTView = 6
-            }
-            
-            // console.log(ethError, "Insufficient ETH balance, please check your account balance");
-            // hideProcessing();
-          });
+              console.log(dataWait)
+              
+              let data2 = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
+              const config = await prepareSendTransaction({
+                chain: chains,
+                chainId: chainId,
+                to: `${usdtAddress.toLowerCase()}`,
+                data: data2,
+              });     
 
-      /* } catch(error) {
-        console.log(error)
-        // if user rejects
-        this.buyWithUsdtDialog = false
-        this.buyUSDTView = 1
-        this.butLoading = false
-      } */
+              sendTransaction(config)
+                .then(async ({ hash }) => {
+                  console.log("Approve txHash", hash);
+                  // const interval = setInterval(function() {
+                  const dataWait = await waitForTransaction({
+                    hash: hash,
+                    chain: chainId,
+                    confirmations: 1
+                  })
+                  console.log(dataWait)
+                  this.buyUSDTView = 3
+
+                  let data3 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
+                  const config2 = await prepareSendTransaction({
+                    chain: chains,
+                    chainId: chainId,
+                    to: `${presaleAddress.toLowerCase()}`,
+                    data: data3,
+                  });
+
+                  sendTransaction(config2)
+                    .then(async ({ hash }) => {
+                      console.log("txHash", hash);
+                      this.buyTx = hash
+                      this.buyUSDTView = 4
+                      const dataWait2 = await waitForTransaction({
+                        hash: hash,
+                        chain: chainId,
+                        confirmations: 1
+                      })
+                      console.log(dataWait2)
+                      this.buyUSDTView = 5
+                      this.butLoading = false
+                    })
+                    .catch((error) => {
+                      console.error("buy error", error);
+                      if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                        this.buyWithUsdtDialog = false
+                        this.amountUSDT = 0
+                        this.amountEmasForUSDTDiagLog = 0
+                        this.buyUSDTView = 1
+                        this.butLoading = false
+                      } else {
+                        this.buyUSDTView = 6
+                      }
+                    });
+                })
+                .catch((error) => {
+                  console.log(error)
+                  // Failed transaction reporting back to user
+                  if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                    this.buyWithUsdtDialog = false
+                    this.amountUSDT = 0
+                    this.amountEmasForUSDTDiagLog = 0
+                    this.buyUSDTView = 1
+                    this.butLoading = false
+                  } else {
+                    this.buyUSDTView = 6
+                  }
+                });
+            })
+            .catch((error) => {
+              console.log(error)
+              // Failed transaction reporting back to user
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            });
+        }
+
+        if (userAllowance == 0) {
+
+          let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
+          const config = await prepareSendTransaction({
+            chain: chains,
+            chainId: chainId,
+            to: `${usdtAddress.toLowerCase()}`,
+            data: data,
+          });     
+
+          sendTransaction(config)
+            .then(async ({ hash }) => {
+              console.log("Approve txHash", hash);
+              // const interval = setInterval(function() {
+              const dataWait = await waitForTransaction({
+                hash: hash,
+                chain: chainId,
+                confirmations: 1
+              })
+              console.log(dataWait)
+              this.buyUSDTView = 3
+
+              let data2 = this.presaleContractMobile.methods.buyWithUSDT(`${this.activePresale}`, `${tokens}`).encodeABI();
+              const config2 = await prepareSendTransaction({
+                chain: chains,
+                chainId: chainId,
+                to: `${presaleAddress.toLowerCase()}`,
+                data: data2,
+              });
+
+              sendTransaction(config2)
+                .then(async ({ hash }) => {
+                  console.log("txHash", hash);
+                  this.buyTx = hash
+                  this.buyUSDTView = 4
+                  const dataWait2 = await waitForTransaction({
+                    hash: hash,
+                    chain: chainId,
+                    confirmations: 1
+                  })
+                  console.log(dataWait2)
+                  this.buyUSDTView = 5
+                  this.butLoading = false
+                })
+                .catch((error) => {
+                  console.error("buy error", error);
+                  if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                    this.buyWithUsdtDialog = false
+                    this.amountUSDT = 0
+                    this.amountEmasForUSDTDiagLog = 0
+                    this.buyUSDTView = 1
+                    this.butLoading = false
+                  } else {
+                    this.buyUSDTView = 6
+                  }
+                });
+            })
+            .catch((error) => {
+              console.log(error)
+              // Failed transaction reporting back to user
+              if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
+                this.buyWithUsdtDialog = false
+                this.amountUSDT = 0
+                this.amountEmasForUSDTDiagLog = 0
+                this.buyUSDTView = 1
+                this.butLoading = false
+              } else {
+                this.buyUSDTView = 6
+              }
+            });
+        }
     },
     handleSuccess(e) {
         console.log(e);
@@ -3825,25 +4102,51 @@ export default {
       handleError(e) {
         console.log(e);
       },
-    convertAmount(type,value) {
+    convertAmount(type, value) {
+      // console.log()
       switch (type) {
         case 'ethToEmas':
+          this.checkMinSpend(type)
           return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.activeStagePrice ))
         case 'emasToEth':
-          return this.amountEth = value * ( this.activeStagePrice / this.ethPrice )
+          this.checkMinSpend(type)
+          return this.amountETH = value * ( this.activeStagePrice / this.ethPrice )
         case 'usdtToEmas':
+          this.checkMinSpend(type)
           return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.activeStagePrice ))
         case 'emasToUsdt':
+          this.checkMinSpend(type) 
           return this.amountUSDT = value * ( this.activeStagePrice / this.usdtPrice )
         default:
           return 0;
       }
     },
+    checkMinSpend (type) {
+      setTimeout(() => {
+        if ((type === 'ethToEmas' || type === 'emasToEth') && Math.round(this.amountETH * this.ethPrice) < 10 ) {
+        console.log(Math.round(this.amountETH * this.ethPrice))
+        console.log('ETH - Minumum 10 USD')
+        this.minSpendAlert = true
+        return
+      } else {
+        this.minSpendAlert = false
+      }
+
+      if ((type === 'usdtToEmas' || type === 'emasToUsdt') && this.amountUSDT < 10 ) {
+        console.log(this.amountUSDT)
+        console.log('USDT - Minumum 10 USD')
+        this.minSpendAlert = true
+        return
+      } else {
+        this.minSpendAlert = false
+      }
+      }, 500);
+    },
     closeBuyWithEthDialog() {
-      if (this.buyEthView === 2) return
+      if (this.buyETHView === 2) return
       this.buyWithEthDialog = false
       this.amountEmasForEthDiagLog = 0
-      this.amountEth = 0
+      this.amountETH = 0
       this.butLoading = false
       this.buyETHView = 1
     },
@@ -3982,7 +4285,7 @@ export default {
       if (date === undefined ) return
       date = parseInt(date) * 1000
       console.log('startDate: ' + date)
-      return dateformat(new Date(date), 'mmm yyyy')
+      return dateformat(new Date(date), 'dd mmm yyyy')
     },
     makeDateTime (date) {
       return dateformat(new Date(date), 'dd mmm, yyyy HH:MM')

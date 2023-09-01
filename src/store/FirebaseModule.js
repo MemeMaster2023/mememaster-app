@@ -10,6 +10,8 @@ const FirebaseModule = {
     collectionsEmpty: false,
     memes: [],
     memesEmpty: false,
+    publicMemes: [],
+    publicMemesEmpty: false,
     promotedTokens: [],
     launchQueue: [],
     popularTokens: [],
@@ -30,6 +32,12 @@ const FirebaseModule = {
     },
     setMemesEmpty (state, payload) {
       state.memesEmpty = payload
+    },
+    setPublicMemes (state, payload) {
+      state.publicMemes = payload
+    },
+    setPublicMemesEmpty (state, payload) {
+      state.publicMemesempty = payload
     },
     setPromotedTokens (state, payload) {
       state.promotedTokens = payload
@@ -74,6 +82,7 @@ const FirebaseModule = {
           // console.log(doc.id, '=>', doc.data())
           var obj = doc.data()
           obj.id = doc.id
+          obj.show = false
           obj.checkTime = Math.round(today / 1000 + 1800) // 1 Hour to prevent to much Firebase loading/reading
           collectionList.push(obj)
         })
@@ -106,6 +115,37 @@ const FirebaseModule = {
         .catch((error) => {
           console.log(error);
         });
+    },
+    updateMemesInCollection ({ commit }, payload) {
+      commit('setLoading', true);
+      let query = db.collection('memes').where('cid', '==', payload.cid)
+
+      query.get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching memes.')
+          return
+        }
+        snapshot.forEach(doc => {
+          // console.log(doc.id, '=>', doc.data())
+          var obj = doc.data()
+          obj.id = doc.id
+          console.log('meme doc id: ' + obj.id)
+          db.collection('memes')
+            .doc(obj.id)
+            .update({public: payload.public})
+            .then(() => {
+            console.log('Meme Public/Private updated');
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        })
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      })
+
     },
     addMemeToCollection ({ commit }, payload) {
       // console.log(payload)
@@ -142,6 +182,32 @@ const FirebaseModule = {
           memeList.push(obj)
         })
         commit('setMemes', memeList)
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      })
+    },
+    getPublicMemes ({commit}, payload) {
+      commit('setLoading', payload.id)
+      commit('setPublicMemesEmpty', false);
+      let today = new Date().getTime()
+      let query = db.collection('memes').where('public', '==', true).orderBy('created', 'desc').limit(payload.limit)
+      query.get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.')
+          commit('setPublicMemesEmpty', true);
+          return
+        }
+        var memeListPublic = []
+        snapshot.forEach(doc => {
+          console.log(doc.id, '=>', doc.data())
+          var obj = doc.data()
+          obj.id = doc.id
+          obj.checkTime = Math.round(today / 1000 + 1800) // 1 Hour to prevent to much Firebase loading/reading
+          memeListPublic.push(obj)
+        })
+        commit('setPublicMemes', memeListPublic)
       })
       .catch(err => {
         console.log('Error getting documents', err)
@@ -668,6 +734,12 @@ const FirebaseModule = {
       return state.memes
     },
     memesEmpty(state) {
+      return state.memesEmpty;
+    },
+    publicMemes (state) {
+      return state.publicMemes
+    },
+    publicMemesEmpty(state) {
       return state.memesEmpty;
     },
     promotedTokens (state) {

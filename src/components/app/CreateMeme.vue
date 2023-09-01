@@ -5,6 +5,7 @@
       <!-- ######################################################################################## -->
       <!-- ############################ Generate Text to Image #################################### -->
       <!-- ######################################################################################## -->
+
       <v-row class="pt-12 pl-4 pr-4 pb-12" v-if="view === 'generate'" >
         <v-col cols="12" md="4" :align="center" >
 
@@ -91,7 +92,7 @@
                         <template v-slot:activator="{ props }">
                           <v-icon class="ml-2" size="small" v-bind="props">mdi-information-outline</v-icon>
                         </template>
-                        <span>How much influence the source image has on the diffusion process.<br>Values close to 100% will yield images very similar to the source image,<br>while values close to 0% will yield images wildly different than the source image.</span>
+                        <span>How much influence the source image has on the diffusion process.<br>Values at 99% will yield images very similar to the source image,<br>while values close to 0% will yield images wildly different than the source image.</span>
                       </v-tooltip>
                       <v-spacer></v-spacer>
                       <p>{{ Math.round(imageStrength * 100) }}%</p>
@@ -103,6 +104,19 @@
                       :max="0.99"
                       :min="0"
                     ></v-slider>
+
+                    <div v-if="uploadImage !== ''">Add to My Collections without enhancing</div>
+                    <v-btn size="small" 
+                          class="mt-1"
+                           v-if="uploadImage !== ''"
+                           style="width:100%"
+                           color="deep-purple-lighten-1"
+                           prepend-icon="mdi-plus"
+                          @click="addwithoutEnhancing()"
+                    >
+                     Add now
+                    </v-btn>
+
                   </v-col>
                 </v-expansion-panel-text>
               </v-expansion-panel>
@@ -394,7 +408,10 @@
 
         </v-col>
 
-        <!-- ################ Generated Photo Box ##########################-->
+        <!-- #################################################################################-->
+        <!-- ########################## Generated Photo Box ##################################-->
+         <!-- #################################################################################-->
+
         <v-col cols="12" :md="getDrawer ? 5 : 6" :align="center">
           <v-card theme="dark" 
                   height="100%"
@@ -560,6 +577,7 @@
     <!-- ######################################################################################## -->
     <!-- ############################ Add Meme Caption To Image ################################## -->
     <!-- ######################################################################################## -->
+    
     <v-row class="pt-12 pl-4 pr-4" :align="center" v-if="view === 'memetext'">
       <v-btn @click="view = 'generate'" prepend-icon="mdi-arrow-left-bold" class="mt-1 ml-3">Back</v-btn>
       <v-col cols="12" md="12">
@@ -989,6 +1007,211 @@
     <!-- ########################################################################### -->
     <!-- #################################  DIALOGS ################################ -->
     <!-- ########################################################################### -->
+
+    <!-- #########################  SAVE MEME DIALOG #########################-->
+    <v-dialog
+      v-model="saveMemeDialog"
+      :fullscreen="isMobileDevice"
+      transition="dialog-bottom-transition"
+      max-width="800"
+      persistent
+    >
+        <v-card theme="dark">
+          <v-toolbar
+            color="#241d43"
+            title="Save this Meme to Your Collections"
+            class="text-white"
+          >
+          <v-spacer></v-spacer>
+           <v-btn
+              v-if="!uploadingFile && !uploadComplete"
+              icon
+              color="white"
+              @click="saveMemeDialog = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text v-if="!uploadingFile && !uploadComplete && !newCollection">
+            <v-row>
+              <v-col cols="=12" md="6">
+                <v-text-field
+                  prepend-inner-icon="mdi-tag-faces"
+                  label="Meme Name"
+                  placeholder="Meme Name..."
+                  density="compact"
+                  v-model="memeName"
+                  variant="outlined"
+                  hint="A nice name for your meme file."
+                  :rules="nameRules"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="=12" md="6" :align="'end'">
+                <v-btn 
+                    :style="isMobileDevice ? 'width:100%;margin-top:-20px' : ''"
+                    prepend-icon="mdi-plus" 
+                    variant="outlined"
+                    @click="newCollection = true"
+                >
+                  Create new Collection
+                </v-btn>
+              </v-col>
+              
+            </v-row>
+            <v-list lines="two" :style="isMobileDevice ? '' : 'margin-top:-30px'" v-if="getCollections.length > 0">
+              <v-list-subheader>My Meme Collections ({{ getCollections.length }})</v-list-subheader>
+
+                <template v-for="(item, index) in getCollections" :key="index">
+                <v-list-item
+                  link
+                  :value="item"
+                  active-color="primary"
+                  :title="item.name"
+                  :subtitle="'Created: ' + makeDateTime(item.created) + ' --- ' + (item.public ? 'Public Collection' : 'Private Collection')"
+                  @click="selectedCollection = item"
+                >
+                <template v-slot:prepend>
+                      <v-avatar color="blue-lighten-1" style="border-radius: 10px;" v-if="item.icon === 'default'" >
+                        <v-icon color="white">mdi-image-multiple-outline</v-icon>
+                      </v-avatar>
+                      <v-img v-else :src="item.icon" style="max-width: 40px;min-width: 40px; max-height:40px;min-height:40px;border-radius: 10px;margin-right: 18px">
+                      </v-img>
+                    </template>
+
+                  <template v-slot:append>
+                    <v-icon
+                      :color="item.public ? 'green-lighten-1' : 'red-lighten-1'"
+                    >
+                      {{  item.public ? 'mdi-lock-open-variant-outline' : 'mdi-lock-outline' }}
+                    </v-icon>
+                  </template>
+                </v-list-item>
+                <v-divider></v-divider>
+                </template>
+
+            </v-list>
+            <div v-else class="text-h6 ma-2">You don't have any Collections yet. Create one first.</div>
+
+          </v-card-text>
+
+          <v-card-text v-if="uploadingFile || uploadComplete">
+            <v-row >
+              <v-col cols="12" md="12">
+                <div v-if="!uploadComplete" class="text-h6 ma-2">Saving Meme...</div>
+                <div v-if="uploadComplete" class="text-h6 ma-2">Meme saved to your {{ memeName }} collection</div>
+                <v-progress-linear
+                  v-model="uploadProgress"
+                  color="deep-purple-darken-3"
+                  height="25"
+                >
+                  <strong>{{ Math.ceil(uploadProgress) }}%</strong>
+                </v-progress-linear>
+              </v-col>
+             </v-row>
+          </v-card-text>
+
+          <v-card-text v-if="newCollection">
+            <v-row>
+              <v-col cols="=12" md="8">
+                <v-form fast-fail @submit.prevent>
+                  <v-text-field
+                    prepend-inner-icon="mdi-collage"
+                    label="Collection Name"
+                    placeholder="Collection Name..."
+                    density="compact"
+                    maxlength="50"
+                    v-model="newCollectionName"
+                    variant="outlined"
+                    hint="A name for your new collection."
+                    :rules="nameRules"
+                  ></v-text-field>
+                </v-form>
+              </v-col>
+              <v-col cols="=12" md="4" :align="'end'">
+                <v-layout>
+                  <v-switch
+                    style="margin-top:-8px"
+                    v-model="public"
+                    hide-details
+                    :label="`Make Public: ${public ? 'Yes' : 'No'}`"
+                    inset
+                  ></v-switch>
+                  
+                  <v-icon
+                    style="margin-top:5px"
+                    size="large"
+                    color="green"
+                    @click="privatePublicDialog = true"
+                   >
+                    mdi-information-outline
+                  </v-icon>
+                </v-layout>
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions class="justify-end mb-2 mr-4"  v-if="!uploadingFile && !uploadComplete && !newCollection">
+              <v-btn
+                variant="text"
+                @click="saveMemeDialog = false"
+              >
+                Cancel
+              </v-btn>
+
+              <v-btn
+                v-if="!uploadingFile && !uploadComplete"
+                prepend-icon="mdi-content-save-check-outline"
+                variant="outlined"
+                color="green-lighten-1"
+                @click="saveMemeConfirmed()"
+                :disabled="selectedCollection.length === 0 || memeName === '' || checkNameRules(memeName)"
+              >
+              Save Meme
+              </v-btn>
+            </v-card-actions>
+
+            <v-card-actions class="justify-end mb-2 mr-4"  v-if="(uploadingFile || uploadComplete) && !newCollection">
+              <v-btn
+                prepend-icon="mdi-check-all"
+                variant="outlined"
+                color="green-lighten-3"
+                @click="memeCreationCompleted()"
+                :disabled="!uploadComplete"
+              >
+              Meme Upload Completed
+              </v-btn>
+
+              <v-btn
+                prepend-icon="mdi-collage"
+                variant="outlined"
+                color="blue-lighten-3"
+                to="/mycollections"
+                :disabled="!uploadComplete"
+              >
+               To My Collections
+              </v-btn>
+            </v-card-actions>
+
+            <v-card-actions class="justify-end mb-2 mr-4"  v-if="newCollection">
+              <v-btn 
+                  variant="text"
+                  @click="newCollection = flase"
+              >
+                Cancel
+              </v-btn>
+              <v-btn 
+                  prepend-icon="mdi-content-save-check-outline" 
+                  variant="outlined"
+                  color="green-lighten-3"
+                  @click="createNewCollection()"
+                  :disabled="newCollectionName === '' || checkNameRules(newCollectionName)"
+              >
+                Create Collection
+              </v-btn>
+            </v-card-actions>
+
+        </v-card>
+    </v-dialog>
     
     <v-dialog v-model="deleteDialog" persistent min-width="290" max-width="390">
       <v-card>
@@ -1058,6 +1281,7 @@ import MemeMasterAPI from '../../clients/MemeMasterAPI'
 import CreateMemeText from './CreateMemeText'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import imageCompression from 'browser-image-compression'
+import dateformat from "dateformat"
 // import { readAndCompressImage } from 'browser-image-resizer'
 export default {
   props: {
@@ -1076,6 +1300,7 @@ export default {
     deleteDialog: false,
     generateLoading: false,
     promptGuideDialog: false,
+    saveMemeDialog: false,
     deleteDraftDialog: false,
     deleteMultipleDraftDialog: false,
     storageRef: null,
@@ -1140,6 +1365,14 @@ export default {
     imageStrength: 0.45,
     showRowAlert: false,
     showRowAlertText: '',
+    newCollection: false,
+    selectedCollection: [],
+    newCollectionName: '',
+    memeName: '',
+    memeText: '',
+    memeUpload: [],
+    uploadProgress: 0,
+    uploadComplete: false,
   }),
   components: {
     CreateMemeText
@@ -1184,6 +1417,9 @@ export default {
     getDrawer () {
       return this.$store.state.drawer
     },
+    getCollections () {
+      return this.$store.state.fb.collections
+    },
     w_x_h () {
       switch (this.aspect) {
         case '7:4':
@@ -1216,6 +1452,137 @@ export default {
       setTimeout(() => {
         firstScrollTo('#generate', 500, { offset: -64 });
       }, 200);
+    },
+    addwithoutEnhancing () {
+      this.saveMemeDialog = true
+      this.getUserCollections()
+    },
+    getUserCollections() {
+      console.log(this.getCollections)
+      if (this.getCollections.length > 0) {
+        let checkTime = Math.round(new Date().getTime() / 1000)
+        if (this.getCollections[0]?.checkTime > Math.round(checkTime)) {
+          console.log('No collections reload needed')
+          return
+        }
+      }
+      let dispatchObj = {
+        uid: this.getUser.uid,
+        limit: 20
+      }
+      console.log(dispatchObj)
+      this.$store.dispatch("getUserCollections", dispatchObj)
+        .then(() => {
+          console.log(this.getCollections)
+        })
+        .catch(error => {
+          console.log(error)
+          this.loadingData = false
+        })
+    },
+    async saveMemeConfirmed () {
+
+      // Create a reference to the file
+      this.uploadingFile = true
+      this.uploadComplete = false
+      const storageRef = firebase.storage().ref()
+      // storageRef.child(this.files.name);
+      // const compressedFile = await imageCompression(this.files, options)
+      // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+      // console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+      // Create a reference to 'images/mountains.jpg'
+      // var str = this.currentUser.uid.substr(0, 6)
+      var fileImagesRef = storageRef.child('memes/' + this.getUser.uid + '/' + this.selectedCollection.name + '/' + this.memeName + '.png')
+      var metadata = {
+        contentType:'image/png',
+        customMetadata: {
+          uid: this.getUser.uid,
+          uname: this.getUser.displayName,
+          prompt: '', // JSON.stringify(this.selectedImage.prompt),
+          status: '1',
+          created: new Date().getTime()
+        },
+      };
+      var uploadTask = fileImagesRef.put(this.memeUpload, metadata);
+      // fileImagesRef.put('memes/' + this.getUser.uid + '/' + this.selectedCollection.name + '/' + this.memeName + '.png', metadata);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          console.log("snapshot", snapshot)
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          console.log("snapshot state", snapshot.state);
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log(this.memeName + '.png');
+              this.uploadProgress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          console.log(error);
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          // if (this.files.length - 1 === parseInt(i)) {
+          // }
+          var thumbnail = ''
+          let postkey = db.collection('memes').doc()
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            let dispatchObj = {
+              cid: this.selectedCollection.id,
+              id: postkey.id,
+              url: downloadURL,
+              uid: this.getUser.uid,
+              username: this.getUser.displayName,
+              gender: this.getUser.gender,
+              name: this.memeName,
+              created: new Date().getTime(),
+              thumbnail: thumbnail, // To be Done
+              status: 1,
+              public: this.selectedCollection.public,
+              views: 0,
+              likes: 0,
+              is_nft: false
+            }
+            console.log(dispatchObj)
+            this.$store.dispatch("addMemeToCollection", dispatchObj)
+              .then(() => {
+                // console.log(this.getCollections)
+              })
+              .catch(error => {
+                console.log(error)
+                this.loadingData = false
+              })
+            /* db.collection('collections').doc(this.newPostKey.id).collections(dispatchObj)
+            .then(() => {
+                console.log('Image url in bucket updated')
+              })
+            .catch(error => {
+                console.log(error)
+              }) */
+            // this.saveMemeDialog = false
+            this.uploadingFile = false
+            this.uploadComplete = true
+          })
+        }
+      )
+    },    
+    memeCreationCompleted () {
+        this.memeName = ''
+        this.saveMemeDialog = false
+        this.memeCompleted = true
     },
     getGenerationEngines () {
       this.items = []
@@ -1655,6 +2022,7 @@ export default {
         return;
       } else {
         console.log(image)
+        this.memeUpload = image.target.files[0]
         this.fileType = image.target.files[0].type
         this.showRowAlert = false
         this.checkDimension(image.target)
@@ -1861,6 +2229,13 @@ export default {
       });
 
     },
+    checkNameRules (value) {
+      if (/^[\w\s]+$/.test(value)) return false
+      return true
+    },
+    makeDateTime (date) {
+      return dateformat(new Date(date), 'dd mmm, yyyy HH:MM')
+    }
   }
 }
 </script>
