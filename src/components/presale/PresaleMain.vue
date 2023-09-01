@@ -1287,10 +1287,10 @@
                 <label for="" style="font-weight: bold;">Selling</label>
                 <v-text-field
                   class="mt-2"
-                  v-on:keyup="convertAmount('ethToEmas', amountEth)"
-                  v-model="amountEth"
-                  @focus="clearOnFocus('amountEth')"
-                  @input="ensureNonNegative('amountEth')"
+                  v-on:keyup="convertAmount('ethToEmas', amountETH)"
+                  v-model="amountETH"
+                  @focus="clearOnFocus('amountETH')"
+                  @input="ensureNonNegative('amountETH')"
                   type="number"
                   min="0"
                 >
@@ -1327,7 +1327,7 @@
                       color="#360a3f" 
                       @click="buyWithEthContract()"
                       :loading="butLoading"
-                      :disabled="minSpendAlert || amountEth === 0 || amountEmasForEthDiagLog === 0"
+                      :disabled="minSpendAlert || amountETH === 0 || amountEmasForEthDiagLog === 0"
                   >
                   Swap ETH for EMAS
                 </v-btn>
@@ -1905,7 +1905,7 @@ export default {
     ethPrice: 0,
     usdtPrice: 0,
     minSpendAlert: false,
-    amountEth: 0,
+    amountETH: 0,
     amountUSDT: 0,
     insufficientETHBalance: false,
     insufficientUSDTBalance: false,
@@ -3539,7 +3539,7 @@ export default {
         let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
         console.log(accountBalance)
 
-        if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
+        if (_web3.utils.fromWei(accountBalance, "ether") < this.amountETH) {
           this.insufficientETHBalance = true
           this.butLoading = false
           return
@@ -3562,8 +3562,8 @@ export default {
 
         console.log(this.presaleContract2)
 
-        this.amountETH = this.amountEth * 1.05 // Add 0.5% ETH to the total
-        var eth = parseFloat(this.amountEth) 
+        this.amountETH = this.amountETH * 1.05 // Add 0.5% ETH to the total
+        var eth = parseFloat(this.amountETH) 
 
         console.log('********* eth ***********')
         console.log(eth)
@@ -3626,7 +3626,7 @@ export default {
     closeEthBuyDialog  () {
        if (this.buyETHView === 2) return
        this.buyWithEthDialog = false
-       this.amountEth = 0
+       this.amountETH = 0
        this.amountEmasForEthDiagLog = 0
        this.buyETHView = 1
        this.butLoading = false
@@ -3645,9 +3645,9 @@ export default {
       this.insufficientETHBalance = false
       this.butLoading = true
 
-      this.amountEth = this.amountEth * 1.05 // Add 0.5% ETH to the total
-      console.log(this.amountEth)
-      var eth = parseFloat(this.amountEth)
+      this.amountETH = this.amountETH * 1.05 // Add 0.5% ETH to the total
+      console.log(this.amountETH)
+      var eth = parseFloat(this.amountETH)
       eth = _web3.utils.toWei(eth, 'ether');
       console.log(eth)
       let tokens = Math.round(this.amountEmasForEthDiagLog)
@@ -3657,7 +3657,7 @@ export default {
       // Get User Balance
       let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
 
-      if (_web3.utils.fromWei(accountBalance, "ether") < this.amountEth) {
+      if (_web3.utils.fromWei(accountBalance, "ether") < this.amountETH) {
         this.insufficientETHBalance = true
         this.butLoading = false
         return
@@ -4102,7 +4102,7 @@ export default {
           return this.amountEmasForEthDiagLog = Math.round(value * ( this.ethPrice / this.activeStagePrice ))
         case 'emasToEth':
           this.checkMinSpend(type)
-          return this.amountEth = value * ( this.activeStagePrice / this.ethPrice )
+          return this.amountETH = value * ( this.activeStagePrice / this.ethPrice )
         case 'usdtToEmas':
           this.checkMinSpend(type)
           return this.amountEmasForUSDTDiagLog = Math.round(value * ( this.usdtPrice / this.activeStagePrice ))
@@ -4115,8 +4115,8 @@ export default {
     },
     checkMinSpend (type) {
       setTimeout(() => {
-        if ((type === 'ethToEmas' || type === 'emasToEth') && Math.round(this.amountEth * this.ethPrice) < 10 ) {
-        console.log(Math.round(this.amountEth * this.ethPrice))
+        if ((type === 'ethToEmas' || type === 'emasToEth') && Math.round(this.amountETH * this.ethPrice) < 10 ) {
+        console.log(Math.round(this.amountETH * this.ethPrice))
         console.log('ETH - Minumum 10 USD')
         this.minSpendAlert = true
         return
@@ -4138,7 +4138,7 @@ export default {
       if (this.buyETHView === 2) return
       this.buyWithEthDialog = false
       this.amountEmasForEthDiagLog = 0
-      this.amountEth = 0
+      this.amountETH = 0
       this.butLoading = false
       this.buyETHView = 1
     },
