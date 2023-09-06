@@ -241,7 +241,7 @@
 
       </v-list-group>
         
-      <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes')"></v-list-item>
+      <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes/default')"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="NFT Marketplace" value="nftmarket" @click="routerGo('/nfts')"></v-list-item>
       <v-list-item prepend-icon="mdi-circle-multiple-outline" title="New Token Listings" value="tokens" @click="routerGo('/tokens')"></v-list-item>
       <v-list-item prepend-icon="mdi-shape-plus" title="Games" value="games" @click="routerGo('/games')"></v-list-item>

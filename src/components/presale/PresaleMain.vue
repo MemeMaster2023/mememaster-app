@@ -134,7 +134,7 @@
                 <v-btn prepend-icon="mdi-image-multiple-outline"
                        :style="drawer ? 'font-size: 0.7rem;width: 100%;font-weight: bold;' : 'font-size: 0.8rem;width: 100%;font-weight: bold;'"
                        color="purple-lighten-4"
-                       to="/memes"
+                       to="/memes/default"
                 >
                   Meme Marketplace
                 </v-btn>
@@ -201,9 +201,11 @@
                   </v-progress-linear>
                 </v-layout>
 
+                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
                 <Countdown v-else-if="!presaleStarted">
                 </Countdown>
 
+                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
                 <div v-if="presaleStarted">
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
@@ -348,7 +350,7 @@
             <v-btn prepend-icon="mdi-image-multiple-outline" stacked
                     style="font-size: 0.8rem;width:100%;font-weight: bold;"
                     color="purple-lighten-4"
-                    to="/memes"
+                    to="/memes/default"
             >
               Meme Marketplace
             </v-btn>
@@ -1879,7 +1881,38 @@ export default {
     drawer: Boolean
   },
   data: () => ({
-    tempWalletArr: [],
+    tempWalletArr: [
+      '0x770e725359cd9a3cf34feeb832a16969a8d21660',
+      '0x63e8c8c7986b6a35fdb510389f339587dce4f23b',
+      '0x600dd87387875403d068a577cbcf79aafa0032c9',
+      '0xdd9c3cffd75b2709ea23d049f0ea632eb87a3c80',
+      '0x159e84dc084938de6e99ef466364645eccde0ece',
+      '0x5ac123e22a70b77354b6872c0f7073876995d333',
+      '0xDd9C3CfFd75B2709EA23D049f0EA632eb87a3C80',
+      '0x159E84dC084938de6E99Ef466364645ECCDE0ecE',
+      '0x5ac123e22a70B77354b6872c0f7073876995D333',
+      '0x63E8c8C7986B6a35fdB510389f339587DCE4f23B',
+      '0x600dD87387875403d068a577cbcf79aafA0032C9',
+      '0x770e725359cd9A3Cf34FEeb832A16969a8D21660',
+      '0x5eB93f1b0b3E1Fd0f99118e39684f087a84d40Ec',
+      '0x9967a5a58bb500f575782fe62e92cb318fb39b1a',
+      '0x9967a5a58Bb500f575782fe62E92Cb318FB39B1a',
+      '0x44Beb9Db583f3417c265Cb3616B67324e5382411',
+      '0xf3080174242667f944350587Db9Bf6e008b52cd5',
+      '0x44beb9db583f3417c265cb3616b67324e5382411',
+      '0xf3080174242667f944350587db9bf6e008b52cd5',
+      '0xb363463dd9D8dAED8A0E074495E4aDA67ea1176b',
+      '0xb363463dd9d8daed8a0e074495e4ada67ea1176b',
+      '0xb4DE7DaeC140EF39AB3E006ABA485E906F80DdcB',
+      '0xb4de7daec140ef39ab3e006aba485e906f80ddcb',
+      '0xb4de7daec140ef39ab3e006aba485e906f80ddcb',
+      '0xF7480c07Ea1e7aa9340e49339300029667348ecA',
+      '0xf7480c07ea1e7aa9340e49339300029667348eca',
+      '0x7D6112094092e02762379D8201E7e136AaA2F6E9',
+      '0x7d6112094092e02762379d8201e7e136aaa2f6e9',
+      '0x5ac123e22a70B77354b6872c0f7073876995D333',
+      '0x5ac123e22a70b77354b6872c0f7073876995d333'
+    ],
     loading: false,
     butLoading: false,
     snackbar: false,

@@ -254,7 +254,7 @@
                           <v-icon v-if="selectedMeme.gender === 0" color="grey">mdi-account</v-icon> 
                           <v-icon v-else-if="selectedMeme.gender === 1" color="blue">mdi-face-man</v-icon> 
                           <v-icon v-else-if="selectedMeme.gender === 2" color="pink">mdi-face-woman</v-icon> 
-                          {{ selectedmeme?.username }}
+                          {{ selectedMeme?.username }}
                       </div>
                     </v-card-text>
 
@@ -275,10 +275,10 @@
                         </v-tooltip>
                       </div>
                       <v-spacer></v-spacer>
-                      <div>
+                      <v-btn variant="text" @click="sheet = !sheet">
                         <v-icon >mdi-share</v-icon> 
                         Share
-                      </div>
+                      </v-btn>
                       <v-spacer></v-spacer>
                     </v-card-actions>
 
@@ -287,6 +287,79 @@
               </v-row>
           </v-card-text>
 
+          <v-bottom-sheet v-show="sheet">
+            <v-card class="ma-4 pb-8">
+
+              <div class="ma-4">
+                <p style="color: #FFF" class="font-weight-medium text-center" >Share Via</p>
+              </div>
+
+                <v-layout justify-center>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="facebook"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="#3b5998" style="border-radius:10px" medium dark><v-icon medium>mdi-facebook</v-icon></v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="whatsapp"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="#25D366" style="border-radius:10px" medium dark><v-icon medium>mdi-whatsapp</v-icon></v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="twitter"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="light-blue" style="border-radius:10px" medium dark><v-icon medium>mdi-twitter</v-icon></v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="telegram"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="light-blue darken-3" style="border-radius:10px" medium dark>
+                        <v-img 
+                          src="/img/icons/telegram.png" 
+                          style="width:16px;height:16px" 
+                        />
+                      </v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="email"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="grey" style="border-radius:10px" medium dark><v-icon medium>mdi-at</v-icon></v-btn>
+                  </ShareNetwork>
+                  <!-- <v-btn fab v-clipboard="'https://olahbola.com/#/news/' + card.slug" @success="handleSuccess" @error="handleError"
+                          color="grey darken-1" style="border-radius:10px" medium dark><v-icon medium>mdi-content-copy</v-icon></v-btn> -->
+                  <v-spacer></v-spacer>
+                  <!-- <v-spacer></v-spacer>
+                  <v-btn fab @click="shareFB" color="#3b5998" style="border-radius:10px" medium dark><v-icon medium>mdi-facebook</v-icon></v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn fab @click="shareWA" color="#25D366" style="border-radius:10px" medium dark><v-icon medium>mdi-whatsapp</v-icon></v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn fab @click="shareIN" color="purple" style="border-radius:10px" medium dark><v-icon medium>mdi-instagram</v-icon></v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn fab @click="shareEmail" color="grey darken-1" style="border-radius:10px" medium dark><v-icon medium>mdi-at</v-icon></v-btn>
+                  <v-spacer></v-spacer> -->
+                </v-layout>
+            </v-card>
+          </v-bottom-sheet>
         </v-card>
       </v-dialog>
 
@@ -314,6 +387,7 @@ export default {
     loading: false,
     loadingData: false,
     memeDetailsDialog: false,
+    sheet: false,
     view: 1,
     readMore: false,
     limit: 50,
@@ -330,9 +404,49 @@ export default {
     },
     getUser () {
       return this.$store.state.user
-    }
+    },
+    mmConnected () {
+      return this.$store.state.user.mmConnected
+    },
+    walletConnected () {
+      return this.$store.state.user.walletConnected
+    },
+    twConnected () {
+      return this.$store.state.user.twConnected
+    },
+    emailConnected () {
+      return this.$store.state.user.isEmailConnected
+    },
   },
   watch: {
+    mmConnected () {
+      if (this.mmConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
+    twConnected () {
+      if (this.twConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
+    walletConnected () {
+      if (this.walletConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
+    emailConnected(newValue){
+      if (this.emailConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
@@ -341,7 +455,9 @@ export default {
   },
   methods: {
     init () {
-      if(![null,undefined].includes(this.getUser)) {
+      console.log('######## this.getUser ##########')
+      console.log(this.getUser)
+      if(![null,undefined, ''].includes(this.getUser.displayName)) {
         console.log("x");
         this.getLikes();
       }
@@ -363,12 +479,20 @@ export default {
             this.loadingData = false
             this.memeCount = Math.ceil(this.getPublicMemes.length / 3)
             console.log(this.memeCount)
+
+            if (this.$route.params?.id !== 'default') {
+              let id = this.$route.params?.id
+              let meme  = this.getPublicMemes.find(item => item.id === id)
+              this.memeDetailsClicked(meme)
+            }
+            
           }
         })
         .catch(error => {
           console.log(error)
           this.loadingData = false
         })
+
     },
     waitPublicMemesLoaded () {
       setTimeout(() => {
@@ -379,11 +503,17 @@ export default {
             this.loadingData = false
             this.memeCount = Math.ceil(this.getPublicMemes.length / 3)
             console.log(this.memeCount)
+            if (this.$route.params?.id !== 'default') {
+              let id = this.$route.params?.id
+              let meme  = this.getPublicMemes.find(item => item.id === id)
+              this.memeDetailsClicked(meme)
+            }
             return
           }
         }, 2000);
     },
     getLikes (){
+      console.log('######## this.getLikes ##########')
       const query = db.collection('likes').doc(this.getUser.uid);
       query.get().then(snapshot => {
         console.log(snapshot.data())
@@ -463,8 +593,22 @@ export default {
       this.getPublicMemes[index].show = !this.getPublicMemes[index].show
     },
     memeDetailsClicked (meme) {
+      console.log(meme)
       this.selectedMeme = meme
       this.memeDetailsDialog = true
+      this.addViewCount(meme)
+    },
+    addViewCount (meme) {
+      let dispatchObj = {
+        views: meme.views += 1
+      }
+      db.collection('memes').doc(meme.id).update(dispatchObj)
+      .then(() => {
+          // No TODO
+        })
+      .catch(error => {
+          console.log(error)
+        })
     },
     checkNameLength (name) {
       if (name === undefined) return

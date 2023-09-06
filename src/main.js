@@ -29,6 +29,7 @@ import Vue3VideoPlayer from '@cloudgeek/vue3-video-player';
 import '@cloudgeek/vue3-video-player/dist/vue3-video-player.css';
 import VueApexCharts from 'vue3-apexcharts'
 import Countdown from 'vue3-flip-countdown'
+import VueSocialSharing from 'vue-social-sharing'
 // import Jazzicon from 'vue3-jazzicon/src/components';
 // import Web3 from 'web3';
 // import { ethers } from 'ethers';
@@ -66,6 +67,7 @@ app.use(Vue3VideoPlayer, {
     lang: 'en',
 })
 app.use(VueApexCharts)
+app.use(VueSocialSharing)
 // app.use(ethers)
 app.use(Countdown);
 
