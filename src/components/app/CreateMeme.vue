@@ -101,7 +101,7 @@
                       v-model="imageStrength"
                       color="blue"
                       :step="0.01"
-                      :max="1"
+                      :max="0.99"
                       :min="0"
                     ></v-slider>
 
@@ -392,7 +392,6 @@
               >
                 Start Meme Generation
               </v-btn>
-              <p class="text-center text-green pt-2 font-weight-bold">You have {{ getUser.credits }} Credits</p>
 
               <v-btn v-if="enableStopGenerating"
                   prepend-icon="mdi-close-octagon-outline" 
@@ -403,6 +402,9 @@
               >
                 Stop Generating
               </v-btn>
+
+              <p class="text-center text-green pt-2 font-weight-bold">You have {{ getUser.credits }} Credits</p>
+              
             </v-col>
           </v-row>
 

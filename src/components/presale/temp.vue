@@ -134,7 +134,7 @@
                   <v-btn prepend-icon="mdi-image-multiple-outline"
                          style="font-size: 0.8rem;width: 100%;font-weight: bold;"
                          color="purple-lighten-4"
-                         to="/memes"
+                         to="/memes/default"
                   >
                     Meme Marketplace
                   </v-btn>
@@ -323,7 +323,7 @@
               <v-btn prepend-icon="mdi-image-multiple-outline" stacked
                       style="font-size: 0.8rem;width:100%;font-weight: bold;"
                       color="purple-lighten-4"
-                      to="/memes"
+                      to="/memes/default"
               >
                 Meme Marketplace
               </v-btn>

@@ -349,6 +349,57 @@
 import { db } from '@/main'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 import imageCompression from 'browser-image-compression'
+import MemeMasterAPI from '../../clients/MemeMasterAPI'
+// ####################################################
+// ################ Web3 ##############################
+// ####################################################
+import Web3 from 'web3';
+import { ethers } from 'ethers';
+// import { connectUser, getProvider } from './presaleHelpers';
+// import { presaleAddress } from './config';
+// const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
+const presaleAddress = "0x13871995d62fEdfFAf2C5D26fca5739941e37572" /// !! NEW MAINNET 0x448Fe2708d8A8044F40D6E9456e40CF6a1Fd7A72 
+const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"    /// !! MAINNET 0xdAC17F958D2ee523a2206206994597C13D831ec7
+// Mobile Imports and const
+import { configureChains, createConfig, erc20ABI, prepareSendTransaction, sendTransaction, waitForTransaction, switchNetwork, disconnect, watchAccount, watchNetwork } from '@wagmi/core'
+import { arbitrum, mainnet, goerli } from '@wagmi/core/chains'
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { parseGwei } from 'viem'
+// const chainRPC = "https://eth.llamarpc.com";
+// const chainRPC = "https://rpc.ankr.com/eth_goerli"
+let chainRPC
+let projectId;
+let chains;
+let chainId;
+if (import.meta.env.VITE_APP_ENVIRONMENT === 'production') {
+  // chainRPC = "https://eth.llamarpc.com";
+  // chainRPC = 'https://ethereum.publicnode.com'
+  chainRPC = 'https://eth-mainnet.g.alchemy.com/v2/4TIWmrx70iRoMJ4CyXPRiOv77-9kYLqn'
+  chains = [mainnet]
+  projectId = import.meta.env.VITE_APP_PROJECT_ID
+  chainId = 1
+} else {
+  chainRPC = "https://eth-goerli.g.alchemy.com/v2/nu4cpI0eeI7-sNl9TTT-ukP6bFlmGnC8"
+  chains = [goerli]
+  projectId = import.meta.env.VITE_APP_PROJECT_ID_TEST
+  chainId = 5
+}
+const _web3 = new Web3(chainRPC)
+// const powerTwelve = _web3.utils.toBN(10).pow(_web3.utils.toBN(12))
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+
+// 2. Set up wagmi config
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient
+});
+// 3. Create ethereum and modal clients
+const ethereumClient = new EthereumClient(wagmiConfig, chains);
+// ####################################################
+// ################ Web3 End ##########################
+// ####################################################
+
 export default {
   name: 'Mint NFT',
   props: {
@@ -403,6 +454,9 @@ export default {
   computed: {
     getUser () {
       return this.$store.state.user
+    },
+    getAbi () {
+      return this.$store.state.mint
     },
     getNFTcontracts () {
       return this.$store.state.mint.contracts
@@ -589,21 +643,88 @@ export default {
     // ###########################################################################
     // ############################## Create and Mint NFT Process ################
     // ###########################################################################
-    createAndMint () {
+    async  createAndMint () {
+      // getContractABIAndBytecode for standard ERC-1155 Contract
+      let web3 = new Web3(window.ethereum);
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+      // Get User Balance
+      let accountBalance = await _web3.eth.getBalance(this.getUser.accounts[0]);
+       console.log(accountBalance)
+
+      const signer = provider.getSigner()
+      let name = 'Test MM NFT'
+      let symbol = 'MMT'
+      let tokenURIPrefix = 'https://gateway.pinata.cloud/ipfs/'
+      let abi = this.getAbi.abi
+      let bytecode = this.getAbi.bytecode
+      console.log(bytecode)
+      const contractConstructor = new ethers.Contract('', abi, provider);
+      const contractDeploy = contractConstructor.connect(signer);
+
+      console.log(contractDeploy)
+      // deployContract(abi, bytecode, name, symbol, contractType, collectionId, image, desc, cover_image);
+      contractConstructor
+      .deploy({
+        data: bytecode,
+        arguments: [name, symbol, tokenURIPrefix],
+      })
+      .send({
+        from: this.getUser.accounts[0],
+      })
+      .then((deployment) => {
+        console.log('Contract was deployed at the following address:');
+        console.log(deployment.options.address);
+        contractAddress = deployment.options.address;
+        /* $('#nft_contract_address').val(contractAddress);
+        $('#nft_contract_address').val(contractAddress);
+        let formData = new FormData();
+        formData.append('file', attachment);
+        formData.append('name', name);
+        formData.append('symbol', symbol);
+        formData.append('contract_address', contractAddress);
+        formData.append('contract_type', contractType);
+        formData.append('collection_id', collectionId);
+        formData.append('description', description);
+        formData.append('cover', cover);
+        createContract(formData); */
+        this.createAndMintContinue01(contractAddress);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+      // this.createAndMintContinue01()
+    },
+    createAndMintContinue01 (contractAddress, contractType) {
+
+      // Instantiate the Meme master NFT contract
+      Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${this.NFT1155_ADDRESS.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
+        .then(result => {
+        console.log(result.data.result)
+        let abi = JSON.parse(result.data.result)
+        this.nftContractAbi = abi
+        this.nftContractMobile = new _web3.eth.Contract(this.nftContractAbi, `${this.NFT1155_ADDRESS.toLowerCase()}`)
+        console.log(this.nftContractMobile)
+        // this.createAndMintContinue02()
+      })
+    },
+    createAndMintContinue02 () {
       // Create and Mint NFT Process Start
-      this.createNewNFTcontract()
+      // Create item in nft_contracts if new
+      if (this.newContract) {
+         console.log('######## createNewNFTcontract ########')
+         this.createNewNFTcontract()
+      } else {
+        this.createNFT()
+      }
     },
     createNewNFTcontract () {
-      if (this.newContract) {
         this.newContractId = 0 // Will be set after creating the contract
         // Form to ask for Name, Description, Symbol images etc
         // create the new NFT contract
 
         // NFT Contract done go to next step
         this.uploadIPFS()
-      } else {
-        this.uploadIPFS()
-      }
     },
     uploadIPFS () {
       // Upload & Pin Image to IPFS and get image_hash and metadata_hash
@@ -643,10 +764,7 @@ export default {
         multi_royalty: {} // {"royalties": [0], "wallet_address": ["0xf251d1b5215dd88dda288689b2cedc5f0843d7f4"]}
       }
       console.log(nftObject)
-      // Create item in nft_contracts if new
-      // if (this.newContract) {
-      //   this.createNewNFTcontract()
-      // }
+      
     },
     // ###########################################################################
     // ###################################### END ################################

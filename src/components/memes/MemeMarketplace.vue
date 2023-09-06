@@ -5,17 +5,17 @@
       <v-card theme="dark" class="mt-16 mb-16" height="100%" v-if="view === 1">
 
        <v-row :class="isMobileDevice ? 'mt-12 ml-1 mr-1' : 'mt-12'" :align="center">
-        <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
+        <v-col cols="12" md="1" :align="center" v-if="!isMobileDevice">
         </v-col>
 
-        <v-col cols="12" md="8" :align="center">
+        <v-col cols="12" md="10" :align="center">
           <div class="text-h4 text-center ma-2">Meme Marketplace</div>
           <div style="text-align: justify;" class="cardTextCreateSmall ma-2">
             Welcome to our Meme Marketplace, the ultimate hub for meme enthusiasts, creators, and collectors. Dive into a world of laughter, wit, and viral sensations as you explore our curated collection of hilarious and iconic memes.
-            <!-- <v-btn size="small" variant="text" @click="readMore = !readMore">Read more...</v-btn>
-            <br><br> -->
+            <v-btn size="small" variant="text" @click="readMore = !readMore">Read more...</v-btn>
+            <br><br>
 
-            <div v-if="!readMore">
+            <div v-if="readMore">
               Discover a wide range of meme formats, templates, and viral sensations that have taken the internet by storm. From classic reaction images to trending memes, our marketplace showcases the best and most entertaining content from across the meme-sphere.<br><br>
 
               As a creator, our Meme Marketplace provides you with a platform to showcase your meme-making skills and gain recognition. Upload your original creations, share your unique sense of humor with the world, and even earn rewards for your viral masterpieces.<br><br>
@@ -25,7 +25,7 @@
           </div>
 
           <!-- ######################## Meme Marketplace Component ######################## -->
-        
+
           <v-row v-if="loadingData" style="width:100%" class="ma-4"> 
 
             <v-col cols="12" md="12" :align="'center'">
@@ -39,11 +39,11 @@
 
           </v-row>
 
-          <!-- <div class="row" v-else> 
+          <div class="row" v-else> 
 
             <div class="column">
               <template v-for="(meme, index) in getPublicMemes">
-                <v-img v-if="index <= memeCount-1" class="mb-4"
+                <v-img v-if="index < memeCount-1" class="mb-4"
                        style="width:100%;border-radius: 10px;"
                        :src="meme.url" 
                        :lazy-src="meme.url"
@@ -55,11 +55,11 @@
 
                   <v-toolbar color="bg-grey-darken-4" style="opacity:0.9" v-show="meme.show">
 
-                    <v-tooltip :text="'See More from ' + meme.username" location="top">
+                    <v-tooltip :text="'See More from ' + meme?.username" location="top">
                       <template v-slot:activator="{ props }">
                         <v-btn @click.stop="moreInfoMeme(index)" v-bind="props" style="text-transform: none !important;font-weight: bold;" color="yellow">
                           <v-icon size="large" style="margin-right:5px;margin-left:-4px;">mdi-lightbulb-on-outline</v-icon>
-                          <div :style="isMobileDevice ? 'font-size:0.7rem' : 'font-size:0.9rem'">{{ drawer ? '' : 'Created' }} By: {{  checkNameLength(meme.username) }}</div>
+                          <div :style="isMobileDevice ? 'font-size:0.7rem' : 'font-size:0.9rem'">{{ drawer ? '' : 'Created' }} By: {{  checkNameLength(meme?.username) }}</div>
                         </v-btn>
                       </template>
                     </v-tooltip>
@@ -89,7 +89,7 @@
 
             <div class="column">
               <template v-for="(meme, index) in getPublicMemes">
-                <v-img v-if="index >= memeCount && index < memeCount*2" class="mb-4"
+                <v-img v-if="index >= memeCount-1 && index < (memeCount*2)-1" class="mb-4"
                        style="width:100%;border-radius: 10px;"
                        :src="meme.url" 
                        :lazy-src="meme.url"
@@ -101,11 +101,11 @@
 
                   <v-toolbar color="bg-grey-darken-4" style="opacity:0.9" v-show="meme.show">
 
-                    <v-tooltip :text="'See More from ' + meme.username" location="top">
+                    <v-tooltip :text="'See More from ' + meme?.username" location="top">
                       <template v-slot:activator="{ props }">
                         <v-btn @click.stop="moreInfoMeme(index)" v-bind="props" style="text-transform: none !important;font-weight: bold;" color="yellow">
                           <v-icon size="large" style="margin-right:5px;margin-left:-4px;">mdi-lightbulb-on-outline</v-icon>
-                          <div :style="isMobileDevice ? 'font-size:0.7rem' : 'font-size:0.9rem'">{{ drawer ? '' : 'Created' }} By: {{  checkNameLength(meme.username) }}</div>
+                          <div :style="isMobileDevice ? 'font-size:0.7rem' : 'font-size:0.9rem'">{{ drawer ? '' : 'Created' }} By: {{  checkNameLength(meme?.username) }}</div>
                         </v-btn>
                       </template>
                     </v-tooltip>
@@ -135,7 +135,7 @@
 
             <div class="column">
                <template v-for="(meme, index) in getPublicMemes">
-                <v-img v-if="index >= memeCount*2" class="mb-4"
+                <v-img v-if="index >= (memeCount*2)-1" class="mb-4"
                        style="width:100%;border-radius: 10px;"
                        :src="meme.url" 
                        :lazy-src="meme.url"
@@ -147,11 +147,11 @@
 
                   <v-toolbar color="bg-grey-darken-4" style="opacity:0.9" v-show="meme.show">
 
-                    <v-tooltip :text="'See More from ' + meme.username" location="top">
+                    <v-tooltip :text="'See More from ' + meme?.username" location="top">
                       <template v-slot:activator="{ props }">
                         <v-btn @click.stop="moreInfoMeme(index)" v-bind="props" style="text-transform: none !important;font-weight: bold;" color="yellow">
                           <v-icon size="large" style="margin-right:5px;margin-left:-4px;">mdi-lightbulb-on-outline</v-icon>
-                          <div :style="isMobileDevice ? 'font-size:0.7rem' : 'font-size:0.9rem'">{{ drawer ? '' : 'Created' }} By: {{  checkNameLength(meme.username) }}</div>
+                          <div :style="isMobileDevice ? 'font-size:0.7rem' : 'font-size:0.9rem'">{{ drawer ? '' : 'Created' }} By: {{  checkNameLength(meme?.username) }}</div>
                         </v-btn>
                       </template>
                     </v-tooltip>
@@ -179,7 +179,7 @@
               </template>
             </div>
               
-          </div> -->
+          </div>
 
           <v-alert
             class="mt-8 mb-16"
@@ -187,11 +187,10 @@
             theme="dark"
             icon="mdi-code-braces"
           >
-            <p style="font-size: 1.3rem;margin-top: -5px;">The Meme Marketplace is still under development.<br>Stay tuned for information about the 1st release.</p>
-          </v-alert>      
-
+            <p style="font-size: 1.3rem;margin-top: -5px;">The Meme Marketplace is still under development.<br>Stay tuned for information about more releases.</p>
+          </v-alert>                                
            </v-col>
-            <v-col cols="12" md="2" :align="center" v-if="!isMobileDevice">
+            <v-col cols="12" md="1" :align="center" v-if="!isMobileDevice">
         </v-col>
        </v-row>
 
@@ -255,7 +254,7 @@
                           <v-icon v-if="selectedMeme.gender === 0" color="grey">mdi-account</v-icon> 
                           <v-icon v-else-if="selectedMeme.gender === 1" color="blue">mdi-face-man</v-icon> 
                           <v-icon v-else-if="selectedMeme.gender === 2" color="pink">mdi-face-woman</v-icon> 
-                          {{ selectedMeme.username }}
+                          {{ selectedMeme?.username }}
                       </div>
                     </v-card-text>
 
@@ -276,10 +275,10 @@
                         </v-tooltip>
                       </div>
                       <v-spacer></v-spacer>
-                      <div>
+                      <v-btn variant="text" @click="sheet = !sheet">
                         <v-icon >mdi-share</v-icon> 
                         Share
-                      </div>
+                      </v-btn>
                       <v-spacer></v-spacer>
                     </v-card-actions>
 
@@ -288,6 +287,79 @@
               </v-row>
           </v-card-text>
 
+          <v-bottom-sheet v-show="sheet">
+            <v-card class="ma-4 pb-8">
+
+              <div class="ma-4">
+                <p style="color: #FFF" class="font-weight-medium text-center" >Share Via</p>
+              </div>
+
+                <v-layout justify-center>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="facebook"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="#3b5998" style="border-radius:10px" medium dark><v-icon medium>mdi-facebook</v-icon></v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="whatsapp"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="#25D366" style="border-radius:10px" medium dark><v-icon medium>mdi-whatsapp</v-icon></v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="twitter"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="light-blue" style="border-radius:10px" medium dark><v-icon medium>mdi-twitter</v-icon></v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="telegram"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="light-blue darken-3" style="border-radius:10px" medium dark>
+                        <v-img 
+                          src="/img/icons/telegram.png" 
+                          style="width:16px;height:16px" 
+                        />
+                      </v-btn>
+                  </ShareNetwork>
+                  <v-spacer></v-spacer>
+                  <ShareNetwork
+                      network="email"
+                      :url="'https://mememaster.app/memes/' + selectedMeme.id"
+                      :title="selectedMeme.name"
+                      tag="v-btn"
+                    >
+                      <v-btn fab color="grey" style="border-radius:10px" medium dark><v-icon medium>mdi-at</v-icon></v-btn>
+                  </ShareNetwork>
+                  <!-- <v-btn fab v-clipboard="'https://olahbola.com/#/news/' + card.slug" @success="handleSuccess" @error="handleError"
+                          color="grey darken-1" style="border-radius:10px" medium dark><v-icon medium>mdi-content-copy</v-icon></v-btn> -->
+                  <v-spacer></v-spacer>
+                  <!-- <v-spacer></v-spacer>
+                  <v-btn fab @click="shareFB" color="#3b5998" style="border-radius:10px" medium dark><v-icon medium>mdi-facebook</v-icon></v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn fab @click="shareWA" color="#25D366" style="border-radius:10px" medium dark><v-icon medium>mdi-whatsapp</v-icon></v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn fab @click="shareIN" color="purple" style="border-radius:10px" medium dark><v-icon medium>mdi-instagram</v-icon></v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn fab @click="shareEmail" color="grey darken-1" style="border-radius:10px" medium dark><v-icon medium>mdi-at</v-icon></v-btn>
+                  <v-spacer></v-spacer> -->
+                </v-layout>
+            </v-card>
+          </v-bottom-sheet>
         </v-card>
       </v-dialog>
 
@@ -315,6 +387,7 @@ export default {
     loading: false,
     loadingData: false,
     memeDetailsDialog: false,
+    sheet: false,
     view: 1,
     readMore: false,
     limit: 50,
@@ -331,9 +404,49 @@ export default {
     },
     getUser () {
       return this.$store.state.user
-    }
+    },
+    mmConnected () {
+      return this.$store.state.user.mmConnected
+    },
+    walletConnected () {
+      return this.$store.state.user.walletConnected
+    },
+    twConnected () {
+      return this.$store.state.user.twConnected
+    },
+    emailConnected () {
+      return this.$store.state.user.isEmailConnected
+    },
   },
   watch: {
+    mmConnected () {
+      if (this.mmConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
+    twConnected () {
+      if (this.twConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
+    walletConnected () {
+      if (this.walletConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
+    emailConnected(newValue){
+      if (this.emailConnected) {
+        setTimeout(() => {
+          this.getLikes();
+        }, 2000)
+      }
+    },
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
@@ -342,7 +455,9 @@ export default {
   },
   methods: {
     init () {
-      if(![null,undefined].includes(this.getUser)) {
+      console.log('######## this.getUser ##########')
+      console.log(this.getUser)
+      if(![null,undefined, ''].includes(this.getUser.displayName)) {
         console.log("x");
         this.getLikes();
       }
@@ -364,12 +479,20 @@ export default {
             this.loadingData = false
             this.memeCount = Math.ceil(this.getPublicMemes.length / 3)
             console.log(this.memeCount)
+
+            if (this.$route.params?.id !== 'default') {
+              let id = this.$route.params?.id
+              let meme  = this.getPublicMemes.find(item => item.id === id)
+              this.memeDetailsClicked(meme)
+            }
+            
           }
         })
         .catch(error => {
           console.log(error)
           this.loadingData = false
         })
+
     },
     waitPublicMemesLoaded () {
       setTimeout(() => {
@@ -380,11 +503,17 @@ export default {
             this.loadingData = false
             this.memeCount = Math.ceil(this.getPublicMemes.length / 3)
             console.log(this.memeCount)
+            if (this.$route.params?.id !== 'default') {
+              let id = this.$route.params?.id
+              let meme  = this.getPublicMemes.find(item => item.id === id)
+              this.memeDetailsClicked(meme)
+            }
             return
           }
         }, 2000);
     },
     getLikes (){
+      console.log('######## this.getLikes ##########')
       const query = db.collection('likes').doc(this.getUser.uid);
       query.get().then(snapshot => {
         console.log(snapshot.data())
@@ -464,12 +593,25 @@ export default {
       this.getPublicMemes[index].show = !this.getPublicMemes[index].show
     },
     memeDetailsClicked (meme) {
+      console.log(meme)
       this.selectedMeme = meme
       this.memeDetailsDialog = true
+      this.addViewCount(meme)
+    },
+    addViewCount (meme) {
+      let dispatchObj = {
+        views: meme.views += 1
+      }
+      db.collection('memes').doc(meme.id).update(dispatchObj)
+      .then(() => {
+          // No TODO
+        })
+      .catch(error => {
+          console.log(error)
+        })
     },
     checkNameLength (name) {
-      // console.log(name)
-      // console.log(name.length)
+      if (name === undefined) return
       if (name.length < 10) {
         return name
       } else {

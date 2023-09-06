@@ -241,7 +241,7 @@
 
       </v-list-group>
         
-      <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes')"></v-list-item>
+      <v-list-item prepend-icon="mdi-image-multiple-outline" title="Meme Marketplace" value="mememarket" @click="routerGo('/memes/default')"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="NFT Marketplace" value="nftmarket" @click="routerGo('/nfts')"></v-list-item>
       <v-list-item prepend-icon="mdi-circle-multiple-outline" title="New Token Listings" value="tokens" @click="routerGo('/tokens')"></v-list-item>
       <v-list-item prepend-icon="mdi-shape-plus" title="Games" value="games" @click="routerGo('/games')"></v-list-item>
@@ -690,11 +690,11 @@
 
           <v-row v-if="isMobileDevice" style="margin-left:5%;margin-right:5%">
             <v-col cols="12" v-if="showConfirmation === false">
-              <!--<v-btn v-if="!mmConnected && $route.name !== 'MMobile'" size="large" style="width:100%;text-transform: none !important" color="deep-purple-lighten-4"  @click="gotoMMLink()">
+              <v-btn v-if="!mmConnected && $route.name !== 'MMobile'" size="large" style="width:100%;text-transform: none !important" color="deep-purple-lighten-4"  @click="gotoMMLink()">
                 <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Launch Metamask In-App Browser
               </v-btn>
               <MetaMaskConnect v-if="$route.name === 'MMobile'" :isMobileDevice="isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
-              </MetaMaskConnect> -->
+              </MetaMaskConnect>
 
               <WalletConnect 
                   :isMobileDevice="isMobileDevice" 
@@ -923,7 +923,6 @@ export default {
       windowHeight: Number,
     },
     data: () => ({
-      dark: true,
       env: false,
       drawer: false,
       scrolled: false,

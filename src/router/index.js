@@ -94,7 +94,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "home" */ '@/views/MyNFTs.vue'),
       },
       {
-        path: '/memes',
+        path: '/memes/:id',
         name: 'Meme Marketplace',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route

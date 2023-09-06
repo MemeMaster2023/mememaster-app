@@ -15,6 +15,7 @@
         :isMobileDevice="isMobileDevice" 
         :windowWidth="windowWidth" 
         :windowHeight="windowHeight" 
+        v-on:mmMobileClicked="mmMobileClicked()"
         :drawer="drawer"
   />
   </v-app>
