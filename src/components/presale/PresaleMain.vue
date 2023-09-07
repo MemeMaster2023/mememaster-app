@@ -227,7 +227,7 @@
 
                 <v-row v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0 && tempWalletArr.includes(this.getUser.accounts[0])" style="margin-top:-30px">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
-                    <v-chip variant="outlined" class="ma-2" color="#360a3f">
+                    <v-chip variant="outlined" class="ma-2" color="#360a3f" style="width:284px">
                       <v-icon color="green-lighten-2"><img
                         style="width: 22px;margin-right:10px; background-color: rgb(159, 155, 155); border-radius: 50%"
                         src="/img/logos/logo.png" alt="Icon" /></v-icon>
@@ -238,11 +238,12 @@
 
                 <v-row class="pt-2" v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0 && tempWalletArr.includes(this.getUser.accounts[0])" style="margin-top:-30px">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
-                    <v-btn variant="text" 
+                    <v-btn variant="outlined" 
+                           rounded
                            prepend-icon="mdi-lifebuoy" 
                            color="#360a3f" 
                            size="small" 
-                           style="text-transform: none !important;"
+                           style="text-transform: none !important;font-weight:bold;width:284px"
                            @click="gotoLink('https://t.me/mememaster2023_tech_support')"
                     >
                       Having issues buying? Click here.
