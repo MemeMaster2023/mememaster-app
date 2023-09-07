@@ -690,10 +690,10 @@
 
           <v-row v-if="isMobileDevice" style="margin-left:5%;margin-right:5%">
             <v-col cols="12" v-if="showConfirmation === false">
-              <v-btn v-if="!mmConnected && $route.name !== 'MMobile'" size="large" style="width:100%;text-transform: none !important" color="deep-purple-lighten-4"  @click="gotoMMLink()">
+              <v-btn v-if="!mmConnected && $route.name !== 'MMobile' && !mmMobileApp" size="large" style="width:100%;text-transform: none !important" color="deep-purple-lighten-4"  @click="gotoMMLink()">
                 <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Launch Metamask In-App Browser
               </v-btn>
-              <MetaMaskConnect v-if="$route.name === 'MMobile'" :isMobileDevice="isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
+              <MetaMaskConnect v-if="$route.name === 'MMobile' || mmMobileApp" :isMobileDevice="isMobileDevice" style="width:100%;margin-bottom: 16px;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
               </MetaMaskConnect>
 
               <WalletConnect 
@@ -977,6 +977,9 @@ export default {
       },
       mmConnected () {
         return this.$store.state.user.mmConnected
+      },
+      mmMobileApp () {
+        return this.$store.state.user.mmMobileApp
       },
       walletConnected () {
         return this.$store.state.user.walletConnected

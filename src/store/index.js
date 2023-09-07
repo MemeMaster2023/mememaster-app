@@ -30,6 +30,7 @@ export default createStore({
                 isEmailConnected: localStorage.getItem('mm-isEmailConnected') === null ? false : localStorage.getItem('mm-isEmailConnected') === 'false' ? false : true,
                 mmInstalled: false,
                 mmCount: 0,
+                mmMobileApp: false,
                 twConnected: false,
                 twInstalled: false,
                 newCount: 10,
@@ -70,6 +71,10 @@ export default createStore({
         increment (state) {
             state.count++
             console.log(state)
+        },
+        setMMmobileApp (state, payload) {
+            // console.log('drawer: ' + payload.drawer)
+            state.user.mmMobileApp = payload
         },
         setDrawer (state, payload) {
             // console.log('drawer: ' + payload.drawer)

@@ -233,6 +233,9 @@ export default {
     mmConnected () {
       return this.$store.state.user.mmConnected
     },
+    mmMobileApp () {
+      return this.$store.state.user.mmMobileApp
+    },
     twConnected () {
       return this.$store.state.user.twConnected
     },

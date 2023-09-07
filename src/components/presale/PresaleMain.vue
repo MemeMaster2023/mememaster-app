@@ -1236,10 +1236,10 @@
 
           <v-row v-if="isMobileDevice" style="margin-left:5%;margin-right:5%">
             <v-col cols="12" v-if="showConfirmation === false">
-              <v-btn v-if="!mmConnected && $route.name !== 'MMobile'" size="large" style="width:100%;text-transform: none !important" color="deep-purple-lighten-4"  @click="gotoMMLink()">
+              <v-btn v-if="!mmConnected && $route.name !== 'MMobile' && !mmMobileApp" size="large" style="width:100%;text-transform: none !important" color="deep-purple-lighten-4"  @click="gotoMMLink()">
                 <img src="/img/icons/metamask.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Launch Metamask In-App Browser
               </v-btn>
-              <MetaMaskConnect v-if="$route.name === 'MMobile'" :isMobileDevice="isMobileDevice" style="width:100%;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
+              <MetaMaskConnect v-if="$route.name === 'MMobile' || mmMobileApp" :isMobileDevice="isMobileDevice" style="width:100%;margin-bottom: 16px;" ref="mmConnect" buttonType="large" :windowWidth="windowWidth" :windowHeight="windowHeight" :dark="dark">
               </MetaMaskConnect>
 
               <WalletConnect
@@ -1882,7 +1882,7 @@ export default {
   },
   data: () => ({
     tempWalletArr: [
-      //'0x4c200851C5BeD4456175f3183fF76a1bCc73f48C',
+      '0x4c200851C5BeD4456175f3183fF76a1bCc73f48C',
       '0x770e725359cd9a3cf34feeb832a16969a8d21660',
       '0x63e8c8c7986b6a35fdb510389f339587dce4f23b',
       '0x600dd87387875403d068a577cbcf79aafa0032c9',
@@ -3288,6 +3288,9 @@ export default {
     mmConnected () {
       return this.$store.state.user.mmConnected
     },
+    mmMobileApp () {
+      return this.$store.state.user.mmMobileApp
+    },
     walletConnected () {
       return this.$store.state.user.walletConnected
     },
@@ -3483,7 +3486,7 @@ export default {
         .then(result => {
         console.log(result.data.result)
         let abi = JSON.parse(result.data.result)
-        window.abi = abi;
+        this.presaleContractAbi = abi
         this.presaleContract = new web3.eth.Contract(abi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContract)
         this.loadPresaleFromContract()
@@ -3576,7 +3579,7 @@ export default {
       }
     },
     buyWithEthContract () {
-      if(this.isMobileDevice) {
+      if(this.isMobileDevice && !this.mmConnected) {
         this.buyWithEthContractMobile()
       } else {
         this.buyWithEthContractWeb()
@@ -3611,7 +3614,7 @@ export default {
         console.log(signer);
         const network = await provider.getNetwork();
         console.log(network);
-        const abi = window.abi;
+        const abi = this.presaleContractAbi;
         console.log(abi)
         // The Contract object
 
@@ -3762,7 +3765,7 @@ export default {
         });
     },
     buyWithUSDTContract () {
-      if(this.isMobileDevice) {
+      if(this.isMobileDevice && !this.mmConnected) {
         this.buyWithUSDTContractMobile()
       } else {
         this.buyWithUSDTContractWeb()
@@ -3787,8 +3790,9 @@ export default {
         const usdtContract = usdtConstructor.connect(signer)
         console.log(usdtContract)
 
-        let usdt = parseFloat(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
+        let usdt = parseInt(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
         let usdtSpending = usdt // * 1.01
+
         console.log('** usdt ***')
         console.log(usdt)
         console.log(this.amountEmasForUSDTDiagLog)
@@ -3829,7 +3833,7 @@ export default {
 
             // USDT buy
             console.log('Approve result: ', approve)
-            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
+            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, this.presaleContractAbi, provider);
             const presaleContract = presaleConstructor.connect(signer);
             const buyUSDT = await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
 
@@ -3868,7 +3872,6 @@ export default {
             })  
           })
         }
-
         if (userAllowance === 0) {
           const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
 
@@ -3878,7 +3881,7 @@ export default {
 
             // USDT buy
             console.log('Approve result: ', approve)
-            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, window.abi, provider);
+            const presaleConstructor = new ethers.Contract(`${presaleAddress.toLowerCase()}`, this.presaleContractAbi, provider);
             const presaleContract = presaleConstructor.connect(signer);
             const buyUSDT = await presaleContract.buyWithUSDT(`${this.activePresale}`, `${tokens}`);
 
@@ -3937,7 +3940,7 @@ export default {
 
       // try {
         
-        let usdt = parseFloat(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
+        let usdt = parseInt(this.amountUSDT) * 1e6 // (Math.round(parseFloat(this.amountUSDT)) * 1e6)
         let usdtSpending = usdt // * 1.01
         console.log('**** usdt *****')
         console.log(usdt)

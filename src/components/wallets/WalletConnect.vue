@@ -1,7 +1,7 @@
 <template>
   <div id="walletconnect">
 
-    <v-row v-if="buttonType === 'large'" :class="isMobileDevice ? 'pt-2 ml-0 mr-0' : 'pt-2'">
+    <v-row v-if="buttonType === 'large'" :class="isMobileDevice ? 'pt-2' : 'pt-2'">
 
       <v-btn style="width:100%;" size="large" color="blue lighten-5" v-if="walletConnected">
         <img src="/img/icons/walletconnect_light.png" style="max-width:32px;padding-right:10px;text-transform: none !important;"/>Connected
