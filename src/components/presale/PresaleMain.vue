@@ -1883,6 +1883,7 @@ export default {
   data: () => ({
     tempWalletArr: [
       '0x4c200851C5BeD4456175f3183fF76a1bCc73f48C',
+      '0x4c200851c5bed4456175f3183ff76a1bcc73f48c',
       '0x770e725359cd9a3cf34feeb832a16969a8d21660',
       '0x63e8c8c7986b6a35fdb510389f339587dce4f23b',
       '0x600dd87387875403d068a577cbcf79aafa0032c9',
@@ -3872,7 +3873,7 @@ export default {
             })  
           })
         }
-        if (userAllowance === 0) {
+        if (userAllowance == 0) {
           const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
 
           approve.wait().then(async () => {
