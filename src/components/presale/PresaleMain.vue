@@ -3872,8 +3872,7 @@ export default {
               }
             })  
           })
-        }
-        if (userAllowance == 0) {
+        } else {
           const approve = await usdtContract.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`);
 
           approve.wait().then(async () => {
@@ -4075,9 +4074,7 @@ export default {
                 this.buyUSDTView = 6
               }
             });
-        }
-
-        if (userAllowance == 0) {
+        } else {
 
           let data = usdtContract.methods.approve(`${presaleAddress.toLowerCase()}`, `${usdtSpending}`).encodeABI();
           const config = await prepareSendTransaction({
