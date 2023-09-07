@@ -202,7 +202,7 @@
         >
         
           <div class="ma-8">
-            <v-row :style="'margin-top:' + (windowHeight - 600) + 'px;'" :align="'center'">
+            <v-row :style="'margin-top:' + (mmMobileApp ? windowHeight - 550 : windowHeight - 600) + 'px;'" :align="'center'">
               <v-col cols="12" md="12" >
                 <div class="text-center pb-12">
                   <v-btn variant="outlined" 
@@ -686,6 +686,7 @@
 
 <script>
 // @ is an alias to /src
+import store from '@/store/index'
 import TokenListings from '@/components/tokens/Tokens'
 import { scroller } from 'vue-scrollto/src/scrollTo'
 export default {
@@ -756,7 +757,9 @@ export default {
     TokenListings
   },
   computed: {
-
+    mmMobileApp () {
+      return this.$store.state.user.mmMobileApp
+    }
   },
   watch: {
   },
@@ -766,6 +769,13 @@ export default {
     this.scrollToTop()
     console.log('###### this.isMobileDevice Home Home ##########')
     console.log(this.isMobileDevice)
+
+    console.log('this.$route.name === MMobile 01')
+    console.log(this.$route.name)
+    if (this.$route.name === 'MMobile') {
+      console.log('this.$route.name === MMobile 02')
+      store.commit("setMMmobileApp", true);
+    }
   },
   methods: {
     scrollToGallery () {
