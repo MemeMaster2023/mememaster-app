@@ -3661,7 +3661,7 @@ export default {
            this.butLoading = false
 
         }).catch(error => {
-          console.log(error)
+          console.log(error.message)
           if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
             
             console.log('reject 01')
@@ -3677,7 +3677,7 @@ export default {
         })
 
       } catch(error) {
-        console.log(error)
+        console.log(error.message)
         // if user rejects
         if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
           
@@ -3936,7 +3936,7 @@ export default {
           })      
         }   
       } catch(error) {
-        console.log(error)
+        console.log(error.message)
         if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
           this.buyWithUsdtDialog = false
           this.amountUSDT = 0
@@ -4063,7 +4063,7 @@ export default {
                     });
                 })
                 .catch((error) => {
-                  console.log(error)
+                  console.log(error.message)
                   // Failed transaction reporting back to user
                   if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
                     this.buyWithUsdtDialog = false
@@ -4077,7 +4077,7 @@ export default {
                 });
             })
             .catch((error) => {
-              console.log(error)
+              console.log(error.message)
               // Failed transaction reporting back to user
               if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
                 this.buyWithUsdtDialog = false
@@ -4147,7 +4147,7 @@ export default {
                 });
             })
             .catch((error) => {
-              console.log(error)
+              console.log(error.message)
               // Failed transaction reporting back to user
               if (error.message.includes('User rejected the request.') || error.message.includes('user rejected transaction') || error.message.includes('User denied transaction signature')) {  // condition when user rejects the tx
                 this.buyWithUsdtDialog = false
@@ -4329,7 +4329,7 @@ export default {
           .catch((error) => {
             this.snackbarText = 'Send message error - please try again later'
             this.snackbar = true
-            console.log(error)
+            console.log(error.message)
           })
       }
     },
