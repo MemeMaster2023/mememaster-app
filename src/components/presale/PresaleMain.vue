@@ -181,7 +181,7 @@
               </v-toolbar>
 
                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <v-template v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
+                <v-template v-if="presaleStarted">
                   <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }} - {{ makeDate(presale.endTime) }}</div>
                   <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
                   
@@ -190,7 +190,7 @@
                 </v-template>
 
                  <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-4'" v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
+                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-4'" v-if="presaleStarted">
                   <v-progress-linear
                     :model-value="stageProgress"
                     height="30"
@@ -202,11 +202,11 @@
                 </v-layout>
 
                  <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <Countdown v-else-if="!presaleStarted || !tempWalletArr.includes(this.getUser.accounts[0])">
+                <Countdown v-else-if="!presaleStarted">
                 </Countdown>
 
                  <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <div v-if="presaleStarted || tempWalletArr.includes(this.getUser.accounts[0])">
+                <div v-if="presaleStarted">
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
                 </div>
@@ -225,7 +225,7 @@
                   </v-col>
                 </v-row>
 
-                <v-row v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0 && tempWalletArr.includes(this.getUser.accounts[0])" style="margin-top:-30px">
+                <v-row v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0" style="margin-top:-30px">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-chip variant="outlined" class="ma-2" color="#360a3f" style="width:284px">
                       <v-icon color="green-lighten-2"><img
@@ -236,7 +236,7 @@
                   </v-col>
                 </v-row>
 
-                <v-row class="pt-2" v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0 && tempWalletArr.includes(this.getUser.accounts[0])" style="margin-top:-30px">
+                <v-row class="pt-2" v-if="(mmConnected || walletConnected || twConnected)" style="margin-top:-30px">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-btn variant="outlined" 
                            rounded
@@ -262,10 +262,10 @@
                 <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
                 <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
-                    <v-btn @click="mainnetTestBuyWithETH()" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
-                    <v-btn @click="mainnetTestBuyWithUSDT()" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
+                    <v-btn @click="handleShowDialog(true, 'buyWithUsdtDialog')" size="large" style="width:100%" color="#360a3f">Buy with USDT</v-btn>
                   </v-col>
                 </v-row>
 
@@ -1845,7 +1845,7 @@ import { ethers } from 'ethers';
 // import { connectUser, getProvider } from './presaleHelpers';
 // import { presaleAddress } from './config';
 // const presaleAddress = "0x89e3e98A0a7f33555F8C167Cf34540d00E70F299"
-const presaleAddress = "0x448Fe2708d8A8044F40D6E9456e40CF6a1Fd7A72" /// !! NEW TESTNET  0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55
+const presaleAddress = "0xd27c12d2b7749280057592BF03eC2a63158F4716" // 0x448Fe2708d8A8044F40D6E9456e40CF6a1Fd7A72 /// !! NEW TESTNET  0x5be4dE69b66E033bAc999889BBaF98E4bebe7A55
 const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"    /// !! USDT TESTNET  0x96c694b644E215BDD025E050EDf9cE9b018bCcDB
 
 // Mobile Imports and const
@@ -1896,40 +1896,7 @@ export default {
     drawer: Boolean
   },
   data: () => ({
-    tempWalletArr: [
-      '0x4c200851C5BeD4456175f3183fF76a1bCc73f48C',
-      '0x4c200851c5bed4456175f3183ff76a1bcc73f48c',
-      '0x770e725359cd9a3cf34feeb832a16969a8d21660',
-      '0x63e8c8c7986b6a35fdb510389f339587dce4f23b',
-      '0x600dd87387875403d068a577cbcf79aafa0032c9',
-      '0xdd9c3cffd75b2709ea23d049f0ea632eb87a3c80',
-      '0x159e84dc084938de6e99ef466364645eccde0ece',
-      '0x5ac123e22a70b77354b6872c0f7073876995d333',
-      '0xDd9C3CfFd75B2709EA23D049f0EA632eb87a3C80',
-      '0x159E84dC084938de6E99Ef466364645ECCDE0ecE',
-      '0x5ac123e22a70B77354b6872c0f7073876995D333',
-      '0x63E8c8C7986B6a35fdB510389f339587DCE4f23B',
-      '0x600dD87387875403d068a577cbcf79aafA0032C9',
-      '0x770e725359cd9A3Cf34FEeb832A16969a8D21660',
-      '0x5eB93f1b0b3E1Fd0f99118e39684f087a84d40Ec',
-      '0x9967a5a58bb500f575782fe62e92cb318fb39b1a',
-      '0x9967a5a58Bb500f575782fe62E92Cb318FB39B1a',
-      '0x44Beb9Db583f3417c265Cb3616B67324e5382411',
-      '0xf3080174242667f944350587Db9Bf6e008b52cd5',
-      '0x44beb9db583f3417c265cb3616b67324e5382411',
-      '0xf3080174242667f944350587db9bf6e008b52cd5',
-      '0xb363463dd9D8dAED8A0E074495E4aDA67ea1176b',
-      '0xb363463dd9d8daed8a0e074495e4ada67ea1176b',
-      '0xb4DE7DaeC140EF39AB3E006ABA485E906F80DdcB',
-      '0xb4de7daec140ef39ab3e006aba485e906f80ddcb',
-      '0xb4de7daec140ef39ab3e006aba485e906f80ddcb',
-      '0xF7480c07Ea1e7aa9340e49339300029667348ecA',
-      '0xf7480c07ea1e7aa9340e49339300029667348eca',
-      '0x7D6112094092e02762379D8201E7e136AaA2F6E9',
-      '0x7d6112094092e02762379d8201e7e136aaa2f6e9',
-      '0x5ac123e22a70B77354b6872c0f7073876995D333',
-      '0x5ac123e22a70b77354b6872c0f7073876995d333'
-    ],
+    tempWalletArr: [],
     loading: false,
     butLoading: false,
     snackbar: false,
@@ -1941,14 +1908,12 @@ export default {
     stage1: 0.005,
     stage2: 0.0055,
     stage3: 0.0061,
-    stage4: 0.0061,
-    stage5: 0.005,
     stage1Target: '$1,750,000',
     stage2Target: '$1.375,000',
     stage3Target: '$1,220.000',
     stage4Target: '$1,750,000', // Temp
     stage5Target: '$1,750,000', // Temp
-    presaleStarted: false,
+    presaleStarted: true,
     activePresale: 1, // array in contract
     activeStagePrice: 0,
     presale: [],
@@ -3375,10 +3340,6 @@ export default {
       this.activeStagePrice = this.stage2
     } else if (this.activePresale === 3) {
       this.activeStagePrice = this.stage3
-    } else if (this.activePresale === 4) { // Temp
-      this.activeStagePrice = this.stage4
-    } else if (this.activePresale === 5) { // Temp
-      this.activeStagePrice = this.stage5
     }
 
   },
@@ -3389,7 +3350,7 @@ export default {
     }
   },
   methods: {
-    mainnetTestBuyWithETH () {
+    /* mainnetTestBuyWithETH () {
 
       if (this.tempWalletArr.includes(this.getUser.accounts[0])) {
         this.handleShowDialog(true, 'buyWithEthDialog')
@@ -3406,7 +3367,7 @@ export default {
       } else {
         this.presaleNotLive = true
       }
-    },
+    }, */
     init () {
       this.pieMargin = this.windowWidth <= 360 ? -40 : this.windowWidth <= 390 ? -30 : -20
       console.log(this.pieMargin)
