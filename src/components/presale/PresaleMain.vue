@@ -208,7 +208,7 @@
                  <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
                 <div v-if="presaleStarted">
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
+                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : numberWithCommas(raised) }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
                 </div>
 
                 <div v-else>
@@ -919,7 +919,7 @@
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
               <div class="text-h4 ma-2 text-purple-darken-3">MEME MASTER TOKENOMICS</div>
-              <div class="text-h5 ma-2 text-purple-darken-3">Token distibution and information</div>
+              <div class="text-h5 ma-2 text-purple-darken-3">Token distribution and information</div>
           </v-col>
         </v-row>
 

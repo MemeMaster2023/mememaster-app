@@ -872,7 +872,7 @@
           <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
             <v-col cols="12" md="12" :align="'center'" class="mt-8">
                 <div class="text-h4 ma-2 text-purple-darken-3">MEME MASTER TOKENOMICS</div>
-                <div class="text-h5 ma-2 text-purple-darken-3">Token distibution and information</div>
+                <div class="text-h5 ma-2 text-purple-darken-3">Token distribution and information</div>
             </v-col>
           </v-row>
   
