@@ -1914,7 +1914,7 @@ export default {
     stage4Target: '$1,750,000', // Temp
     stage5Target: '$1,750,000', // Temp
     presaleStarted: true,
-    activePresale: 1, // array in contract
+    activePresale: 2, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
