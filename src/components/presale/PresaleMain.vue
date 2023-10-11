@@ -4204,17 +4204,17 @@ export default {
         url = import.meta.env.VITE_APP_MM_API_LOCAL
       }
       try {
-        const response = await axios.get(url + "getlastpricecoingecko", {
+        /* const response = await axios.get(url + "getlastpricecoingecko", {
           params: {
             "symbols": symbol
           }
-        });
+        }); */
         // console.log(response)
         // const { ETH: ethData, USDT: usdtData } = response.data.data;
         if (symbol === 'ethereum') {
-          this.ethPrice = response.data.data.market_data.current_price.usd
+          this.ethPrice = 1554 // response.data.data.market_data.current_price.usd
         } else {
-          this.usdtPrice = response.data.data.market_data.current_price.usd
+          this.usdtPrice = 1 // response.data.data.market_data.current_price.usd
         }
         console.log(this.ethPrice)
         console.log(this.usdtPrice)
