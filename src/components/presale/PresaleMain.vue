@@ -182,7 +182,7 @@
 
                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
                 <v-template v-if="presaleStarted">
-                  <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }} - {{ makeDate(presale.endTime) }}</div>
+                  <div class="pt-4 text-h5 ma-2 text-black">{{ "09 Nov 2023" }} - {{ makeDate(presale.endTime) }}</div>
                   <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
                   
                   <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage2 : stage3 }}</div>
@@ -1914,7 +1914,7 @@ export default {
     stage4Target: '$1,750,000', // Temp
     stage5Target: '$1,750,000', // Temp
     presaleStarted: true,
-    activePresale: 2, // array in contract
+    activePresale: 3, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
