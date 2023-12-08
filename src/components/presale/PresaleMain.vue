@@ -171,52 +171,62 @@
               KYC - AUDIT
             </v-btn>
 
-            <v-card theme="dark" color="#FFF" :max-width="isMobileDevice ? '100%' : '70%'" height="100%">
+            <v-card theme="dark" color="#FFF" :max-width="isMobileDevice ? '100%' : '70%'" min-height="610">
               <v-toolbar
                 color="#360a3f"
               >
-              <div style="font-size: 1.5rem;" class="ml-4 grow">Presale Stage {{ activePresale }}</div>
-              <v-spacer></v-spacer>
-               <v-toolbar-title>{{ activeStagePrice }}</v-toolbar-title>
+              <div style="font-size: 1.5rem;" class="ml-4 grow">The Presale Has Ended</div>
               </v-toolbar>
 
                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <v-template v-if="presaleStarted">
-                  <div class="pt-4 text-h5 ma-2 text-black">{{ "09 Nov 2023" }} - {{ makeDate(presale.endTime) }}</div>
+                <!-- <v-template v-if="presaleStarted">
+                  <div class="pt-4 text-h5 ma-2 text-black">{{ makeDate(presale.startTime) }} - {{ makeDate(presale.endTime) }}</div>
                   <div class="text-h6 ma-2 text-black">1 EMAS = ${{ presale.length === 0 ? activeStagePrice :(parseInt(presale.price) / 1000000000000000000) }}</div>
                   
                   <div v-if="activePresale < 3" style="font-size: 1rem;" class="ml-8 mr-8 text-black">Hurry and buy before Stage {{  activePresale + 1 }} Price Increases To {{ activePresale === 1 ? stage2 : stage3 }}</div>
                   <div v-else style="font-size: 1rem;" class="ml-8 mr-8 text-black">Last Stage.</div>
+                </v-template> -->
+                <v-template >
+                  <div class="pt-2 text-h6 ma-2 text-black">Presale Ended on 8 Dec, 2023</div>
                 </v-template>
 
-                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-4'" v-if="presaleStarted">
+                <div class="ma-2 text-black">Due to Meme Master not reaching the min sale quantity in the Pre Sale, as well as claiming your EMAS tokens you will also be manually refunded all of your contribution in USDT or ETHEREUM.<br><br>
+                This is as a thank you for those of you who took part in the sale.<br><br>
+                We will still go ahead with listing the EMAS tokens in the near future where you may trade your tokens even though your contribution has been fully refunded.<br><br>
+
+                Thank you for your support.<br><br>
+
+                The MemeMaster Team
+                </div>
+
+                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                <!-- <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-4'" v-if="presaleStarted">
                   <v-progress-linear
-                    :model-value="stageProgress"
+                    :model-value="100"
                     height="30"
                     color="#360a3f"
                     style="background-color: #a692aa;"
                   >
-                  <strong>{{ stageProgress }}%</strong>
+                  <strong>{{ 'Presale Ended' }}</strong>
                   </v-progress-linear>
-                </v-layout>
+                </v-layout> -->
 
-                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <Countdown v-else-if="!presaleStarted">
-                </Countdown>
+                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                <!-- <Countdown v-if="!presaleStarted">
+                </Countdown> -->
 
-                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
-                <div v-if="presaleStarted">
+                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                <!-- <div v-if="presaleStarted">
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
-                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : numberWithCommas(raised) }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
+                  <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
                 </div>
 
                 <div v-else>
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — 0 / 0</div>
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — $0 / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
-                </div>
+                </div> -->
 
-                <v-row class="pt-4" v-if="mmConnected || walletConnected || twConnected">
+                <v-row v-if="mmConnected || walletConnected || twConnected">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-chip variant="outlined" class="ma-2" color="#360a3f">
                       <v-icon start icon="mdi-wallet" color="#360a3f"></v-icon>
@@ -227,7 +237,7 @@
 
                 <v-row v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0" style="margin-top:-30px">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
-                    <v-chip variant="outlined" class="ma-2" color="#360a3f" style="width:284px">
+                    <v-chip variant="outlined" class="ma-2" color="#360a3f">
                       <v-icon color="green-lighten-2"><img
                         style="width: 22px;margin-right:10px; background-color: rgb(159, 155, 155); border-radius: 50%"
                         src="/img/logos/logo.png" alt="Icon" /></v-icon>
@@ -236,31 +246,26 @@
                   </v-col>
                 </v-row>
 
-                <v-row class="pt-2" v-if="(mmConnected || walletConnected || twConnected)" style="margin-top:-30px">
-                  <v-col cols="12" md="12" class="pl-8 pr-8">
-                    <v-btn variant="outlined" 
-                           rounded
-                           prepend-icon="mdi-lifebuoy" 
-                           color="#360a3f" 
-                           size="small" 
-                           style="text-transform: none !important;font-weight:bold;width:284px"
-                           @click="gotoLink('https://t.me/mememaster2023_tech_support')"
-                    >
-                      Having issues buying? Click here.
-                    </v-btn>
-                  </v-col>
-                </v-row>
 
                 <v-row v-if="!mmConnected && !walletConnected && !twConnected">
 
-                  <v-col cols="12" md="12" class="pt-16 pl-8 pr-8">
+                  <v-col cols="12" md="12" class="pt-2 pl-8 pr-8">
                     <v-btn @click="connectWalletClicked" class="mt-8" size="large" style="width:100%" color="#360a3f">Connect your Wallet</v-btn>
                   </v-col>
 
                 </v-row>
 
+                <v-row v-else class="pb-8">
+                  <v-col cols="12" md="12" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
+                    <div style="font-size: 1rem;"  class="ml-2 mr-2 font-weight-bold text-black">Claiming will be available in {{ daysBetween(new Date().getTime(), new Date('2023-12-22').getTime()) }} Days</div>
+                  </v-col>
+                  <v-col cols="12" md="12" :class="isMobileDevice ? 'pl-8 pr-8' : ''" :align="'center'">
+                    <v-btn @click="handleClaim()" disabled size="large" style="width:90%" color="#360a3f">Claim Now</v-btn>
+                  </v-col>
+                </v-row>
+
                 <!--  presaleNotLive handleShowDialog(true, 'buyWithEthDialog')  handleShowDialog(true, 'buyWithUsdtDialog') -->
-                <v-row v-else>
+                <!-- <v-row v-else>
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <v-btn @click="handleShowDialog(true, 'buyWithEthDialog')" size="large" style="width:100%" color="#360a3f">Buy with ETH</v-btn>
                   </v-col>
@@ -276,10 +281,10 @@
                   <v-col cols="12" md="6" :class="isMobileDevice ? 'pl-8 pr-8' : 'pr-8'">
                     <v-btn size="large" style="width:100%" @click="scrollToNewToCrypto()">New to Crypto</v-btn>
                   </v-col>
-                </v-row>
+                </v-row> -->
 
             </v-card>
-          </v-col>
+            </v-col>
         </v-row>
       </v-img>
 
@@ -4325,6 +4330,18 @@ export default {
     },
     makeDateTime (date) {
       return dateformat(new Date(date), 'dd mmm, yyyy HH:MM')
+    },
+    daysBetween(date1, date2) {
+
+      // The number of milliseconds in one day
+      const ONE_DAY = 1000 * 60 * 60 * 24;
+
+      // Calculate the difference in milliseconds
+      const differenceMs = Math.abs(date1 - date2);
+
+      // Convert back to days and return
+      return Math.round(differenceMs / ONE_DAY);
+
     }
   }
 }
