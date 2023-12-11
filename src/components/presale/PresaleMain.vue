@@ -1020,10 +1020,10 @@
                     v-clipboard:success="handleSuccess"
                     v-clipboard:error="handleError"
                 >EMAS Team Token Lockup Address: 0xbEcff770Ef81F4aE5Cc73F992BB8e0FB3Ab96859</div>
-               <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
+               <!-- <div :style="isMobileDevice ? 'font-weight:bold;color:#4A148C;font-size: 0.8rem;' : 'font-size: 1rem;font-weight:bold;color:#4A148C'"
                     v-clipboard:copy.stop="'0x000000000000000000000000000000000000dEaD'"
                     v-clipboard:success="handleSuccess"
-                    v-clipboard:error="handleError">EMAS Burn Address: 0x0000000000000......0000000000000dEaD</div><br>
+                    v-clipboard:error="handleError">EMAS Burn Address: 0x0000000000000......0000000000000dEaD</div> --><br>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336;font-size: 1rem;' : 'font-size: 1rem;font-weight:bold;color:#F44336'">!! Do not send funds to this Contract !!</div>
                <div :style="isMobileDevice ? 'font-weight:bold;color:#F44336;font-size: 1rem;' : 'font-size: 1rem;font-weight:bold;color:#F44336'">We cannot return funds sent to this contract address.</div>
               </v-sheet>
