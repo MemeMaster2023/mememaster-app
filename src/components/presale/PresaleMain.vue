@@ -10,19 +10,19 @@
         <v-row :class="isMobileDevice ? 'mt-2 ml-2 mr-2 mb-8' : drawer ? 'mt-12 ml-8 mr-8' : 'mt-12 ml-16 mr-16'" >
           <v-col cols="12" md="6" class="order-last order-md-first">
             <div :class="isMobileDevice ? 'text-h4 ma-2 pt-8 text-white' : 'text-h4 ma-1 text-white'">Meme Master Presale</div>
-            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Buy Now: Meme Master 2023 Presale live on September 10th, 2023 at 12:00 CET. EMAS tokens have zero sell and zero buy tax.<br><br>
+            <div style="text-align: justify;font-size: 1.2rem;" class="ma-2 text-white font-weight-medium">Meme Master 2023 Presale has ended on 8 Dec 2023..<br><br>
               <ul class="ml-4" style="margin-top: -20px;">
                 <li>Exchange EMAS tokens for EMAS points.</li>
                 <li>Mint, trade and collect Memes, music and NFTs and interact with our games.</li>
                 <li>Win EMAS points and convert into EMAS tokens.</li>
                 <li>Hold EMAS tiers to gain more access and discounted entry to early new token listing, new project releases, airdrops and much more.</li>
               </ul>
-              <div class="pt-2">No buy and sell tax - No min purchase - Please ensure you have enough ETH for gas fees.</div>
+              <!-- <div class="pt-2">No buy and sell tax - No min purchase - Please ensure you have enough ETH for gas fees.</div> -->
             </div>
 
             <v-tooltip location="bottom" v-if="!isMobileDevice">
               <template v-slot:activator="{ props }">
-                <div class="text-center">
+                <div class="text-center pt-16">
                   <v-btn
                         class="mt-2 mb-2"
                         size="large"
@@ -60,7 +60,7 @@
                        color="purple-lighten-4"
                        @click="scrollStages()"
                 >
-                  Presale Stages
+                  Presale
                 </v-btn>
               </v-col>
 
@@ -199,7 +199,7 @@
                 The MemeMaster Team
                 </div>
 
-                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
                 <!-- <v-layout :class="isMobileDevice ? 'mt-4 ml-4 mr-4 mb-12' : 'mt-4 ml-12 mr-12 mb-4'" v-if="presaleStarted">
                   <v-progress-linear
                     :model-value="100"
@@ -211,11 +211,11 @@
                   </v-progress-linear>
                 </v-layout> -->
 
-                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
                 <!-- <Countdown v-if="!presaleStarted">
                 </Countdown> -->
 
-                <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
+                 <!-- || tempWalletArr.includes(this.getUser.accounts[0]) -->
                 <!-- <div v-if="presaleStarted">
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">Sold — {{ tokensSold === 0 ? 0 : numberWithCommas(tokensSold) }} / {{ presale.length === 0 ? 0 : numberWithCommas(presale.tokensToSell) }}</div>
                   <div style="font-size: 1rem;"  class="ma-2 font-weight-bold text-black">USDT Raised — ${{ raised === 0 ? 0 : raised }} / {{ activePresale === 1 ? stage1Target : activePresale === 2 ? stage2Target : stage3Target }}</div>
@@ -284,7 +284,7 @@
                 </v-row> -->
 
             </v-card>
-            </v-col>
+          </v-col>
         </v-row>
       </v-img>
 
@@ -392,14 +392,14 @@
       <!-- ###############################       AIRDROP          ################################# -->
       <!-- ######################################################################################## -->
 
-      <Airdrop :isMobileDevice="isMobileDevice">
-      </Airdrop>
+      <!-- <Airdrop :isMobileDevice="isMobileDevice">
+      </Airdrop> -->
 
       <!-- ######################################################################################## -->
       <!-- ###############################       WELCOME          ################################# -->
       <!-- ######################################################################################## -->
 
-      <div id="welcome">
+      <!-- <div id="welcome">
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
@@ -426,13 +426,13 @@
           </v-col>
 
         </v-row>
-      </div>
+      </div> -->
 
       <!-- ######################################################################################## -->
       <!-- ###############################     HOW TO BUY         ################################# -->
       <!-- ######################################################################################## -->
 
-      <div id="howtobuy">
+      <!-- <div id="howtobuy">
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
@@ -498,13 +498,13 @@
 
           </v-col>
         </v-row>
-      </div>
+      </div> -->
 
       <!-- ######################################################################################## -->
       <!-- #################################     BUY OPTIONS      ################################# -->
       <!-- ######################################################################################## -->
 
-      <div id="buyoptions" style="background-color: #F3E5F5;padding-bottom: 16px;">
+      <!-- <div id="buyoptions" style="background-color: #F3E5F5;padding-bottom: 16px;">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
               <div class="text-h4 ma-2 text-purple-darken-3">OPTIONS ON HOW TO BUY</div>
@@ -566,7 +566,6 @@
                     :class="isMobileDevice ? 'mt-12' : ''"
             >
               <v-layout class="mb-2">
-                <!-- <v-icon size="40" color="purple-darken-3">mdi-currency-usd</v-icon> -->
                 <v-img src="/img/icons/white-cryptocurrency-coin-tether-usdt-icon-vector-27655890.png" style="max-width:40px"></v-img>
                 <div class="text-h5 text-purple-darken-3 pt-1">Buy with USDT</div>
               </v-layout>
@@ -603,13 +602,13 @@
 
           </v-col>
         </v-row>
-      </div>
+      </div> -->
 
       <!-- ######################################################################################## -->
       <!-- ###############################     PRESALE  STAGES        ############################# -->
       <!-- ######################################################################################## -->
 
-      <div id="stages">
+      <!-- <div id="stages">
 
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-12'" >
           <v-col cols="12" md="12" :align="'center'">
@@ -757,7 +756,7 @@
           </v-col>
         </v-row>
 
-      </div>
+      </div> -->
 
       <!-- ######################################################################################## -->
       <!-- #######################################     TIERS      ################################# -->
@@ -924,7 +923,7 @@
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-8">
               <div class="text-h4 ma-2 text-purple-darken-3">MEME MASTER TOKENOMICS</div>
-              <div class="text-h5 ma-2 text-purple-darken-3">Token distribution and information</div>
+              <div class="text-h5 ma-2 text-purple-darken-3">Token distibution and information</div>
           </v-col>
         </v-row>
 
@@ -1039,7 +1038,7 @@
       <!-- #####################################     NEW TO CRYPTO      ############################## -->
       <!-- ######################################################################################## -->
 
-      <div id="newtocrypto">
+      <!-- <div id="newtocrypto">
         <v-row :class="isMobileDevice ? 'mt-12 ml-2 mr-2' : 'mt-16'" >
           <v-col cols="12" md="12" :align="'center'" class="mt-4">
             <div class="text-h4 ma-2 text-purple-lighten-3">NEW TO CRYPTO</div>
@@ -1175,7 +1174,7 @@
             </v-col>
           </v-row>
         </v-form>
-      </div>
+      </div> -->
 
       <!-- ######################################################################################## -->
       <!-- ############################     DIALOGS AND COMPONENTS   ###############################-->
