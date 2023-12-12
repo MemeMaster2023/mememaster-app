@@ -46,9 +46,10 @@
                 <p style="margin-right: -20px;margin-right: -20px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We are an evolving AI inspired project: Try our current features then follow our roadmap.</p>
               </template>
 
-              <template v-if="i === 5">
+              <!-- <template v-if="i === 5">
                  <p style="margin-right: -30px;margin-right: -30px;" v-if="!isMobileDevice" :class="isMobileDevice ? 'font-weight-bold homeTextSmaller' : 'font-weight-bold homeText'">We're excited to announce our token offer, targeted for September 2023, get in early.</p>
-              </template>
+              </template> -->
+
               <!--<v-layout class="mt-8" >
                 <v-btn size="x-large"
                       variant="outlined"
@@ -732,9 +733,9 @@ export default {
         {
           src: '/img/home/mememaster_home05.webp',
         },
-        {
+        /* {
           src: '/img/home/mememaster_home06.webp',
-        }
+        } */
       ],
     images1: [
       {name: '', meme:'Enjoying the sun at the beach on pandora', color: '', url: '/img/memes/meme_01.png', cols: 4},
