@@ -255,7 +255,7 @@
 
                 </v-row>
 
-                <v-row v-else class="pb-8">
+                <v-row v-else class="pb-8" v-if="!claimProcessSuccess">
                   <v-col cols="12" md="12" :class="isMobileDevice ? 'pl-8 pr-8' : 'pl-8'">
                     <div style="font-size: 1rem;"  class="ml-2 mr-2 font-weight-bold text-black">Claiming is available!</div>
                   </v-col>
@@ -3530,7 +3530,7 @@ export default {
     },
     closeClaimDialog () {
       this.claimDialog = false
-      this.claimProcessSuccess = false
+      // this.claimProcessSuccess = false
       this.email = ''
     },
     scrollToTop () {
