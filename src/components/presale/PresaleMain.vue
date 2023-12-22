@@ -3394,12 +3394,12 @@ export default {
       if (this.mmConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
-          if (this.isMobileDevice) {
+          if (this.isMobileDevice && this.totalClaimable === 0) {
             // this.loadUserClaimableTokensMobile()
             this.loadUserClaimableTokensMobileAll(1)
             this.loadUserClaimableTokensMobileAll(2)
             this.loadUserClaimableTokensMobileAll(3)
-          } else {
+          } else if (this.totalClaimable === 0) {
             // this.loadUserClaimableTokens()
             this.loadUserClaimableTokensWebAll(1)
             this.loadUserClaimableTokensWebAll(2)
@@ -3413,12 +3413,13 @@ export default {
       if (this.twConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
-          if (this.isMobileDevice) {
+          if (this.isMobileDevice && this.totalClaimable === 0) {
             // this.loadUserClaimableTokensMobile()
             this.loadUserClaimableTokensMobileAll(1)
             this.loadUserClaimableTokensMobileAll(2)
             this.loadUserClaimableTokensMobileAll(3)
-          } else {
+          } else if (this.totalClaimable === 0) {
+            // this.loadUserClaimableTokens()
             this.loadUserClaimableTokensWebAll(1)
             this.loadUserClaimableTokensWebAll(2)
             this.loadUserClaimableTokensWebAll(3)
@@ -3431,12 +3432,13 @@ export default {
       if (this.walletConnected) {
         setTimeout(() => {
           this.connectWalletDialog = false
-          if (this.isMobileDevice) {
+          if (this.isMobileDevice && this.totalClaimable === 0) {
             // this.loadUserClaimableTokensMobile()
             this.loadUserClaimableTokensMobileAll(1)
             this.loadUserClaimableTokensMobileAll(2)
             this.loadUserClaimableTokensMobileAll(3)
-          } else {
+          } else if (this.totalClaimable === 0) {
+            // this.loadUserClaimableTokens()
             this.loadUserClaimableTokensWebAll(1)
             this.loadUserClaimableTokensWebAll(2)
             this.loadUserClaimableTokensWebAll(3)
