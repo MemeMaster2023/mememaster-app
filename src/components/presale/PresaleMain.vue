@@ -3739,13 +3739,13 @@ export default {
         }
       }
     },
-    async loadUserClaimableTokensMobileAll () {
+    async loadUserClaimableTokensMobileAll (stage) {
 
       console.log('############### loadUserClaimableTokens ##################')
       if (this.mmConnected || this.walletConnected || this.twConnected) {
         console.log('############### loadUserClaimableTokens ##################')
         try {
-          const tokenRewards = await this.presaleContractMobile.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${this.activePresale}`).call()
+          const tokenRewards = await this.presaleContractMobile.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${stage}`).call()
           console.log(tokenRewards)
           this.totalClaimable += parseInt(tokenRewards)
         } catch(err) {
