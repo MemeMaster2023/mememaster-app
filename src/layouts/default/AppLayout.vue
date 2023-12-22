@@ -442,7 +442,7 @@
             Presale
           </v-btn>
         </template>
-        <span>Presale coming soon, follow our social media channels below for details...
+        <span>Presale has ended, follow our social media channels below for details...
         </span>
       </v-tooltip>
 
