@@ -161,6 +161,20 @@ const FirebaseModule = {
           console.log(error);
         });
     },
+    processClaim ({ commit }, payload) {
+      // console.log(payload)
+      commit('setLoading', true);
+
+      db.collection('claims')
+        .doc(payload.id)
+        .set(payload)
+        .then(() => {
+          console.log('Claim in bucket created!');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getUserMemes ({commit}, payload) {
       commit('setLoading', payload.id)
       commit('setMemesEmpty', false);

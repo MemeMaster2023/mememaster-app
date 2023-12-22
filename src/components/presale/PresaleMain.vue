@@ -235,13 +235,13 @@
                   </v-col>
                 </v-row>
 
-                <v-row v-if="(mmConnected || walletConnected || twConnected) && tokensBought > 0" style="margin-top:-30px">
+                <v-row v-if="(mmConnected || walletConnected || twConnected) && totalClaimable > 0" style="margin-top:-30px">
                   <v-col cols="12" md="12" class="pl-8 pr-8">
                     <v-chip variant="outlined" class="ma-2" color="#360a3f">
                       <v-icon color="green-lighten-2"><img
                         style="width: 22px;margin-right:10px; background-color: rgb(159, 155, 155); border-radius: 50%"
                         src="/img/logos/logo.png" alt="Icon" /></v-icon>
-                      {{ 'You have bought ' + numberWithCommas(tokensBought) + ' EMAS'  }}
+                      {{ 'You have bought ' + numberWithCommas(totalClaimable) + ' EMAS'  }}
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -260,7 +260,7 @@
                     <div style="font-size: 1rem;"  class="ml-2 mr-2 font-weight-bold text-black">Claiming will be available in {{ daysBetween(new Date().getTime(), new Date('2023-12-22').getTime()) }} Days</div>
                   </v-col>
                   <v-col cols="12" md="12" :class="isMobileDevice ? 'pl-8 pr-8' : ''" :align="'center'">
-                    <v-btn @click="handleClaim()" disabled size="large" style="width:90%" color="#360a3f">Claim Now</v-btn>
+                    <v-btn @click="handleClaim()" :disabled="parseInt(totalClaimable) <= 0" size="large" style="width:90%" color="#360a3f">Claim Now</v-btn>
                   </v-col>
                 </v-row>
 
@@ -1807,6 +1807,102 @@
           </v-card>
         </v-dialog>
 
+         <!-- ############################################################################################# -->
+      <!-- #############################  DIALOG buyWithUsdtDialog  #####################################-->
+      <!-- ############################################################################################# -->
+
+      <v-dialog v-model="claimDialog" transition="dialog-bottom-transition" :fullscreen="isMobileDevice" persistent
+        :min-width="isMobileDevice ? 300 : 500" max-width="600">
+        <v-card height="100%" color="#F3E5F5">
+          <v-toolbar color="#241d43">
+            <v-btn v-if="isMobileDevice" icon color="white" @click="closeClaimDialog()">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <span class="text-white ml-4" style="font-size: 1.2rem">Claim EMAS Tokens</span>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!isMobileDevice" icon color="white" @click="closeClaimDialog()">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          
+          <v-card-text class="mb-8" v-if="!claimProcessSuccess">
+
+            <v-row class="pt-8 mb-4">
+              <v-col cols="12"  :align="'center'">
+              
+                <!-- <div class="text-h5 mt-2">Transaction Successful!</div> -->
+                <div class="text-h5 mt-2">You can claim {{ numberWithCommas(totalClaimable) }} EMAS Tokens</div>
+
+                <div class="mt-4">Please enter your email address below.</div>
+                
+                <v-form v-model="valid" ref="form" dense >
+                  <v-text-field class="mt-4 ml-8 mr-8"
+                    label="Email Address"
+                    placeholder="Enter your email address..."
+                    type="email"
+                    density="comfortable"
+                    v-model="email"
+                    :rules="emailRules"
+                    variant="outlined"
+                    @input="change0"
+                    @change="change0"
+                  ></v-text-field>
+                </v-form>
+
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-text class="mb-8" v-if="claimProcessSuccess">
+
+            <v-row class="pt-8 mb-8">
+              <v-col cols="12"  :align="'center'">
+                <v-icon size="60" color="green" >mdi-check-circle-outline</v-icon>
+
+                <div class="text-h5 mt-2">Thank you, Your Claim will be processed!</div>
+
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions class="card-actions mt-4" style="width:100%;position: absolute;bottom: 0;">
+              <v-spacer></v-spacer>
+              <v-btn v-if="!claimProcessSuccess"
+                variant="text"
+                size="large"
+                class="font-weight-bold mb-2"
+                @click="closeClaimDialog()"
+              >
+                Cancel
+              </v-btn>
+              <v-btn v-if="!claimProcessSuccess"
+                style="color:#FFF;"
+                variant="elevated"
+                color="#360a3f"
+                size="large"
+                :disabled="!valid"
+                class="font-weight-bold mb-2"
+                @click="processClaim()"
+              >
+                Submit
+              </v-btn>
+              <v-btn v-if="claimProcessSuccess"
+                style="color:#FFF;"
+                variant="elevated"
+                color="#360a3f"
+                size="large"
+                class="font-weight-bold mb-2"
+                @click="closeClaimDialog()"
+              >
+                Close
+              </v-btn>
+          </v-card-actions>
+
+        </v-card>
+      </v-dialog>
+
+
+
       <!-- ############################## SNACKBARS ####################################### -->
      <v-snackbar
         v-model="snackbar"
@@ -1835,6 +1931,7 @@
 <script>
 // @ is an alias to /src
 import store from '@/store/index'
+import { db } from '@/main'
 import axios from 'axios'
 import Airdrop from '@/views/Airdrop'
 import Countdown from '@/views/Countdown'
@@ -1950,7 +2047,7 @@ export default {
     stage4Target: '$1,750,000', // Temp
     stage5Target: '$1,750,000', // Temp
     presaleStarted: true,
-    activePresale: 5, // array in contract
+    activePresale: 4, // array in contract
     activeStagePrice: 0,
     presale: [],
     presaleMobile: [],
@@ -1972,6 +2069,10 @@ export default {
     amountEmasForEthDiagLog: 0,
     connectWalletDialog: false,
     buyWithEthDialog: false,
+    claimDialog: false,
+    claimProcessSuccess: false,
+    totalClaimable: 0,
+    valid: false,
     buyETHView: 1,
     buyUSDTView: 1,
     buyWithUsdtDialog: false,
@@ -1982,6 +2083,11 @@ export default {
     firstName: '',
     lastName: '',
     phoneOrEmail: '',
+    email: '',
+    emailRules: [
+      v => !!v || 'Email is required',
+      v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Email address must be valid'
+    ],
     investmentBudgetSelected: { id: 0, name: '0$ - 5k$'},
     bestTimeToContactSelected: { id: 0, name: 'Morning'},
     countryCodeSelected: { id: 0, name: 'Select your country...'},
@@ -3324,9 +3430,15 @@ export default {
         setTimeout(() => {
           this.connectWalletDialog = false
           if (this.isMobileDevice) {
-            this.loadUserClaimableTokensMobile()
+            // this.loadUserClaimableTokensMobile()
+            this.loadUserClaimableTokensMobileAll(1)
+            this.loadUserClaimableTokensMobileAll(4)
+            this.loadUserClaimableTokensMobileAll(5)
           } else {
-            this.loadUserClaimableTokens()
+            // this.loadUserClaimableTokens()
+            this.loadUserClaimableTokensWebAll(1)
+            this.loadUserClaimableTokensWebAll(4)
+            this.loadUserClaimableTokensWebAll(5)
           }
           // this.drawer = false
         }, 2000)
@@ -3337,9 +3449,14 @@ export default {
         setTimeout(() => {
           this.connectWalletDialog = false
           if (this.isMobileDevice) {
-            this.loadUserClaimableTokensMobile()
+            // this.loadUserClaimableTokensMobile()
+            this.loadUserClaimableTokensMobileAll(1)
+            this.loadUserClaimableTokensMobileAll(4)
+            this.loadUserClaimableTokensMobileAll(5)
           } else {
-            this.loadUserClaimableTokens()
+            this.loadUserClaimableTokensWebAll(1)
+            this.loadUserClaimableTokensWebAll(4)
+            this.loadUserClaimableTokensWebAll(5)
           }
           // this.drawer = false
         }, 2000)
@@ -3350,14 +3467,19 @@ export default {
         setTimeout(() => {
           this.connectWalletDialog = false
           if (this.isMobileDevice) {
-            this.loadUserClaimableTokensMobile()
+            // this.loadUserClaimableTokensMobile()
+            this.loadUserClaimableTokensMobileAll(1)
+            this.loadUserClaimableTokensMobileAll(4)
+            this.loadUserClaimableTokensMobileAll(5)
           } else {
-            this.loadUserClaimableTokens()
+            this.loadUserClaimableTokensWebAll(1)
+            this.loadUserClaimableTokensWebAll(4)
+            this.loadUserClaimableTokensWebAll(5)
           }
           // this.drawer = false
         }, 2000)
       }
-    },
+    }
   },
   created() {
     // this.currentUser = firebase.auth().currentUser;
@@ -3411,6 +3533,44 @@ export default {
     init () {
       this.pieMargin = this.windowWidth <= 360 ? -40 : this.windowWidth <= 390 ? -30 : -20
       console.log(this.pieMargin)
+    },
+    handleClaim() {
+      this.claimDialog = true
+      this.totalClaimable = 0
+      // load claimabel tokesn from 3 stages.
+      if (this.isMobileDevice) {
+        this.loadUserClaimableTokensMobileAll(1)
+        this.loadUserClaimableTokensMobileAll(4)
+        this.loadUserClaimableTokensMobileAll(5)
+      } else {
+        this.loadUserClaimableTokensWebAll(1)
+        this.loadUserClaimableTokensWebAll(4)
+        this.loadUserClaimableTokensWebAll(5)
+      }
+    },
+    processClaim() {
+      let postkey = db.collection('memes').doc()
+      const payload = {
+        id: postkey.id,
+        email: this.email,
+        name: this.getUser.displayName,
+        address: this.getUser.accounts[0],
+        emas_total: this.totalClaimable,
+        created: new Date().getTime(),
+        status: 0
+      }
+      console.log(payload)
+      this.$store.dispatch('processClaim', payload).then(async () => {
+        // TODO
+        this.claimProcessSuccess = true
+        this.snackbarText = 'Your Claim will be processed!'
+        this.snackbar = true
+      })
+    },
+    closeClaimDialog () {
+      this.claimDialog = false
+      this.claimProcessSuccess = false
+      this.email = ''
     },
     scrollToTop () {
       const firstScrollTo = scroller();
@@ -3507,7 +3667,10 @@ export default {
         this.presaleContract = new web3.eth.Contract(abi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContract)
         this.loadPresaleFromContract()
-        this.loadUserClaimableTokens()
+        // this.loadUserClaimableTokens()
+        this.loadUserClaimableTokensWebAll(1)
+        this.loadUserClaimableTokensWebAll(4)
+        this.loadUserClaimableTokensWebAll(5)
       })
     },
     async loadPresaleFromContract () {
@@ -3546,6 +3709,21 @@ export default {
         }
       }
     },
+    async loadUserClaimableTokensWebAll (stage) {
+
+      console.log('############### loadUserClaimableTokens ##################')
+      if (this.mmConnected || this.walletConnected || this.twConnected) {
+        console.log('############### loadUserClaimableTokens ##################')
+        try {
+          const tokenRewards = await this.presaleContract.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${stage}`).call()
+          console.log(tokenRewards)
+          this.totalClaimable += parseInt(tokenRewards)
+        } catch(err) {
+          console.log(err)
+          return 0
+        }
+      }
+    },
     instantiateContractAbiMobile () {
 
       Promise.resolve(MemeMasterAPI.instantiateContractAbi(`${presaleAddress.toLowerCase()}`, import.meta.env.VITE_APP_ENVIRONMENT))
@@ -3556,7 +3734,10 @@ export default {
         this.presaleContractMobile = new _web3.eth.Contract(this.presaleContractAbi, `${presaleAddress.toLowerCase()}`)
         console.log(this.presaleContractMobile)
         this.loadPresaleFromContractMobile()
-        this.loadUserClaimableTokensMobile()
+        // this.loadUserClaimableTokensMobile()
+        this.loadUserClaimableTokensMobileAll(1)
+        this.loadUserClaimableTokensMobileAll(4)
+        this.loadUserClaimableTokensMobileAll(5)
       })
     },
     async loadPresaleFromContractMobile() {
@@ -3590,6 +3771,20 @@ export default {
           const tokenRewards = await this.presaleContractMobile.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${this.activePresale}`).call()
           console.log(tokenRewards)
           this.tokensBought = tokenRewards
+        } catch(err) {
+          console.log(err)
+        }
+      }
+    },
+    async loadUserClaimableTokensMobileAll () {
+
+      console.log('############### loadUserClaimableTokens ##################')
+      if (this.mmConnected || this.walletConnected || this.twConnected) {
+        console.log('############### loadUserClaimableTokens ##################')
+        try {
+          const tokenRewards = await this.presaleContractMobile.methods.tokenRewards(`${this.getUser.accounts[0]}`, `${this.activePresale}`).call()
+          console.log(tokenRewards)
+          this.totalClaimable += parseInt(tokenRewards)
         } catch(err) {
           console.log(err)
         }
@@ -4350,6 +4545,18 @@ export default {
       this.investmentBudgetSelected = { id: 0, name: '0$ - 5k$' }
       this.bestTimeToContactSelected = { id: 0, name: 'Morning' }
       this.countryCodeSelected = { id: 0, name: 'Select your country' }
+    },
+    change0 () {
+      // validate
+      console.log(this.valid)
+      if (this.$refs.form.validate()) {
+        this.valid = true
+      } else {
+        this.valid = false
+      }
+      /* setTimeout(() => {
+        this.updateScore()
+      }, 100) */
     },
     numberWithCommas (x) {
         console.log()
